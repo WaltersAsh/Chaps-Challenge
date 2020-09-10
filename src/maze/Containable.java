@@ -7,7 +7,7 @@ package maze;
  *
  */
 
-public class Containable extends Drawable{
+public abstract class Containable extends Drawable{
 	public Containable(String filename, String initials) {
 		super(filename, initials);
 	}

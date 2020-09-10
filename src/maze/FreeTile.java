@@ -17,7 +17,12 @@ public class FreeTile extends Tile{
 		this.walkable = true;
 	}
 	
+	/**
+	 * Place a Containable inside this Tile
+	 * @param c		The Containable
+	 */
 	public void place(Containable c) {
-		
+		contains.push(c);
+		c.setContainer(this);
 	}
 }

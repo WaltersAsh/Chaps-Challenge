@@ -7,7 +7,7 @@ package maze;
  *
  */
 
-public class Chap extends Containable{
+public class Chap extends Movable{
 
 	public Chap(String filename, String initials) {
 		super(filename, initials);
