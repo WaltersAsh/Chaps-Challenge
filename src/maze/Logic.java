@@ -1,6 +1,6 @@
 package maze;
 
-import com.google.common.base.Preconditions*;
+import com.google.common.base.Preconditions;
 
 /**
  * The main class for keeping track of game logic
