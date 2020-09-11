@@ -11,6 +11,6 @@ import com.google.common.base.Preconditions;
 
 public class Logic {
 	public static void main(String[] args) {
-
+		
 	}
 }

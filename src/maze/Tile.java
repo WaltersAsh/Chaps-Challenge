@@ -8,14 +8,28 @@ package maze;
  */
 
 public abstract class Tile extends Drawable {
+	int row, col;
+	boolean walkable = false;
 	
 	public Tile(String filename, String initials) {
 		super(filename, initials);
 	}
-
-	boolean walkable = false;
 	
+	/**
+	 * can the Chap walk on this Tile?
+	 * @return		whether Chap can walk on this Tile
+	 */
 	public boolean isWalkable() {
 		return walkable;
+	}
+	
+	/**
+	 * Set the coordinates of this Tile
+	 * @param r		the row
+	 * @param c		the column
+	 */
+	public void setCoords(int r, int c) {
+		row = r;
+		col = c;
 	}
 }
