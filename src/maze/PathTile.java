@@ -13,7 +13,8 @@ import com.google.common.base.Preconditions;
  */
 
 public class PathTile extends Tile{
-	Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
+	private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
+	private boolean isBlocked = false;
 	
 	public PathTile(String filename) {
 		super(filename, "░░");
@@ -27,6 +28,7 @@ public class PathTile extends Tile{
 	public void place(Containable c) {
 		contains.push(c);
 		c.setContainer(this);
+		if(c instanceof BlockingContainable) isBlocked = true;
 	}
 	
 	/**
@@ -35,7 +37,11 @@ public class PathTile extends Tile{
 	 */
 	public void remove(Containable c) {
 		contains.remove(c);
-		c.setContainer(this);
+		if(c instanceof BlockingContainable) isBlocked=false;
+		
+		// might have to check all other objects in contains, but 
+		// theoretically if it correctly blocks then we never 
+		// have 2 BlockingContainable at once
 	}
 	
 	/**
@@ -66,5 +72,9 @@ public class PathTile extends Tile{
 				((Pickup)cont).onWalked(c);
 			}
 		}
+	}
+
+	public boolean isBlocked() {
+		return isBlocked;
 	}
 }

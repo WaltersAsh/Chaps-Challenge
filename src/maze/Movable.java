@@ -7,7 +7,7 @@ package maze;
  *
  */
 
-public abstract class Movable extends Containable{
+public abstract class Movable extends BlockingContainable{
 
 	public Movable(String filename, String initials) {
 		super(filename, initials);

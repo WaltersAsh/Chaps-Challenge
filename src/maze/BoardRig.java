@@ -21,8 +21,8 @@ import com.google.common.base.Preconditions;
  */
 
 public class BoardRig {
-	private static Pattern keyPat = Pattern.compile("K([0-9]+)");
-	private static Pattern lockPat = Pattern.compile("L([0-9]+)");
+	private static Pattern keyPat = Pattern.compile("K(.)");
+	private static Pattern lockPat = Pattern.compile("L(.)");
 	
 	public static void main(String[] args) {
 		System.out.println(lesson1());
@@ -33,16 +33,16 @@ public class BoardRig {
 				   "PA PA PA WA WA WA WA WA PA WA WA WA WA WA PA PA PA\n"+
 				   "PA PA PA WA PA PA PA WA WA WA PA PA PA WA PA PA PA\n"+
 				   "PA PA PA WA PA TR PA WA EX WA PA TR PA WA PA PA PA\n"+
-				   "PA WA WA WA WA WA L1 WA EL WA L1 WA WA WA WA WA PA\n"+
-				   "PA WA PA K2 PA L3 PA PA PA PA PA L4 PA K2 PA WA PA\n"+
-				   "PA WA PA TR PA WA K3 PA IN PA K4 WA PA TR PA WA PA\n"+
+				   "PA WA WA WA WA WA LG WA EL WA LG WA WA WA WA WA PA\n"+
+				   "PA WA PA KY PA LB PA PA PA PA PA LR PA KY PA WA PA\n"+
+				   "PA WA PA TR PA WA KB PA IN PA KR WA PA TR PA WA PA\n"+
 				   "PA WA WA WA WA WA TR PA CH PA TR WA WA WA WA WA PA\n"+
-				   "PA WA PA TR PA WA K3 PA PA PA K4 WA PA TR PA WA PA\n"+
-				   "PA WA PA PA PA L3 PA PA TR PA PA L4 PA PA PA WA PA\n"+
-				   "PA WA WA WA WA WA WA L2 WA L2 WA WA WA WA WA WA PA\n"+
+				   "PA WA PA TR PA WA KB PA PA PA KR WA PA TR PA WA PA\n"+
+				   "PA WA PA PA PA LR PA PA TR PA PA LB PA PA PA WA PA\n"+
+				   "PA WA WA WA WA WA WA LY WA LY WA WA WA WA WA WA PA\n"+
 				   "PA PA PA PA PA WA PA PA WA PA PA WA PA PA PA PA PA\n"+
 				   "PA PA PA PA PA WA PA TR WA TR PA WA PA PA PA PA PA\n"+
-				   "PA PA PA PA PA WA PA PA WA K1 PA WA PA PA PA PA PA\n"+
+				   "PA PA PA PA PA WA PA PA WA KG PA WA PA PA PA PA PA\n"+
 				   "PA PA PA PA PA WA WA WA WA WA WA WA PA PA PA PA PA\n"+
 				   "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA";
 		return BoardRig.fromString(board);
@@ -114,11 +114,26 @@ public class BoardRig {
 				Matcher lockMatch = lockPat.matcher(token);
 				
 				if(keyMatch.matches()) {
-					return new Key("", Integer.valueOf(keyMatch.group(1)));
+					return new Key("", colorFromToken(keyMatch.group(1)));
 				}else if(lockMatch.matches()) {
-					return new Door("", Integer.valueOf(lockMatch.group(1)));
+					return new Door("", colorFromToken(lockMatch.group(1)));
 				}
 		}
 		return null;
+	}
+	
+	public static Maze.KeyColor colorFromToken(String token){
+		switch(token) {
+			case "B":
+				return Maze.KeyColor.BLUE;
+			case "R":
+				return Maze.KeyColor.RED;
+			case "G":
+				return Maze.KeyColor.GREEN;
+			case "Y":
+				return Maze.KeyColor.YELLOW;
+			default:
+				throw new IllegalArgumentException();
+		}
 	}
 }

@@ -19,4 +19,16 @@ public class Chap extends Movable{
 	public List<Pickup> getInventory(){
 		return inventory;
 	}
+	
+	public Key hasMatchingKey(Door d) {
+		for(Pickup p: inventory) {
+			if(p instanceof Key) {
+				Key key = (Key) p;
+				if(key.getColor().equals(d.getColor())) {
+					return key;
+				}
+			}
+		}
+		return null;
+	}
 }

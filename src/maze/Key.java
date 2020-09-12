@@ -8,8 +8,18 @@ package maze;
  */
 
 public class Key extends Pickup {
+	private Maze.KeyColor color;
 
-	public Key(String filename, int id) {
-		super(filename, "K"+id);
+	public Key(String filename, Maze.KeyColor color) {
+		super(filename, "K"+color.toString().charAt(0));
+		this.color = color;
+	}
+	
+	public Maze.KeyColor getColor() {
+		return color;
+	}
+
+	public void setColor(Maze.KeyColor color) {
+		this.color = color;
 	}
 }

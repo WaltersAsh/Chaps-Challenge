@@ -7,16 +7,19 @@ package maze;
  *
  */
 
-public class Door extends LockableTile {
-
-	public Door(String filename, int id) {
-		super(filename, "D"+id);
+public class Door extends BlockingContainable {
+	private Maze.KeyColor color;
+	
+	public Door(String filename, Maze.KeyColor color) {
+		super(filename, "D"+color.toString().charAt(0));
+		this.color = color;
 	}
 
-	@Override
-	public boolean canUnlock(Chap c) {
-		// TODO Auto-generated method stub
-		return false;
+	public Maze.KeyColor getColor() {
+		return color;
 	}
 
+	public void setColor(Maze.KeyColor color) {
+		this.color = color;
+	}
 }

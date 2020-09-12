@@ -14,6 +14,13 @@ public class Maze {
 		RIGHT
 	}
 	
+	public enum KeyColor{
+		BLUE,
+		RED,
+		GREEN,
+		YELLOW
+	}
+	
 	private Tile[][] tiles;
 	private Chap chap;
 	
@@ -56,8 +63,12 @@ public class Maze {
 		
 		if(next instanceof PathTile) {
 			PathTile ptnext = (PathTile) next;
-			ptnext.moveTo(chap);
-			ptnext.onWalked(chap);
+			if(ptnext.isBlocked()) {
+				
+			}else {
+				ptnext.moveTo(chap);
+				ptnext.onWalked(chap);
+			}
 		}
 	}
 	

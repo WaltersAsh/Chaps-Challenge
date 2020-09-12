@@ -7,16 +7,8 @@ package maze;
  *
  */
 
-public class ExitLock extends LockableTile {
-
+public class ExitLock extends BlockingContainable {
 	public ExitLock(String filename) {
 		super(filename, "EL");
 	}
-
-	@Override
-	public boolean canUnlock(Chap c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
