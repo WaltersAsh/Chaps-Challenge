@@ -64,12 +64,38 @@ public class Maze {
 		if(next instanceof PathTile) {
 			PathTile ptnext = (PathTile) next;
 			if(ptnext.isBlocked()) {
-				
-			}else {
-				ptnext.moveTo(chap);
-				ptnext.onWalked(chap);
+				if(!checkBlocking(ptnext)) return; // return if we can't move to the blocked tile
+			}
+			ptnext.moveTo(chap);
+			ptnext.onWalked(chap);
+		}
+	}
+	
+	/**
+	 * Check if we can move onto a "blocked" PathTile
+	 * 
+	 * We could move onto it for example if we
+	 * had the matching key to the blocking door.
+	 * 
+	 * @param blocked	the PathTile to check
+	 * @return			if we could move onto it
+	 */
+	public boolean checkBlocking(PathTile blocked) {
+		BlockingContainable bc = blocked.getBlocker();
+		if(bc instanceof Door) {
+			Door door = (Door) bc;
+			Key key = chap.hasMatchingKey(door);
+			if(key != null) {
+				blocked.remove(door);
+				// Green key may be used unlimited times
+				if(!key.getColor().equals(KeyColor.GREEN)) {
+					chap.getInventory().remove(key);
+				}
+				System.out.println("[door] unlocked with "+key.getColor()+" key");
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public Tile tileTo(Tile t, Direction d) {

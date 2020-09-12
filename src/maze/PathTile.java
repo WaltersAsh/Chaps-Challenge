@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 public class PathTile extends Tile{
 	private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
 	private boolean isBlocked = false;
+	private BlockingContainable blocker;
 	
 	public PathTile(String filename) {
 		super(filename, "░░");
@@ -28,7 +29,10 @@ public class PathTile extends Tile{
 	public void place(Containable c) {
 		contains.push(c);
 		c.setContainer(this);
-		if(c instanceof BlockingContainable) isBlocked = true;
+		if(c instanceof BlockingContainable) {
+			isBlocked = true;
+			blocker = (BlockingContainable) c;
+		}
 	}
 	
 	/**
@@ -37,7 +41,10 @@ public class PathTile extends Tile{
 	 */
 	public void remove(Containable c) {
 		contains.remove(c);
-		if(c instanceof BlockingContainable) isBlocked=false;
+		if(c instanceof BlockingContainable) {
+			isBlocked=false;
+			blocker = null;
+		}
 		
 		// might have to check all other objects in contains, but 
 		// theoretically if it correctly blocks then we never 
@@ -76,5 +83,9 @@ public class PathTile extends Tile{
 
 	public boolean isBlocked() {
 		return isBlocked;
+	}
+
+	public BlockingContainable getBlocker() {
+		return blocker;
 	}
 }
