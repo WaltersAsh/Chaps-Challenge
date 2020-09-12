@@ -13,20 +13,14 @@ import java.awt.Toolkit;
 
 public class Drawable {
 	private static Toolkit toolkit;
-	private Image image;
 	protected String initials; // the string representation of this Drawable for drawing in text form
 	
 
 	public Drawable(String filename, String initials) {
 		this.initials = initials;
-		//this.image = toolkit.getImage(filename);
 	}
 	
 	public String getInitials() {
 		return initials;
-	}
-	
-	public Image getImage() {
-		return image;
 	}
 }

@@ -22,4 +22,9 @@ public class Key extends Pickup {
 	public void setColor(Maze.KeyColor color) {
 		this.color = color;
 	}
+	
+	@Override
+	public String toString() {
+		return color.toString() + " key";
+	}
 }
