@@ -1,5 +1,6 @@
 package maze;
 
+import java.util.*;
 import java.util.regex.*;
 
 import com.google.common.base.Preconditions;
@@ -58,7 +59,7 @@ public class BoardRig {
 		// split the input into rows then tokens
 		String[] lines = input.split("\n");
 		Tile[][] tiles = new Tile[lines.length][];
-		Chap chap = null;
+		List<Containable> entities = new ArrayList<>();
 		
 		for(int r=0; r<lines.length; r++) {
 				
@@ -72,9 +73,7 @@ public class BoardRig {
 					PathTile p = new PathTile("");
 					p.place((Containable)d);
 					row[c]=p;
-					if(d instanceof Chap) {
-						chap = (Chap)d;
-					}
+					entities.add((Containable)d);
 				}else { // otherwise it's a Tile
 					row[c]=(Tile)d;
 				}
@@ -82,7 +81,7 @@ public class BoardRig {
 			}
 			tiles[r]=row;
 		}
-		return new Maze(tiles, chap);
+		return new Maze(tiles, entities);
 	}
 	
 	/**

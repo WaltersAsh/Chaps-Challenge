@@ -1,5 +1,7 @@
 package maze;
 
+import java.util.*;
+
 /**
  * The Maze board, which keeps track of the Tiles and logic in the game
  * @author Ian 300474717
@@ -23,6 +25,9 @@ public class Maze {
 	
 	private Tile[][] tiles;
 	private Chap chap;
+	private Set<Treasure> treasures = new HashSet<Treasure>();
+	
+	private boolean levelFinished = false;
 	
 	/**
 	 * Constuct empty Board with a width and height
@@ -40,9 +45,15 @@ public class Maze {
 	 * @param t		Tile[][] of Tiles
 	 * @param c 	Main chap token
 	 */
-	public Maze(Tile[][] t, Chap c) {
+	public Maze(Tile[][] t, List<Containable> entities) {
 		tiles = t;
-		chap = c;
+		for(Containable c: entities) {
+			if(c instanceof Treasure) {
+				treasures.add((Treasure)c);
+			}else if(c instanceof Chap) {
+				chap = (Chap) c;
+			}
+		}
 	}
 
 	@Override
@@ -67,7 +78,7 @@ public class Maze {
 				if(!checkBlocking(ptnext)) return; // return if we can't move to the blocked tile
 			}
 			ptnext.moveTo(chap);
-			ptnext.onWalked(chap);
+			ptnext.onWalked(this);
 		}
 	}
 	
@@ -89,9 +100,16 @@ public class Maze {
 				blocked.remove(door);
 				// Green key may be used unlimited times
 				if(!key.getColor().equals(KeyColor.GREEN)) {
-					chap.getInventory().remove(key);
+					chap.getKeys().remove(key);
 				}
 				System.out.println("[door] unlocked with "+key.getColor()+" key");
+				return true;
+			}
+		}else if(bc instanceof ExitLock) {
+			ExitLock el = (ExitLock) bc;
+			if(treasures.size() == chap.getTreasures().size()) {
+				blocked.remove(el);
+				System.out.println("[exit lock] unlocked");
 				return true;
 			}
 		}
@@ -125,4 +143,13 @@ public class Maze {
 	public Tile[][] getTiles() {
 		return tiles;
 	}
+	
+	public boolean isLevelFinished() {
+		return levelFinished;
+	}
+
+	public void setLevelFinished(boolean levelFinished) {
+		this.levelFinished = levelFinished;
+	}
+
 }

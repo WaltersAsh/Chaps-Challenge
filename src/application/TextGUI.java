@@ -30,7 +30,7 @@ public class TextGUI {
 	}
 	
 	public void listen() {
-		while(true) {
+		while(!maze.isLevelFinished()) {
 			
 			
 			@SuppressWarnings("resource")
@@ -52,7 +52,8 @@ public class TextGUI {
 					return;
 			}
 			displayBoard();
-			System.out.println(maze.getChap().getInventory());
+			System.out.println(maze.getChap().getKeys());
+			System.out.println(maze.getChap().getTreasures());
 		}
 	}
 }

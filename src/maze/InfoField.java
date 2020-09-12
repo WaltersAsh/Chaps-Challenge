@@ -15,7 +15,7 @@ public class InfoField extends Pickup{
 	}
 
 	@Override
-	public void onWalked(Chap c) {
+	public void onWalked(Maze m) {
 		System.out.printf("[info field] %s\n",information);
 	}
 }

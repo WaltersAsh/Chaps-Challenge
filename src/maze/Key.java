@@ -25,6 +25,6 @@ public class Key extends Pickup {
 	
 	@Override
 	public String toString() {
-		return color.toString() + " key";
+		return color.toString() + " Key";
 	}
 }

@@ -71,12 +71,12 @@ public class PathTile extends Tile{
 	
 	/**
 	 * Trigger any events when chap walks on this tile
-	 * @param c		Chap
+	 * @param m		Maze
 	 */
-	public void onWalked(Chap c) {
+	public void onWalked(Maze m) {
 		for(Containable cont: contains) {
 			if(cont instanceof Pickup) {
-				((Pickup)cont).onWalked(c);
+				((Pickup)cont).onWalked(m);
 			}
 		}
 	}

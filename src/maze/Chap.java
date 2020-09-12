@@ -10,25 +10,35 @@ import java.util.*;
  */
 
 public class Chap extends Movable{
-	private List<Pickup> inventory = new ArrayList<>();
+	private List<Key> keys = new ArrayList<>();
+	private List<Treasure> treasures = new ArrayList<>();
 	
 	public Chap(String filename) {
 		super(filename, "CH");
 	}
 	
-	public List<Pickup> getInventory(){
-		return inventory;
+	public void pickup(Pickup p) {
+		if(p instanceof Treasure) {
+			treasures.add((Treasure)p);
+		}else if(p instanceof Key) {
+			keys.add((Key)p);
+		}
 	}
 	
 	public Key hasMatchingKey(Door d) {
-		for(Pickup p: inventory) {
-			if(p instanceof Key) {
-				Key key = (Key) p;
-				if(key.getColor().equals(d.getColor())) {
-					return key;
-				}
+		for(Key key: keys) {
+			if(key.getColor().equals(d.getColor())) {
+				return key;
 			}
 		}
 		return null;
+	}
+
+	public List<Treasure> getTreasures() {
+		return treasures;
+	}
+
+	public List<Key> getKeys() {
+		return keys;
 	}
 }

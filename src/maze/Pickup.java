@@ -17,9 +17,9 @@ public abstract class Pickup extends Containable{
 	 * Trigger any events when Chap walks over the Tile which contains this Containable
 	 * @param c 	Chap
 	 */
-	public void onWalked(Chap c) {
-		c.getInventory().add(this);
+	public void onWalked(Maze m) {
 		this.container.remove(this);
-		System.out.printf("[pickup] you picked up a %s\n", this.getClass());
+		m.getChap().pickup(this);
+		System.out.printf("[pickup] you picked up a %s\n", this);
 	}
 }

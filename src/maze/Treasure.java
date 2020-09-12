@@ -8,8 +8,12 @@ package maze;
  */
 
 public class Treasure extends Pickup {
-
 	public Treasure(String filename) {
 		super(filename, "TR");
+	}
+	
+	@Override
+	public String toString() {
+		return "Treasure";
 	}
 }
