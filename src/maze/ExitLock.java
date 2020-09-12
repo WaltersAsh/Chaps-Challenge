@@ -9,8 +9,8 @@ package maze;
 
 public class ExitLock extends LockableTile {
 
-	public ExitLock(String filename, String initials) {
-		super(filename, initials);
+	public ExitLock(String filename) {
+		super(filename, "EL");
 	}
 
 	@Override

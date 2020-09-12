@@ -9,8 +9,8 @@ package maze;
 
 public class Key extends Pickup {
 
-	public Key(String filename, String initials) {
-		super(filename, initials);
+	public Key(String filename, int id) {
+		super(filename, "K"+id);
 	}
 
 }

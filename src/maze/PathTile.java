@@ -9,11 +9,11 @@ import java.util.*;
  *
  */
 
-public class FreeTile extends Tile{
+public class PathTile extends Tile{
 	Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
 	
-	public FreeTile(String filename, String initials) {
-		super(filename, initials);
+	public PathTile(String filename) {
+		super(filename, "░░");
 		this.walkable = true;
 	}
 	
@@ -24,5 +24,14 @@ public class FreeTile extends Tile{
 	public void place(Containable c) {
 		contains.push(c);
 		c.setContainer(this);
+	}
+	
+	/**
+	 * Get the initials of the top contained object instead
+	 */
+	@Override
+	public String getInitials() {
+		if(!contains.isEmpty())return contains.peek().getInitials();
+		return super.getInitials();
 	}
 }

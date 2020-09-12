@@ -9,8 +9,8 @@ package maze;
 
 public class InfoField extends Containable{
 
-	public InfoField(String filename, String initials) {
-		super(filename, initials);
+	public InfoField(String filename) {
+		super(filename, "IF");
 	}
 
 }

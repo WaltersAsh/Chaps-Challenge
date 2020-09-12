@@ -8,8 +8,8 @@ package maze;
  */
 
 public class WallTile extends Tile{
-	public WallTile(String filename, String initials) {
-		super(filename, initials);
+	public WallTile(String filename) {
+		super(filename, "▓▓");
 		this.walkable = false;
 	}
 }

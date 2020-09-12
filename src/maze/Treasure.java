@@ -9,8 +9,8 @@ package maze;
 
 public class Treasure extends Pickup {
 
-	public Treasure(String filename, String initials) {
-		super(filename, initials);
+	public Treasure(String filename) {
+		super(filename, "TR");
 	}
 
 }

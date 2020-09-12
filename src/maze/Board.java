@@ -7,7 +7,7 @@ package maze;
  */
 
 public class Board {
-	Tile[][] tiles;
+	private Tile[][] tiles;
 	
 	/**
 	 * Constuct empty Board with a width and height

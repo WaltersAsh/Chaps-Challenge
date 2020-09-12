@@ -12,13 +12,13 @@ public abstract class Containable extends Drawable{
 		super(filename, initials);
 	}
 
-	FreeTile container;
+	PathTile container;
 
-	public FreeTile getContainer() {
+	public PathTile getContainer() {
 		return container;
 	}
 
-	public void setContainer(FreeTile container) {
+	public void setContainer(PathTile container) {
 		this.container = container;
 	}
 	

@@ -9,8 +9,8 @@ package maze;
 
 public class Crate extends Movable{
 
-	public Crate(String filename, String initials) {
-		super(filename, initials);
+	public Crate(String filename) {
+		super(filename, "XX");
 	}
 
 }

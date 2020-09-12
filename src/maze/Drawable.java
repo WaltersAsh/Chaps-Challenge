@@ -19,7 +19,7 @@ public class Drawable {
 
 	public Drawable(String filename, String initials) {
 		this.initials = initials;
-		this.image = toolkit.getImage(filename);
+		//this.image = toolkit.getImage(filename);
 	}
 	
 	public String getInitials() {

@@ -9,8 +9,8 @@ package maze;
 
 public class Door extends LockableTile {
 
-	public Door(String filename, String initials) {
-		super(filename, initials);
+	public Door(String filename, int id) {
+		super(filename, "D"+id);
 	}
 
 	@Override

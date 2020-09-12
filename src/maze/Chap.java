@@ -9,8 +9,8 @@ package maze;
 
 public class Chap extends Movable{
 
-	public Chap(String filename, String initials) {
-		super(filename, initials);
+	public Chap(String filename) {
+		super(filename, "CH");
 	}
 
 }

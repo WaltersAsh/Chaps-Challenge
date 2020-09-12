@@ -7,10 +7,10 @@ package maze;
  *
  */
 
-public class Exit extends FreeTile {
+public class Exit extends Tile {
 	
-	public Exit(String filename, String initials) {
-		super(filename, initials);
+	public Exit(String filename) {
+		super(filename, "EX");
 	}
 
 }
