@@ -100,7 +100,7 @@ public class BoardRig {
 			case "TR":
 				return new Treasure("");
 			case "IN":
-				return new InfoField("");
+				return new InfoField("", "testing");
 			case "EL":
 				return new ExitLock("");
 			case "EX":

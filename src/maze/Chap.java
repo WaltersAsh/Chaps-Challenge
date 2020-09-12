@@ -10,9 +10,13 @@ import java.util.*;
  */
 
 public class Chap extends Movable{
-	List<Pickup> inventory = new ArrayList<>();
+	private List<Pickup> inventory = new ArrayList<>();
 	
 	public Chap(String filename) {
 		super(filename, "CH");
+	}
+	
+	public List<Pickup> getInventory(){
+		return inventory;
 	}
 }

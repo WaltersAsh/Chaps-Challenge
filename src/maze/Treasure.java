@@ -12,11 +12,4 @@ public class Treasure extends Pickup {
 	public Treasure(String filename) {
 		super(filename, "TR");
 	}
-
-	@Override
-	public void onWalked(Chap c) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

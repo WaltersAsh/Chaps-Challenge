@@ -8,15 +8,14 @@ package maze;
  */
 
 public class InfoField extends Pickup{
-
-	public InfoField(String filename) {
+	String information;
+	public InfoField(String filename, String information) {
 		super(filename, "IF");
+		this.information=information;
 	}
 
 	@Override
 	public void onWalked(Chap c) {
-		// TODO Auto-generated method stub
-		
+		System.out.printf("[info field] %s\n",information);
 	}
-
 }

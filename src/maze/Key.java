@@ -12,11 +12,4 @@ public class Key extends Pickup {
 	public Key(String filename, int id) {
 		super(filename, "K"+id);
 	}
-
-	@Override
-	public void onWalked(Chap c) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
