@@ -15,41 +15,44 @@ import maze.*;
  */
 
 public class TextGUI {
-	Maze board;
+	Maze maze;
 	List<Treasure> treasure = new ArrayList<>();
 	Chap chap;
 	
 	public TextGUI() {
-		board = BoardRig.lesson1();
+		maze = BoardRig.lesson1();
+		displayBoard();
 		listen();
 	}
 	
 	public void displayBoard() {
-		System.out.println(board);
+		System.out.println(maze);
 	}
 	
 	public void listen() {
 		while(true) {
-			displayBoard();
+			
 			
 			@SuppressWarnings("resource")
 			Scanner sc = new Scanner(System.in);
 			switch(sc.next().toLowerCase()) {
 				case "w":
-					board.move(Maze.Direction.UP);
+					maze.move(Maze.Direction.UP);
 					break;
 				case "s":
-					board.move(Maze.Direction.DOWN);
+					maze.move(Maze.Direction.DOWN);
 					break;
 				case "a":
-					board.move(Maze.Direction.LEFT);
+					maze.move(Maze.Direction.LEFT);
 					break;
 				case "d":
-					board.move(Maze.Direction.RIGHT);
+					maze.move(Maze.Direction.RIGHT);
 					break;
 				case "q":
 					return;
 			}
+			displayBoard();
+			System.out.println(maze.getChap().getInventory());
 		}
 	}
 }

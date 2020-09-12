@@ -15,7 +15,7 @@ public class Maze {
 	}
 	
 	private Tile[][] tiles;
-	Chap chap;
+	private Chap chap;
 	
 	/**
 	 * Constuct empty Board with a width and height
@@ -37,11 +37,7 @@ public class Maze {
 		tiles = t;
 		chap = c;
 	}
-	
-	public Tile getTileAt(int row, int col) {
-		return tiles[row][col];
-	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
@@ -78,5 +74,14 @@ public class Maze {
 		default:
 			return null;
 		}
+	}
+	
+	
+	public Tile getTileAt(int row, int col) {
+		return tiles[row][col];
+	}
+	
+	public Chap getChap() {
+		return chap;
 	}
 }
