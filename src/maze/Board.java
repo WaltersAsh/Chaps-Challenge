@@ -29,4 +29,16 @@ public class Board {
 	public Tile getTileAt(int row, int col) {
 		return tiles[row][col];
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		for(Tile[] rows: tiles) {
+			for(Tile t: rows) {
+				s.append(t.getInitials());
+			}
+			s.append("\n");
+		}
+		return s.toString();
+	}
 }

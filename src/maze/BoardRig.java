@@ -72,6 +72,7 @@ public class BoardRig {
 					row[c]=(Tile)d;
 				}
 			}
+			tiles[r]=row;
 		}
 		
 		return new Board(tiles);
