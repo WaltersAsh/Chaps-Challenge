@@ -84,4 +84,8 @@ public class Maze {
 	public Chap getChap() {
 		return chap;
 	}
+
+	public Tile[][] getTiles() {
+		return tiles;
+	}
 }
