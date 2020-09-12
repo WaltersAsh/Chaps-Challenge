@@ -12,5 +12,4 @@ public class Enemy extends Movable{
 	public Enemy(String filename, String initials) {
 		super(filename, initials);
 	}
-
 }

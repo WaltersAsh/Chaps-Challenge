@@ -12,8 +12,4 @@ public abstract class Movable extends Containable{
 	public Movable(String filename, String initials) {
 		super(filename, initials);
 	}
-	
-	public boolean canMove(Tile destination) {
-		return false;
-	}
 }

@@ -13,4 +13,10 @@ public class Key extends Pickup {
 		super(filename, "K"+id);
 	}
 
+	@Override
+	public void onWalked(Chap c) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

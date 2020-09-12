@@ -21,5 +21,5 @@ public abstract class Containable extends Drawable{
 	public void setContainer(PathTile container) {
 		this.container = container;
 	}
-	
+
 }

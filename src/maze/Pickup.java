@@ -13,4 +13,10 @@ public abstract class Pickup extends Containable{
 		super(filename, initials);
 	}
 
+	/**
+	 * Trigger any events when Chap walks over the Tile which contains this Containable
+	 * @param c 	Chap
+	 */
+	public abstract void onWalked(Chap c);
+
 }

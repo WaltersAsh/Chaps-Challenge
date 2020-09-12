@@ -13,4 +13,10 @@ public class Treasure extends Pickup {
 		super(filename, "TR");
 	}
 
+	@Override
+	public void onWalked(Chap c) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

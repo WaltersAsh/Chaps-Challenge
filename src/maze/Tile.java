@@ -24,12 +24,18 @@ public abstract class Tile extends Drawable {
 	}
 	
 	/**
-	 * Set the coordinates of this Tile
+	 * Set the coordinates of this Drawable
 	 * @param r		the row
 	 * @param c		the column
 	 */
 	public void setCoords(int r, int c) {
 		row = r;
 		col = c;
+	}
+	
+
+	@Override
+	public String toString() {
+		return this.getClass() + " at " + row + ", "+ col; 
 	}
 }

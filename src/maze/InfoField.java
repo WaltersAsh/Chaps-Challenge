@@ -7,10 +7,16 @@ package maze;
  *
  */
 
-public class InfoField extends Containable{
+public class InfoField extends Pickup{
 
 	public InfoField(String filename) {
 		super(filename, "IF");
+	}
+
+	@Override
+	public void onWalked(Chap c) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

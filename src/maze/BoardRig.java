@@ -1,12 +1,11 @@
 package maze;
 
-import java.util.*;
 import java.util.regex.*;
 
 import com.google.common.base.Preconditions;
 
 /**
- * A testing class for setting up a Board
+ * A testing class for setting up a text only Board
  * @author Ian 300474717
  *	
  * WA = wall
@@ -26,23 +25,27 @@ public class BoardRig {
 	private static Pattern lockPat = Pattern.compile("L([0-9]+)");
 	
 	public static void main(String[] args) {
+		System.out.println(lesson1());
+	}
+	
+	public static Maze lesson1() {
 		String board = "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA\n"+
-					   "PA PA PA WA WA WA WA WA PA WA WA WA WA WA PA PA PA\n"+
-					   "PA PA PA WA PA PA PA WA WA WA PA PA PA WA PA PA PA\n"+
-					   "PA PA PA WA PA TR PA WA EX WA PA TR PA WA PA PA PA\n"+
-					   "PA WA WA WA WA WA L1 WA EL WA L1 WA WA WA WA WA PA\n"+
-					   "PA WA PA K2 PA L3 PA PA PA PA PA L4 PA K2 PA WA PA\n"+
-					   "PA WA PA TR PA WA K3 PA IN PA K4 WA PA TR PA WA PA\n"+
-					   "PA WA WA WA WA WA TR PA CH PA TR WA WA WA WA WA PA\n"+
-					   "PA WA PA TR PA WA K3 PA PA PA K4 WA PA TR PA WA PA\n"+
-					   "PA WA PA PA PA L3 PA PA TR PA PA L4 PA PA PA WA PA\n"+
-					   "PA WA WA WA WA WA WA L2 WA L2 WA WA WA WA WA WA PA\n"+
-					   "PA PA PA PA PA WA PA PA WA PA PA WA PA PA PA PA PA\n"+
-					   "PA PA PA PA PA WA PA TR WA TR PA WA PA PA PA PA PA\n"+
-					   "PA PA PA PA PA WA PA PA WA K1 PA WA PA PA PA PA PA\n"+
-					   "PA PA PA PA PA WA WA WA WA WA WA WA PA PA PA PA PA\n"+
-					   "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA";
-		System.out.println(BoardRig.fromString(board));
+				   "PA PA PA WA WA WA WA WA PA WA WA WA WA WA PA PA PA\n"+
+				   "PA PA PA WA PA PA PA WA WA WA PA PA PA WA PA PA PA\n"+
+				   "PA PA PA WA PA TR PA WA EX WA PA TR PA WA PA PA PA\n"+
+				   "PA WA WA WA WA WA L1 WA EL WA L1 WA WA WA WA WA PA\n"+
+				   "PA WA PA K2 PA L3 PA PA PA PA PA L4 PA K2 PA WA PA\n"+
+				   "PA WA PA TR PA WA K3 PA IN PA K4 WA PA TR PA WA PA\n"+
+				   "PA WA WA WA WA WA TR PA CH PA TR WA WA WA WA WA PA\n"+
+				   "PA WA PA TR PA WA K3 PA PA PA K4 WA PA TR PA WA PA\n"+
+				   "PA WA PA PA PA L3 PA PA TR PA PA L4 PA PA PA WA PA\n"+
+				   "PA WA WA WA WA WA WA L2 WA L2 WA WA WA WA WA WA PA\n"+
+				   "PA PA PA PA PA WA PA PA WA PA PA WA PA PA PA PA PA\n"+
+				   "PA PA PA PA PA WA PA TR WA TR PA WA PA PA PA PA PA\n"+
+				   "PA PA PA PA PA WA PA PA WA K1 PA WA PA PA PA PA PA\n"+
+				   "PA PA PA PA PA WA WA WA WA WA WA WA PA PA PA PA PA\n"+
+				   "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA";
+		return BoardRig.fromString(board);
 	}
 	
 	/**
@@ -51,10 +54,11 @@ public class BoardRig {
 	 * @param input		string formatted as in class comment
 	 * @return
 	 */
-	public static Board fromString(String input){
+	public static Maze fromString(String input){
 		// split the input into rows then tokens
 		String[] lines = input.split("\n");
 		Tile[][] tiles = new Tile[lines.length][];
+		Chap chap = null;
 		
 		for(int r=0; r<lines.length; r++) {
 				
@@ -68,14 +72,17 @@ public class BoardRig {
 					PathTile p = new PathTile("");
 					p.place((Containable)d);
 					row[c]=p;
+					if(d instanceof Chap) {
+						chap = (Chap)d;
+					}
 				}else { // otherwise it's a Tile
 					row[c]=(Tile)d;
 				}
+				row[c].setCoords(r, c); // ensure the 2 way link
 			}
 			tiles[r]=row;
 		}
-		
-		return new Board(tiles);
+		return new Maze(tiles, chap);
 	}
 	
 	/**
