@@ -1,4 +1,4 @@
-package maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * A wall tile, which Chap may not walk on

@@ -1,10 +1,12 @@
-package application;
+package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.util.*;
 
 import javax.tools.DocumentationTool.Location;
-
-import maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Chap;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Treasure;
 
 
 /**
