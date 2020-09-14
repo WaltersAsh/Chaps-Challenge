@@ -1,4 +1,4 @@
-package maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * Shows an information popup when Chap walks over it

@@ -1,4 +1,4 @@
-package maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * Base class for objects which can move or be moved around the board

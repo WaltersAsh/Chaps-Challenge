@@ -1,4 +1,4 @@
-package application;
+package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

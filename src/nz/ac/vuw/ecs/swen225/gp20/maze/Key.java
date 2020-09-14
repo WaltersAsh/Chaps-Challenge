@@ -1,4 +1,4 @@
-package maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * A Key which may be picked up by Chap and unlocks a matching Door

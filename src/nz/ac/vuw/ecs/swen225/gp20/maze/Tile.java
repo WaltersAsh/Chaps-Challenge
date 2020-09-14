@@ -1,4 +1,4 @@
-package maze;
+package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * Base class for all Tiles representable on the board
