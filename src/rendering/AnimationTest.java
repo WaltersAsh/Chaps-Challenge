@@ -112,7 +112,6 @@ public class AnimationTest extends Component implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
         char c = e.getKeyChar();
         if (steveMoves.containsKey(c)) {
             isPressed = true;
