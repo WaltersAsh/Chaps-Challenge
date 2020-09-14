@@ -11,6 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
  * Gui class for visual display of the game.
@@ -21,7 +22,7 @@ public class Gui {
   //frame and main panels
   private JFrame frame;
   private JPanel framePanel;
-  private JPanel boardPanel;
+  private BoardView boardPanel;
   private JPanel sidePanel;
 
   //menu bar and menu
@@ -92,7 +93,7 @@ public class Gui {
    * Create he board panel.
    */
   public void createBoardPanel() {
-    boardPanel = new JPanel();
+    boardPanel = new BoardView();
     boardPanel.setBackground(paleLavender);
     boardPanel.setMinimumSize(new Dimension(400, 400));
     boardPanel.setPreferredSize(new Dimension(500, 500));

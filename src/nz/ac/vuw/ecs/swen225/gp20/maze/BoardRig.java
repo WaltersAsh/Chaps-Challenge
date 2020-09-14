@@ -70,7 +70,7 @@ public class BoardRig {
 				Drawable d = fromToken(line[c]);
 				// if it's a containable, make a PathTile and place the containable inside
 				if(d instanceof Containable) {
-					PathTile p = new PathTile("");
+					PathTile p = new PathTile("resources/textures/board/tile/path.png");
 					p.place((Containable)d);
 					row[c]=p;
 					entities.add((Containable)d);
@@ -93,21 +93,21 @@ public class BoardRig {
 		Preconditions.checkArgument(token.length()==2, "Token has length %s but expected 2", token.length());
 		switch(token) {
 			case "WA":
-				return new WallTile("");
+				return new WallTile("resources/textures/board/tile/wall.png");
 			case "PA":
-				return new PathTile("");
+				return new PathTile("resources/textures/board/tile/path.png");
 			case "TR":
-				return new Treasure("");
+				return new Treasure("resources/textures/board/pickup/treasure/diamond.png");
 			case "IN":
-				return new InfoField("", "testing");
+				return new InfoField("resources/textures/board/pickup/sign.png", "testing");
 			case "EL":
 				return new ExitLock("");
 			case "EX":
-				return new Exit("");
+				return new Exit("resources/textures/board/pickup/exit.png");
 			case "CH":
-				return new Chap("");
+				return new Chap("resources/textures/board/moveable/character_skins/player_skin/PlayerFront_Still.png");
 			case "XX":
-				return new Crate("");
+				return new Crate("resources/textures/board/moveable/crate.png");
 			default:
 				Matcher keyMatch = keyPat.matcher(token);
 				Matcher lockMatch = lockPat.matcher(token);
