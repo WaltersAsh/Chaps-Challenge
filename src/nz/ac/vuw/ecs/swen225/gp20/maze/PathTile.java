@@ -88,4 +88,8 @@ public class PathTile extends Tile{
 	public BlockingContainable getBlocker() {
 		return blocker;
 	}
+
+	public Stack getContainable(){
+		return contains;
+	}
 }
