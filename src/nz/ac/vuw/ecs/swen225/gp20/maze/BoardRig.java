@@ -105,8 +105,8 @@ public class BoardRig {
 			case "EX":
 				return new Exit("resources/textures/board/pickup/exit.png");
 			case "CH":
-				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/steve.png");
-				//return new Chap("resources/textures/board/moveable/character_skins/player_skin/PlayerFront_Still.png");
+				//return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/steve.png");
+				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_Walk.gif");
 			case "XX":
 				return new Crate("resources/textures/board/moveable/crate.png");
 			default:

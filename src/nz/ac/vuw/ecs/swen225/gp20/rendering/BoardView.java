@@ -11,7 +11,7 @@ public class BoardView extends JComponent {
 
     private Maze m;
     private Tile[][] tiles;
-    private int blockSize =40;
+    private int blockSize =80;
 
     public BoardView(){
         m = BoardRig.lesson1();
@@ -22,22 +22,20 @@ public class BoardView extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for(int row=0; row<tiles.length; row++){
-            for(int col = 0; col<tiles[row].length; col++){
+        for(int row=4; row<tiles.length; row++){
+            for(int col = 5; col<tiles[row].length; col++){
                 Tile t = m.getTileAt(row,col);
-                g.drawImage(t.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                g.drawImage(t.getImage(), (col-5)*blockSize, (row-4)*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
                     PathTile pt = (PathTile)t;
                     if(!pt.getContainedEntities().isEmpty()){
                         for(Containable c: pt.getContainedEntities()){
-                            g.drawImage(c.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                            g.drawImage(c.getImage(), (col-5)*blockSize, (row-4)*blockSize, blockSize, blockSize, this);
                         }
                     }
                 }
             }
         }
-
-        System.out.println(m);
 
     }
 }

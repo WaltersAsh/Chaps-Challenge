@@ -1,6 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
-
+import javax.swing.*;
+import java.io.File;
+import java.net.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * The player controlled token
@@ -12,9 +16,12 @@ import java.util.*;
 public class Chap extends Movable{
 	private List<Key> keys = new ArrayList<>();
 	private List<Treasure> treasures = new ArrayList<>();
+
+	String filename;
 	
 	public Chap(String filename) {
 		super(filename, "CH");
+		this.filename = filename;
 	}
 	
 	public void pickup(Pickup p) {
@@ -32,6 +39,13 @@ public class Chap extends Movable{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Image getImage() {
+		Image icon = new ImageIcon(filename).getImage();
+		return icon;
+
 	}
 
 	public List<Treasure> getTreasures() {
