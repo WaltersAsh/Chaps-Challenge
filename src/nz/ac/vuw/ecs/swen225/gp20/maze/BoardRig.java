@@ -70,7 +70,7 @@ public class BoardRig {
 				Drawable d = fromToken(line[c]);
 				// if it's a containable, make a PathTile and place the containable inside
 				if(d instanceof Containable) {
-					PathTile p = new PathTile("resources/textures/board/tile/path.png");
+					PathTile p = new PathTile("resources/textures/board/tile/smooth_stone.png");
 					p.place((Containable)d);
 					row[c]=p;
 					entities.add((Containable)d);
@@ -95,17 +95,18 @@ public class BoardRig {
 			case "WA":
 				return new WallTile("resources/textures/board/tile/wall.png");
 			case "PA":
-				return new PathTile("resources/textures/board/tile/path.png");
+				return new PathTile("resources/textures/board/tile/smooth_stone.png");
 			case "TR":
-				return new Treasure("resources/textures/board/pickup/treasure/diamond.png");
+				return new Treasure("resources/textures/board/pickup/treasure/emerald.png");
 			case "IN":
 				return new InfoField("resources/textures/board/pickup/sign.png", "testing");
 			case "EL":
-				return new ExitLock("");
+				return new ExitLock("resources/textures/board/blocking/doors/bedrock.png");
 			case "EX":
 				return new Exit("resources/textures/board/pickup/exit.png");
 			case "CH":
-				return new Chap("resources/textures/board/moveable/character_skins/player_skin/PlayerFront_Still.png");
+				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/steve.png");
+				//return new Chap("resources/textures/board/moveable/character_skins/player_skin/PlayerFront_Still.png");
 			case "XX":
 				return new Crate("resources/textures/board/moveable/crate.png");
 			default:
@@ -113,9 +114,9 @@ public class BoardRig {
 				Matcher lockMatch = lockPat.matcher(token);
 				
 				if(keyMatch.matches()) {
-					return new Key("", colorFromToken(keyMatch.group(1)));
+					return new Key(fileForKey(keyMatch.group(1)), colorFromToken(keyMatch.group(1)));
 				}else if(lockMatch.matches()) {
-					return new Door("", colorFromToken(lockMatch.group(1)));
+					return new Door(fileForDoor(lockMatch.group(1)), colorFromToken(lockMatch.group(1)));
 				}
 		}
 		return null;
@@ -131,6 +132,36 @@ public class BoardRig {
 				return Maze.KeyColor.GREEN;
 			case "Y":
 				return Maze.KeyColor.YELLOW;
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
+
+	public static String fileForKey(String token){
+		switch(token) {
+			case "B":
+				return "resources/textures/board/pickup/keys/wooden_pickaxe.png";
+			case "R":
+				return "resources/textures/board/pickup/keys/iron_pickaxe.png";
+			case "G":
+				return "resources/textures/board/pickup/keys/diamond_pickaxe.png";
+			case "Y":
+				return "resources/textures/board/pickup/keys/golden_pickaxe.png";
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
+
+	public static String fileForDoor(String token){
+		switch(token) {
+			case "B":
+				return "resources/textures/board/blocking/doors/spruce_planks.png";
+			case "R":
+				return "resources/textures/board/blocking/doors/iron_block.png";
+			case "G":
+				return "resources/textures/board/blocking/doors/diamond_block.png";
+			case "Y":
+				return "resources/textures/board/blocking/doors/gold_block.png";
 			default:
 				throw new IllegalArgumentException();
 		}
