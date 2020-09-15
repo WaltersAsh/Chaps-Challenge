@@ -1,9 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
-import javax.swing.*;
-import java.io.File;
-import java.net.*;
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,12 +37,12 @@ public class Chap extends Movable{
 		return null;
 	}
 
-	@Override
-	public Image getImage() {
-		Image icon = new ImageIcon(filename).getImage();
-		return icon;
-
-	}
+//	@Override
+//	public Image getImage() {
+//		Image icon = new ImageIcon(filename).getImage();
+//		return icon;
+//
+//	}
 
 	public List<Treasure> getTreasures() {
 		return treasures;

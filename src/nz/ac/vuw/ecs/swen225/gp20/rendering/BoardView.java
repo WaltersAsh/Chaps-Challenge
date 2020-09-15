@@ -5,7 +5,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class BoardView extends JComponent {
 
@@ -25,12 +24,12 @@ public class BoardView extends JComponent {
         for(int row=0; row<tiles.length; row++){
             for(int col = 0; col<tiles[row].length; col++){
                 Tile t = m.getTileAt(row,col);
-                g.drawImage(t.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                g.drawImage(getToolkit().getImage(t.getFilename()), col*blockSize, row*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
                     PathTile pt = (PathTile)t;
                     if(!pt.getContainedEntities().isEmpty()){
                         for(Containable c: pt.getContainedEntities()){
-                            g.drawImage(c.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                            g.drawImage(getToolkit().getImage(c.getFilename()), col * blockSize, row * blockSize, blockSize, blockSize, this);
                         }
                     }
                 }
