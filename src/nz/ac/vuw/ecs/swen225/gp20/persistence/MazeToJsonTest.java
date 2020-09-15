@@ -2,9 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 
 public class MazeToJsonTest {
@@ -12,14 +10,15 @@ public class MazeToJsonTest {
 
     public static void main(String[] args) {
         System.out.println();
-//        for (Tile[] row : m.getTiles()) {
-//            for (Tile col : row) {
-//                System.out.println(col.getClass().getSimpleName());
-//            }
-//        }
+        for (Tile[] row : m.getTiles()) {
+            for (Tile col : row) {
+                System.out.println(col.getClass().getSimpleName());
+            }
+        }
 
-        Gson gson = new GsonBuilder().create();
-        RuntimeTypeAdapterFactory<Tile> adapterFactory = RuntimeTypeAdapterFactory.of(Tile.class, "type");
+        RuntimeTypeAdapterFactory<Tile> typeAdapterFactory = RuntimeTypeAdapterFactory.of(Tile.class, "type").registerSubtype(PathTile.class).registerSubtype(WallTile.class);
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeAdapterFactory).create();
+        System.out.println(gson.toJson(m.getTiles()));
 
 
     }

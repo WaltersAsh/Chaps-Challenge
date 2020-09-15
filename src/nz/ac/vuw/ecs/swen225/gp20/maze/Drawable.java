@@ -15,7 +15,7 @@ public class Drawable {
 	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
 	protected String initials; // the string representation of this Drawable for drawing in text form
 
-	private Image image;
+	public Image image;
 
 	public Drawable(String filename, String initials) {
 
