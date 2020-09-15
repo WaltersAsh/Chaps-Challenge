@@ -25,3 +25,6 @@ hs_err_pid*
 
 # don't ignore lib folder
 !/lib/*
+!/.idea/misc.xml
+!/.idea/intellij-javadocs-4.0.1.xml
+!/.idea/checkstyle-idea.xml
