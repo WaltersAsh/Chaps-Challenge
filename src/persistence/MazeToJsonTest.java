@@ -20,7 +20,8 @@ public class MazeToJsonTest {
 //        }
 
         Gson gson = new GsonBuilder().create();
-        RuntimeTypeAdapterFactory<Tile> adapterFactory = RuntimeTypeAdapterFactory.of(Tile.class);
+        RuntimeTypeAdapterFactory<Tile> adapterFactory = RuntimeTypeAdapterFactory.of(Tile.class, "type");
+
 
 
     }
