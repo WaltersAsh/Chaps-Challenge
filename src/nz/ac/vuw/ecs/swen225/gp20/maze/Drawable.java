@@ -1,8 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 
 /**
  * Base class for anything which can be drawn on the board
@@ -15,17 +14,22 @@ public class Drawable {
 	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
 	protected String initials; // the string representation of this Drawable for drawing in text form
 
-	public Image image;
-
+	//	public Image image;
+	public String filename;
 	public Drawable(String filename, String initials) {
 
 		this.initials = initials;
-		image = toolkit.getImage(filename);
+//		image = toolkit.getImage(filename);
+		this.filename = filename;
 	}
 	
 	public String getInitials() {
 		return initials;
 	}
 
-	public Image getImage(){return image;}
+//	public Image getImage(){return image;}
+
+	public String getFilename() {
+		return filename;
+	}
 }
