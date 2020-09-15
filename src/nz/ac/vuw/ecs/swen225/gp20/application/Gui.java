@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -129,6 +131,8 @@ public class Gui {
     frame.setMinimumSize(new Dimension(800, 700));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
             dimen.height / 2 - frame.getSize().height / 2);
+
+    setupKeyListener();
   }
 
   /**
@@ -276,6 +280,57 @@ public class Gui {
   }
 
   /**
+   * Key listener to detect keys and key strokes.
+   */
+  public void setupKeyListener() {
+    frame.addKeyListener(new KeyListener() {
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        int key = e.getExtendedKeyCode();
+
+        //movement
+        if (key == KeyEvent.VK_UP) {
+          System.out.println("up pressed");
+        } else if (key == KeyEvent.VK_DOWN) {
+          System.out.println("down pressed");
+        } else if (key == KeyEvent.VK_LEFT) {
+          System.out.println("left pressed");
+        } else if (key == KeyEvent.VK_RIGHT) {
+          System.out.println("right pressed");
+
+          //pause and resume
+        } else if (key == KeyEvent.VK_SPACE) {
+          System.out.println("space pressed");
+        } else if (key == KeyEvent.VK_ESCAPE) {
+          System.out.println("escape pressed");
+
+          //shortcuts
+        } else if (e.isControlDown() && key == KeyEvent.VK_X) {
+          System.out.println("ctrl + x pressed");
+        } else if (e.isControlDown() && key == KeyEvent.VK_S) {
+          System.out.println("ctrl + s pressed");
+        } else if (e.isControlDown() && key == KeyEvent.VK_R) {
+          System.out.println("ctrl + r pressed");
+        } else if (e.isControlDown() && key == KeyEvent.VK_P) {
+          System.out.println("ctrl + p pressed");
+        } else if (e.isControlDown() && key == KeyEvent.VK_1) {
+          System.out.println("ctrl + 1 pressed");
+        }
+      }
+
+      //dead code
+      @Override
+      public void keyTyped(KeyEvent e) {
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+      }
+    });
+  }
+
+  /**
    * Get the frame.
    *
    * @return the JFrame representing the container for the gui
@@ -299,7 +354,8 @@ public class Gui {
    * @param levelValue the String representing the level value to be set
    */
   public void setLevelValueLabel(String levelValue) {
-
+    levelValueLabel.setText(levelValue);
+    frame.revalidate();
   }
 
   /**
@@ -308,7 +364,8 @@ public class Gui {
    * @param timeValue the String representing the time value to be set
    */
   public void setTimeValueLabel(String timeValue) {
-
+    timeValueLabel.setText(timeValue);
+    frame.revalidate();
   }
 
   /**
@@ -317,7 +374,8 @@ public class Gui {
    * @param collectablesValue the String representing the collectables value to be set
    */
   public void setCollectablesValueLabel(String collectablesValue) {
-
+    collectablesValueLabel.setText(collectablesValue);
+    frame.revalidate();
   }
 
   /**
