@@ -1,11 +1,10 @@
-package persistence;
+package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapterFactory;
-import maze.BoardRig;
-import maze.Maze;
-import maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 
 
 public class MazeToJsonTest {
@@ -21,7 +20,6 @@ public class MazeToJsonTest {
 
         Gson gson = new GsonBuilder().create();
         RuntimeTypeAdapterFactory<Tile> adapterFactory = RuntimeTypeAdapterFactory.of(Tile.class, "type");
-
 
 
     }

@@ -1,6 +1,6 @@
-package persistence;
+package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 public class MazeLoader {
     public static Maze loadLevel1() {
