@@ -28,8 +28,12 @@ public class BoardView extends JComponent {
                 g.drawImage(t.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
                     //TODO Something in here I think
-                    if(!((PathTile) t).getContainable().empty()){
-                        g.drawImage(t.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                    PathTile pt = (PathTile)t;
+                    if(!pt.getContainedEntities().isEmpty()) {
+                    	for(Containable c: pt.getContainedEntities()) {
+                    		g.drawImage(c.getImage(), col*blockSize, row*blockSize, blockSize, blockSize, this);
+                    	}
+                    		
                     }
                 }
             }

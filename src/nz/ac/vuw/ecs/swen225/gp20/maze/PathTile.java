@@ -89,7 +89,7 @@ public class PathTile extends Tile{
 		return blocker;
 	}
 
-	public Stack getContainable(){
+	public Stack<Containable> getContainedEntities(){
 		return contains;
 	}
 }
