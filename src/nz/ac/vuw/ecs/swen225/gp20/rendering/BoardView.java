@@ -12,7 +12,8 @@ public class BoardView extends JComponent {
     private Maze m;
     private Tile[][] tiles;
     private int blockSize =40;
-    private int width, height, panelWidth, panelHeight;
+    private int width, height, minPanel ;
+
 
 
     public BoardView(Maze m){
@@ -27,13 +28,15 @@ public class BoardView extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
+        minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
         //drawWholeBoard(g);
         drawWindowedBoard(g);
     }
 
     public void drawWholeBoard(Graphics g){
+        //blockSize = minPanel
+
         for(int row=0; row<height; row++){
             for(int col = 0; col<width; col++){
                 Tile t = m.getTileAt(row,col);
@@ -55,17 +58,11 @@ public class BoardView extends JComponent {
      * @param g the graphics used
      */
     public void drawWindowedBoard(Graphics g){
-        //TODO Get resizing working
-        int minPanel = Math.min(panelHeight, panelWidth);
-
         int viewTiles = 4;
         int windowSize = (2*viewTiles)+1;
 
-
-
-        int blockSize = 71;
-//        System.out.printf("%d/%d=%d\n", panelHeight,panelWidth,blockSize);
-//        System.out.printf("%d/%d=%d\n", minPanel,windowSize,blockSize);
+        int blockSize = minPanel/windowSize;
+        System.out.printf("%d/%d=%d\n", minPanel,windowSize,blockSize);
 
         int chapRow = m.getChap().getContainer().getRow();
         int chapCol = m.getChap().getContainer().getCol();
