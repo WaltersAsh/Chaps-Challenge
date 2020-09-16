@@ -1,7 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * Base class for anything which can be drawn on the board
@@ -9,8 +13,11 @@ import java.awt.*;
  * @author Ian 300474717
  *
  */
-
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class Drawable {
+	public final String id = UUID.randomUUID().toString();
 	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
 	protected String initials; // the string representation of this Drawable for drawing in text form
 

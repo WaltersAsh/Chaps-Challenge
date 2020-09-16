@@ -17,13 +17,8 @@ public class MazeToJsonTest {
 //                System.out.println(col.getClass().getSimpleName());
 //            }
 //        }
-        String jsonString = mapper.writeValueAsString(m.getTiles()[0]);
+        String jsonString = mapper.writeValueAsString(m.getTiles()[3]);
         System.out.println(jsonString);
-//
-//        RuntimeTypeAdapterFactory<Tile> typeAdapterFactory = RuntimeTypeAdapterFactory.of(Tile.class, "type").registerSubtype(PathTile.class).registerSubtype(WallTile.class);
-//        Gson gson = new GsonBuilder().registerTypeAdapterFactory(typeAdapterFactory).create();
-//        System.out.println(gson.toJson(m.getTiles()));
-
 
     }
 }
