@@ -62,16 +62,12 @@ public class BoardView extends JComponent {
         int windowSize = (2*viewTiles)+1;
 
         int blockSize = minPanel/windowSize;
-        System.out.printf("%d/%d=%d\n", minPanel,windowSize,blockSize);
 
         int chapRow = m.getChap().getContainer().getRow();
         int chapCol = m.getChap().getContainer().getCol();
 
         int startRow = chapRow - viewTiles;
         int startCol = chapCol - viewTiles;
-
-        int endRow = chapRow + viewTiles;
-        int endCol = chapCol + viewTiles;
 
         if(startRow<0){startRow = 0;}
         if(startCol<0){startCol = 0;}
