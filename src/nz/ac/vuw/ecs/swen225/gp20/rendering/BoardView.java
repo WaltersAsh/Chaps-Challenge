@@ -26,6 +26,8 @@ public class BoardView extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
+
         //drawWholeBoard(g);
         drawWindowedBoard(g);
     }
@@ -52,7 +54,7 @@ public class BoardView extends JComponent {
      * @param g the graphics used
      */
     public void drawWindowedBoard(Graphics g){
-        int blockSize = 72;
+        int blockSize = 71;
         int viewTiles = 4;
         int windowSize = (2*viewTiles)+1;
 
