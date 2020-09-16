@@ -13,6 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -77,6 +79,9 @@ public class Gui {
 
   private BoardView board;
   private Maze maze;
+  private Timer timer;
+  private TimerTask timerTask;
+  private boolean isTimerActive;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -131,6 +136,7 @@ public class Gui {
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
             dimen.height / 2 - frame.getSize().height / 2);
 
+    setupTimer();
     setupKeyListener();
   }
 
@@ -289,6 +295,10 @@ public class Gui {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
+        if (!isTimerActive) {
+          timer.schedule(timerTask, 0, 1000); //start the timer countdown
+          isTimerActive = true;
+        }
         //movement
         if (key == KeyEvent.VK_UP) {
           maze.move(Maze.Direction.UP);
@@ -333,6 +343,23 @@ public class Gui {
   }
 
   /**
+   * Setup the timer
+   */
+  public void setupTimer() {
+    final int[] secondsLeft = {Integer.parseInt(timeValueLabel.getText())};
+    timer = new Timer();
+    timerTask = new TimerTask() {
+      @Override
+      public void run() {
+        if (secondsLeft[0] > 0) {
+          secondsLeft[0]--;
+          setTimeValueLabel(secondsLeft[0]);
+        }
+      }
+    };
+  }
+
+  /**
    * Get the frame.
    *
    * @return the JFrame representing the container for the gui
@@ -365,8 +392,8 @@ public class Gui {
    *
    * @param timeValue the String representing the time value to be set
    */
-  public void setTimeValueLabel(String timeValue) {
-    timeValueLabel.setText(timeValue);
+  public void setTimeValueLabel(int timeValue) {
+    timeValueLabel.setText(String.valueOf(timeValue));
     frame.revalidate();
   }
 
