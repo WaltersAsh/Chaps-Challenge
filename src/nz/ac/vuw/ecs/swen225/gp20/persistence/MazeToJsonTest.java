@@ -19,6 +19,7 @@ public class MazeToJsonTest {
 //        }
         String jsonString = mapper.writeValueAsString(m);
         System.out.println(jsonString);
+        Maze m2 = mapper.readValue(jsonString, Maze.class);
         //try recreate
 
     }
