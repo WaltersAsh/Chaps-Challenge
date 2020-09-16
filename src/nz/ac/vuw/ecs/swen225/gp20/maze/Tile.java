@@ -32,7 +32,14 @@ public abstract class Tile extends Drawable {
 		row = r;
 		col = c;
 	}
-	
+
+	public int getRow(){
+		return row;
+	}
+
+	public int getCol(){
+		return col;
+	}
 
 	@Override
 	public String toString() {

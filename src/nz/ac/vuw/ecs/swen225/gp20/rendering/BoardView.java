@@ -11,19 +11,28 @@ public class BoardView extends JComponent {
     private Maze m;
     private Tile[][] tiles;
     private int blockSize =40;
+    private int width, height;
 
     public BoardView(Maze m){
         this.m = m;
         m = BoardRig.lesson1();
         tiles = m.getTiles();
+        width = m.getWidth();
+        height = m.getHeight();
+        System.out.println("Width = "+width);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for(int row=0; row<tiles.length; row++){
-            for(int col = 0; col<tiles[row].length; col++){
+        //drawWholeBoard(g);
+        drawWindowedBoard(g);
+    }
+
+    public void drawWholeBoard(Graphics g){
+        for(int row=0; row<height; row++){
+            for(int col = 0; col<width; col++){
                 Tile t = m.getTileAt(row,col);
                 g.drawImage(getToolkit().getImage(t.getFilename()), col*blockSize, row*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
@@ -36,6 +45,53 @@ public class BoardView extends JComponent {
                 }
             }
         }
+    }
+
+    /**
+     * Draws the windowed board on the screen.
+     * @param g the graphics used
+     */
+    public void drawWindowedBoard(Graphics g){
+        int blockSize = 72;
+        int viewTiles = 4;
+        int windowSize = (2*viewTiles)+1;
+
+        int chapRow = m.getChap().getContainer().getRow();
+        int chapCol = m.getChap().getContainer().getCol();
+
+        int startRow = chapRow - viewTiles;
+        int startCol = chapCol - viewTiles;
+
+        int endRow = chapRow + viewTiles;
+        int endCol = chapCol + viewTiles;
+
+        if(startRow<0){startRow = 0;}
+        if(startCol<0){startCol = 0;}
+
+        if(startCol+windowSize>width-1){startCol = width-1-windowSize;}
+        if(startRow+windowSize>height-1){startRow = height-1-windowSize;}
+
+        int currentRow = 0;
+        for(int row=startRow; row<startRow+windowSize; row++){
+            int currentCol = 0;
+            for(int col = startCol; col<startCol+windowSize; col++){
+                Tile t = m.getTileAt(row,col);
+                g.drawImage(getToolkit().getImage(t.getFilename()), currentCol*blockSize, currentRow*blockSize, blockSize, blockSize, this);
+                if(t instanceof PathTile){
+                    PathTile pt = (PathTile)t;
+                    if(!pt.getContainedEntities().isEmpty()){
+                        for(Containable c: pt.getContainedEntities()){
+                            g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize, currentRow * blockSize, blockSize, blockSize, this);
+                        }
+                    }
+                }
+                currentCol++;
+            }
+            currentRow++;
+
+        }
+
+
 
     }
 }
