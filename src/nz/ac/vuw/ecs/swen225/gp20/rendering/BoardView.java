@@ -12,7 +12,8 @@ public class BoardView extends JComponent {
     private Tile[][] tiles;
     private int blockSize =40;
 
-    public BoardView(){
+    public BoardView(Maze m){
+        this.m = m;
         m = BoardRig.lesson1();
         tiles = m.getTiles();
     }

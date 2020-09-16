@@ -1,12 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
@@ -19,6 +13,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -31,7 +28,6 @@ public class Gui {
   private JFrame frame;
   private JPanel framePanel;
   private JPanel boardPanel;
-  private BoardView board;
   private JPanel sidePanel;
 
   //inner panels inside of side panel
@@ -67,17 +63,20 @@ public class Gui {
   private JMenu helpMenu;
 
   //Text sizes and fonts
-  Font regText = new Font("", Font.PLAIN, 25);
-  Font bigText = new Font("", Font.BOLD, 45);
+  private Font regText = new Font("", Font.PLAIN, 25);
+  private Font bigText = new Font("", Font.BOLD, 45);
 
   //Background colours
   //TODO: Replace background color for theme of renderer assets
-  Color lavender = new Color(74, 29, 138);
-  Color lightLavender = new Color(179, 159, 207);
-  Color darkLavender = new Color(50, 38, 66);
-  Color deepLavender = new Color(85, 52, 130);
-  Color fullLavender = new Color(102, 0, 255);
-  Color paleLavender = new Color(237, 224, 255);
+  private Color lavender = new Color(74, 29, 138);
+  private Color lightLavender = new Color(179, 159, 207);
+  private Color darkLavender = new Color(50, 38, 66);
+  private Color deepLavender = new Color(85, 52, 130);
+  private Color fullLavender = new Color(102, 0, 255);
+  private Color paleLavender = new Color(237, 224, 255);
+
+  private BoardView board;
+  private Maze maze;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -150,7 +149,9 @@ public class Gui {
    */
   public void createBoardPanel() {
     boardPanel = new JPanel();
-    board = new BoardView();
+    //TODO: Set maze and board somewhere else
+    maze = BoardRig.lesson1();
+    board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     boardPanel.setMinimumSize(new Dimension(400, 400));
     boardPanel.setPreferredSize(new Dimension(500, 500));
@@ -288,19 +289,20 @@ public class Gui {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-
         //movement
         if (key == KeyEvent.VK_UP) {
-          System.out.println("up pressed");
+          maze.move(Maze.Direction.UP);
         } else if (key == KeyEvent.VK_DOWN) {
-          System.out.println("down pressed");
+          maze.move(Maze.Direction.DOWN);
         } else if (key == KeyEvent.VK_LEFT) {
-          System.out.println("left pressed");
+          maze.move(Maze.Direction.LEFT);
         } else if (key == KeyEvent.VK_RIGHT) {
-          System.out.println("right pressed");
+          maze.move(Maze.Direction.RIGHT);
+        }
+        board.repaint();
 
-          //pause and resume
-        } else if (key == KeyEvent.VK_SPACE) {
+        //pause and resume
+        if (key == KeyEvent.VK_SPACE) {
           System.out.println("space pressed");
         } else if (key == KeyEvent.VK_ESCAPE) {
           System.out.println("escape pressed");
