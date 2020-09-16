@@ -28,6 +28,8 @@ public class Maze {
 	private Set<Treasure> treasures = new HashSet<Treasure>();
 	
 	private boolean levelFinished = false;
+
+	private int width,height;
 	
 	/**
 	 * Constuct empty Board with a width and height
@@ -47,6 +49,9 @@ public class Maze {
 	 */
 	public Maze(Tile[][] t, List<Containable> entities) {
 		tiles = t;
+
+		height = tiles.length;
+		width = tiles[0].length;
 		for(Containable c: entities) {
 			if(c instanceof Treasure) {
 				treasures.add((Treasure)c);
@@ -151,5 +156,9 @@ public class Maze {
 	public void setLevelFinished(boolean levelFinished) {
 		this.levelFinished = levelFinished;
 	}
+
+	public int getWidth(){return width;}
+
+	public int getHeight(){return height;}
 
 }
