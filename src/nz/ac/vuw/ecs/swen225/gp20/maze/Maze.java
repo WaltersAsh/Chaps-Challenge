@@ -40,7 +40,19 @@ public class Maze {
 	public Maze(int width, int height) {
 		tiles = new Tile[width][height];
 	}
-	
+
+	public Maze(Tile[][] tiles, Chap chap, Set<Treasure> treasures, boolean levelFinished, int width, int height) {
+		this.tiles = tiles;
+		this.chap = chap;
+		this.treasures = treasures;
+		this.levelFinished = levelFinished;
+		this.width = width;
+		this.height = height;
+	}
+
+	public Maze() {
+	}
+
 	/**
 	 * Construct Board from predetermined Tiles
 	 * 

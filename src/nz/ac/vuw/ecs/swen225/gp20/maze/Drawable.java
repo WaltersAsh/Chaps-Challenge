@@ -4,7 +4,6 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import java.awt.*;
 import java.util.UUID;
 
 /**
@@ -17,9 +16,15 @@ import java.util.UUID;
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
 public class Drawable {
-	public final String id = UUID.randomUUID().toString();
-	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+	public String id = UUID.randomUUID().toString();
+//	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
 	protected String initials; // the string representation of this Drawable for drawing in text form
+
+	public Drawable(String id, String initials, String filename) {
+		this.id = id;
+		this.initials = initials;
+		this.filename = filename;
+	}
 
 	//	public Image image;
 	public String filename;
@@ -29,7 +34,9 @@ public class Drawable {
 //		image = toolkit.getImage(filename);
 		this.filename = filename;
 	}
-	
+
+	public Drawable() {}
+
 	public String getInitials() {
 		return initials;
 	}

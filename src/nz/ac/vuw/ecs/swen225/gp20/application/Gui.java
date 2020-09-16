@@ -1,24 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
  * Gui class for visual display of the game.
@@ -156,7 +148,8 @@ public class Gui {
   public void createBoardPanel() {
     boardPanel = new JPanel();
     //TODO: Set maze and board somewhere else
-    maze = BoardRig.lesson1();
+//    maze = BoardRig.lesson1();
+    maze = nz.ac.vuw.ecs.swen225.gp20.persistence.MazeToJsonTest.createM2();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     boardPanel.setMinimumSize(new Dimension(400, 400));

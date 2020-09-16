@@ -12,4 +12,11 @@ public class WallTile extends Tile{
 		super(filename, "▓▓");
 		this.walkable = false;
 	}
+
+	public WallTile(String id, String initials, String filename, int row, int col, boolean walkable) {
+		super(id, initials, filename, row, col, walkable);
+	}
+
+	public WallTile() {
+	}
 }

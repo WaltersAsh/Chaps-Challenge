@@ -11,4 +11,7 @@ public class ExitLock extends BlockingContainable {
 	public ExitLock(String filename) {
 		super(filename, "EL");
 	}
+
+	public ExitLock() {
+	}
 }

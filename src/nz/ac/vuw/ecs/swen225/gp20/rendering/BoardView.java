@@ -39,8 +39,8 @@ public class BoardView extends JComponent {
                 g.drawImage(getToolkit().getImage(t.getFilename()), col*blockSize, row*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
                     PathTile pt = (PathTile)t;
-                    if(!pt.getContainedEntities().isEmpty()){
-                        for(Containable c: pt.getContainedEntities()){
+                    if(!pt.getContains().isEmpty()){
+                        for(Containable c: pt.getContains()){
                             g.drawImage(getToolkit().getImage(c.getFilename()), col * blockSize, row * blockSize, blockSize, blockSize, this);
                         }
                     }
@@ -81,8 +81,8 @@ public class BoardView extends JComponent {
                 g.drawImage(getToolkit().getImage(t.getFilename()), currentCol*blockSize, currentRow*blockSize, blockSize, blockSize, this);
                 if(t instanceof PathTile){
                     PathTile pt = (PathTile)t;
-                    if(!pt.getContainedEntities().isEmpty()){
-                        for(Containable c: pt.getContainedEntities()){
+                    if(!pt.getContains().isEmpty()){
+                        for(Containable c: pt.getContains()){
                             g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize, currentRow * blockSize, blockSize, blockSize, this);
                         }
                     }

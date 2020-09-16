@@ -13,6 +13,13 @@ public abstract class Pickup extends Containable{
 		super(filename, initials);
 	}
 
+	public Pickup(String id, String initials, String filename, PathTile container) {
+		super(id, initials, filename, container);
+	}
+
+	public Pickup() {
+	}
+
 	/**
 	 * Trigger any events when Chap walks over the Tile which contains this Containable
 	 * @param c 	Chap

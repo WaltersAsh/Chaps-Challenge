@@ -10,6 +10,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Key extends Pickup {
 	private Maze.KeyColor color;
 
+	public Key() {
+	}
+
 	public Key(String filename, Maze.KeyColor color) {
 		super(filename, "K"+color.toString().charAt(0));
 		this.color = color;

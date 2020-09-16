@@ -9,7 +9,10 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public class Door extends BlockingContainable {
 	private Maze.KeyColor color;
-	
+
+	public Door() {
+	}
+
 	public Door(String filename, Maze.KeyColor color) {
 		super(filename, "D"+color.toString().charAt(0));
 		this.color = color;

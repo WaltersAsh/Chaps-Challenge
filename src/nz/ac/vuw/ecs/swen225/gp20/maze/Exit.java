@@ -12,7 +12,14 @@ public class Exit extends Pickup {
 	public Exit(String filename) {
 		super(filename, "EX");
 	}
-	
+
+	public Exit() {
+	}
+
+	public Exit(String id, String initials, String filename, PathTile container) {
+		super(id, initials, filename, container);
+	}
+
 	@Override
 	public void onWalked(Maze m) {
 		m.setLevelFinished(true);

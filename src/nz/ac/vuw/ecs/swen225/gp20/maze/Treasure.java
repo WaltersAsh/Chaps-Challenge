@@ -11,7 +11,14 @@ public class Treasure extends Pickup {
 	public Treasure(String filename) {
 		super(filename, "TR");
 	}
-	
+
+	public Treasure(String id, String initials, String filename, PathTile container) {
+		super(id, initials, filename, container);
+	}
+
+	public Treasure() {
+	}
+
 	@Override
 	public String toString() {
 		return "Treasure";
