@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
 
+import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
@@ -11,7 +12,8 @@ public class BoardView extends JComponent {
     private Maze m;
     private Tile[][] tiles;
     private int blockSize =40;
-    private int width, height;
+    private int width, height, panelWidth, panelHeight;
+
 
     public BoardView(Maze m){
         this.m = m;
@@ -19,7 +21,6 @@ public class BoardView extends JComponent {
         tiles = m.getTiles();
         width = m.getWidth();
         height = m.getHeight();
-        System.out.println("Width = "+width);
     }
 
     @Override
@@ -54,9 +55,17 @@ public class BoardView extends JComponent {
      * @param g the graphics used
      */
     public void drawWindowedBoard(Graphics g){
-        int blockSize = 71;
+        //TODO Get resizing working
+        int minPanel = Math.min(panelHeight, panelWidth);
+
         int viewTiles = 4;
         int windowSize = (2*viewTiles)+1;
+
+
+
+        int blockSize = 71;
+//        System.out.printf("%d/%d=%d\n", panelHeight,panelWidth,blockSize);
+//        System.out.printf("%d/%d=%d\n", minPanel,windowSize,blockSize);
 
         int chapRow = m.getChap().getContainer().getRow();
         int chapCol = m.getChap().getContainer().getCol();
