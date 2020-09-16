@@ -17,8 +17,9 @@ public class MazeToJsonTest {
 //                System.out.println(col.getClass().getSimpleName());
 //            }
 //        }
-        String jsonString = mapper.writeValueAsString(m.getTiles()[3]);
+        String jsonString = mapper.writeValueAsString(m);
         System.out.println(jsonString);
+        //try recreate
 
     }
 }
