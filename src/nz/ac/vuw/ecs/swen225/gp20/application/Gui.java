@@ -158,7 +158,8 @@ public class Gui {
     //TODO: Set maze and board somewhere else
     //maze = BoardRig.lesson1();
     //maze = BoardRig.crateTest();
-    maze = BoardRig.crateAndWaterTest();
+    //maze = BoardRig.crateAndWaterTest();
+    maze = BoardRig.pathFindTest1();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     boardPanel.setMinimumSize(new Dimension(400, 400));
@@ -356,6 +357,8 @@ public class Gui {
         if (secondsLeft[0] > 0) {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
+          // TODO: move this to a separate timer
+          maze.tickPathFinding();
         }
       }
     };

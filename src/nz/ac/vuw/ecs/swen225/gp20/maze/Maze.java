@@ -26,6 +26,7 @@ public class Maze {
 	private Tile[][] tiles;
 	private Chap chap;
 	private Set<Treasure> treasures = new HashSet<Treasure>();
+	private List<Enemy> enemies = new ArrayList<Enemy>();
 	private ExitLock exitlock;
 	private boolean levelFinished = false;
 
@@ -60,6 +61,11 @@ public class Maze {
 				chap = (Chap) c;
 			}else if(c instanceof ExitLock) {
 				exitlock = (ExitLock) c;
+			}else if(c instanceof Enemy) {
+				Enemy e = (Enemy)c;
+				e.initPathFinder(this);
+				enemies.add(e);
+
 			}
 		}
 	}
@@ -176,6 +182,17 @@ public class Maze {
 		}
 	}
 
+	public void tickPathFinding() {
+		for (Enemy e: enemies) {
+			Tile destination = e.tickPathFinding();
+			if(destination instanceof PathTile) {
+				PathTile pt = (PathTile)destination;
+				if(!pt.isBlocked()) {
+					pt.moveTo(e);
+				}
+			}
+		}
+	}
 
 	public Tile getTileAt(int row, int col) {
 		return tiles[row][col];
