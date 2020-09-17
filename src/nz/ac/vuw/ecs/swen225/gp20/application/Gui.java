@@ -1,8 +1,18 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,10 +23,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
@@ -35,26 +43,26 @@ public class Gui {
   //inner panels inside of side panel
   private JPanel levelPanel;
   private JPanel timePanel;
-  private JPanel collectablesPanel;
+  private JPanel treasuresPanel;
   private JPanel inventoryPanel;
 
   //inner panels inside of inner panels of side panel
   private JPanel levelContentPanel;
   private JPanel timeContentPanel;
-  private JPanel collectablesContentPanel;
+  private JPanel treasuresContentPanel;
   private JPanel inventoryGridPanel;
   private JPanel inventoryContentPanel;
 
   //title labels
   private JLabel levelTitleLabel;
   private JLabel timeTitleLabel;
-  private JLabel collectablesTitleLabel;
+  private JLabel treasuresTitleLabel;
   private JLabel inventoryTitleLabel;
 
   //value labels
   private JLabel levelValueLabel;
   private JLabel timeValueLabel;
-  private JLabel collectablesValueLabel;
+  private JLabel treasuresValueLabel;
   private JLabel[] inventoryValueLabels;
 
   //menu bar and menu
@@ -98,7 +106,9 @@ public class Gui {
     createMenuComponents();
 
     boardPanel.setLayout(new BorderLayout());
-    boardPanel.add(board);
+    boardPanel.add(board, BorderLayout.CENTER);
+    board.setAlignmentX(Component.CENTER_ALIGNMENT);
+    board.setAlignmentY(Component.CENTER_ALIGNMENT);
 
     //add menus to menu bars
     menuBar.add(gameMenu);
@@ -108,13 +118,13 @@ public class Gui {
     //add content panels to inner side panels
     levelPanel.add(levelContentPanel);
     timePanel.add(timeContentPanel);
-    collectablesPanel.add(collectablesContentPanel);
+    treasuresPanel.add(treasuresContentPanel);
     inventoryPanel.add(inventoryContentPanel);
 
     //add panels to side panels
     sidePanel.add(levelPanel);
     sidePanel.add(timePanel);
-    sidePanel.add(collectablesPanel);
+    sidePanel.add(treasuresPanel);
     sidePanel.add(inventoryPanel);
 
     //set up board and side panels into frame panel
@@ -132,7 +142,7 @@ public class Gui {
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
     frame.setSize(1024, 800);
-    frame.setMinimumSize(new Dimension(800, 700));
+    frame.setMinimumSize(new Dimension(800, 675));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
             dimen.height / 2 - frame.getSize().height / 2);
 
@@ -162,8 +172,12 @@ public class Gui {
     //maze = BoardRig.pathFindTest1();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
-    boardPanel.setMinimumSize(new Dimension(400, 400));
-    boardPanel.setPreferredSize(new Dimension(500, 500));
+    //boardPanel.setMinimumSize(new Dimension(400, 400));
+    //boardPanel.setPreferredSize(new Dimension(500, 500));
+    boardPanel.setMinimumSize(new Dimension(board.getPreferredSize().width,
+            board.getPreferredSize().height));
+    boardPanel.setPreferredSize(new Dimension(board.getPreferredSize().width,
+            board.getPreferredSize().height));
     boardPanel.setMaximumSize(new Dimension(800, 800));
   }
 
@@ -186,31 +200,33 @@ public class Gui {
   public void createInnerSidePanels() {
     levelPanel = new JPanel();
     timePanel = new JPanel();
-    collectablesPanel = new JPanel();
+    treasuresPanel = new JPanel();
     inventoryPanel = new JPanel();
     inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
     inventoryGridPanel = new JPanel();
     inventoryGridPanel.setLayout(new GridLayout(2, 4));
     levelPanel.setBackground(fullLavender);
     timePanel.setBackground(lavender);
-    collectablesPanel.setBackground(deepLavender);
+    treasuresPanel.setBackground(deepLavender);
     inventoryPanel.setBackground(darkLavender);
     inventoryGridPanel.setBackground(darkLavender);
     levelPanel.setPreferredSize(new Dimension(175, 125));
     timePanel.setPreferredSize(new Dimension(175, 125));
-    collectablesPanel.setPreferredSize(new Dimension(175, 125));
+    treasuresPanel.setPreferredSize(new Dimension(175, 125));
     inventoryPanel.setPreferredSize(new Dimension(175, 125));
     levelPanel.setBorder(new LineBorder(paleLavender, 2, false));
     timePanel.setBorder(new LineBorder(paleLavender, 2, false));
-    collectablesPanel.setBorder(new LineBorder(paleLavender, 2, false));
+    treasuresPanel.setBorder(new LineBorder(paleLavender, 2, false));
     inventoryPanel.setBorder(new LineBorder(paleLavender, 2, false));
 
     //inventory grid panel initialisation
-    for (int i = 0; i < (2 * 4); i++) {
-      final JLabel label = new JLabel();
+    inventoryValueLabels = new JLabel[8];
+    for (int i = 0; i < 8; i++) {
+      JLabel label = new JLabel();
       label.setOpaque(true);
       label.setBackground(darkLavender);
       label.setBorder(BorderFactory.createLineBorder(paleLavender));
+      inventoryValueLabels[i] = label;
       inventoryGridPanel.add(label);
     }
   }
@@ -223,45 +239,45 @@ public class Gui {
     //initialise inner panels for inner panels in side panel
     levelContentPanel = new JPanel();
     timeContentPanel = new JPanel();
-    collectablesContentPanel = new JPanel();
+    treasuresContentPanel = new JPanel();
     inventoryContentPanel = new JPanel();
     levelContentPanel.setLayout(new BoxLayout(levelContentPanel, BoxLayout.Y_AXIS));
     timeContentPanel.setLayout(new BoxLayout(timeContentPanel, BoxLayout.Y_AXIS));
-    collectablesContentPanel.setLayout(new BoxLayout(collectablesContentPanel, BoxLayout.Y_AXIS));
+    treasuresContentPanel.setLayout(new BoxLayout(treasuresContentPanel, BoxLayout.Y_AXIS));
     inventoryContentPanel.setLayout(new BoxLayout(inventoryContentPanel, BoxLayout.Y_AXIS));
     levelContentPanel.setBackground(fullLavender);
     timeContentPanel.setBackground(lavender);
-    collectablesContentPanel.setBackground(deepLavender);
+    treasuresContentPanel.setBackground(deepLavender);
     inventoryContentPanel.setBackground(darkLavender);
 
     //initialise title labels for panels in inner side panel
     levelTitleLabel = new JLabel("LEVEL");
     timeTitleLabel = new JLabel("TIME LEFT");
-    collectablesTitleLabel = new JLabel("COLLECTABLES REMAINING");
+    treasuresTitleLabel = new JLabel("TREASURES REMAINING");
     inventoryTitleLabel = new JLabel("INVENTORY");
     levelTitleLabel.setForeground(Color.WHITE);
     timeTitleLabel.setForeground(Color.WHITE);
-    collectablesTitleLabel.setForeground(Color.WHITE);
+    treasuresTitleLabel.setForeground(Color.WHITE);
     inventoryTitleLabel.setForeground(Color.WHITE);
     levelTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     timeTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    collectablesTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    treasuresTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     inventoryTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
     //initialise value labels
     levelValueLabel = new JLabel("1");
     timeValueLabel = new JLabel("60");
-    collectablesValueLabel = new JLabel("8");
+    treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures()));
     inventoryValueLabels = new JLabel[8];
     levelValueLabel.setFont(bigText);
     timeValueLabel.setFont(bigText);
-    collectablesValueLabel.setFont(bigText);
+    treasuresValueLabel.setFont(bigText);
     levelValueLabel.setForeground(Color.BLACK);
     timeValueLabel.setForeground(Color.BLACK);
-    collectablesValueLabel.setForeground(Color.BLACK);
+    treasuresValueLabel.setForeground(Color.BLACK);
     levelValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     timeValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    collectablesValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    treasuresValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
     //add labels and JComponents to inner panels in side panels
     levelContentPanel.add(levelTitleLabel);
@@ -270,12 +286,13 @@ public class Gui {
     timeContentPanel.add(timeTitleLabel);
     timeContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
     timeContentPanel.add(timeValueLabel);
-    collectablesContentPanel.add(collectablesTitleLabel);
-    collectablesContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
-    collectablesContentPanel.add(collectablesValueLabel);
+    treasuresContentPanel.add(treasuresTitleLabel);
+    treasuresContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
+    treasuresContentPanel.add(treasuresValueLabel);
     inventoryContentPanel.add(inventoryTitleLabel);
-    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
+    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
     inventoryContentPanel.add(inventoryGridPanel);
+    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
   }
 
   /**
@@ -312,6 +329,11 @@ public class Gui {
         } else if (key == KeyEvent.VK_RIGHT) {
           maze.move(Maze.Direction.RIGHT);
         }
+        decrementTreasurePickUp();
+        if (maze.isLevelFinished()) {
+          timer.cancel();
+          timer.purge();
+        }
         board.repaint();
 
         //pause and resume
@@ -346,7 +368,7 @@ public class Gui {
   }
 
   /**
-   * Setup the timer
+   * Setup the timer.
    */
   public void setupTimer() {
     final int[] secondsLeft = {Integer.parseInt(timeValueLabel.getText())};
@@ -357,11 +379,28 @@ public class Gui {
         if (secondsLeft[0] > 0) {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
-          // TODO: move this to a separate timer
           maze.tickPathFinding();
+          //might as well leave this here, don't think timer has to be purely for application side
+          //unless the pathfinding ticks are supposed to be faster/slower than 1 sec ¯\_(ツ)_/¯
         }
       }
     };
+  }
+
+  /**
+   * Decrement treasure pickup value.
+   */
+  public void decrementTreasurePickUp() {
+    int treasureCount = maze.getChap().getTreasures().size();
+    setTreasuresValueLabel(maze.numTreasures() - treasureCount);
+  }
+
+  /**
+   * Update keys/items (not treasures) picked up.
+   */
+  public void updateInventory() {
+    List<Key> keys = maze.getChap().getKeys();
+
   }
 
   /**
@@ -403,12 +442,12 @@ public class Gui {
   }
 
   /**
-   * Set the collectables value text of the label.
+   * Set the treasures value text of the label.
    *
-   * @param collectablesValue the String representing the collectables value to be set
+   * @param treasuresValue the String representing the treasures value to be set
    */
-  public void setCollectablesValueLabel(String collectablesValue) {
-    collectablesValueLabel.setText(collectablesValue);
+  public void setTreasuresValueLabel(int treasuresValue) {
+    treasuresValueLabel.setText(String.valueOf(treasuresValue));
     frame.revalidate();
   }
 
