@@ -13,11 +13,16 @@ public class Chap extends Movable{
 	private List<Key> keys = new ArrayList<>();
 	private List<Treasure> treasures = new ArrayList<>();
 
-	String filename;
+
+
+	String left, right;
 	
-	public Chap(String filename) {
-		super(filename, "CH");
-		this.filename = filename;
+	public Chap(String left, String right) {
+		super(left, "CH");
+		this.left = left;
+		this.right = right;
+
+
 	}
 	
 	public void pickup(Pickup p) {
@@ -51,4 +56,5 @@ public class Chap extends Movable{
 	public List<Key> getKeys() {
 		return keys;
 	}
+
 }

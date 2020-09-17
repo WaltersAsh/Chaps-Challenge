@@ -45,7 +45,7 @@ public class Maze {
 	 * Construct Board from predetermined Tiles
 	 * 
 	 * @param t		Tile[][] of Tiles
-	 * @param c 	Main chap token
+	 * @param entities	what entities need to be placed
 	 */
 	public Maze(Tile[][] t, List<Containable> entities) {
 		tiles = t;
@@ -76,6 +76,13 @@ public class Maze {
 	public void move(Direction d) {
 		Tile current = chap.getContainer();
 		Tile next = tileTo(current,d);
+
+		if(d == Direction.LEFT){
+			chap.changeFile(chap.left);
+		}
+		if(d == Direction.RIGHT){
+			chap.changeFile(chap.right);
+		}
 		
 		if(next instanceof PathTile) {
 			PathTile ptnext = (PathTile) next;
