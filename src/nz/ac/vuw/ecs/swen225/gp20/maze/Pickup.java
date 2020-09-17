@@ -11,8 +11,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 public abstract class Pickup extends Containable{
 
-	public Pickup(String filename, String initials, SoundEffect soundEffect) {
-		super(filename, initials, soundEffect);
+	public Pickup(String filename, String initials) {
+		super(filename, initials);
 	}
 
 	/**

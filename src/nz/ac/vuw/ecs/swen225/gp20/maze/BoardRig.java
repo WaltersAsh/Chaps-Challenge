@@ -28,7 +28,7 @@ public class BoardRig {
 	private static Pattern keyPat = Pattern.compile("K(.)");
 	private static Pattern lockPat = Pattern.compile("L(.)");
 
-	private static List<SoundEffect> stoneSounds = new ArrayList<>();
+
 
 	public static void main(String[] args) {
 		System.out.println(lesson1());
@@ -120,8 +120,7 @@ public class BoardRig {
 				Drawable d = fromToken(line[c]);
 				// if it's a containable, make a PathTile and place the containable inside
 				if(d instanceof Containable) {
-					initialiseStoneSounds();
-					PathTile p = new PathTile("resources/textures/board/tile/smooth_stone.png",stoneSounds);
+					PathTile p = new PathTile("resources/textures/board/tile/smooth_stone.png");
 					p.place((Containable)d);
 					row[c]=p;
 					entities.add((Containable)d);
@@ -150,33 +149,32 @@ public class BoardRig {
 			case "WA":
 				return new WallTile("resources/textures/board/tile/wall.png");
 			case "PA":
-				initialiseStoneSounds();
-				return new PathTile("resources/textures/board/tile/smooth_stone.png", stoneSounds);
+				return new PathTile("resources/textures/board/tile/smooth_stone.png");
 			case "TR":
-				return new Treasure("resources/textures/board/pickup/treasure/emerald.gif", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+				return new Treasure("resources/textures/board/pickup/treasure/emerald.gif");
 			case "IN":
-				return new InfoField("resources/textures/board/pickup/sign.png", "testing", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+				return new InfoField("resources/textures/board/pickup/sign.png", "testing");
 			case "EL":
-				return new ExitLock("resources/textures/board/blocking/doors/bedrock.png", new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+				return new ExitLock("resources/textures/board/blocking/doors/bedrock.png");
 			case "EX":
-				return new Exit("resources/textures/board/pickup/exit.png", new SoundEffect("resources/sound_effects/exit/trigger.wav"));
+				return new Exit("resources/textures/board/pickup/exit.png");
 			case "CH":
 				//return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/steve.png");
-				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif", "resources/textures/board/moveable/character_skins/new_player_skin/SteveRight_WalkBig.gif", new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif", "resources/textures/board/moveable/character_skins/new_player_skin/SteveRight_WalkBig.gif");
 			case "XX":
-				return new Crate("resources/textures/board/moveable/crate.png", new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+				return new Crate("resources/textures/board/moveable/crate.png");
 			case "WT":
-				return new Water("resources/textures/board/blocking/water.gif", new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+				return new Water("resources/textures/board/blocking/water.gif");
 			case "EN":
-				return new Enemy("resources/textures/board/moveable/character_skins/new_enemy_skin/creeper_leftwalkBig.gif", new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+				return new Enemy("resources/textures/board/moveable/character_skins/new_enemy_skin/creeper_leftwalkBig.gif");
 			default:
 				Matcher keyMatch = keyPat.matcher(token);
 				Matcher lockMatch = lockPat.matcher(token);
 
 				if(keyMatch.matches()) {
-					return new Key(fileForKey(keyMatch.group(1)), colorFromToken(keyMatch.group(1)), new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+					return new Key(fileForKey(keyMatch.group(1)), colorFromToken(keyMatch.group(1)));
 				}else if(lockMatch.matches()) {
-					return new Door(fileForDoor(lockMatch.group(1)), colorFromToken(lockMatch.group(1)), new SoundEffect("resources/sound_effects/placeholder/pop.wav"));
+					return new Door(fileForDoor(lockMatch.group(1)), colorFromToken(lockMatch.group(1)));
 				}
 		}
 		return null;
@@ -227,17 +225,5 @@ public class BoardRig {
 		}
 	}
 
-	public static void initialiseStoneSounds(){
-		stoneSounds.clear();
-		String[] stoneFiles = {"resources/sound_effects/stone_step/step1.wav",
-				"resources/sound_effects/stone_step/step2.wav",
-				"resources/sound_effects/stone_step/step3.wav",
-				"resources/sound_effects/stone_step/step4.wav",
-				"resources/sound_effects/stone_step/step5.wav"};
 
-
-		for(String s: stoneFiles){
-			stoneSounds.add(new SoundEffect(s));
-		}
-	}
 }

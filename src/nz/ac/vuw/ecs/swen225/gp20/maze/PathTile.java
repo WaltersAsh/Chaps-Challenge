@@ -18,15 +18,9 @@ public class PathTile extends Tile{
 	private boolean isBlocked = false;
 	private BlockingContainable blocker;
 
-	private List<SoundEffect> pathSounds;
-	private SoundEffect prevSound = null;
-
-	public PathTile(String filename, List<SoundEffect> pathSounds) {
-		super(filename, "░░");
+	public PathTile(String filename) {
+		super(filename, "PA");
 		this.walkable = true;
-
-		this.pathSounds = pathSounds;
-
 
 	}
 
@@ -89,19 +83,7 @@ public class PathTile extends Tile{
 		}
 	}
 
-	public void playRandomSound(){
-		SoundEffect currentSound;
-		Random rand = new Random();
 
-		currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
-		while(prevSound == currentSound){
-			prevSound = currentSound;
-			currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
-		}
-		currentSound.play();
-		currentSound.reset();
-		prevSound = currentSound;
-	}
 
 	public boolean isBlocked() {
 		return isBlocked;

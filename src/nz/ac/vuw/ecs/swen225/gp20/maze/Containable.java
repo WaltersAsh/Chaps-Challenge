@@ -11,12 +11,9 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 public abstract class Containable extends Drawable{
 
-	private SoundEffect sound;
-
-	public Containable(String filename, String initials, SoundEffect sound) {
+	public Containable(String filename, String initials) {
 		super(filename, initials);
 
-		this.sound = sound;
 	}
 
 	PathTile container;
@@ -28,11 +25,5 @@ public abstract class Containable extends Drawable{
 	public void setContainer(PathTile container) {
 		this.container = container;
 	}
-
-	public SoundEffect getSound(){return sound;}
-
-
-
-
 
 }

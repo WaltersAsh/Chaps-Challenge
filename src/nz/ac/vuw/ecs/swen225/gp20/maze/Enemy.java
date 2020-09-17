@@ -12,8 +12,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 public class Enemy extends Movable{
 	PathFinder pf;
 
-	public Enemy(String filename, SoundEffect soundEffect) {
-		super(filename, "EN", soundEffect);
+	public Enemy(String filename) {
+		super(filename, "EN");
 	}
 
 	public void initPathFinder(Maze m) {

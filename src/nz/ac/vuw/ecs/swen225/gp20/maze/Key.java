@@ -12,8 +12,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 public class Key extends Pickup {
 	private Maze.KeyColor color;
 
-	public Key(String filename, Maze.KeyColor color, SoundEffect soundEffect) {
-		super(filename, "K"+color.toString().charAt(0), soundEffect);
+	public Key(String filename, Maze.KeyColor color) {
+		super(filename, "K"+color.toString().charAt(0));
 		this.color = color;
 	}
 	

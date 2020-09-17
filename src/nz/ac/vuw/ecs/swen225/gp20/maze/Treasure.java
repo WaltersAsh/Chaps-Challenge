@@ -10,8 +10,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  */
 
 public class Treasure extends Pickup {
-	public Treasure(String filename, SoundEffect soundEffect) {
-		super(filename, "TR", soundEffect);
+	public Treasure(String filename) {
+		super(filename, "TR");
 	}
 
 	@Override

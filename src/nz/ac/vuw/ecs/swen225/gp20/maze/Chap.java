@@ -19,8 +19,8 @@ public class Chap extends Movable{
 
 	String left, right;
 
-	public Chap(String left, String right, SoundEffect soundEffect) {
-		super(left, "CH", soundEffect);
+	public Chap(String left, String right) {
+		super(left, "CH");
 		this.left = left;
 		this.right = right;
 

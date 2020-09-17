@@ -11,8 +11,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 public class Crate extends Movable{
 
-	public Crate(String filename, SoundEffect soundEffect) {
-		super(filename, "XX", soundEffect);
+	public Crate(String filename) {
+		super(filename, "XX");
 	}
 
 }
