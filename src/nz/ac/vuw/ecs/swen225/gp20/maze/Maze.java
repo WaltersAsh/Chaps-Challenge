@@ -34,7 +34,9 @@ public class Maze {
 
 	private int width,height;
 
-	private HashMap<String, List<SoundEffect>> sounds = new HashMap<>();
+	private HashMap<String, SoundEffect> sounds = new HashMap<>();
+	private List<SoundEffect> pathSounds = new ArrayList<>();
+
 
 	private SoundEffect prevSound = null;
 	private SoundEffect currentSound = null;
@@ -75,8 +77,7 @@ public class Maze {
 
 			}
 		}
-
-		initialiseSoundEffects();
+		initialiseSounds();
 	}
 
 	@Override
@@ -113,16 +114,18 @@ public class Maze {
 				}
 			}
 
-			playSound("stone");
+			if(!((PathTile) next).getContainedEntities().isEmpty()){
+				playSound(((PathTile) next).getContainedEntities().peek().initials);
+			}
+			else {
+				playRandomSound();
+			}
 
 
 			ptnext.moveTo(chap);
 			ptnext.onWalked(this);
 
-
-
 		}
-
 
 	}
 
@@ -212,37 +215,75 @@ public class Maze {
 		}
 	}
 
-	public void initialiseSoundEffects(){
+
+	/**
+	 * WA = wall
+	 * PA = path
+	 * KX = key with #X
+	 * LX = lock with #X
+	 * TR = treasure
+	 * IN = info square
+	 * EL = exit lock
+	 * EX = exit
+	 * CH = chap
+	 * XX = crate
+	 * WT = water
+	 * EN = enemy
+	 */
+	public void initialiseSounds(){
+		initialiseStoneSounds();
+
+		sounds.put("EX", new SoundEffect("resources/sound_effects/exit/trigger.wav"));
+		sounds.put("TR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+		sounds.put("KB", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+		sounds.put("KR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+		sounds.put("KG", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+		sounds.put("KY", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
+		sounds.put("DB", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("DR", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("DG", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("DY", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("IN", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+
+
+
+
+	}
+
+	public void initialiseStoneSounds(){
 		String[] stoneFiles = {"resources/sound_effects/stone_step/step1.wav",
 				"resources/sound_effects/stone_step/step2.wav",
 				"resources/sound_effects/stone_step/step3.wav",
 				"resources/sound_effects/stone_step/step4.wav",
 				"resources/sound_effects/stone_step/step5.wav"};
-		List<SoundEffect> stoneSounds = new ArrayList<>();
+
 
 		for(String s: stoneFiles){
-			stoneSounds.add(new SoundEffect(s));
+			pathSounds.add(new SoundEffect(s));
 		}
-
-		sounds.put("stone", stoneSounds);
 	}
 
-	public void playSound(String sound){
+	public void playRandomSound(){
+		SoundEffect currentSound;
 		Random rand = new Random();
-		List<SoundEffect> currentSoundList = getSoundList(sound);
-		currentSound = currentSoundList.get(rand.nextInt(currentSoundList.size()));
+
+		currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
 		while(prevSound == currentSound){
 			prevSound = currentSound;
-			currentSound = currentSoundList.get(rand.nextInt(currentSoundList.size()));
+			currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
 		}
 		currentSound.play();
 		currentSound.reset();
 		prevSound = currentSound;
 	}
 
-	public List<SoundEffect> getSoundList(String key){
-		return sounds.get(key);
+	public void playSound(String s){
+		SoundEffect current = sounds.get(s);
+		current.play();
+		current.reset();
 	}
+
+
 
 	public Tile getTileAt(int row, int col) {
 		return tiles[row][col];

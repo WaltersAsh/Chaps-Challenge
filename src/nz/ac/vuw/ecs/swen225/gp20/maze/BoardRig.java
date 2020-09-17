@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.google.common.base.Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 /**
  * A testing class for setting up a text only Board
@@ -26,6 +27,8 @@ import com.google.common.base.Preconditions;
 public class BoardRig {
 	private static Pattern keyPat = Pattern.compile("K(.)");
 	private static Pattern lockPat = Pattern.compile("L(.)");
+
+
 
 	public static void main(String[] args) {
 		System.out.println(lesson1());
@@ -221,4 +224,6 @@ public class BoardRig {
 				throw new IllegalArgumentException();
 		}
 	}
+
+
 }
