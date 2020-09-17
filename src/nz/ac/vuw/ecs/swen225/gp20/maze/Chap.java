@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * The player controlled token
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -16,7 +16,7 @@ public class Chap extends Movable{
 
 
 	String left, right;
-	
+
 	public Chap(String left, String right) {
 		super(left, "CH");
 		this.left = left;
@@ -24,7 +24,7 @@ public class Chap extends Movable{
 
 
 	}
-	
+
 	public void pickup(Pickup p) {
 		if(p instanceof Treasure) {
 			treasures.add((Treasure)p);
@@ -32,7 +32,7 @@ public class Chap extends Movable{
 			keys.add((Key)p);
 		}
 	}
-	
+
 	public Key hasMatchingKey(Door d) {
 		for(Key key: keys) {
 			if(key.getColor().equals(d.getColor())) {
@@ -57,4 +57,7 @@ public class Chap extends Movable{
 		return keys;
 	}
 
+	public boolean hasAllTreasures(Maze m) {
+		return m.numTreasures()==this.treasures.size();
+	}
 }

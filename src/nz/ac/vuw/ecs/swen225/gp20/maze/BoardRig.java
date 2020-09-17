@@ -88,6 +88,10 @@ public class BoardRig {
 	 * Get a Drawable from a string token
 	 * @param token
 	 * @return
+	public Set<Treasure> getTreasures() {
+		return treasures;
+	}
+
 	 */
 	public static Drawable fromToken(String token) {
 		Preconditions.checkArgument(token.length()==2, "Token has length %s but expected 2", token.length());
