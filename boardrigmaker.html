@@ -1,0 +1,131 @@
+<!--this utter abomination is a result of a lack of skill with JS and html-->
+<html onkeydown="keydownFunction(event)" onkeyup="keyupFunction(event)">
+click to set top left corner of selection
+<br>
+control+click to set bottom right corner of selection
+<br>
+use "new type" input to override selection to new type inputted
+<br>
+<br>
+<input id="width" type="number"> width</input>
+<br>
+<input id="height" type="number"> height</input>
+<br>
+<button type="button" onclick="makeGrid()">make maze</button>
+<br>
+<br>
+<div id="grid" oncontextmenu="return false;"></div>
+<br>
+<input id="changetype" type="text"> new type</input>
+<br>
+<button type="button" onclick="selected.forEach(changeType);">set new type</button>
+<br>
+<br>
+<textarea id="exportarea"></textarea>
+<br>
+<button type="button" onclick="doExport()">export</button> (copy from above)
+<br>
+
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+<script>
+var firstcorner;
+var secondcorner;
+var selected = [];
+var controlDown = false;
+
+function makeGrid(){
+    var grid = document.getElementById("grid");
+    var height = document.getElementById("height").value;
+    var width = document.getElementById("width").value;
+    
+    
+    var grid_html = "<table>";
+    var h = 0;
+    for(h=0; h<height; h++){
+        
+        grid_html = grid_html + '<tr id="' + h + '">';
+        var w = 0;
+        for(w=0; w<width; w++){
+            grid_html = grid_html + '<td onclick="cellClicked(this)" id="' + w +'">WA</td>';
+        }
+        grid_html = grid_html + "</tr>";
+    }
+    grid.innerHTML = grid_html;
+    document.getElementById("exportarea").value = "";
+};
+
+function cellClicked(cell){
+    if(controlDown){
+        cellCtrlClicked(cell);
+    }else{
+        firstcorner = cell;
+        //cell.style.backgroundColor="red";
+    }
+}
+
+function cellCtrlClicked(cell){
+    selected.forEach(unHighlight);
+    selected = [];
+    secondcorner = cell;
+    var firstCol = Number(firstcorner.id);
+    var firstRow = Number(firstcorner.parentElement.id);
+    var secondCol = Number(secondcorner.id);
+    var secondRow = Number(secondcorner.parentElement.id);
+    
+    for(var r=firstRow; r<=secondRow; r++){
+        
+        var element = document.getElementsByTagName("TR").namedItem(r);
+        for(var c=firstCol; c<=secondCol; c++){
+            var child = element.children.namedItem(c);
+            highlight(child);
+        }
+    }
+}
+
+function doExport(){
+    var exportString = "String board = ";
+    
+    var grid = document.getElementById("grid");
+    var rows = document.getElementsByTagName("TR");
+    for(var i=0; i<rows.length; i++){
+        exportString = exportString + "\"";
+        var row = rows[i].getElementsByTagName("TD"); 
+        for(var j=0; j<row.length; j++){
+            exportString = exportString + row[j].textContent + " ";
+        }
+        exportString = exportString.slice(0,-1) + "\\n\"+\n";
+    }
+    exportString = exportString.slice(0,-5)+'";';
+    document.getElementById("exportarea").value = exportString;
+}
+
+function changeType(element){
+    element.innerHTML = document.getElementById("changetype").value;
+}
+
+function keydownFunction(event){
+    if(event.key=="Control"){
+        controlDown=true;
+    }
+}
+
+function keyupFunction(event){
+    if(event.key=="Control"){
+        controlDown=false;
+    }
+}
+
+function highlight(element){
+    element.style.backgroundColor = "cyan";
+    selected.push(element);
+}
+
+function unHighlight(element){
+    element.style.backgroundColor = "";
+}
+</script>
+</html>

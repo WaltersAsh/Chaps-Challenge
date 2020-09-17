@@ -98,6 +98,25 @@ public class BoardRig {
 					   "PA PA PA PA PA PA PA PA PA\n";
 		return BoardRig.fromString(board);
 	}
+	
+	public static Maze levelEditorTest() {
+		String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA CH PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA WT WT WT WT WT WT WT WT WT WT WT WT WT WA\n"+
+				"WA WT WT WT WT WT WT WT WT WT WT WT WT WT WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA";
+		return BoardRig.fromString(board);
+	}
 
 	/**
 	 * Construct Board from string
