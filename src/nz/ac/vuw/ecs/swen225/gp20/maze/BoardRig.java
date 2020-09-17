@@ -148,7 +148,7 @@ public class BoardRig {
 			case "PA":
 				return new PathTile("resources/textures/board/tile/smooth_stone.png");
 			case "TR":
-				return new Treasure("resources/textures/board/pickup/treasure/emerald.png");
+				return new Treasure("resources/textures/board/pickup/treasure/emerald.gif");
 			case "IN":
 				return new InfoField("resources/textures/board/pickup/sign.png", "testing");
 			case "EL":

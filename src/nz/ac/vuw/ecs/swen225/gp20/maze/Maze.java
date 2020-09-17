@@ -76,7 +76,7 @@ public class Maze {
 			}
 		}
 
-		initaliseSoundEffects();
+		initialiseSoundEffects();
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class Maze {
 		}
 	}
 
-	public void initaliseSoundEffects(){
+	public void initialiseSoundEffects(){
 		String[] stoneFiles = {"resources/sound_effects/stone_step/step1.wav",
 				"resources/sound_effects/stone_step/step2.wav",
 				"resources/sound_effects/stone_step/step3.wav",
