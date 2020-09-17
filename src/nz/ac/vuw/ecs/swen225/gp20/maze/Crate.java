@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 /**
  * A Crate which may be pushed by Chap
  * 
@@ -9,8 +11,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public class Crate extends Movable{
 
-	public Crate(String filename) {
-		super(filename, "XX");
+	public Crate(String filename, SoundEffect soundEffect) {
+		super(filename, "XX", soundEffect);
 	}
 
 }

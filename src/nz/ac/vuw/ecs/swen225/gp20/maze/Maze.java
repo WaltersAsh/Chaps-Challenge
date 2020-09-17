@@ -34,7 +34,6 @@ public class Maze {
 
 	private int width,height;
 
-	private HashMap<String, List<SoundEffect>> sounds = new HashMap<>();
 
 	private SoundEffect prevSound = null;
 	private SoundEffect currentSound = null;
@@ -75,8 +74,6 @@ public class Maze {
 
 			}
 		}
-
-		initialiseSoundEffects();
 	}
 
 	@Override
@@ -113,16 +110,22 @@ public class Maze {
 				}
 			}
 
-			playSound("stone");
+
+			if(!((PathTile) next).getContainedEntities().isEmpty()){
+				((PathTile) next).getContainedEntities().peek().getSound().play();
+				((PathTile) next).getContainedEntities().peek().getSound().play();
+			}
+			else {
+				if(next instanceof PathTile){
+					((PathTile) next).playRandomSound();
+				}
+			}
 
 
 			ptnext.moveTo(chap);
 			ptnext.onWalked(this);
 
-
-
 		}
-
 
 	}
 
@@ -212,37 +215,9 @@ public class Maze {
 		}
 	}
 
-	public void initialiseSoundEffects(){
-		String[] stoneFiles = {"resources/sound_effects/stone_step/step1.wav",
-				"resources/sound_effects/stone_step/step2.wav",
-				"resources/sound_effects/stone_step/step3.wav",
-				"resources/sound_effects/stone_step/step4.wav",
-				"resources/sound_effects/stone_step/step5.wav"};
-		List<SoundEffect> stoneSounds = new ArrayList<>();
 
-		for(String s: stoneFiles){
-			stoneSounds.add(new SoundEffect(s));
-		}
 
-		sounds.put("stone", stoneSounds);
-	}
 
-	public void playSound(String sound){
-		Random rand = new Random();
-		List<SoundEffect> currentSoundList = getSoundList(sound);
-		currentSound = currentSoundList.get(rand.nextInt(currentSoundList.size()));
-		while(prevSound == currentSound){
-			prevSound = currentSound;
-			currentSound = currentSoundList.get(rand.nextInt(currentSoundList.size()));
-		}
-		currentSound.play();
-		currentSound.reset();
-		prevSound = currentSound;
-	}
-
-	public List<SoundEffect> getSoundList(String key){
-		return sounds.get(key);
-	}
 
 	public Tile getTileAt(int row, int col) {
 		return tiles[row][col];

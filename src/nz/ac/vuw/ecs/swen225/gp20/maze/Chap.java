@@ -1,4 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,8 @@ public class Chap extends Movable{
 
 	String left, right;
 
-	public Chap(String left, String right) {
-		super(left, "CH");
+	public Chap(String left, String right, SoundEffect soundEffect) {
+		super(left, "CH", soundEffect);
 		this.left = left;
 		this.right = right;
 

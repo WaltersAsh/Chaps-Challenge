@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 /**
  * Shows an information popup when Chap walks over it
  * 
@@ -9,8 +11,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public class InfoField extends Pickup{
 	String information;
-	public InfoField(String filename, String information) {
-		super(filename, "IF");
+	public InfoField(String filename, String information, SoundEffect soundEffect) {
+		super(filename, "IF", soundEffect);
 		this.information=information;
 	}
 

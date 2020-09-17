@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 /**
  * Base class for objects the Chap can pick up
  * 
@@ -9,8 +11,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public abstract class Pickup extends Containable{
 
-	public Pickup(String filename, String initials) {
-		super(filename, initials);
+	public Pickup(String filename, String initials, SoundEffect soundEffect) {
+		super(filename, initials, soundEffect);
 	}
 
 	/**

@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import java.util.*;
 
 import com.google.common.base.Preconditions;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 
 /**
@@ -16,10 +17,17 @@ public class PathTile extends Tile{
 	private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
 	private boolean isBlocked = false;
 	private BlockingContainable blocker;
-	
-	public PathTile(String filename) {
+
+	private List<SoundEffect> pathSounds;
+	private SoundEffect prevSound = null;
+
+	public PathTile(String filename, List<SoundEffect> pathSounds) {
 		super(filename, "░░");
 		this.walkable = true;
+
+		this.pathSounds = pathSounds;
+
+
 	}
 
 	/**
@@ -81,6 +89,20 @@ public class PathTile extends Tile{
 		}
 	}
 
+	public void playRandomSound(){
+		SoundEffect currentSound;
+		Random rand = new Random();
+
+		currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
+		while(prevSound == currentSound){
+			prevSound = currentSound;
+			currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
+		}
+		currentSound.play();
+		currentSound.reset();
+		prevSound = currentSound;
+	}
+
 	public boolean isBlocked() {
 		return isBlocked;
 	}
@@ -92,4 +114,6 @@ public class PathTile extends Tile{
 	public Stack<Containable> getContainedEntities(){
 		return contains;
 	}
+
+	public List<SoundEffect> getPathSounds(){return getPathSounds();}
 }

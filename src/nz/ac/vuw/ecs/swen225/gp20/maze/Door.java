@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 /**
  * The Door, should only unlock if the Chap has the matching Key
  * 
@@ -10,8 +12,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Door extends BlockingContainable {
 	private Maze.KeyColor color;
 	
-	public Door(String filename, Maze.KeyColor color) {
-		super(filename, "D"+color.toString().charAt(0));
+	public Door(String filename, Maze.KeyColor color, SoundEffect soundEffect) {
+		super(filename, "D"+color.toString().charAt(0), soundEffect);
 		this.color = color;
 	}
 
