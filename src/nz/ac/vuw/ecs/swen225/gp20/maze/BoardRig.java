@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * A testing class for setting up a text only Board
  * @author Ian 300474717
- *	
+ *
  * WA = wall
  * PA = path
  * KX = key with #X
@@ -24,11 +24,11 @@ import com.google.common.base.Preconditions;
 public class BoardRig {
 	private static Pattern keyPat = Pattern.compile("K(.)");
 	private static Pattern lockPat = Pattern.compile("L(.)");
-	
+
 	public static void main(String[] args) {
 		System.out.println(lesson1());
 	}
-	
+
 	public static Maze lesson1() {
 		String board = "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA\n"+
 				   "PA PA PA WA WA WA WA WA PA WA WA WA WA WA PA PA PA\n"+
@@ -48,10 +48,24 @@ public class BoardRig {
 				   "PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA PA";
 		return BoardRig.fromString(board);
 	}
-	
+
+	public static Maze crateTest() {
+		String board = "PA PA PA PA PA PA PA PA PA\n"+
+					   "PA WA WA WA WA WA WA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA PA PA CH PA PA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA PA PA XX PA PA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA WA WA WA WA WA WA PA\n"+
+					   "PA PA PA PA PA PA PA PA PA\n";
+		return BoardRig.fromString(board);
+	}
+
 	/**
 	 * Construct Board from string
-	 * 
+	 *
 	 * @param input		string formatted as in class comment
 	 * @return
 	 */
@@ -60,12 +74,12 @@ public class BoardRig {
 		String[] lines = input.split("\n");
 		Tile[][] tiles = new Tile[lines.length][];
 		List<Containable> entities = new ArrayList<>();
-		
+
 		for(int r=0; r<lines.length; r++) {
-				
+
 			String[] line = lines[r].split("\\s");
 			Tile[] row = new Tile[line.length];
-			
+
 			for(int c=0; c<line.length; c++) {
 				Drawable d = fromToken(line[c]);
 				// if it's a containable, make a PathTile and place the containable inside
@@ -83,7 +97,7 @@ public class BoardRig {
 		}
 		return new Maze(tiles, entities);
 	}
-	
+
 	/**
 	 * Get a Drawable from a string token
 	 * @param token
@@ -116,7 +130,7 @@ public class BoardRig {
 			default:
 				Matcher keyMatch = keyPat.matcher(token);
 				Matcher lockMatch = lockPat.matcher(token);
-				
+
 				if(keyMatch.matches()) {
 					return new Key(fileForKey(keyMatch.group(1)), colorFromToken(keyMatch.group(1)));
 				}else if(lockMatch.matches()) {
@@ -125,7 +139,7 @@ public class BoardRig {
 		}
 		return null;
 	}
-	
+
 	public static Maze.KeyColor colorFromToken(String token){
 		switch(token) {
 			case "B":

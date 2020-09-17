@@ -52,6 +52,7 @@ public class Maze {
 
 		height = tiles.length;
 		width = tiles[0].length;
+
 		for(Containable c: entities) {
 			if(c instanceof Treasure) {
 				treasures.add((Treasure)c);
