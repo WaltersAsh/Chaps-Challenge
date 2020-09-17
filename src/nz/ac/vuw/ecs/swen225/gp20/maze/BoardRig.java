@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
  * EX = exit
  * CH = chap
  * XX = crate
+ * WT = water
  */
 
 public class BoardRig {
@@ -57,6 +58,22 @@ public class BoardRig {
 					   "PA WA PA PA PA PA PA WA PA\n"+
 					   "PA WA PA PA PA PA PA WA PA\n"+
 					   "PA WA PA PA XX PA PA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA WA WA WA WA WA WA PA\n"+
+					   "PA WA WA WA WA WA WA WA PA\n"+
+					   "PA PA PA PA PA PA PA PA PA\n";
+		return BoardRig.fromString(board);
+	}
+
+	public static Maze crateAndWaterTest() {
+		String board = "PA PA PA PA PA PA PA PA PA\n"+
+					   "PA WA WA WA WA WA WA WA PA\n"+
+					   "PA WA PA PA CH PA PA WA PA\n"+
+					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA PA PA XX PA PA WA PA\n"+
+					   "PA WA PA PA XX PA PA WA PA\n"+
+					   "PA WA WT WT WT WT WT WA PA\n"+
+					   "PA WA WT WT WT WT WT WA PA\n"+
 					   "PA WA PA PA PA PA PA WA PA\n"+
 					   "PA WA WA WA WA WA WA WA PA\n"+
 					   "PA PA PA PA PA PA PA PA PA\n";
@@ -127,6 +144,8 @@ public class BoardRig {
 				return new Chap("resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif", "resources/textures/board/moveable/character_skins/new_player_skin/SteveRight_WalkBig.gif");
 			case "XX":
 				return new Crate("resources/textures/board/moveable/crate.png");
+			case "WT":
+				return new Water("");
 			default:
 				Matcher keyMatch = keyPat.matcher(token);
 				Matcher lockMatch = lockPat.matcher(token);

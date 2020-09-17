@@ -157,7 +157,8 @@ public class Gui {
     boardPanel = new JPanel();
     //TODO: Set maze and board somewhere else
     //maze = BoardRig.lesson1();
-    maze = BoardRig.crateTest();
+    //maze = BoardRig.crateTest();
+    maze = BoardRig.crateAndWaterTest();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     boardPanel.setMinimumSize(new Dimension(400, 400));
