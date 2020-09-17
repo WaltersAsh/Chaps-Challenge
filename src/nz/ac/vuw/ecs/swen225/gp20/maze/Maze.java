@@ -90,41 +90,58 @@ public class Maze {
 		if(next instanceof PathTile) {
 			PathTile ptnext = (PathTile) next;
 			if(ptnext.isBlocked()) {
-				if(!checkBlocking(ptnext)) return; // return if we can't move to the blocked tile
+				if(checkBlocking(ptnext, d)) {
+					// we can move
+				}else {
+					// return if we can't move to the blocked tile
+					return;
+				}
 			}
 			ptnext.moveTo(chap);
 			ptnext.onWalked(this);
+
 		}
 	}
 
 	/**
-	 * Check if we can move onto a "blocked" PathTile
+	 * Check if we can move onto a door PathTile
 	 *
-	 * We could move onto it for example if we
+	 * We could move onto it if we
 	 * had the matching key to the blocking door.
 	 *
 	 * @param blocked	the PathTile to check
 	 * @return			if we could move onto it
 	 */
-	public boolean checkBlocking(PathTile blocked) {
+	public boolean checkBlocking(PathTile blocked, Direction d) {
 		BlockingContainable bc = blocked.getBlocker();
 		if(bc instanceof Door) {
-			Door door = (Door) bc;
-			Key key = chap.hasMatchingKey(door);
-			if(key != null) {
-				blocked.remove(door);
-				// Green key may be used unlimited times
-				if(!key.getColor().equals(KeyColor.GREEN)) {
-					chap.getKeys().remove(key);
-				}
-				System.out.println("[door] unlocked with "+key.getColor()+" key");
-				return true;
+			return tryUnlockDoor((Door)bc);
+		}else if(bc instanceof Crate) {
+			return tryPushCrate((Crate)bc, d);
+		}
+		return false;
+	}
+
+	public boolean tryUnlockDoor(Door door) {
+		Key key = chap.hasMatchingKey(door);
+		if(key != null) {
+			door.getContainer().remove(door);
+			// Green key may be used unlimited times
+			if(!key.getColor().equals(KeyColor.GREEN)) {
+				chap.getKeys().remove(key);
 			}
-		}else if(bc instanceof ExitLock) {
-			ExitLock el = (ExitLock) bc;
-			if(treasures.size() == chap.getTreasures().size()) {
-				blocked.remove(el);
-				System.out.println("[exit lock] unlocked");
+			System.out.println("[door] unlocked with "+key.getColor()+" key");
+			return true;
+		}
+		return false;
+	}
+
+	public boolean tryPushCrate(Crate c, Direction d) {
+		Tile destination = tileTo(c.container, d);
+		if(destination instanceof PathTile){
+			PathTile pt = (PathTile)destination;
+			if(!pt.isBlocked()) {
+				pt.moveTo(c);
 				return true;
 			}
 		}
