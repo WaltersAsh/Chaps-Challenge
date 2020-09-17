@@ -29,8 +29,8 @@ public class BoardView extends JComponent {
 
         minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
-        drawWholeBoard(g);
-        //drawWindowedBoard(g);
+        //drawWholeBoard(g);
+        drawWindowedBoard(g);
     }
 
     public void drawWholeBoard(Graphics g){
@@ -57,7 +57,7 @@ public class BoardView extends JComponent {
      * @param g the graphics used
      */
     public void drawWindowedBoard(Graphics g){
-        int viewTiles = 4;
+        int viewTiles = 3;
         int windowSize = (2*viewTiles)+1;
 
         int blockSize = minPanel/windowSize;
@@ -71,8 +71,8 @@ public class BoardView extends JComponent {
         if(startRow<0){startRow = 0;}
         if(startCol<0){startCol = 0;}
 
-        if(startCol+windowSize>width-1){startCol = width-1-windowSize;}
-        if(startRow+windowSize>height-1){startRow = height-1-windowSize;}
+        if(startCol+windowSize>width-1){startCol = width-windowSize;}
+        if(startRow+windowSize>height-1){startRow = height-windowSize;}
 
         int currentRow = 0;
         for(int row=startRow; row<startRow+windowSize; row++){
