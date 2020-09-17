@@ -21,6 +21,34 @@ public class Chap extends Movable {
         this.treasures = treasures;
     }
 
+
+	String left, right;
+	
+	public Chap(String left, String right) {
+		super(left, "CH");
+		this.left = left;
+		this.right = right;
+
+
+	}
+	
+	public void pickup(Pickup p) {
+		if(p instanceof Treasure) {
+			treasures.add((Treasure)p);
+		}else if(p instanceof Key) {
+			keys.add((Key)p);
+		}
+	}
+	
+	public Key hasMatchingKey(Door d) {
+		for(Key key: keys) {
+			if(key.getColor().equals(d.getColor())) {
+				return key;
+			}
+		}
+		return null;
+	}
+
     public Chap(String id, String initials, String filename, PathTile container, List<Key> keys, List<Treasure> treasures) {
         super(id, initials, filename, container);
         this.filename = filename;
@@ -64,7 +92,8 @@ public class Chap extends Movable {
         return treasures;
     }
 
-    public List<Key> getKeys() {
-        return keys;
-    }
+	public List<Key> getKeys() {
+		return keys;
+	}
+
 }

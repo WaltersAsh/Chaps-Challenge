@@ -46,4 +46,6 @@ public class Drawable {
 	public String getFilename() {
 		return filename;
 	}
+
+	public void changeFile(String newFile){filename = newFile;}
 }

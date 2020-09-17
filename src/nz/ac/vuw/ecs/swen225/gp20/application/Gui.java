@@ -21,7 +21,7 @@ public class Gui {
   //frame and main panels
   private JFrame frame;
   private JPanel framePanel;
-  private JPanel boardPanel;
+  public static JPanel boardPanel;
   private JPanel sidePanel;
 
   //inner panels inside of side panel
