@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
+
 /**
  * Base class for objects which can move or be moved around the board
  * 
