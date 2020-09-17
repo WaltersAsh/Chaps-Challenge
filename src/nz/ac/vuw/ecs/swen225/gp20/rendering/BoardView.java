@@ -29,12 +29,17 @@ public class BoardView extends JComponent {
 
         minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
-        //drawWholeBoard(g);
-        drawWindowedBoard(g);
+        drawWholeBoard(g);
+        //drawWindowedBoard(g);
     }
 
     public void drawWholeBoard(Graphics g){
-        //blockSize = minPanel
+        if(width>height){
+            blockSize = Gui.boardPanel.getWidth()/width;
+        }
+        else{
+            blockSize = Gui.boardPanel.getHeight()/height;
+        }
 
         for(int row=0; row<height; row++){
             for(int col = 0; col<width; col++){
