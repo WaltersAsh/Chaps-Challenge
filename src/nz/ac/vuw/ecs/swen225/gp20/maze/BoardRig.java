@@ -145,7 +145,7 @@ public class BoardRig {
 			case "XX":
 				return new Crate("resources/textures/board/moveable/crate.png");
 			case "WT":
-				return new Water("");
+				return new Water("resources/textures/board/blocking/water.gif");
 			default:
 				Matcher keyMatch = keyPat.matcher(token);
 				Matcher lockMatch = lockPat.matcher(token);

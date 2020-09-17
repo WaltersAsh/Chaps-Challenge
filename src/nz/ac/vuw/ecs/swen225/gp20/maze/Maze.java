@@ -136,12 +136,26 @@ public class Maze {
 		return false;
 	}
 
+	/**
+	 * Try to push a crate.
+	 *
+	 * @param c		the crate to push
+	 * @param d		the direction in which to push
+	 * @return		if we pushed the crate
+	 */
 	public boolean tryPushCrate(Crate c, Direction d) {
 		Tile destination = tileTo(c.container, d);
+		// if the tile we try to push to is a pathtile
 		if(destination instanceof PathTile){
 			PathTile pt = (PathTile)destination;
+			// if the pathtile we try to push to is free, push the crate
 			if(!pt.isBlocked()) {
 				pt.moveTo(c);
+				return true;
+			// can also push crate onto water to make a path
+			}else if(pt.getBlocker() instanceof Water) {
+				pt.remove(pt.getBlocker());
+				c.getContainer().remove(c);
 				return true;
 			}
 		}
