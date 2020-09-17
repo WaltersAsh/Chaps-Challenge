@@ -68,13 +68,13 @@ public class BoardRig {
 	public static Maze crateAndWaterTest() {
 		String board = "PA PA PA PA PA PA PA PA PA\n"+
 					   "PA WA WA WA WA WA WA WA PA\n"+
-					   "PA WA PA PA CH PA PA WA PA\n"+
-					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA PA PA PA EL EX WA PA\n"+
+					   "PA WA CH PA PA PA WA WA PA\n"+
 					   "PA WA PA PA XX PA PA WA PA\n"+
 					   "PA WA PA PA XX PA PA WA PA\n"+
 					   "PA WA WT WT WT WT WT WA PA\n"+
 					   "PA WA WT WT WT WT WT WA PA\n"+
-					   "PA WA PA PA PA PA PA WA PA\n"+
+					   "PA WA TR PA PA PA TR WA PA\n"+
 					   "PA WA WA WA WA WA WA WA PA\n"+
 					   "PA PA PA PA PA PA PA PA PA\n";
 		return BoardRig.fromString(board);

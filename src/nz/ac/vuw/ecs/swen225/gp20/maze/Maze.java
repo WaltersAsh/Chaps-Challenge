@@ -79,7 +79,6 @@ public class Maze {
 	public void move(Direction d) {
 		Tile current = chap.getContainer();
 		Tile next = tileTo(current,d);
-
 		if(d == Direction.LEFT){
 			chap.changeFile(chap.left);
 		}
