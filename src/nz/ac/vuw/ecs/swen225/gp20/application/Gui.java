@@ -193,7 +193,8 @@ public class Gui extends MazeEventListener{
     // maze = BoardRig.pathFindTest1();
     // maze = BoardRig.levelEditorTest2();
 
-
+    maze.addListener(this);
+    
     inventory = new ArrayList<>(maze.getChap().getKeys());
     updatedInventory = new ArrayList<>(maze.getChap().getKeys());
     board = new BoardView(maze);
@@ -618,20 +619,27 @@ public class Gui extends MazeEventListener{
     frame.revalidate();
   }
   
+  /**
+   * Update the inventory when we pick up a key.
+   * 
+   * @param e the key pickup event
+   */
   @Override
   public void update(MazeEventPickup e) {
     try {
-      Key key = (Key) e.getPicked();
-      Image keyImage;
-      keyImage = ImageIO.read(new File(key.getFilename()));
-      ImageIcon keyIcon = new ImageIcon(
-          keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-      for (JLabel inventoryValueLabel : inventoryValueLabels) {
-        if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
-          inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
-          inventoryValueLabel.setIcon(keyIcon);
-          frame.revalidate();
-          break;
+      if(e.getPicked() instanceof Key) {
+        Key key = (Key) e.getPicked();
+        Image keyImage;
+        keyImage = ImageIO.read(new File(key.getFilename()));
+        ImageIcon keyIcon = new ImageIcon(
+            keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+        for (JLabel inventoryValueLabel : inventoryValueLabels) {
+          if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
+            inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
+            inventoryValueLabel.setIcon(keyIcon);
+            frame.revalidate();
+            break;
+          }
         }
       }
     } catch (IOException e1) {
@@ -639,7 +647,12 @@ public class Gui extends MazeEventListener{
       e1.printStackTrace();
     }
   }
-  
+ 
+  /**
+   * Update the inventory when we open a door.
+   * 
+   * @param e the door open event
+   */
   @Override
   public void update(MazeEventUnlocked e) {
     if (e.getDoor().getColor() == KeyColor.GREEN)
