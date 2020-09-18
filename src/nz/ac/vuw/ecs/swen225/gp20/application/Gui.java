@@ -43,6 +43,7 @@ public class Gui {
   private JFrame frame;
   private JPanel framePanel;
   public static JPanel boardPanel;
+
   private JPanel sidePanel;
 
   //inner panels inside of side panel
@@ -90,7 +91,7 @@ public class Gui {
   private Color fullLavender = new Color(102, 0, 255);
   private Color paleLavender = new Color(237, 224, 255);
 
-  private BoardView board;
+  public static BoardView board;
   private Maze maze;
   private Timer timer;
   private TimerTask timerTask;
@@ -175,7 +176,7 @@ public class Gui {
     //TODO: Set maze and board somewhere else
     maze = BoardRig.lesson1();
     //maze = BoardRig.crateTest();
-    maze = BoardRig.crateAndWaterTest();
+    //maze = BoardRig.crateAndWaterTest();
     //maze = BoardRig.pathFindTest1();
     //maze = BoardRig.levelEditorTest2();
     inventory = new ArrayList<>(maze.getChap().getKeys());
@@ -522,6 +523,14 @@ public class Gui {
    */
   public JPanel getBoardPanel() {
     return boardPanel;
+  }
+
+  /**
+   * Get the board.
+   * @return the JComponent representing the board.
+   */
+  public BoardView getBoard() {
+    return board;
   }
 
   /**
