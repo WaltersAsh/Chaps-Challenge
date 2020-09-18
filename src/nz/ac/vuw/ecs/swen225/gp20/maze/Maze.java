@@ -152,7 +152,6 @@ public class Maze {
 		if(key != null) {
 			sounds.get(door.initials).play();
 			door.getContainer().remove(door);
-			sounds.get(door.initials).reset();
 
 			//sounds.get(door.getContainer().initials).play();
 			// Green key may be used unlimited times
@@ -180,13 +179,11 @@ public class Maze {
 			// if the pathtile we try to push to is free, push the crate
 			if(!pt.isBlocked()) {
 				sounds.get(c.initials).play();
-				sounds.get(c.initials).reset();
 				pt.moveTo(c);
 				return true;
 			// can also push crate onto water to make a path
 			}else if(pt.getBlocker() instanceof Water) {
 				sounds.get(pt.getBlocker().initials).play();
-				sounds.get(pt.getBlocker().initials).reset();
 				pt.remove(pt.getBlocker());
 				c.getContainer().remove(c);
 				return true;
@@ -281,14 +278,12 @@ public class Maze {
 			currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
 		}
 		currentSound.play();
-		currentSound.reset();
 		prevSound = currentSound;
 	}
 
 	public void playSound(String s){
 		SoundEffect current = sounds.get(s);
 		current.play();
-		current.reset();
 	}
 
 
@@ -329,6 +324,5 @@ public class Maze {
 	public void openExitLock() {
 		exitlock.getContainer().remove(exitlock);
 		sounds.get(exitlock.initials).play();
-		sounds.get(exitlock.initials).reset();
 	}
 }

@@ -29,8 +29,8 @@ public class BoardView extends JComponent {
 
         minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
-        drawWholeBoard(g);
-        //drawWindowedBoard(g);
+        //drawWholeBoard(g);
+        drawWindowedBoard(g);
     }
 
     public void drawWholeBoard(Graphics g){
