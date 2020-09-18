@@ -18,5 +18,11 @@ public class MazeEventPushed extends MazeEventWalked{
 	public Movable getPushed() {
 		return pushed;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Walked onto %s,%s and pushed a %s %s",
+				destination.getCol(), destination.getRow(), pushed, direction);
+	}
 
 }

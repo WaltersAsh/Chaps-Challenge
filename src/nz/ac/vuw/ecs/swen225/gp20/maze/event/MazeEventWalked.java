@@ -9,8 +9,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  *
  */
 public class MazeEventWalked extends MazeEvent{
-	private Tile origin, destination;
-	private Maze.Direction direction;
+	protected Tile origin, destination;
+	protected Maze.Direction direction;
 	
 	public MazeEventWalked(Maze m, Tile origin, Tile destination, Maze.Direction direction) {
 		super(m);
@@ -29,5 +29,12 @@ public class MazeEventWalked extends MazeEvent{
 
 	public Maze.Direction getDirection() {
 		return direction;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Walked from tile %s,%s to tile %s,%s",
+				origin.getCol(), origin.getRow(), 
+				destination.getCol(), destination.getRow());
 	}
 }

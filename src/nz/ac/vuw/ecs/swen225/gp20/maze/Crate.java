@@ -14,5 +14,9 @@ public class Crate extends Movable{
 	public Crate(String filename) {
 		super(filename, "XX");
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Crate";
+	}
 }

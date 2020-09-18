@@ -18,5 +18,11 @@ public class MazeEventPickup extends MazeEventWalked{
 	public Pickup getPicked() {
 		return picked;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Picked up a %s at %s,%s",
+				picked, destination.getCol(), destination.getRow());
+	}
 
 }

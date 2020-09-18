@@ -13,4 +13,10 @@ public class MazeEventWon extends MazeEventWalked{
 	public MazeEventWon(Maze m, Tile origin, Tile destination, Direction direction) {
 		super(m, origin, destination, direction);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Walked onto the exit tile at %s,%s and beat the level!",
+				destination.getCol(), destination.getRow());
+	}
 }
