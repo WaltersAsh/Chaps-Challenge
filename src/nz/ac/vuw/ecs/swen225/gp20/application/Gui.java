@@ -168,9 +168,9 @@ public class Gui {
     //TODO: Set maze and board somewhere else
     //maze = BoardRig.lesson1();
     //maze = BoardRig.crateTest();
-    //maze = BoardRig.crateAndWaterTest();
+    maze = BoardRig.crateAndWaterTest();
     //maze = BoardRig.pathFindTest1();
-    maze = BoardRig.levelEditorTest2();
+    //maze = BoardRig.levelEditorTest2();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     //boardPanel.setMinimumSize(new Dimension(400, 400));

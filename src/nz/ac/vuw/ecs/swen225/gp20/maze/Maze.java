@@ -183,6 +183,8 @@ public class Maze {
 				return true;
 			// can also push crate onto water to make a path
 			}else if(pt.getBlocker() instanceof Water) {
+				sounds.get(pt.getBlocker().initials).play();
+				sounds.get(pt.getBlocker().initials).reset();
 				pt.remove(pt.getBlocker());
 				c.getContainer().remove(c);
 				return true;
@@ -248,9 +250,7 @@ public class Maze {
 		sounds.put("DY", new SoundEffect("resources/sound_effects/door/door_open.wav"));
 		sounds.put("IN", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
 		sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
-
-
-
+		sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
 
 	}
 
