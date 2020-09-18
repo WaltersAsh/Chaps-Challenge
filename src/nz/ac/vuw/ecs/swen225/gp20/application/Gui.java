@@ -1,21 +1,26 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -90,6 +95,8 @@ public class Gui {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
+  private List<Key> inventory;
+  private List<Key> updatedInventory;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -166,11 +173,13 @@ public class Gui {
   public void createBoardPanel() {
     boardPanel = new JPanel();
     //TODO: Set maze and board somewhere else
-    //maze = BoardRig.lesson1();
+    maze = BoardRig.lesson1();
     //maze = BoardRig.crateTest();
     //maze = BoardRig.crateAndWaterTest();
     //maze = BoardRig.pathFindTest1();
-    maze = BoardRig.levelEditorTest2();
+    //maze = BoardRig.levelEditorTest2();
+    inventory = new ArrayList<>(maze.getChap().getKeys());
+    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     //boardPanel.setMinimumSize(new Dimension(400, 400));
@@ -224,6 +233,7 @@ public class Gui {
     inventoryValueLabels = new JLabel[8];
     for (int i = 0; i < 8; i++) {
       JLabel label = new JLabel();
+      label.setText(" ");
       label.setOpaque(true);
       label.setBackground(darkLavender);
       label.setBorder(BorderFactory.createLineBorder(paleLavender));
@@ -269,7 +279,7 @@ public class Gui {
     levelValueLabel = new JLabel("1");
     timeValueLabel = new JLabel("60");
     treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures()));
-    inventoryValueLabels = new JLabel[8];
+    //inventoryValueLabels = new JLabel[8];
     levelValueLabel.setFont(bigText);
     timeValueLabel.setFont(bigText);
     treasuresValueLabel.setFont(bigText);
@@ -335,6 +345,12 @@ public class Gui {
           timer.cancel();
           timer.purge();
         }
+
+        try {
+          updateInventory();
+        } catch (IOException ioException) {
+          ioException.printStackTrace();
+        }
         board.repaint();
 
         //pause and resume
@@ -397,11 +413,97 @@ public class Gui {
   }
 
   /**
-   * Update keys/items (not treasures) picked up.
+   * Add a inventory icon when a key is picked up.
+   *
+   * @throws IOException thrown when key icon image reading fails
    */
-  public void updateInventory() {
-    List<Key> keys = maze.getChap().getKeys();
+  public void addInventoryIcon() throws IOException {
+    Image keyImage = null;
+    ImageIcon keyIcon = null;
+    String enumName;
+    Key currentKey = inventory.get(inventory.size() - 1);
+    enumName = currentKey.getColor().name();
+    switch (currentKey.getColor()) {
+      case BLUE:
+        keyImage = ImageIO.read(new File(
+                "resources/textures/board/pickup/keys/wooden_pickaxe.png"));
+        break;
+      case RED:
+        keyImage = ImageIO.read(new File(
+                "resources/textures/board/pickup/keys/iron_pickaxe.png"));
+        break;
+      case GREEN:
+        keyImage = ImageIO.read(new File(
+                "resources/textures/board/pickup/keys/diamond_pickaxe.png"));
+        break;
+      case YELLOW:
+        keyImage = ImageIO.read(new File(
+                "resources/textures/board/pickup/keys/golden_pickaxe.png"));
+        break;
+      default:
+        break;
+    }
+    keyIcon = new ImageIcon(keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      if (inventoryValueLabel.getText().equals(" ")) {  //check label is empty
+        inventoryValueLabel.setText(enumName);  //identify as non-empty label
+        inventoryValueLabel.setIcon(keyIcon);
+        frame.revalidate();
+        break;
+      }
+    }
+  }
 
+  /**
+   * Remove an inventory icon.
+   *
+   * @param labelText the label that has the matching label text
+   */
+  public void removeInventoryIcon(String labelText) {
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      if (inventoryValueLabel.getText().equals(labelText)) {
+        inventoryValueLabel.setText(" ");   //set label to empty again
+        inventoryValueLabel.setIcon(null);  //remove the icon (display nothing)
+        frame.revalidate();
+        break;
+      }
+    }
+  }
+
+  /**
+   * Update keys/items (not treasures) picked up.
+   *
+   * <p>
+   * This method contains very dodgy logic
+   * old inventory - new inventory > 0: key is added
+   * new inventory - old inventory > 0: key is used
+   * </p>
+   *
+   */
+  public void updateInventory() throws IOException {
+    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
+    List<Key> tempUpdatedInventory = new ArrayList<>(maze.getChap().getKeys());
+    List<Key> tempInventory = new ArrayList<Key>(inventory);
+
+    //inventory is changed
+    if (!inventory.equals(updatedInventory)) {
+
+      updatedInventory.removeAll(inventory);
+      tempInventory.removeAll(tempUpdatedInventory);
+
+      //key is picked up
+      if (updatedInventory.size() > 0) {
+        System.out.println(updatedInventory);
+        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
+        inventory = updatedInventory;
+        addInventoryIcon();
+        //key is used
+      } else {
+        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
+        inventory = updatedInventory;
+        removeInventoryIcon(tempInventory.get(0).getColor().name());
+      }
+    }
   }
 
   /**
