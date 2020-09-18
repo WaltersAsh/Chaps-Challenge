@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 /**
  * Base class for objects which may be inside FreeTiles
  * 

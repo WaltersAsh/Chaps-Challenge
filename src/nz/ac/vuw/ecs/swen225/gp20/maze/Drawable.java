@@ -15,7 +15,7 @@ import java.util.UUID;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Drawable {
   public final String id = UUID.randomUUID().toString();
-  private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+  protected static Toolkit toolkit = Toolkit.getDefaultToolkit();
   protected String initials; // the string representation of this Drawable for drawing in text form
 
   // public Image image;

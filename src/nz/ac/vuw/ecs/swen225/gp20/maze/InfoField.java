@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 /**
  * Shows an information popup when Chap walks over it
  * 

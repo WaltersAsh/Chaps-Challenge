@@ -2,9 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.*;
 
-import com.google.common.base.Preconditions;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 /**
  * A tile which Chap may walk on, and may contain Containables
  * 
@@ -84,9 +81,5 @@ public class PathTile extends Tile {
 
   public Stack<Containable> getContainedEntities() {
     return contains;
-  }
-
-  public List<SoundEffect> getPathSounds() {
-    return getPathSounds();
   }
 }

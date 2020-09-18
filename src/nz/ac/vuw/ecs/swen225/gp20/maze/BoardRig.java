@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.google.common.base.Preconditions;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 /**
  * A testing class for setting up a text only Board
