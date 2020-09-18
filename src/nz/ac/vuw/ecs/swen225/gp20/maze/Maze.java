@@ -179,6 +179,8 @@ public class Maze {
 			PathTile pt = (PathTile)destination;
 			// if the pathtile we try to push to is free, push the crate
 			if(!pt.isBlocked()) {
+				sounds.get(c.initials).play();
+				sounds.get(c.initials).reset();
 				pt.moveTo(c);
 				return true;
 			// can also push crate onto water to make a path
@@ -251,6 +253,8 @@ public class Maze {
 		sounds.put("IN", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
 		sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
 		sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
+		sounds.put("XX", new SoundEffect("resources/sound_effects/crate/grindstone_use1pitch.wav"));
+
 
 	}
 
