@@ -16,9 +16,28 @@ use "new type" input to override selection to new type inputted
 <br>
 <div id="grid" oncontextmenu="return false;"></div>
 <br>
-<input id="changetype" type="text"> new type</input>
-<br>
-<button type="button" onclick="selected.forEach(changeType);">set new type</button>
+<label for="changetype">new type?</label>
+<select autocomplete="off" id="changetype" onchange="selected.forEach(changeType)">
+<option value="WA" selected>wall</option>
+<option value="PA">path</option>
+<option value="KB">wood pickaxe</option>
+<option value="KR">iron pickaxe</option>
+<option value="KG">diamond pickaxe</option>
+<option value="KY">gold pickaxe</option>
+<option value="LB">wood door</option>
+<option value="LR">iron door</option>
+<option value="LG">diamond door</option>
+<option value="LY">gold door</option>
+<option value="TR">treasure</option>
+<option value="IN">info square</option>
+<option value="EL">exit lock</option>
+<option value="EX">exit</option>
+<option value="CH">chap</option>
+<option value="XX">crate</option>
+<option value="WT">water</option>
+<option value="EN">enemy</option>
+</select>
+<button type="button" onclick="selected.forEach(changeType)">update</button>
 <br>
 <br>
 <textarea id="exportarea"></textarea>
@@ -36,6 +55,27 @@ var firstcorner;
 var secondcorner;
 var selected = [];
 var controlDown = false;
+var images = {
+	"WA":"resources/textures/board/tile/wall.png",
+	"PA":"resources/textures/board/tile/smooth_stone.png",
+	"TR":"resources/textures/board/pickup/treasure/emerald.gif",
+	"IN":"resources/textures/board/pickup/sign.png",
+	"EL":"resources/textures/board/blocking/doors/bedrock.png",
+	"EX":"resources/textures/board/pickup/exit.png",
+	"CH":"resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif",
+	"XX":"resources/textures/board/moveable/crate.png",
+	"WT":"resources/textures/board/blocking/water.gif",
+	"EN":"resources/textures/board/moveable/character_skins/new_enemy_skin/creeper_leftwalkBig.gif",
+	"LB":"resources/textures/board/blocking/doors/spruce_planks.png",
+	"LR":"resources/textures/board/blocking/doors/iron_block.png",
+	"LG":"resources/textures/board/blocking/doors/diamond_block.png",
+	"LY":"resources/textures/board/blocking/doors/gold_block.png",
+	"KB":"resources/textures/board/pickup/keys/wooden_pickaxe.png",
+	"KR":"resources/textures/board/pickup/keys/iron_pickaxe.png",
+	"KG":"resources/textures/board/pickup/keys/diamond_pickaxe.png",
+	"KY":"resources/textures/board/pickup/keys/gold_pickaxe.png",
+};
+
 
 function makeGrid(){
     var grid = document.getElementById("grid");
@@ -50,7 +90,7 @@ function makeGrid(){
         grid_html = grid_html + '<tr id="' + h + '">';
         var w = 0;
         for(w=0; w<width; w++){
-            grid_html = grid_html + '<td onclick="cellClicked(this)" id="' + w +'">WA</td>';
+            grid_html = grid_html + '<td id="' + w +'" class="WA"><img onclick="cellClicked(this.parentElement)" oncontextmenu="cellCtrlClicked(this.parentElement)" src="'+images['WA']+'" id="WA" width="20" height="20"></td>';
         }
         grid_html = grid_html + "</tr>";
     }
@@ -59,6 +99,7 @@ function makeGrid(){
 };
 
 function cellClicked(cell){
+	console.log(cell);
     if(controlDown){
         cellCtrlClicked(cell);
     }else{
@@ -95,7 +136,7 @@ function doExport(){
         exportString = exportString + "\"";
         var row = rows[i].getElementsByTagName("TD"); 
         for(var j=0; j<row.length; j++){
-            exportString = exportString + row[j].textContent + " ";
+            exportString = exportString + row[j].classList + " ";
         }
         exportString = exportString.slice(0,-1) + "\\n\"+\n";
     }
@@ -104,7 +145,9 @@ function doExport(){
 }
 
 function changeType(element){
-    element.innerHTML = document.getElementById("changetype").value;
+	var change = document.getElementById("changetype").value;
+    element.className = change;
+	element.getElementsByTagName("img")[0].src = images[change];;
 }
 
 function keydownFunction(event){
@@ -120,12 +163,12 @@ function keyupFunction(event){
 }
 
 function highlight(element){
-    element.style.backgroundColor = "cyan";
+    element.style.border="1px solid cyan";
     selected.push(element);
 }
 
 function unHighlight(element){
-    element.style.backgroundColor = "";
+    element.style.border="";
 }
 </script>
 </html>
