@@ -46,7 +46,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
  *
  * @author Justin 300470389
  */
-public class Gui {
+public class Gui extends MazeEventListener{
   // frame and main panels
   private JFrame frame;
   private JPanel framePanel;
@@ -193,13 +193,6 @@ public class Gui {
     // maze = BoardRig.pathFindTest1();
     // maze = BoardRig.levelEditorTest2();
 
-    maze.addListener(new MazeEventListener() {
-
-      @Override
-      public void notify(MazeEvent e) {
-        onMazeUpdate(e);
-      }
-    });
 
     inventory = new ArrayList<>(maze.getChap().getKeys());
     updatedInventory = new ArrayList<>(maze.getChap().getKeys());
@@ -624,54 +617,43 @@ public class Gui {
     infoFieldLabelText.setText(text);
     frame.revalidate();
   }
-
-  /**
-   * React to a MazeEvent.
-   * 
-   * @param e the event to react to
-   */
-  public void onMazeUpdate(MazeEvent e) {
-    if (e instanceof MazeEventPickup) {
-      MazeEventPickup p = (MazeEventPickup) e;
-
-      if (p.getPicked() instanceof Key) {
-
-        try {
-          Key key = (Key) p.getPicked();
-          Image keyImage;
-          keyImage = ImageIO.read(new File(key.getFilename()));
-          ImageIcon keyIcon = new ImageIcon(
-              keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-          for (JLabel inventoryValueLabel : inventoryValueLabels) {
-            if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
-              inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
-              inventoryValueLabel.setIcon(keyIcon);
-              frame.revalidate();
-              break;
-            }
-          }
-        } catch (IOException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-        }
-
-      }
-    } else if (e instanceof MazeEventUnlocked) {
-      MazeEventUnlocked u = (MazeEventUnlocked) e;
-      if (u.getDoor().getColor() == KeyColor.GREEN)
-        return; // temporary fix
+  
+  @Override
+  public void update(MazeEventPickup e) {
+    try {
+      Key key = (Key) e.getPicked();
+      Image keyImage;
+      keyImage = ImageIO.read(new File(key.getFilename()));
+      ImageIcon keyIcon = new ImageIcon(
+          keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
       for (JLabel inventoryValueLabel : inventoryValueLabels) {
-        if (inventoryValueLabel.getText().equals(u.getDoor().getColor().name())) {
-          inventoryValueLabel.setText(" "); // set label to empty again
-          inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+        if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
+          inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
+          inventoryValueLabel.setIcon(keyIcon);
           frame.revalidate();
           break;
         }
       }
+    } catch (IOException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
     }
-
   }
-
+  
+  @Override
+  public void update(MazeEventUnlocked e) {
+    if (e.getDoor().getColor() == KeyColor.GREEN)
+      return; // temporary fix
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      if (inventoryValueLabel.getText().equals(e.getDoor().getColor().name())) {
+        inventoryValueLabel.setText(" "); // set label to empty again
+        inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+        frame.revalidate();
+        break;
+      }
+    }
+  }
+  
   /**
    * Main method for testing the GUI.
    *

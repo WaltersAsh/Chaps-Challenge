@@ -11,9 +11,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class MazeEventPushed extends MazeEventWalked {
   private Movable pushed;
 
-  public MazeEventPushed(Maze m, Tile origin, Tile destination, Maze.Direction direction,
+  public MazeEventPushed(Maze maze, Tile origin, Tile destination, Maze.Direction direction,
       Movable pushed) {
-    super(m, origin, destination, direction);
+    super(maze, origin, destination, direction);
     this.pushed = pushed;
   }
 
@@ -26,5 +26,9 @@ public class MazeEventPushed extends MazeEventWalked {
     return String.format("Walked onto %s,%s and pushed a %s %s", destination.getCol(),
         destination.getRow(), pushed, direction);
   }
-
+  
+  @Override
+  public void accept(MazeEventListener l) {
+    l.update(this);
+  }
 }

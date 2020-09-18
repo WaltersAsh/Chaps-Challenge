@@ -11,9 +11,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class MazeEventInfoField extends MazeEventWalked {
   private InfoField info;
 
-  public MazeEventInfoField(Maze m, Tile origin, Tile destination, Maze.Direction direction,
+  public MazeEventInfoField(Maze maze, Tile origin, Tile destination, Maze.Direction direction,
       InfoField info) {
-    super(m, destination, destination, direction);
+    super(maze, destination, destination, direction);
     this.info = info;
   }
 
@@ -25,5 +25,10 @@ public class MazeEventInfoField extends MazeEventWalked {
   public String toString() {
     return String.format("Read an info field saying \"%s\" at tile %s,%s", info.getInformation(),
         destination.getCol(), destination.getRow());
+  }
+  
+  @Override
+  public void accept(MazeEventListener l) {
+    l.update(this);
   }
 }

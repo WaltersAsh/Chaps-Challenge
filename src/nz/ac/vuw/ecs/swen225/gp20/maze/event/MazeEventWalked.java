@@ -8,12 +8,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  * @author Ian 300474717
  *
  */
-public class MazeEventWalked extends MazeEvent {
+public class MazeEventWalked implements MazeEvent {
   protected Tile origin, destination;
   protected Maze.Direction direction;
-
-  public MazeEventWalked(Maze m, Tile origin, Tile destination, Maze.Direction direction) {
-    super(m);
+  protected Maze maze;
+  
+  public MazeEventWalked(Maze maze, Tile origin, Tile destination, Maze.Direction direction) {
+    this.maze = maze;
     this.origin = origin;
     this.destination = destination;
     this.direction = direction;
@@ -35,5 +36,10 @@ public class MazeEventWalked extends MazeEvent {
   public String toString() {
     return String.format("Walked from tile %s,%s to tile %s,%s", origin.getCol(), origin.getRow(),
         destination.getCol(), destination.getRow());
+  }
+  
+  @Override
+  public void accept(MazeEventListener l) {
+    l.update(this);
   }
 }

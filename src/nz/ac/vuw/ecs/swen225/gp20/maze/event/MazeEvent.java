@@ -8,14 +8,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  * @author Ian 300474717
  *
  */
-abstract public class MazeEvent {
-  private Maze maze;
-
-  public MazeEvent(Maze m) {
-    maze = m;
-  }
-
-  public Maze getMaze() {
-    return maze;
-  }
+public interface MazeEvent {
+  void accept(MazeEventListener listener);
 }

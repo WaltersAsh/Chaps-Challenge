@@ -12,9 +12,9 @@ public class MazeEventUnlocked extends MazeEventWalked {
   private Door door;
   private Key key;
 
-  public MazeEventUnlocked(Maze m, Tile origin, Tile destination, Maze.Direction direction,
+  public MazeEventUnlocked(Maze maze, Tile origin, Tile destination, Maze.Direction direction,
       Door door, Key key) {
-    super(m, destination, destination, direction);
+    super(maze, destination, destination, direction);
     this.door = door;
     this.key = key;
 
@@ -32,5 +32,10 @@ public class MazeEventUnlocked extends MazeEventWalked {
   public String toString() {
     return String.format("Unlocked a %s at %s,%s with a %s", door, destination.getCol(),
         destination.getRow(), key);
+  }
+  
+  @Override
+  public void accept(MazeEventListener l) {
+    l.update(this);
   }
 }
