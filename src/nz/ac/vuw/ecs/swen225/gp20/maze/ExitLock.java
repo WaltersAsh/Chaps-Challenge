@@ -10,7 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  */
 
 public class ExitLock extends BlockingContainable {
-	public ExitLock(String filename) {
-		super(filename, "EL");
-	}
+  public ExitLock(String filename) {
+    super(filename, "EL");
+  }
 }

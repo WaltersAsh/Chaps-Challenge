@@ -9,9 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public abstract class Movable extends BlockingContainable{
+public abstract class Movable extends BlockingContainable {
 
-	public Movable(String filename, String initials) {
-		super(filename, initials);
-	}
+  public Movable(String filename, String initials) {
+    super(filename, initials);
+  }
 }

@@ -7,18 +7,19 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 
-public abstract class Pickup extends Containable{
+public abstract class Pickup extends Containable {
 
-	public Pickup(String filename, String initials) {
-		super(filename, initials);
-	}
+  public Pickup(String filename, String initials) {
+    super(filename, initials);
+  }
 
-	/**
-	 * Pick up this Pickup
-	 * @param c 	Chap
-	 */
-	public void addToInventory(Chap c) {
-		this.container.remove(this);
-		c.pickup(this);
-	}
+  /**
+   * Pick up this Pickup
+   * 
+   * @param c Chap
+   */
+  public void addToInventory(Chap c) {
+    this.container.remove(this);
+    c.pickup(this);
+  }
 }

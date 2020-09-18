@@ -10,7 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  */
 
 public class Water extends BlockingContainable {
-	public Water(String filename) {
-		super(filename, "WT");
-	}
+  public Water(String filename) {
+    super(filename, "WT");
+  }
 }

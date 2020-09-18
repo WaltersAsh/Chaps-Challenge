@@ -9,14 +9,15 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public class InfoField extends Pickup{
-	private String information;
-	public InfoField(String filename, String information) {
-		super(filename, "IN");
-		this.information=information;
-	}
+public class InfoField extends Pickup {
+  private String information;
 
-	public String getInformation() {
-		return information;
-	}
+  public InfoField(String filename, String information) {
+    super(filename, "IN");
+    this.information = information;
+  }
+
+  public String getInformation() {
+    return information;
+  }
 }

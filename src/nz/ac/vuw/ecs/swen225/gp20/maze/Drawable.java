@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -13,32 +12,33 @@ import java.util.UUID;
  * @author Ian 300474717
  *
  */
-@JsonIdentityInfo(
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Drawable {
-	public final String id = UUID.randomUUID().toString();
-	private static Toolkit toolkit = Toolkit.getDefaultToolkit();
-	protected String initials; // the string representation of this Drawable for drawing in text form
+  public final String id = UUID.randomUUID().toString();
+  private static Toolkit toolkit = Toolkit.getDefaultToolkit();
+  protected String initials; // the string representation of this Drawable for drawing in text form
 
-	//	public Image image;
-	public String filename;
-	public Drawable(String filename, String initials) {
+  // public Image image;
+  public String filename;
 
-		this.initials = initials;
+  public Drawable(String filename, String initials) {
+
+    this.initials = initials;
 //		image = toolkit.getImage(filename);
-		this.filename = filename;
-	}
-	
-	public String getInitials() {
-		return initials;
-	}
+    this.filename = filename;
+  }
+
+  public String getInitials() {
+    return initials;
+  }
 
 //	public Image getImage(){return image;}
 
-	public String getFilename() {
-		return filename;
-	}
+  public String getFilename() {
+    return filename;
+  }
 
-	public void changeFile(String newFile){filename = newFile;}
+  public void changeFile(String newFile) {
+    filename = newFile;
+  }
 }

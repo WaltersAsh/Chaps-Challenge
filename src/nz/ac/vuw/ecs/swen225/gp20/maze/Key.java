@@ -10,23 +10,23 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  */
 
 public class Key extends Pickup {
-	private Maze.KeyColor color;
+  private Maze.KeyColor color;
 
-	public Key(String filename, Maze.KeyColor color) {
-		super(filename, "K"+color.toString().charAt(0));
-		this.color = color;
-	}
-	
-	public Maze.KeyColor getColor() {
-		return color;
-	}
+  public Key(String filename, Maze.KeyColor color) {
+    super(filename, "K" + color.toString().charAt(0));
+    this.color = color;
+  }
 
-	public void setColor(Maze.KeyColor color) {
-		this.color = color;
-	}
-	
-	@Override
-	public String toString() {
-		return color.toString() + " Key";
-	}
+  public Maze.KeyColor getColor() {
+    return color;
+  }
+
+  public void setColor(Maze.KeyColor color) {
+    this.color = color;
+  }
+
+  @Override
+  public String toString() {
+    return color.toString() + " Key";
+  }
 }

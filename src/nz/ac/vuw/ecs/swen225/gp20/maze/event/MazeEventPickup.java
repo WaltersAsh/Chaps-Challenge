@@ -8,21 +8,23 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  * @author Ian 300474717
  *
  */
-public class MazeEventPickup extends MazeEventWalked{
-	private Pickup picked;
-	public MazeEventPickup(Maze m, Tile origin, Tile destination, Maze.Direction direction, Pickup picked) {
-		super(m, destination, destination, direction);
-		this.picked = picked;  
-	}
-	
-	public Pickup getPicked() {
-		return picked;
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("Picked up a %s at %s,%s",
-				picked, destination.getCol(), destination.getRow());
-	}
+public class MazeEventPickup extends MazeEventWalked {
+  private Pickup picked;
+
+  public MazeEventPickup(Maze m, Tile origin, Tile destination, Maze.Direction direction,
+      Pickup picked) {
+    super(m, destination, destination, direction);
+    this.picked = picked;
+  }
+
+  public Pickup getPicked() {
+    return picked;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Picked up a %s at %s,%s", picked, destination.getCol(),
+        destination.getRow());
+  }
 
 }

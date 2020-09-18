@@ -9,21 +9,21 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public abstract class Containable extends Drawable{
+public abstract class Containable extends Drawable {
 
-	public Containable(String filename, String initials) {
-		super(filename, initials);
+  public Containable(String filename, String initials) {
+    super(filename, initials);
 
-	}
+  }
 
-	PathTile container;
+  PathTile container;
 
-	public PathTile getContainer() {
-		return container;
-	}
+  public PathTile getContainer() {
+    return container;
+  }
 
-	public void setContainer(PathTile container) {
-		this.container = container;
-	}
+  public void setContainer(PathTile container) {
+    this.container = container;
+  }
 
 }

@@ -10,8 +10,8 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  */
 
 public class Exit extends Pickup {
-	
-	public Exit(String filename) {
-		super(filename, "EX");
-	}
+
+  public Exit(String filename) {
+    super(filename, "EX");
+  }
 }
