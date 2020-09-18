@@ -17,12 +17,7 @@ public class SoundEffect {
         File audio = new File(filename);
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio);
-
-            AudioFormat format = audioStream.getFormat();
-
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
-
-            sound = (Clip) AudioSystem.getLine(info);
+            sound = AudioSystem.getClip();
 
             sound.open(audioStream);
         }
@@ -42,10 +37,6 @@ public class SoundEffect {
 
     public void play(){
         sound.start();
-    }
-
-    public void reset(){
         sound.setFramePosition(0);
     }
-
 }
