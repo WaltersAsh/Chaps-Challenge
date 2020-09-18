@@ -121,7 +121,6 @@ public class Maze {
 				playRandomSound();
 			}
 
-
 			ptnext.moveTo(chap);
 			ptnext.onWalked(this);
 
@@ -151,7 +150,11 @@ public class Maze {
 	public boolean tryUnlockDoor(Door door) {
 		Key key = chap.hasMatchingKey(door);
 		if(key != null) {
+			sounds.get(door.initials).play();
 			door.getContainer().remove(door);
+			sounds.get(door.initials).reset();
+
+			//sounds.get(door.getContainer().initials).play();
 			// Green key may be used unlimited times
 			if(!key.getColor().equals(KeyColor.GREEN)) {
 				chap.getKeys().remove(key);
@@ -239,11 +242,12 @@ public class Maze {
 		sounds.put("KR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
 		sounds.put("KG", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
 		sounds.put("KY", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-		sounds.put("DB", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
-		sounds.put("DR", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
-		sounds.put("DG", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
-		sounds.put("DY", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("DB", new SoundEffect("resources/sound_effects/door/door_open.wav"));
+		sounds.put("DR", new SoundEffect("resources/sound_effects/door/door_open.wav"));
+		sounds.put("DG", new SoundEffect("resources/sound_effects/door/door_open.wav"));
+		sounds.put("DY", new SoundEffect("resources/sound_effects/door/door_open.wav"));
 		sounds.put("IN", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
+		sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
 
 
 
@@ -320,5 +324,7 @@ public class Maze {
 
 	public void openExitLock() {
 		exitlock.getContainer().remove(exitlock);
+		sounds.get(exitlock.initials).play();
+		sounds.get(exitlock.initials).reset();
 	}
 }
