@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 import java.util.*;
@@ -121,8 +123,14 @@ public class Maze {
 				playRandomSound();
 			}
 
+			BoardView currentBoard = Gui.board;
+			currentBoard.initaliseAnimation(chap, current,next,d);
+			currentBoard.setAnimating(true);
+
 			ptnext.moveTo(chap);
 			ptnext.onWalked(this);
+
+
 
 		}
 

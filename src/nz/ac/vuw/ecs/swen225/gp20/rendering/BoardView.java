@@ -6,15 +6,30 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class BoardView extends JComponent {
+public class BoardView extends JComponent implements ActionListener {
 
     private Maze m;
     private Tile[][] tiles;
     private int blockSize =40;
-    private int width, height, minPanel ;
+    private int width, height, minPanel;
 
 
+    //Stuff for animation
+    private Tile from, to;
+    private int fromX, fromY, toX, toY;
+    private Maze.Direction d;
+    private Movable entity;
+
+    Chap toAnimate;
+
+    private double velx, vely;
+
+    public boolean isAnimating = false;
+
+    Timer t = new Timer(10, this);
 
     public BoardView(Maze m){
         this.m = m;
@@ -29,8 +44,9 @@ public class BoardView extends JComponent {
 
         minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
-        //drawWholeBoard(g);
-        drawWindowedBoard(g);
+        drawWholeBoard(g);
+        //drawWindowedBoard(g);
+        if(isAnimating){animate(g, toAnimate);}
     }
 
     public void drawWholeBoard(Graphics g){
@@ -49,12 +65,17 @@ public class BoardView extends JComponent {
                     PathTile pt = (PathTile)t;
                     if(!pt.getContainedEntities().isEmpty()){
                         for(Containable c: pt.getContainedEntities()){
+                            if(isAnimating&&c instanceof Chap){
+                                toAnimate = (Chap) c;
+                                continue;
+                            }
                             g.drawImage(getToolkit().getImage(c.getFilename()), col * blockSize, row * blockSize, blockSize, blockSize, this);
                         }
                     }
                 }
             }
         }
+
     }
 
     /**
@@ -89,6 +110,10 @@ public class BoardView extends JComponent {
                     PathTile pt = (PathTile)t;
                     if(!pt.getContainedEntities().isEmpty()){
                         for(Containable c: pt.getContainedEntities()){
+                            if(isAnimating&&c instanceof Chap){
+                                toAnimate = (Chap) c;
+                                continue;
+                            }
                             g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize, currentRow * blockSize, blockSize, blockSize, this);
                         }
                     }
@@ -98,8 +123,64 @@ public class BoardView extends JComponent {
             currentRow++;
 
         }
+    }
+
+    public void animate(Graphics g, Chap c){
+        if(d == Maze.Direction.LEFT) {
+            velx = -1;
+            vely = 0;
+        }
+        else if(d == Maze.Direction.UP){
+            vely = -1;
+            velx = 0;
+        }
+        else if(d == Maze.Direction.DOWN){
+            vely = 1.5;
+            velx = 0;
+        }
+        else if(d == Maze.Direction.RIGHT){
+            velx = 1.5;
+            vely = 0;
+        }
+
+        g.drawImage(getToolkit().getImage(c.getFilename()),fromX, fromY, blockSize, blockSize, this);
+    }
+
+    public void initaliseAnimation(Movable entity, Tile from, Tile to, Maze.Direction d){
+        this.from = from;
+        this.to = to;
+
+        this.entity = entity;
+        this.d = d;
 
 
+        fromX = from.getCol()*getBlockSize();
+        fromY = from.getRow()*getBlockSize();
+        toX = to.getCol()*getBlockSize();
+        toY = to.getRow()*getBlockSize();
 
+        System.out.println(fromX+ " "+toX);
+        t.start();
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    public void setAnimating(boolean animating) {
+        isAnimating = animating;
+        if(!animating){
+            t.stop();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+        fromX += velx;
+        fromY += vely;
+
+        if((d == Maze.Direction.LEFT||d == Maze.Direction.RIGHT)&&fromX==toX){setAnimating(false);}
+        if((d == Maze.Direction.DOWN||d == Maze.Direction.UP)&&fromY==toY){setAnimating(false);}
     }
 }

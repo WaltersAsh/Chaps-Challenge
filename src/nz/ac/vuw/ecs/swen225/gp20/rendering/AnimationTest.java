@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
+import javax.lang.model.type.ExecutableType;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.*;
 import java.util.List;
 
 
-public class AnimationTest extends Component implements KeyListener {
+public class AnimationTest extends Component implements KeyListener , ActionListener{
     static Toolkit toolKit = Toolkit.getDefaultToolkit();
     Map<Character, List<Image>> steveMoves = new HashMap<>();
     List<Image> currentList = new ArrayList<>();
@@ -25,8 +26,16 @@ public class AnimationTest extends Component implements KeyListener {
     static final int GAME_SPEED = 150;
 
     int currentX = 0, currentY = 0;
-    int dx = 5, dy = 5;
+    double velx = 0, vely = 0;
 
+    Timer t = new Timer(10, this);
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+        currentX += velx;
+        currentY+= vely;
+    }
 
     public AnimationTest() {
         frame = new JFrame();
@@ -40,62 +49,20 @@ public class AnimationTest extends Component implements KeyListener {
         List<Image> rightMoves = new ArrayList<>();
         List<Image> backMoves = new ArrayList<>();
 
-        Map<Character, Image> stillImages = new HashMap<>();
 
-        frontMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerFront_LeftLegMove.png"));
-        frontMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerFront_RightLegMove.png"));
-        rightMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerRight_Walk1.png"));
-        rightMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerRight_Walk2.png"));
-        rightMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerRight_Walk3.png"));
-        rightMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerRight_Walk2.png"));
-        leftMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerLeft_Walk1.png"));
-        leftMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerLeft_Walk2.png"));
-        leftMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerLeft_Walk3.png"));
-        leftMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerLeft_Walk2.png"));
-        backMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerBack_LeftLegMove.png"));
-        backMoves.add(toolKit.getImage("resources/textures/player_skin/PlayerBack_RightLegMove.png"));
-
-        steveMoves.put('w', backMoves);
-        steveMoves.put('a', rightMoves);
-        steveMoves.put('s', frontMoves);
-        steveMoves.put('d', leftMoves);
-
-        stillImage = toolKit.getImage("resources/textures/player_skin/PlayerFront_Still.png");
-
-
-        new Timer(GAME_SPEED, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (isPressed) {
-                    animate(currentList);
-                }
-            }
-        }).start();
+        stillImage = toolKit.getImage("resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif");
+        t.start();
     }
 
-
-    public void animate(List<Image> l) {
-        if (!l.isEmpty()) {
-            currentImage = currentList.get(count);
-            count++;
-            repaint();
-            if (count > currentList.size() - 1) {
-                count = 0;
-            }
-        }
-    }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (currentList.size() == 0) {
-            currentImage = stillImage;
-        }
         int width = frame.getWidth();
-        int imageWidth = currentImage.getWidth(this);
+        int imageWidth = stillImage.getWidth(this);
 
-        g.drawImage(currentImage, width / 2 - imageWidth / 2, currentY, this);
+        g.drawImage(stillImage, currentX, currentY, this);
 
     }
 
@@ -113,34 +80,27 @@ public class AnimationTest extends Component implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         char c = e.getKeyChar();
-        if (steveMoves.containsKey(c)) {
-            isPressed = true;
-            currentList = steveMoves.get(c);
-        } else {
-            isPressed = false;
-        }
-        if (prevChar != c) {
-            count = 0;
-            prevChar = c;
-        }
-        //move(c);
-
-
+        move(c);
+        System.out.println(velx);
     }
 
     public void move(Character c) {
         switch (c) {
             case 'w':
-                currentY -= dy;
+                vely = -1.5;
+                velx = 0;
                 break;
             case 's':
-                currentY += dy;
+                vely = 1.5;
+                velx = 0;
                 break;
             case 'a':
-                currentX -= dx;
+                velx = -1.5;
+                vely = 0;
                 break;
             case 'd':
-                currentX += dx;
+                velx = 1.5;
+                vely = 0;
                 break;
         }
     }
@@ -148,7 +108,11 @@ public class AnimationTest extends Component implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         isPressed = false;
+        vely = 0;
+        velx = 0;
         //currentImage = stillImage;
         //repaint();
     }
+
+
 }

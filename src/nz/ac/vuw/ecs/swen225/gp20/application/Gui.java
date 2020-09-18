@@ -97,7 +97,7 @@ public class Gui {
   private Color fullLavender = new Color(102, 0, 255);
   private Color paleLavender = new Color(237, 224, 255);
 
-  private BoardView board;
+  public static BoardView board;
   private Maze maze;
   private Timer timer;
   private TimerTask timerTask;
@@ -567,6 +567,14 @@ public class Gui {
    */
   public JLayeredPane getBoardPanel() {
     return boardPanel;
+  }
+
+  /**
+   * Get the board.
+   * @return the JComponent representing the board.
+   */
+  public BoardView getBoard() {
+    return board;
   }
 
   /**
