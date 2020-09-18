@@ -99,7 +99,7 @@ public class BoardRig {
 		return BoardRig.fromString(board);
 	}
 	
-	public static Maze levelEditorTest() {
+	public static Maze levelEditorTest1() {
 		String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"+
 				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
 				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
@@ -114,6 +114,30 @@ public class BoardRig {
 				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
 				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
 				"WA PA PA PA PA PA PA PA PA PA PA WT WT PA WA\n"+
+				"WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA";
+		return BoardRig.fromString(board);
+	}
+	
+	public static Maze levelEditorTest2() {
+		String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA CH PA PA PA PA PA PA PA PA TR PA KY WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA WA WA WA WA WA WA WA WA LY WA WA WA WA WA\n"+
+				"WA TR TR TR TR TR PA PA PA PA PA PA PA PA WA\n"+
+				"WA TR TR TR TR TR PA PA PA PA EN PA PA PA WA\n"+
+				"WA TR TR TR TR TR PA PA PA PA PA PA PA PA WA\n"+
+				"WA TR TR TR TR TR PA PA PA PA PA PA PA PA WA\n"+
+				"WA TR TR TR TR TR PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"+
+				"WA PA EN PA PA PA PA PA PA PA EN PA PA PA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA PA KG WA\n"+
+				"WA LG WA WA WA WA WA WA WA WA WA WA WA WA WA\n"+
+				"WA PA PA PA PA PA PA PA PA PA PA PA EL EX WA\n"+
 				"WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA";
 		return BoardRig.fromString(board);
 	}

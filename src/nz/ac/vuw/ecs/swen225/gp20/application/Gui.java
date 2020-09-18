@@ -170,7 +170,7 @@ public class Gui {
     //maze = BoardRig.crateTest();
     //maze = BoardRig.crateAndWaterTest();
     //maze = BoardRig.pathFindTest1();
-    maze = BoardRig.levelEditorTest()
+    maze = BoardRig.levelEditorTest2();
     board = new BoardView(maze);
     boardPanel.setBackground(paleLavender);
     //boardPanel.setMinimumSize(new Dimension(400, 400));
