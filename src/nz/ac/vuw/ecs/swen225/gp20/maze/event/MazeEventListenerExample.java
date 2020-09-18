@@ -44,6 +44,11 @@ public class MazeEventListenerExample extends MazeEventListener{
 
   @Override
   public void update(MazeEventWon e) {
-    System.out.println("won the games");    
+    System.out.println("won the game");    
+  }
+  
+  @Override
+  public void update(MazeEventPushedWater e) {
+    System.out.println("pushed something into water");
   }
 }

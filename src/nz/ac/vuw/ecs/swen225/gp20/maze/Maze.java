@@ -222,15 +222,13 @@ public class Maze {
         sounds.get(c.initials).play();
         pt.moveTo(c);
         // can also push crate onto water to make a path
+        return new MazeEventPushed(this, chap.container, c.container, d, c);
       } else if (pt.getBlocker() instanceof Water) {
         sounds.get(pt.getBlocker().initials).play();
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-
-      } else {
-        return null;
+        return new MazeEventPushedWater(this, chap.container, c.container, d, c);
       }
-      return new MazeEventPushed(this, chap.container, c.container, d, c);
     }
     return null;
   }
