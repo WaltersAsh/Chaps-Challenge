@@ -71,19 +71,6 @@ public class PathTile extends Tile{
 		return super.getInitials();
 	}
 	
-	/**
-	 * Trigger any events when chap walks on this tile
-	 * @param m		Maze
-	 */
-	public void onWalked(Maze m) {
-		for(Containable cont: contains) {
-			if(cont instanceof Pickup) {
-				((Pickup)cont).onWalked(m);
-			}
-		}
-	}
-
-
 
 	public boolean isBlocked() {
 		return isBlocked;

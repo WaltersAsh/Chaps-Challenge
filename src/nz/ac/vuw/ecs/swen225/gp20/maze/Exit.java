@@ -14,10 +14,4 @@ public class Exit extends Pickup {
 	public Exit(String filename) {
 		super(filename, "EX");
 	}
-	
-	@Override
-	public void onWalked(Maze m) {
-		m.setLevelFinished(true);
-		System.out.println("[exit] you win!");
-	}
 }

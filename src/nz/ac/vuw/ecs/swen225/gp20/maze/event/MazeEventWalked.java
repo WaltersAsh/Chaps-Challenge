@@ -2,6 +2,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
+/**
+ * Event for when chap moves from one tile to another.
+ * 
+ * @author Ian 300474717
+ *
+ */
 public class MazeEventWalked extends MazeEvent{
 	private Tile origin, destination;
 	private Maze.Direction direction;

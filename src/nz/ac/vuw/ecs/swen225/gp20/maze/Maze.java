@@ -39,9 +39,12 @@ public class Maze {
 
 	private int width,height;
 
+	private List<MazeEventListener> listeners = new ArrayList<>();
+	
 	private HashMap<String, SoundEffect> sounds = new HashMap<>();
 	private List<SoundEffect> pathSounds = new ArrayList<>();
 
+	
 
 	private SoundEffect prevSound = null;
 	private SoundEffect currentSound = null;
@@ -97,11 +100,18 @@ public class Maze {
 		return s.toString();
 	}
 	
+	public <L extends MazeEventListener> void addListener(L listener) {
+		listeners.add(listener);
+	}
+	
 	public void broadcast(MazeEvent event) {
-		
+		for(MazeEventListener listener: listeners) {
+			listener.notify(event);
+		}
 	}
 
 	public void move(Direction d) {
+		MazeEvent event;
 		Tile current = chap.getContainer();
 		Tile next = tileTo(current,d);
 		if(d == Direction.LEFT){
@@ -113,12 +123,11 @@ public class Maze {
 
 		if(next instanceof PathTile) {
 			PathTile ptnext = (PathTile) next;
+			event = new MazeEventWalked(this, current, next, d);
 			if(ptnext.isBlocked()) {
-				if(checkBlocking(ptnext, d)) {
-					// we can move
-
-				}else {
-					// return if we can't move to the blocked tile
+				event = checkBlocking(ptnext, d);
+				if(event==null){
+					// we did not move
 					return;
 				}
 			}
@@ -133,12 +142,24 @@ public class Maze {
 			BoardView currentBoard = Gui.board;
 			currentBoard.initaliseAnimation(chap, current,next,d);
 			currentBoard.setAnimating(true);
-
+			
+			MazeEvent checkEntitiesEvent = checkEntities(ptnext, d);
+			if(checkEntitiesEvent!=null) {
+				// should never override a MazeEventUnlocked or a MazeEventPushed
+				// because you can never pick something up in the same move as these
+				event = checkEntitiesEvent;
+				if(checkEntitiesEvent instanceof MazeEventPickup) {
+					MazeEventPickup pickupEvent = (MazeEventPickup) checkEntitiesEvent;
+					if(pickupEvent.getPicked() instanceof Treasure) {
+						if(chap.hasAllTreasures(this)) {
+							openExitLock();
+						}
+					}
+				}
+					
+			}
 			ptnext.moveTo(chap);
-			ptnext.onWalked(this);
-
-
-
+			broadcast(event);
 		}
 
 	}
@@ -152,17 +173,17 @@ public class Maze {
 	 * @param blocked	the PathTile to check
 	 * @return			if we could move onto it
 	 */
-	public boolean checkBlocking(PathTile blocked, Direction d) {
+	public MazeEvent checkBlocking(PathTile blocked, Direction d) {
 		BlockingContainable bc = blocked.getBlocker();
 		if(bc instanceof Door) {
-			return tryUnlockDoor((Door)bc);
+			return tryUnlockDoor((Door)bc, d);
 		}else if(bc instanceof Crate) {
 			return tryPushCrate((Crate)bc, d);
 		}
-		return false;
+		return null;
 	}
 
-	public boolean tryUnlockDoor(Door door) {
+	public MazeEventUnlocked tryUnlockDoor(Door door, Direction d) {
 		Key key = chap.hasMatchingKey(door);
 		if(key != null) {
 			sounds.get(door.initials).play();
@@ -173,10 +194,25 @@ public class Maze {
 			if(!key.getColor().equals(KeyColor.GREEN)) {
 				chap.getKeys().remove(key);
 			}
-			System.out.println("[door] unlocked with "+key.getColor()+" key");
-			return true;
+			return new MazeEventUnlocked(this, chap.container, door.container, d, door, key);
 		}
-		return false;
+		return null;
+	}
+	
+	public MazeEvent checkEntities(PathTile path, Direction d) {
+		for(Containable e: path.getContainedEntities()) {
+			if(e instanceof InfoField) {
+				return new MazeEventInfoField(this, chap.container, path, d, (InfoField)e);
+			}else if(e instanceof Exit) {
+				return new MazeEventWon(this, chap.container, path, d);
+			}else if(e instanceof Pickup){
+				Pickup p = (Pickup) e;
+				p.addToInventory(chap);
+				// should never be able to pick up more than one thing in one go.
+				return new MazeEventPickup(this, chap.container, path, d, p);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -184,9 +220,9 @@ public class Maze {
 	 *
 	 * @param c		the crate to push
 	 * @param d		the direction in which to push
-	 * @return		if we pushed the crate
+	 * @return		the MazeEvent for pushing the crate
 	 */
-	public boolean tryPushCrate(Crate c, Direction d) {
+	public MazeEventPushed tryPushCrate(Crate c, Direction d) {
 		Tile destination = tileTo(c.container, d);
 		// if the tile we try to push to is a pathtile
 		if(destination instanceof PathTile){
@@ -195,16 +231,18 @@ public class Maze {
 			if(!pt.isBlocked()) {
 				sounds.get(c.initials).play();
 				pt.moveTo(c);
-				return true;
 			// can also push crate onto water to make a path
 			}else if(pt.getBlocker() instanceof Water) {
 				sounds.get(pt.getBlocker().initials).play();
 				pt.remove(pt.getBlocker());
 				c.getContainer().remove(c);
-				return true;
+				
+			}else {
+				return null;
 			}
+			return new MazeEventPushed(this, chap.container, c.container, d, c);
 		}
-		return false;
+		return null;
 	}
 
 	public Tile tileTo(Tile t, Direction d) {

@@ -12,7 +12,8 @@ import java.awt.event.ActionListener;
 public class BoardView extends JComponent implements ActionListener {
 
     private Maze m;
-    private Tile[][] tiles;
+
+	private Tile[][] tiles;
     private int blockSize =40;
     private int width, height, minPanel;
 
@@ -159,7 +160,7 @@ public class BoardView extends JComponent implements ActionListener {
         toX = to.getCol()*getBlockSize();
         toY = to.getRow()*getBlockSize();
 
-        System.out.println(fromX+ " "+toX);
+        //System.out.println(fromX+ " "+toX);
         t.start();
     }
 
@@ -183,4 +184,8 @@ public class BoardView extends JComponent implements ActionListener {
         if((d == Maze.Direction.LEFT||d == Maze.Direction.RIGHT)&&fromX==toX){setAnimating(false);}
         if((d == Maze.Direction.DOWN||d == Maze.Direction.UP)&&fromY==toY){setAnimating(false);}
     }
+    
+    public Maze getMaze() {
+		return m;
+	}
 }
