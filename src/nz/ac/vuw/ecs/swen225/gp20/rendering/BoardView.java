@@ -29,7 +29,8 @@ public class BoardView extends JComponent implements ActionListener {
 
     public boolean isAnimating = false;
 
-    Timer t = new Timer(10, this);
+    Timer t = new Timer(5
+        , this);
 
     public BoardView(Maze m){
         this.m = m;
@@ -46,7 +47,7 @@ public class BoardView extends JComponent implements ActionListener {
 
         drawWholeBoard(g);
         //drawWindowedBoard(g);
-        if(isAnimating){animate(g, toAnimate);}
+        if(isAnimating){animate(g);}
     }
 
     public void drawWholeBoard(Graphics g){
@@ -125,25 +126,25 @@ public class BoardView extends JComponent implements ActionListener {
         }
     }
 
-    public void animate(Graphics g, Chap c){
+    public void animate(Graphics g){
         if(d == Maze.Direction.LEFT) {
-            velx = -1;
+            velx = -2;
             vely = 0;
         }
         else if(d == Maze.Direction.UP){
-            vely = -1;
+            vely = -2;
             velx = 0;
         }
         else if(d == Maze.Direction.DOWN){
-            vely = 1.5;
+            vely = 2.5;
             velx = 0;
         }
         else if(d == Maze.Direction.RIGHT){
-            velx = 1.5;
+            velx = 2.5;
             vely = 0;
         }
 
-        g.drawImage(getToolkit().getImage(c.getFilename()),fromX, fromY, blockSize, blockSize, this);
+        g.drawImage(getToolkit().getImage(entity.getFilename()),fromX, fromY, blockSize, blockSize, this);
     }
 
     public void initaliseAnimation(Movable entity, Tile from, Tile to, Maze.Direction d){
