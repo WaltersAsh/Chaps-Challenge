@@ -541,7 +541,7 @@ public class Gui {
    */
   public void detectAndShowInfoField() {
     for (Containable container : maze.getChap().getContainer().getContainedEntities()) {
-      if (container instanceof Pickup) {
+      if (container instanceof Pickup && container.getInitials().equals("IN")) {
         infoFieldLabel.setVisible(true);
         infoFieldLabelText.setVisible(true);
         return;
