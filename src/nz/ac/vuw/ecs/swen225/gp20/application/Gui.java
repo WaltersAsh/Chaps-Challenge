@@ -23,14 +23,17 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Containable;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -42,8 +45,7 @@ public class Gui {
   //frame and main panels
   private JFrame frame;
   private JPanel framePanel;
-  public static JPanel boardPanel;
-
+  public static JLayeredPane boardPanel;
   private JPanel sidePanel;
 
   //inner panels inside of side panel
@@ -70,6 +72,10 @@ public class Gui {
   private JLabel timeValueLabel;
   private JLabel treasuresValueLabel;
   private JLabel[] inventoryValueLabels;
+
+  //infofield label
+  private JLabel infoFieldLabel;
+  private JLabel infoFieldLabelText;
 
   //menu bar and menu
   //TODO: Add menu items to menus
@@ -108,15 +114,18 @@ public class Gui {
     frame.setLayout(new BorderLayout());
     createFramePanel();
     createBoardPanel();
+    createInfoFieldLabel();
     createSidePanel();
     createInnerSidePanels();
     initialiseInnerSidePanels();
     createMenuComponents();
 
-    boardPanel.setLayout(new BorderLayout());
-    boardPanel.add(board, BorderLayout.CENTER);
-    board.setAlignmentX(Component.CENTER_ALIGNMENT);
-    board.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+    //boardPanel.setLayout(new BorderLayout());
+    board.setBounds(0, 0, 1000, 1000);
+    boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
+    boardPanel.add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
+    boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
 
     //add menus to menu bars
     menuBar.add(gameMenu);
@@ -172,7 +181,7 @@ public class Gui {
    * Create the board panel and rendered board.
    */
   public void createBoardPanel() {
-    boardPanel = new JPanel();
+    boardPanel = new JLayeredPane();
     //TODO: Set maze and board somewhere else
     maze = BoardRig.lesson1();
     //maze = BoardRig.crateTest();
@@ -182,7 +191,7 @@ public class Gui {
     inventory = new ArrayList<>(maze.getChap().getKeys());
     updatedInventory = new ArrayList<>(maze.getChap().getKeys());
     board = new BoardView(maze);
-    boardPanel.setBackground(paleLavender);
+    boardPanel.setBackground(lightLavender);
     //boardPanel.setMinimumSize(new Dimension(400, 400));
     //boardPanel.setPreferredSize(new Dimension(500, 500));
     boardPanel.setMinimumSize(new Dimension(board.getPreferredSize().width,
@@ -308,6 +317,26 @@ public class Gui {
   }
 
   /**
+   * Create the info field label and text label.
+   */
+  public void createInfoFieldLabel() {
+    try {
+      Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
+      infoFieldLabel = new JLabel(new ImageIcon(sign.getScaledInstance(
+              500, 500, Image.SCALE_DEFAULT)));
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+    infoFieldLabel.setVisible(false);
+    infoFieldLabel.setBounds(-180, -90, 1000, 1000);
+    infoFieldLabelText = new JLabel("swing is pain :(");
+    infoFieldLabelText.setBounds(150, -225, 1000, 1000);
+    infoFieldLabelText.setFont(new Font("", Font.BOLD, 50));
+    infoFieldLabelText.setForeground(Color.BLACK);
+    infoFieldLabelText.setVisible(false);
+  }
+
+  /**
    * Create the menu bar, menus and menu items.
    * TODO: Create menu items
    */
@@ -342,6 +371,7 @@ public class Gui {
           maze.move(Maze.Direction.RIGHT);
         }
         decrementTreasurePickUp();
+        detectAndShowInfoField();
         if (maze.isLevelFinished()) {
           timer.cancel();
           timer.purge();
@@ -494,7 +524,6 @@ public class Gui {
 
       //key is picked up
       if (updatedInventory.size() > 0) {
-        System.out.println(updatedInventory);
         updatedInventory = new ArrayList<>(maze.getChap().getKeys());
         inventory = updatedInventory;
         addInventoryIcon();
@@ -505,6 +534,21 @@ public class Gui {
         removeInventoryIcon(tempInventory.get(0).getColor().name());
       }
     }
+  }
+
+  /**
+   * Detect if Chap is on an info field and display it to the gui.
+   */
+  public void detectAndShowInfoField() {
+    for (Containable container : maze.getChap().getContainer().getContainedEntities()) {
+      if (container instanceof Pickup) {
+        infoFieldLabel.setVisible(true);
+        infoFieldLabelText.setVisible(true);
+        return;
+      }
+    }
+    infoFieldLabelText.setVisible(false);
+    infoFieldLabel.setVisible(false);
   }
 
   /**
@@ -521,7 +565,7 @@ public class Gui {
    *
    * @return the JPanel representing the container for the board
    */
-  public JPanel getBoardPanel() {
+  public JLayeredPane getBoardPanel() {
     return boardPanel;
   }
 
@@ -560,6 +604,16 @@ public class Gui {
    */
   public void setTreasuresValueLabel(int treasuresValue) {
     treasuresValueLabel.setText(String.valueOf(treasuresValue));
+    frame.revalidate();
+  }
+
+  /**
+   * Set the info field label text.
+   *
+   * @param text the desired text to be entered into the text label
+   */
+  public void setInfoFieldLabelText(String text) {
+    infoFieldLabelText.setText(text);
     frame.revalidate();
   }
 
