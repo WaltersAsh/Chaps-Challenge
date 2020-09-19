@@ -30,4 +30,7 @@ public class MazeEventListener {
   
   public void update(MazeEventPushedWater e) {
   }
+  
+  public void update(MazeEventExitUnlocked e) {
+  }
 }

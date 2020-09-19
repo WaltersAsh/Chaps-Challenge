@@ -9,10 +9,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  *
  */
 public class MazeEventUnlocked extends MazeEventWalked {
-  private Door door;
-  private Key key;
+  protected Door door;
+  protected Key key;
 
-  public MazeEventUnlocked(Maze maze, Tile origin, Tile destination, Maze.Direction direction,
+  public MazeEventUnlocked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       Door door, Key key) {
     super(maze, destination, destination, direction);
     this.door = door;
@@ -35,7 +35,7 @@ public class MazeEventUnlocked extends MazeEventWalked {
   }
   
   @Override
-  public void accept(MazeEventListener l) {
+  public void recieve(MazeEventListener l) {
     l.update(this);
   }
 }

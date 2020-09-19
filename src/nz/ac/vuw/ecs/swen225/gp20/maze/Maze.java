@@ -35,12 +35,6 @@ public class Maze {
 
   private List<MazeEventListener> listeners = new ArrayList<>();
 
-  private HashMap<String, SoundEffect> sounds = new HashMap<>();
-  private List<SoundEffect> pathSounds = new ArrayList<>();
-
-  private SoundEffect prevSound = null;
-  private SoundEffect currentSound = null;
-
   /**
    * Constuct empty Board with a width and height
    *
@@ -77,7 +71,6 @@ public class Maze {
 
       }
     }
-    initialiseSounds();
   }
 
   @Override
@@ -98,13 +91,13 @@ public class Maze {
 
   public void broadcast(MazeEvent event) {
     for (MazeEventListener listener : listeners) {
-      event.accept(listener);
+      event.recieve(listener);
     }
   }
 
   public void move(Direction d) {
     MazeEvent event;
-    Tile current = chap.getContainer();
+    PathTile current = chap.getContainer();
     Tile next = tileTo(current, d);
     if (d == Direction.LEFT) {
       chap.changeFile(chap.left);
@@ -115,19 +108,13 @@ public class Maze {
 
     if (next instanceof PathTile) {
       PathTile ptnext = (PathTile) next;
-      event = new MazeEventWalked(this, current, next, d);
+      event = new MazeEventWalked(this, current, ptnext, d);
       if (ptnext.isBlocked()) {
         event = checkBlocking(ptnext, d);
         if (event == null) {
           // we did not move
           return;
         }
-      }
-
-      if (!((PathTile) next).getContainedEntities().isEmpty()) {
-        playSound(((PathTile) next).getContainedEntities().peek().initials);
-      } else {
-        playRandomSound();
       }
 
       BoardView currentBoard = Gui.board;
@@ -144,6 +131,7 @@ public class Maze {
           if (pickupEvent.getPicked() instanceof Treasure) {
             if (chap.hasAllTreasures(this)) {
               openExitLock();
+              event = new MazeEventExitUnlocked(this, current, ptnext, d, pickupEvent.getPicked(), exitlock);
             }
           }
         }
@@ -176,10 +164,7 @@ public class Maze {
   public MazeEventUnlocked tryUnlockDoor(Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
-      sounds.get(door.initials).play();
       door.getContainer().remove(door);
-
-      // sounds.get(door.getContainer().initials).play();
       // Green key may be used unlimited times
       if (!key.getColor().equals(KeyColor.GREEN)) {
         chap.getKeys().remove(key);
@@ -219,12 +204,10 @@ public class Maze {
       PathTile pt = (PathTile) destination;
       // if the pathtile we try to push to is free, push the crate
       if (!pt.isBlocked()) {
-        sounds.get(c.initials).play();
         pt.moveTo(c);
         // can also push crate onto water to make a path
         return new MazeEventPushed(this, chap.container, c.container, d, c);
       } else if (pt.getBlocker() instanceof Water) {
-        sounds.get(pt.getBlocker().initials).play();
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
         return new MazeEventPushedWater(this, chap.container, c.container, d, c);
@@ -258,61 +241,6 @@ public class Maze {
         }
       }
     }
-  }
-
-  /**
-   * WA = wall PA = path KX = key with #X LX = lock with #X TR = treasure IN =
-   * info square EL = exit lock EX = exit CH = chap XX = crate WT = water EN =
-   * enemy
-   */
-  public void initialiseSounds() {
-    initialiseStoneSounds();
-
-    sounds.put("EX", new SoundEffect("resources/sound_effects/exit/trigger.wav"));
-    sounds.put("TR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-    sounds.put("KB", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-    sounds.put("KR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-    sounds.put("KG", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-    sounds.put("KY", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
-    sounds.put("DB", new SoundEffect("resources/sound_effects/door/door_open.wav"));
-    sounds.put("DR", new SoundEffect("resources/sound_effects/door/door_open.wav"));
-    sounds.put("DG", new SoundEffect("resources/sound_effects/door/door_open.wav"));
-    sounds.put("DY", new SoundEffect("resources/sound_effects/door/door_open.wav"));
-    sounds.put("IN", new SoundEffect("resources/sound_effects/info/villagerHUH.wav"));
-    sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
-    sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
-    sounds.put("XX", new SoundEffect("resources/sound_effects/crate/grindstone_use1pitch.wav"));
-
-  }
-
-  public void initialiseStoneSounds() {
-    String[] stoneFiles = { "resources/sound_effects/stone_step/step1.wav",
-        "resources/sound_effects/stone_step/step2.wav",
-        "resources/sound_effects/stone_step/step3.wav",
-        "resources/sound_effects/stone_step/step4.wav",
-        "resources/sound_effects/stone_step/step5.wav" };
-
-    for (String s : stoneFiles) {
-      pathSounds.add(new SoundEffect(s));
-    }
-  }
-
-  public void playRandomSound() {
-    SoundEffect currentSound;
-    Random rand = new Random();
-
-    currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
-    while (prevSound == currentSound) {
-      prevSound = currentSound;
-      currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
-    }
-    currentSound.play();
-    prevSound = currentSound;
-  }
-
-  public void playSound(String s) {
-    SoundEffect current = sounds.get(s);
-    current.play();
   }
 
   public Tile getTileAt(int row, int col) {
@@ -353,6 +281,5 @@ public class Maze {
 
   public void openExitLock() {
     exitlock.getContainer().remove(exitlock);
-    sounds.get(exitlock.initials).play();
   }
 }

@@ -9,5 +9,5 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  *
  */
 public interface MazeEvent {
-  void accept(MazeEventListener listener);
+  void recieve(MazeEventListener listener);
 }

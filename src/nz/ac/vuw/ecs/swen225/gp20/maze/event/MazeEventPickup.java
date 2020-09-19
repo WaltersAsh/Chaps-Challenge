@@ -9,9 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  *
  */
 public class MazeEventPickup extends MazeEventWalked {
-  private Pickup picked;
+  protected Pickup picked;
 
-  public MazeEventPickup(Maze maze, Tile origin, Tile destination, Maze.Direction direction,
+  public MazeEventPickup(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       Pickup picked) {
     super(maze, destination, destination, direction);
     this.picked = picked;
@@ -28,7 +28,7 @@ public class MazeEventPickup extends MazeEventWalked {
   }
   
   @Override
-  public void accept(MazeEventListener l) {
+  public void recieve(MazeEventListener l) {
     l.update(this);
   }
 }

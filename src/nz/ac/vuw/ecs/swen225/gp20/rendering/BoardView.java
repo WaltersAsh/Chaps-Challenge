@@ -29,12 +29,15 @@ public class BoardView extends JComponent implements ActionListener {
   public boolean isAnimating = false;
 
   Timer t = new Timer(10, this);
+  
+  SoundHandler sh;
 
   public BoardView(Maze m) {
     this.m = m;
     tiles = m.getTiles();
     width = m.getWidth();
     height = m.getHeight();
+    sh = new SoundHandler(m);
   }
 
   @Override

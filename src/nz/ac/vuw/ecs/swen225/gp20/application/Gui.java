@@ -35,7 +35,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEvent;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
@@ -187,9 +186,9 @@ public class Gui extends MazeEventListener{
   public void createBoardPanel() {
     boardPanel = new JLayeredPane();
     // TODO: Set maze and board somewhere else
-    // maze = BoardRig.lesson1();
+    maze = BoardRig.lesson1();
     // maze = BoardRig.crateTest();
-    maze = BoardRig.crateAndWaterTest();
+    // maze = BoardRig.crateAndWaterTest();
     // maze = BoardRig.pathFindTest1();
     // maze = BoardRig.levelEditorTest2();
 

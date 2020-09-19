@@ -10,7 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
  *
  */
 public class MazeEventWon extends MazeEventWalked {
-  public MazeEventWon(Maze maze, Tile origin, Tile destination, Direction direction) {
+  public MazeEventWon(Maze maze, PathTile origin, PathTile destination, Direction direction) {
     super(maze, origin, destination, direction);
   }
 
@@ -21,7 +21,7 @@ public class MazeEventWon extends MazeEventWalked {
   }
   
   @Override
-  public void accept(MazeEventListener l) {
+  public void recieve(MazeEventListener l) {
     l.update(this);
   }
 }

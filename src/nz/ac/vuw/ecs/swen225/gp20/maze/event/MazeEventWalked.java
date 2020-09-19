@@ -9,22 +9,22 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  *
  */
 public class MazeEventWalked implements MazeEvent {
-  protected Tile origin, destination;
+  protected PathTile origin, destination;
   protected Maze.Direction direction;
   protected Maze maze;
   
-  public MazeEventWalked(Maze maze, Tile origin, Tile destination, Maze.Direction direction) {
+  public MazeEventWalked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction) {
     this.maze = maze;
     this.origin = origin;
     this.destination = destination;
     this.direction = direction;
   }
 
-  public Tile getDestination() {
+  public PathTile getDestination() {
     return destination;
   }
 
-  public Tile getOrigin() {
+  public PathTile getOrigin() {
     return origin;
   }
 
@@ -39,7 +39,7 @@ public class MazeEventWalked implements MazeEvent {
   }
   
   @Override
-  public void accept(MazeEventListener l) {
+  public void recieve(MazeEventListener l) {
     l.update(this);
   }
 }
