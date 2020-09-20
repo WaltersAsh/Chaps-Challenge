@@ -12,8 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
@@ -33,11 +31,12 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Containable;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -45,7 +44,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
  *
  * @author Justin 300470389
  */
-public class Gui extends MazeEventListener{
+public class Gui extends MazeEventListener {
   // frame and main panels
   private JFrame frame;
   private JPanel framePanel;
@@ -106,8 +105,7 @@ public class Gui extends MazeEventListener{
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  private List<Key> inventory;
-  private List<Key> updatedInventory;
+  private int[] secondsLeft;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -193,13 +191,8 @@ public class Gui extends MazeEventListener{
     // maze = BoardRig.levelEditorTest2();
 
     maze.addListener(this);
-    
-    inventory = new ArrayList<>(maze.getChap().getKeys());
-    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
-    // boardPanel.setMinimumSize(new Dimension(400, 400));
-    // boardPanel.setPreferredSize(new Dimension(500, 500));
     boardPanel.setMinimumSize(
         new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setPreferredSize(
@@ -377,10 +370,7 @@ public class Gui extends MazeEventListener{
         }
         decrementTreasurePickUp();
         detectAndShowInfoField();
-        if (maze.isLevelFinished()) {
-          timer.cancel();
-          timer.purge();
-        }
+
         /*
          * try { updateInventory(); } catch (IOException ioException) {
          * ioException.printStackTrace(); }
@@ -422,7 +412,7 @@ public class Gui extends MazeEventListener{
    * Setup the timer.
    */
   public void setupTimer() {
-    final int[] secondsLeft = { Integer.parseInt(timeValueLabel.getText()) };
+    secondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
     timer = new Timer();
     timerTask = new TimerTask() {
       @Override
@@ -430,11 +420,7 @@ public class Gui extends MazeEventListener{
         if (secondsLeft[0] > 0) {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
-          maze.tickPathFinding();
-          // might as well leave this here, don't think timer has to be purely for
-          // application side
-          // unless the pathfinding ticks are supposed to be faster/slower than 1 sec
-          // ¯\_(ツ)_/¯
+          //maze.tickPathFinding(); needs to be moved to maze (separate timer)
         }
       }
     };
@@ -449,99 +435,15 @@ public class Gui extends MazeEventListener{
   }
 
   /**
-   * Add a inventory icon when a key is picked up.
-   *
-   * @throws IOException thrown when key icon image reading fails
-   */
-  public void addInventoryIcon() throws IOException {
-    Image keyImage = null;
-    ImageIcon keyIcon = null;
-    String enumName;
-    Key currentKey = inventory.get(inventory.size() - 1);
-    enumName = currentKey.getColor().name();
-    switch (currentKey.getColor()) {
-    case BLUE:
-      keyImage = ImageIO.read(new File("resources/textures/board/pickup/keys/wooden_pickaxe.png"));
-      break;
-    case RED:
-      keyImage = ImageIO.read(new File("resources/textures/board/pickup/keys/iron_pickaxe.png"));
-      break;
-    case GREEN:
-      keyImage = ImageIO.read(new File("resources/textures/board/pickup/keys/diamond_pickaxe.png"));
-      break;
-    case YELLOW:
-      keyImage = ImageIO.read(new File("resources/textures/board/pickup/keys/golden_pickaxe.png"));
-      break;
-    default:
-      break;
-    }
-    keyIcon = new ImageIcon(keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
-        inventoryValueLabel.setText(enumName); // identify as non-empty label
-        inventoryValueLabel.setIcon(keyIcon);
-        frame.revalidate();
-        break;
-      }
-    }
-  }
-
-  /**
-   * Remove an inventory icon.
-   *
-   * @param labelText the label that has the matching label text
-   */
-  public void removeInventoryIcon(String labelText) {
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      if (inventoryValueLabel.getText().equals(labelText)) {
-        inventoryValueLabel.setText(" "); // set label to empty again
-        inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
-        frame.revalidate();
-        break;
-      }
-    }
-  }
-
-  /**
-   * Update keys/items (not treasures) picked up.
-   *
-   * <p>
-   * This method contains very dodgy logic old inventory - new inventory > 0: key
-   * is added new inventory - old inventory > 0: key is used
-   * </p>
-   *
-   */
-  public void updateInventory() throws IOException {
-    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-    List<Key> tempUpdatedInventory = new ArrayList<>(maze.getChap().getKeys());
-    List<Key> tempInventory = new ArrayList<Key>(inventory);
-
-    // inventory is changed
-    if (!inventory.equals(updatedInventory)) {
-
-      updatedInventory.removeAll(inventory);
-      tempInventory.removeAll(tempUpdatedInventory);
-
-      // key is picked up
-      if (updatedInventory.size() > 0) {
-        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-        inventory = updatedInventory;
-        addInventoryIcon();
-        // key is used
-      } else {
-        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-        inventory = updatedInventory;
-        removeInventoryIcon(tempInventory.get(0).getColor().name());
-      }
-    }
-  }
-
-  /**
    * Detect if Chap is on an info field and display it to the gui.
    */
   public void detectAndShowInfoField() {
     for (Containable container : maze.getChap().getContainer().getContainedEntities()) {
       if (container instanceof Pickup && container.getInitials().equals("IN")) {
+        infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
+        infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
+                infoFieldLabel.getY() - 150, 1000, 1000);
+        frame.revalidate();
         infoFieldLabel.setVisible(true);
         infoFieldLabelText.setVisible(true);
         return;
@@ -571,7 +473,7 @@ public class Gui extends MazeEventListener{
 
   /**
    * Get the board.
-   * 
+   *
    * @return the JComponent representing the board.
    */
   public BoardView getBoard() {
@@ -620,13 +522,13 @@ public class Gui extends MazeEventListener{
   
   /**
    * Update the inventory when we pick up a key.
-   * 
+   *
    * @param e the key pickup event
    */
   @Override
   public void update(MazeEventPickup e) {
     try {
-      if(e.getPicked() instanceof Key) {
+      if (e.getPicked() instanceof Key) {
         Key key = (Key) e.getPicked();
         Image keyImage;
         keyImage = ImageIO.read(new File(key.getFilename()));
@@ -649,13 +551,14 @@ public class Gui extends MazeEventListener{
  
   /**
    * Update the inventory when we open a door.
-   * 
+   *
    * @param e the door open event
    */
   @Override
   public void update(MazeEventUnlocked e) {
-    if (e.getDoor().getColor() == KeyColor.GREEN)
+    if (e.getDoor().getColor() == KeyColor.GREEN) {
       return; // temporary fix
+    }
     for (JLabel inventoryValueLabel : inventoryValueLabels) {
       if (inventoryValueLabel.getText().equals(e.getDoor().getColor().name())) {
         inventoryValueLabel.setText(" "); // set label to empty again
@@ -665,7 +568,19 @@ public class Gui extends MazeEventListener{
       }
     }
   }
-  
+
+  /**
+   * Execute operations when maze has been won.
+   *
+   * @param e the maze won event
+   */
+  @Override
+  public void update(MazeEventWon e) {
+    //stop the timer
+    timer.cancel();
+    timer.purge();
+  }
+
   /**
    * Main method for testing the GUI.
    *
