@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 /**
  * The pathfinding enemy tokens
  *
@@ -9,19 +7,18 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public class Enemy extends Movable{
-	PathFinder pf;
+public class Enemy extends Movable {
+  PathFinder pf;
 
-	public Enemy(String filename) {
-		super(filename, "EN");
-	}
+  public Enemy(String filename) {
+    super(filename, "EN");
+  }
 
-	public void initPathFinder(Maze m) {
-		pf = new PathFinder(m);
-	}
+  public void initPathFinder(Maze m) {
+    pf = new PathFinder(m);
+  }
 
-
-	public Tile tickPathFinding() {
-		return pf.next(container);
-	}
+  public Tile tickPathFinding() {
+    return pf.next(container);
+  }
 }

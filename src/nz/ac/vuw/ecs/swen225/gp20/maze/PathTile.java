@@ -2,10 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.*;
 
-import com.google.common.base.Preconditions;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
-
 /**
  * A tile which Chap may walk on, and may contain Containables
  * 
@@ -13,89 +9,77 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public class PathTile extends Tile{
-	private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
-	private boolean isBlocked = false;
-	private BlockingContainable blocker;
+public class PathTile extends Tile {
+  private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
+  private boolean isBlocked = false;
+  private BlockingContainable blocker;
 
-	public PathTile(String filename) {
-		super(filename, "PA");
-		this.walkable = true;
+  public PathTile(String filename) {
+    super(filename, "PA");
+    this.walkable = true;
 
-	}
+  }
 
-	/**
-	 * Place a Containable inside this Tile
-	 * @param c		The Containable
-	 */
-	public void place(Containable c) {
-		contains.push(c);
-		c.setContainer(this);
-		if(c instanceof BlockingContainable) {
-			isBlocked = true;
-			blocker = (BlockingContainable) c;
-		}
-	}
-	
-	/**
-	 * Remove a Containable inside this Tile
-	 * @param c		The Containable
-	 */
-	public void remove(Containable c) {
-		contains.remove(c);
-		if(c instanceof BlockingContainable) {
-			isBlocked=false;
-			blocker = null;
-		}
-		
-		// might have to check all other objects in contains, but 
-		// theoretically if it correctly blocks then we never 
-		// have 2 BlockingContainable at once
-	}
-	
-	/**
-	 * Move a Containable inside this Tile and update the previous Container
-	 * @param c		The Containable
-	 */
-	public void moveTo(Containable c) {
-		c.getContainer().remove(c);
-		place(c);
-	}
-	
-	/**
-	 * Get the initials of the top contained object instead
-	 */
-	@Override
-	public String getInitials() {
-		if(!contains.isEmpty())return contains.peek().getInitials();
-		return super.getInitials();
-	}
-	
-	/**
-	 * Trigger any events when chap walks on this tile
-	 * @param m		Maze
-	 */
-	public void onWalked(Maze m) {
-		for(Containable cont: contains) {
-			if(cont instanceof Pickup) {
-				((Pickup)cont).onWalked(m);
-			}
-		}
-	}
+  /**
+   * Place a Containable inside this Tile
+   * 
+   * @param c The Containable
+   */
+  public void place(Containable c) {
+    contains.push(c);
+    c.setContainer(this);
+    if (c instanceof BlockingContainable) {
+      isBlocked = true;
+      blocker = (BlockingContainable) c;
+    }
+  }
 
+  /**
+   * Remove a Containable inside this Tile
+   * 
+   * @param c The Containable
+   */
+  public void remove(Containable c) {
+    contains.remove(c);
+    if (c instanceof BlockingContainable) {
+      isBlocked = false;
+      blocker = null;
+    }
 
+    // might have to check all other objects in contains, but
+    // theoretically if it correctly blocks then we never
+    // have 2 BlockingContainable at once
+  }
 
-	public boolean isBlocked() {
-		return isBlocked;
-	}
+  /**
+   * Move a Containable inside this Tile and update the previous Container
+   * 
+   * @param c The Containable
+   */
+  public void moveTo(Containable c) {
+    c.getContainer().remove(c);
+    place(c);
+  }
 
-	public BlockingContainable getBlocker() {
-		return blocker;
-	}
+  /**
+   * Get the initials of the top contained object instead
+   */
+  @Override
+  public String getInitials() {
+    if (!contains.isEmpty())
+      return contains.peek().getInitials();
+    return super.getInitials();
+  }
 
-	public Stack<Containable> getContainedEntities(){
-		return contains;
-	}
+  public boolean isBlocked() {
+    return isBlocked;
+  }
 
-	public List<SoundEffect> getPathSounds(){return getPathSounds();}
+  public BlockingContainable getBlocker() {
+    return blocker;
+  }
+
+  public Stack<Containable> getContainedEntities() {
+    return contains;
+  }
 }

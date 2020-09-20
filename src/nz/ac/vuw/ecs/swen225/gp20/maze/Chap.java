@@ -1,5 +1,4 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,38 +10,35 @@ import java.util.List;
  *
  */
 
-public class Chap extends Movable{
-	private List<Key> keys = new ArrayList<>();
-	private List<Treasure> treasures = new ArrayList<>();
+public class Chap extends Movable {
+  private List<Key> keys = new ArrayList<>();
+  private List<Treasure> treasures = new ArrayList<>();
 
+  String left, right;
 
+  public Chap(String left, String right) {
+    super(left, "CH");
+    this.left = left;
+    this.right = right;
 
-	String left, right;
+  }
 
-	public Chap(String left, String right) {
-		super(left, "CH");
-		this.left = left;
-		this.right = right;
+  public void pickup(Pickup p) {
+    if (p instanceof Treasure) {
+      treasures.add((Treasure) p);
+    } else if (p instanceof Key) {
+      keys.add((Key) p);
+    }
+  }
 
-
-	}
-
-	public void pickup(Pickup p) {
-		if(p instanceof Treasure) {
-			treasures.add((Treasure)p);
-		}else if(p instanceof Key) {
-			keys.add((Key)p);
-		}
-	}
-
-	public Key hasMatchingKey(Door d) {
-		for(Key key: keys) {
-			if(key.getColor().equals(d.getColor())) {
-				return key;
-			}
-		}
-		return null;
-	}
+  public Key hasMatchingKey(Door d) {
+    for (Key key : keys) {
+      if (key.getColor().equals(d.getColor())) {
+        return key;
+      }
+    }
+    return null;
+  }
 
 //	@Override
 //	public Image getImage() {
@@ -51,15 +47,15 @@ public class Chap extends Movable{
 //
 //	}
 
-	public List<Treasure> getTreasures() {
-		return treasures;
-	}
+  public List<Treasure> getTreasures() {
+    return treasures;
+  }
 
-	public List<Key> getKeys() {
-		return keys;
-	}
+  public List<Key> getKeys() {
+    return keys;
+  }
 
-	public boolean hasAllTreasures(Maze m) {
-		return m.numTreasures()==this.treasures.size();
-	}
+  public boolean hasAllTreasures(Maze m) {
+    return m.numTreasures() == this.treasures.size();
+  }
 }
