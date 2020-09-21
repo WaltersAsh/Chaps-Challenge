@@ -12,6 +12,7 @@ import java.util.*;
  */
 
 public class Maze {
+  // Enums
   public enum Direction {
     UP, DOWN, LEFT, RIGHT
   }
@@ -20,17 +21,22 @@ public class Maze {
     BLUE, RED, GREEN, YELLOW
   }
 
+  // Board and Entities
+  private int width, height;
   private Tile[][] tiles;
   private Chap chap;
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
   private ExitLock exitlock;
+  
+  // Logic
   private boolean levelFinished = false;
-
-  private int width, height;
-
+  private Timer timer;
+  private int pathFindingDelay = 50; // delay between path finding ticks in ms
+  
+  // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
-
+  
   /**
    * Constuct empty Board with a width and height
    *
@@ -39,6 +45,7 @@ public class Maze {
    */
   public Maze(int width, int height) {
     tiles = new Tile[width][height];
+    throw new UnsupportedOperationException("Not implemented.");
   }
 
   /**
@@ -64,9 +71,10 @@ public class Maze {
         Enemy e = (Enemy) c;
         e.initPathFinder(this);
         enemies.add(e);
-
       }
     }
+    
+    setupTimer();
   }
 
   @Override
@@ -247,7 +255,26 @@ public class Maze {
       return null;
     }
   }
-
+  
+  /**
+   * Setup the timer, but only if it's needed.
+   */
+  public void setupTimer() {
+    if(!enemies.isEmpty()) {
+      timer = new Timer();
+      timer.schedule(new TimerTask() {
+        
+        @Override
+        public void run() {
+          tickPathFinding();
+        }
+      }, 0, pathFindingDelay);
+    }
+  }
+  
+  /**
+   * Tick the enemy path finding.
+   */
   public void tickPathFinding() {
     for (Enemy e : enemies) {
       Tile destination = e.tickPathFinding();
@@ -258,6 +285,22 @@ public class Maze {
         }
       }
     }
+  }
+  
+  /**
+   * Pause the game (suspending the game timer).
+   */
+  public void pause() {
+    if(timer!=null) {
+      timer.cancel();
+    }
+  }
+  
+  /**
+   * Resume the game.
+   */
+  public void resume() {
+    setupTimer();
   }
 
   public Tile getTileAt(int row, int col) {
