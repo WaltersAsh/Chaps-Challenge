@@ -28,11 +28,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Containable;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
@@ -162,7 +161,7 @@ public class Gui extends MazeEventListener {
     frame.setSize(1024, 800);
     frame.setMinimumSize(new Dimension(800, 675));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
-        dimen.height / 2 - frame.getSize().height / 2);
+            dimen.height / 2 - frame.getSize().height / 2);
 
     setupTimer();
     setupKeyListener();
@@ -194,9 +193,9 @@ public class Gui extends MazeEventListener {
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
     boardPanel.setMinimumSize(
-        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
+            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setPreferredSize(
-        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
+            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setMaximumSize(new Dimension(800, 800));
   }
 
@@ -322,17 +321,16 @@ public class Gui extends MazeEventListener {
     try {
       Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
       infoFieldLabel = new JLabel(
-          new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
+              new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-    infoFieldLabel.setVisible(false);
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabelText = new JLabel("swing is pain :(");
     infoFieldLabelText.setBounds(150, -225, 1000, 1000);
     infoFieldLabelText.setFont(new Font("", Font.BOLD, 50));
     infoFieldLabelText.setForeground(Color.BLACK);
-    infoFieldLabelText.setVisible(false);
+    showInfoFieldToGui(false);
   }
 
   /**
@@ -358,6 +356,7 @@ public class Gui extends MazeEventListener {
           timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
         }
+        showInfoFieldToGui(false);
         // movement
         if (key == KeyEvent.VK_UP) {
           maze.move(Maze.Direction.UP);
@@ -369,12 +368,6 @@ public class Gui extends MazeEventListener {
           maze.move(Maze.Direction.RIGHT);
         }
         decrementTreasurePickUp();
-        detectAndShowInfoField();
-
-        /*
-         * try { updateInventory(); } catch (IOException ioException) {
-         * ioException.printStackTrace(); }
-         */
         board.repaint();
 
         // pause and resume
@@ -432,25 +425,6 @@ public class Gui extends MazeEventListener {
   public void decrementTreasurePickUp() {
     int treasureCount = maze.getChap().getTreasures().size();
     setTreasuresValueLabel(maze.numTreasures() - treasureCount);
-  }
-
-  /**
-   * Detect if Chap is on an info field and display it to the gui.
-   */
-  public void detectAndShowInfoField() {
-    for (Containable container : maze.getChap().getContainer().getContainedEntities()) {
-      if (container instanceof Pickup && container.getInitials().equals("IN")) {
-        infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
-        infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
-                infoFieldLabel.getY() - 150, 1000, 1000);
-        frame.revalidate();
-        infoFieldLabel.setVisible(true);
-        infoFieldLabelText.setVisible(true);
-        return;
-      }
-    }
-    infoFieldLabelText.setVisible(false);
-    infoFieldLabel.setVisible(false);
   }
 
   /**
@@ -519,7 +493,18 @@ public class Gui extends MazeEventListener {
     infoFieldLabelText.setText(text);
     frame.revalidate();
   }
-  
+
+  /**
+   * Display the info field to the gui.
+   *
+   * @param confirmation boolean confirming infofield is shown/hidden
+   */
+  public void showInfoFieldToGui(boolean confirmation) {
+    infoFieldLabel.setVisible(confirmation);
+    infoFieldLabelText.setVisible(confirmation);
+    frame.revalidate();
+  }
+
   /**
    * Update the inventory when we pick up a key.
    *
@@ -533,7 +518,7 @@ public class Gui extends MazeEventListener {
         Image keyImage;
         keyImage = ImageIO.read(new File(key.getFilename()));
         ImageIcon keyIcon = new ImageIcon(
-            keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
         for (JLabel inventoryValueLabel : inventoryValueLabels) {
           if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
             inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
@@ -548,7 +533,7 @@ public class Gui extends MazeEventListener {
       e1.printStackTrace();
     }
   }
- 
+
   /**
    * Update the inventory when we open a door.
    *
@@ -567,6 +552,19 @@ public class Gui extends MazeEventListener {
         break;
       }
     }
+  }
+
+  /**
+   * Update the gui to show/hide info field.
+   *
+   * @param e the info field activation event
+   */
+  public void update(MazeEventInfoField e) {
+    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
+    infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
+            infoFieldLabel.getY() - 150, 1000, 1000);
+    frame.revalidate();
+    showInfoFieldToGui(true);
   }
 
   /**
