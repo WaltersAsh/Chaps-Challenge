@@ -101,7 +101,8 @@ public class Maze {
    */
   public void broadcast(MazeEvent event) {
     for (MazeEventListener listener : listeners) {
-      event.recieve(listener);
+      event.receive(listener);
+      listener.updateAny(event);
     }
   }
   
@@ -132,11 +133,6 @@ public class Maze {
         }
       }
       
-      // TODO: move this to other package.
-      BoardView currentBoard = Gui.board;
-      currentBoard.initaliseAnimation(chap, current, next, d);
-      currentBoard.setAnimating(true);
-
       MazeEvent checkEntitiesEvent = checkEntities(ptnext, d);
       if (checkEntitiesEvent != null) {
         // should never override a MazeEventUnlocked or a MazeEventPushed

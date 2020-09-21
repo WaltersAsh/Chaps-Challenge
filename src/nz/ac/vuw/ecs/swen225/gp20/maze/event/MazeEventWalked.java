@@ -32,6 +32,11 @@ public class MazeEventWalked implements MazeEvent {
     return direction;
   }
 
+  public Maze getMaze() {
+    return maze;
+  }
+
+
   @Override
   public String toString() {
     return String.format("Walked from tile %s,%s to tile %s,%s", origin.getCol(), origin.getRow(),
@@ -39,7 +44,7 @@ public class MazeEventWalked implements MazeEvent {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
 }

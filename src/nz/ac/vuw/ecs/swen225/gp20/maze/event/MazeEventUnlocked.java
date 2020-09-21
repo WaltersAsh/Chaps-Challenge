@@ -14,7 +14,7 @@ public class MazeEventUnlocked extends MazeEventWalked {
 
   public MazeEventUnlocked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       Door door, Key key) {
-    super(maze, destination, destination, direction);
+    super(maze, origin, destination, direction);
     this.door = door;
     this.key = key;
 
@@ -35,7 +35,7 @@ public class MazeEventUnlocked extends MazeEventWalked {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
 }

@@ -31,6 +31,7 @@ public class BoardView extends JComponent implements ActionListener {
   Timer t = new Timer(10, this);
   
   SoundHandler sh;
+  AnimationHandler ah;
 
   public BoardView(Maze m) {
     this.m = m;
@@ -38,6 +39,7 @@ public class BoardView extends JComponent implements ActionListener {
     width = m.getWidth();
     height = m.getHeight();
     sh = new SoundHandler(m);
+    ah = new AnimationHandler(m, this);
   }
 
   @Override

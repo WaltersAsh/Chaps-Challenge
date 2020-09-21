@@ -33,4 +33,13 @@ public class MazeEventListener {
   
   public void update(MazeEventExitUnlocked e) {
   }
+  
+  /**
+   * Listen to update from any MazeEvent.
+   * 
+   * @param e the event
+   */
+  public void updateAny(MazeEvent e) {
+    
+  }
 }
