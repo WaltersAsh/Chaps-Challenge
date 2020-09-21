@@ -1,9 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
 import java.util.*;
