@@ -12,7 +12,7 @@ public class AnimationHandler extends MazeEventListener {
   }
   
   @Override
-  public void updateAny(MazeEvent e) {
+  public void update(MazeEvent e) {
     if(e instanceof MazeEventWalked) {
       MazeEventWalked w = (MazeEventWalked) e;
       bv.initaliseAnimation(w.getMaze().getChap(), w.getOrigin(), w.getDestination(), w.getDirection());

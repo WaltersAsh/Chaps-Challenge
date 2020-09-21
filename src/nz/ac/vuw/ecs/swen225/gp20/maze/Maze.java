@@ -98,7 +98,7 @@ public class Maze {
   public void broadcast(MazeEvent event) {
     for (MazeEventListener listener : listeners) {
       event.receive(listener);
-      listener.updateAny(event);
+      listener.update(event);
     }
   }
   

@@ -39,7 +39,7 @@ public class MazeEventListener {
    * 
    * @param e the event
    */
-  public void updateAny(MazeEvent e) {
+  public void update(MazeEvent e) {
     
   }
 }
