@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
-
 /**
  * Base class for objects the Chap can pick up
  * 
@@ -9,19 +7,19 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.SoundEffect;
  *
  */
 
-public abstract class Pickup extends Containable{
+public abstract class Pickup extends Containable {
 
-	public Pickup(String filename, String initials) {
-		super(filename, initials);
-	}
+  public Pickup(String filename, String initials) {
+    super(filename, initials);
+  }
 
-	/**
-	 * Trigger any events when Chap walks over the Tile which contains this Containable
-	 * @param c 	Chap
-	 */
-	public void onWalked(Maze m) {
-		this.container.remove(this);
-		m.getChap().pickup(this);
-		System.out.printf("[pickup] you picked up a %s\n", this);
-	}
+  /**
+   * Pick up this Pickup
+   * 
+   * @param c Chap
+   */
+  public void addToInventory(Chap c) {
+    this.container.remove(this);
+    c.pickup(this);
+  }
 }

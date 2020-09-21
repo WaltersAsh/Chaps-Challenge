@@ -8,41 +8,43 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 
 public abstract class Tile extends Drawable {
-	int row, col;
-	boolean walkable = false;
+  int row, col;
+  boolean walkable = false;
 
-	public Tile(String filename, String initials) {
-		super(filename, initials);
-	}
+  public Tile(String filename, String initials) {
+    super(filename, initials);
+  }
 
-	/**
-	 * can the Chap walk on this Tile?
-	 * @return		whether Chap can walk on this Tile
-	 */
-	public boolean isWalkable() {
-		return walkable;
-	}
+  /**
+   * can the Chap walk on this Tile?
+   * 
+   * @return whether Chap can walk on this Tile
+   */
+  public boolean isWalkable() {
+    return walkable;
+  }
 
-	/**
-	 * Set the coordinates of this Drawable
-	 * @param r		the row
-	 * @param c		the column
-	 */
-	public void setCoords(int r, int c) {
-		row = r;
-		col = c;
-	}
+  /**
+   * Set the coordinates of this Drawable
+   * 
+   * @param r the row
+   * @param c the column
+   */
+  public void setCoords(int r, int c) {
+    row = r;
+    col = c;
+  }
 
-	public int getRow(){
-		return row;
-	}
+  public int getRow() {
+    return row;
+  }
 
-	public int getCol(){
-		return col;
-	}
+  public int getCol() {
+    return col;
+  }
 
-	@Override
-	public String toString() {
-		return this.getClass() + " at " + row + ", "+ col;
-	}
+  @Override
+  public String toString() {
+    return this.getClass() + " at " + row + ", " + col;
+  }
 }

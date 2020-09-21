@@ -12,8 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
@@ -30,10 +28,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Containable;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Pickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -41,55 +43,55 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
  *
  * @author Justin 300470389
  */
-public class Gui {
-  //frame and main panels
+public class Gui extends MazeEventListener {
+  // frame and main panels
   private JFrame frame;
   private JPanel framePanel;
   public static JLayeredPane boardPanel;
   private JPanel sidePanel;
 
-  //inner panels inside of side panel
+  // inner panels inside of side panel
   private JPanel levelPanel;
   private JPanel timePanel;
   private JPanel treasuresPanel;
   private JPanel inventoryPanel;
 
-  //inner panels inside of inner panels of side panel
+  // inner panels inside of inner panels of side panel
   private JPanel levelContentPanel;
   private JPanel timeContentPanel;
   private JPanel treasuresContentPanel;
   private JPanel inventoryGridPanel;
   private JPanel inventoryContentPanel;
 
-  //title labels
+  // title labels
   private JLabel levelTitleLabel;
   private JLabel timeTitleLabel;
   private JLabel treasuresTitleLabel;
   private JLabel inventoryTitleLabel;
 
-  //value labels
+  // value labels
   private JLabel levelValueLabel;
   private JLabel timeValueLabel;
   private JLabel treasuresValueLabel;
   private JLabel[] inventoryValueLabels;
 
-  //infofield label
+  // infofield label
   private JLabel infoFieldLabel;
   private JLabel infoFieldLabelText;
 
-  //menu bar and menu
-  //TODO: Add menu items to menus
+  // menu bar and menu
+  // TODO: Add menu items to menus
   private JMenuBar menuBar;
   private JMenu gameMenu;
   private JMenu levelMenu;
   private JMenu helpMenu;
 
-  //Text sizes and fonts
+  // Text sizes and fonts
   private Font regText = new Font("", Font.PLAIN, 25);
   private Font bigText = new Font("", Font.BOLD, 45);
 
-  //Background colours
-  //TODO: Replace background color for theme of renderer assets
+  // Background colours
+  // TODO: Replace background color for theme of renderer assets
   private Color lavender = new Color(74, 29, 138);
   private Color lightLavender = new Color(179, 159, 207);
   private Color darkLavender = new Color(50, 38, 66);
@@ -102,14 +104,13 @@ public class Gui {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  private List<Key> inventory;
-  private List<Key> updatedInventory;
+  private int[] secondsLeft;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
   public Gui() {
-    //base frame that all JComponents will be added to
+    // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
     createFramePanel();
@@ -120,38 +121,37 @@ public class Gui {
     initialiseInnerSidePanels();
     createMenuComponents();
 
-
-    //boardPanel.setLayout(new BorderLayout());
+    // boardPanel.setLayout(new BorderLayout());
     board.setBounds(0, 0, 1000, 1000);
     boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
     boardPanel.add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
     boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
 
-    //add menus to menu bars
+    // add menus to menu bars
     menuBar.add(gameMenu);
     menuBar.add(levelMenu);
     menuBar.add(helpMenu);
 
-    //add content panels to inner side panels
+    // add content panels to inner side panels
     levelPanel.add(levelContentPanel);
     timePanel.add(timeContentPanel);
     treasuresPanel.add(treasuresContentPanel);
     inventoryPanel.add(inventoryContentPanel);
 
-    //add panels to side panels
+    // add panels to side panels
     sidePanel.add(levelPanel);
     sidePanel.add(timePanel);
     sidePanel.add(treasuresPanel);
     sidePanel.add(inventoryPanel);
 
-    //set up board and side panels into frame panel
-    //framePanel.add(Box.createHorizontalGlue());
+    // set up board and side panels into frame panel
+    // framePanel.add(Box.createHorizontalGlue());
     framePanel.add(boardPanel);
     framePanel.add(Box.createRigidArea(new Dimension(20, 0)));
     framePanel.add(sidePanel);
-    //framePanel.add(Box.createHorizontalGlue());
+    // framePanel.add(Box.createHorizontalGlue());
 
-    //initialise frame
+    // initialise frame
     frame.add(framePanel);
     frame.setJMenuBar(menuBar);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,22 +182,20 @@ public class Gui {
    */
   public void createBoardPanel() {
     boardPanel = new JLayeredPane();
-    //TODO: Set maze and board somewhere else
+    // TODO: Set maze and board somewhere else
     maze = BoardRig.lesson1();
-    //maze = BoardRig.crateTest();
-    //maze = BoardRig.crateAndWaterTest();
-    //maze = BoardRig.pathFindTest1();
-    //maze = BoardRig.levelEditorTest2();
-    inventory = new ArrayList<>(maze.getChap().getKeys());
-    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
+    // maze = BoardRig.crateTest();
+    // maze = BoardRig.crateAndWaterTest();
+    // maze = BoardRig.pathFindTest1();
+    // maze = BoardRig.levelEditorTest2();
+
+    maze.addListener(this);
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
-    //boardPanel.setMinimumSize(new Dimension(400, 400));
-    //boardPanel.setPreferredSize(new Dimension(500, 500));
-    boardPanel.setMinimumSize(new Dimension(board.getPreferredSize().width,
-            board.getPreferredSize().height));
-    boardPanel.setPreferredSize(new Dimension(board.getPreferredSize().width,
-            board.getPreferredSize().height));
+    boardPanel.setMinimumSize(
+            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
+    boardPanel.setPreferredSize(
+            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setMaximumSize(new Dimension(800, 800));
   }
 
@@ -214,8 +212,8 @@ public class Gui {
   }
 
   /**
-   * Create the inner side panels.
-   * TODO: Condense code by adding panels to a collection and looping configurations
+   * Create the inner side panels. TODO: Condense code by adding panels to a
+   * collection and looping configurations
    */
   public void createInnerSidePanels() {
     levelPanel = new JPanel();
@@ -239,7 +237,7 @@ public class Gui {
     treasuresPanel.setBorder(new LineBorder(paleLavender, 2, false));
     inventoryPanel.setBorder(new LineBorder(paleLavender, 2, false));
 
-    //inventory grid panel initialisation
+    // inventory grid panel initialisation
     inventoryValueLabels = new JLabel[8];
     for (int i = 0; i < 8; i++) {
       JLabel label = new JLabel();
@@ -253,11 +251,11 @@ public class Gui {
   }
 
   /**
-   * Create and initialise the panels in the side panel.
-   * TODO: Condense code by adding panels to a collection and looping configurations
+   * Create and initialise the panels in the side panel. TODO: Condense code by
+   * adding panels to a collection and looping configurations
    */
   public void initialiseInnerSidePanels() {
-    //initialise inner panels for inner panels in side panel
+    // initialise inner panels for inner panels in side panel
     levelContentPanel = new JPanel();
     timeContentPanel = new JPanel();
     treasuresContentPanel = new JPanel();
@@ -271,7 +269,7 @@ public class Gui {
     treasuresContentPanel.setBackground(deepLavender);
     inventoryContentPanel.setBackground(darkLavender);
 
-    //initialise title labels for panels in inner side panel
+    // initialise title labels for panels in inner side panel
     levelTitleLabel = new JLabel("LEVEL");
     timeTitleLabel = new JLabel("TIME LEFT");
     treasuresTitleLabel = new JLabel("TREASURES REMAINING");
@@ -285,11 +283,11 @@ public class Gui {
     treasuresTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     inventoryTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    //initialise value labels
+    // initialise value labels
     levelValueLabel = new JLabel("1");
     timeValueLabel = new JLabel("60");
     treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures()));
-    //inventoryValueLabels = new JLabel[8];
+    // inventoryValueLabels = new JLabel[8];
     levelValueLabel.setFont(bigText);
     timeValueLabel.setFont(bigText);
     treasuresValueLabel.setFont(bigText);
@@ -300,7 +298,7 @@ public class Gui {
     timeValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     treasuresValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    //add labels and JComponents to inner panels in side panels
+    // add labels and JComponents to inner panels in side panels
     levelContentPanel.add(levelTitleLabel);
     levelContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
     levelContentPanel.add(levelValueLabel);
@@ -322,23 +320,21 @@ public class Gui {
   public void createInfoFieldLabel() {
     try {
       Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
-      infoFieldLabel = new JLabel(new ImageIcon(sign.getScaledInstance(
-              500, 500, Image.SCALE_DEFAULT)));
+      infoFieldLabel = new JLabel(
+              new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-    infoFieldLabel.setVisible(false);
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabelText = new JLabel("swing is pain :(");
     infoFieldLabelText.setBounds(150, -225, 1000, 1000);
     infoFieldLabelText.setFont(new Font("", Font.BOLD, 50));
     infoFieldLabelText.setForeground(Color.BLACK);
-    infoFieldLabelText.setVisible(false);
+    showInfoFieldToGui(false);
   }
 
   /**
-   * Create the menu bar, menus and menu items.
-   * TODO: Create menu items
+   * Create the menu bar, menus and menu items. TODO: Create menu items
    */
   public void createMenuComponents() {
     menuBar = new JMenuBar();
@@ -357,10 +353,11 @@ public class Gui {
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
         if (!isTimerActive) {
-          timer.schedule(timerTask, 0, 1000); //start the timer countdown
+          timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
         }
-        //movement
+        showInfoFieldToGui(false);
+        // movement
         if (key == KeyEvent.VK_UP) {
           maze.move(Maze.Direction.UP);
         } else if (key == KeyEvent.VK_DOWN) {
@@ -371,26 +368,15 @@ public class Gui {
           maze.move(Maze.Direction.RIGHT);
         }
         decrementTreasurePickUp();
-        detectAndShowInfoField();
-        if (maze.isLevelFinished()) {
-          timer.cancel();
-          timer.purge();
-        }
-
-        try {
-          updateInventory();
-        } catch (IOException ioException) {
-          ioException.printStackTrace();
-        }
         board.repaint();
 
-        //pause and resume
+        // pause and resume
         if (key == KeyEvent.VK_SPACE) {
           System.out.println("space pressed");
         } else if (key == KeyEvent.VK_ESCAPE) {
           System.out.println("escape pressed");
 
-          //shortcuts
+          // shortcuts
         } else if (e.isControlDown() && key == KeyEvent.VK_X) {
           System.out.println("ctrl + x pressed");
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
@@ -404,7 +390,7 @@ public class Gui {
         }
       }
 
-      //dead code
+      // dead code
       @Override
       public void keyTyped(KeyEvent e) {
       }
@@ -419,7 +405,7 @@ public class Gui {
    * Setup the timer.
    */
   public void setupTimer() {
-    final int[] secondsLeft = {Integer.parseInt(timeValueLabel.getText())};
+    secondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
     timer = new Timer();
     timerTask = new TimerTask() {
       @Override
@@ -427,9 +413,7 @@ public class Gui {
         if (secondsLeft[0] > 0) {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
-          maze.tickPathFinding();
-          //might as well leave this here, don't think timer has to be purely for application side
-          //unless the pathfinding ticks are supposed to be faster/slower than 1 sec ¯\_(ツ)_/¯
+          //maze.tickPathFinding(); needs to be moved to maze (separate timer)
         }
       }
     };
@@ -441,114 +425,6 @@ public class Gui {
   public void decrementTreasurePickUp() {
     int treasureCount = maze.getChap().getTreasures().size();
     setTreasuresValueLabel(maze.numTreasures() - treasureCount);
-  }
-
-  /**
-   * Add a inventory icon when a key is picked up.
-   *
-   * @throws IOException thrown when key icon image reading fails
-   */
-  public void addInventoryIcon() throws IOException {
-    Image keyImage = null;
-    ImageIcon keyIcon = null;
-    String enumName;
-    Key currentKey = inventory.get(inventory.size() - 1);
-    enumName = currentKey.getColor().name();
-    switch (currentKey.getColor()) {
-      case BLUE:
-        keyImage = ImageIO.read(new File(
-                "resources/textures/board/pickup/keys/wooden_pickaxe.png"));
-        break;
-      case RED:
-        keyImage = ImageIO.read(new File(
-                "resources/textures/board/pickup/keys/iron_pickaxe.png"));
-        break;
-      case GREEN:
-        keyImage = ImageIO.read(new File(
-                "resources/textures/board/pickup/keys/diamond_pickaxe.png"));
-        break;
-      case YELLOW:
-        keyImage = ImageIO.read(new File(
-                "resources/textures/board/pickup/keys/golden_pickaxe.png"));
-        break;
-      default:
-        break;
-    }
-    keyIcon = new ImageIcon(keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      if (inventoryValueLabel.getText().equals(" ")) {  //check label is empty
-        inventoryValueLabel.setText(enumName);  //identify as non-empty label
-        inventoryValueLabel.setIcon(keyIcon);
-        frame.revalidate();
-        break;
-      }
-    }
-  }
-
-  /**
-   * Remove an inventory icon.
-   *
-   * @param labelText the label that has the matching label text
-   */
-  public void removeInventoryIcon(String labelText) {
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      if (inventoryValueLabel.getText().equals(labelText)) {
-        inventoryValueLabel.setText(" ");   //set label to empty again
-        inventoryValueLabel.setIcon(null);  //remove the icon (display nothing)
-        frame.revalidate();
-        break;
-      }
-    }
-  }
-
-  /**
-   * Update keys/items (not treasures) picked up.
-   *
-   * <p>
-   * This method contains very dodgy logic
-   * old inventory - new inventory > 0: key is added
-   * new inventory - old inventory > 0: key is used
-   * </p>
-   *
-   */
-  public void updateInventory() throws IOException {
-    updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-    List<Key> tempUpdatedInventory = new ArrayList<>(maze.getChap().getKeys());
-    List<Key> tempInventory = new ArrayList<Key>(inventory);
-
-    //inventory is changed
-    if (!inventory.equals(updatedInventory)) {
-
-      updatedInventory.removeAll(inventory);
-      tempInventory.removeAll(tempUpdatedInventory);
-
-      //key is picked up
-      if (updatedInventory.size() > 0) {
-        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-        inventory = updatedInventory;
-        addInventoryIcon();
-        //key is used
-      } else {
-        updatedInventory = new ArrayList<>(maze.getChap().getKeys());
-        inventory = updatedInventory;
-        removeInventoryIcon(tempInventory.get(0).getColor().name());
-      }
-    }
-  }
-
-  /**
-   * Detect if Chap is on an info field and display it to the gui.
-   */
-  public void detectAndShowInfoField() {
-    for (Containable container : maze.getChap().getContainer().getContainedEntities()) {
-      if (container instanceof Pickup) {
-        infoFieldLabel.setVisible(true);
-        infoFieldLabelText.setVisible(true);
-        return;
-      }
-    }
-    infoFieldLabelText.setVisible(false);
-    infoFieldLabel.setVisible(false);
   }
 
   /**
@@ -571,6 +447,7 @@ public class Gui {
 
   /**
    * Get the board.
+   *
    * @return the JComponent representing the board.
    */
   public BoardView getBoard() {
@@ -615,6 +492,91 @@ public class Gui {
   public void setInfoFieldLabelText(String text) {
     infoFieldLabelText.setText(text);
     frame.revalidate();
+  }
+
+  /**
+   * Display the info field to the gui.
+   *
+   * @param confirmation boolean confirming infofield is shown/hidden
+   */
+  public void showInfoFieldToGui(boolean confirmation) {
+    infoFieldLabel.setVisible(confirmation);
+    infoFieldLabelText.setVisible(confirmation);
+    frame.revalidate();
+  }
+
+  /**
+   * Update the inventory when we pick up a key.
+   *
+   * @param e the key pickup event
+   */
+  @Override
+  public void update(MazeEventPickup e) {
+    try {
+      if (e.getPicked() instanceof Key) {
+        Key key = (Key) e.getPicked();
+        Image keyImage;
+        keyImage = ImageIO.read(new File(key.getFilename()));
+        ImageIcon keyIcon = new ImageIcon(
+                keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+        for (JLabel inventoryValueLabel : inventoryValueLabels) {
+          if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
+            inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
+            inventoryValueLabel.setIcon(keyIcon);
+            frame.revalidate();
+            break;
+          }
+        }
+      }
+    } catch (IOException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+  }
+
+  /**
+   * Update the inventory when we open a door.
+   *
+   * @param e the door open event
+   */
+  @Override
+  public void update(MazeEventUnlocked e) {
+    if (e.getDoor().getColor() == KeyColor.GREEN) {
+      return; // temporary fix
+    }
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      if (inventoryValueLabel.getText().equals(e.getDoor().getColor().name())) {
+        inventoryValueLabel.setText(" "); // set label to empty again
+        inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+        frame.revalidate();
+        break;
+      }
+    }
+  }
+
+  /**
+   * Update the gui to show/hide info field.
+   *
+   * @param e the info field activation event
+   */
+  public void update(MazeEventInfoField e) {
+    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
+    infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
+            infoFieldLabel.getY() - 150, 1000, 1000);
+    frame.revalidate();
+    showInfoFieldToGui(true);
+  }
+
+  /**
+   * Execute operations when maze has been won.
+   *
+   * @param e the maze won event
+   */
+  @Override
+  public void update(MazeEventWon e) {
+    //stop the timer
+    timer.cancel();
+    timer.purge();
   }
 
   /**

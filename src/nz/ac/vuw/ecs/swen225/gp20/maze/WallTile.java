@@ -7,9 +7,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 
-public class WallTile extends Tile{
-	public WallTile(String filename) {
-		super(filename, "▓▓");
-		this.walkable = false;
-	}
+public class WallTile extends Tile {
+  public WallTile(String filename) {
+    super(filename, "▓▓");
+    this.walkable = false;
+  }
 }

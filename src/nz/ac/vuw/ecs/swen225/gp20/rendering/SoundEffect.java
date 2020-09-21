@@ -12,31 +12,29 @@ import java.io.InputStream;
  * @author Matt Jay 300443033
  */
 public class SoundEffect {
-    Clip sound;
-    public SoundEffect(String filename){
-        File audio = new File(filename);
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio);
-            sound = AudioSystem.getClip();
+  Clip sound;
 
-            sound.open(audioStream);
-        }
-        catch (UnsupportedAudioFileException ex) {
-            System.out.println("The specified audio file is not supported.");
-            ex.printStackTrace();
-        }
-        catch (LineUnavailableException ex) {
-            System.out.println("Audio line for playing back is unavailable.");
-            ex.printStackTrace();
-        }
-        catch (IOException ex) {
-            System.out.println("Error playing the audio file.");
-            ex.printStackTrace();
-        }
-    }
+  public SoundEffect(String filename) {
+    File audio = new File(filename);
+    try {
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio);
+      sound = AudioSystem.getClip();
 
-    public void play(){
-        sound.start();
-        sound.setFramePosition(0);
+      sound.open(audioStream);
+    } catch (UnsupportedAudioFileException ex) {
+      System.out.println("The specified audio file is not supported.");
+      ex.printStackTrace();
+    } catch (LineUnavailableException ex) {
+      System.out.println("Audio line for playing back is unavailable.");
+      ex.printStackTrace();
+    } catch (IOException ex) {
+      System.out.println("Error playing the audio file.");
+      ex.printStackTrace();
     }
+  }
+
+  public void play() {
+    sound.start();
+    sound.setFramePosition(0);
+  }
 }
