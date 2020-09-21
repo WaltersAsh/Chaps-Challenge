@@ -26,7 +26,7 @@ public class Maze {
 
   private Tile[][] tiles;
   private Chap chap;
-  private Set<Treasure> treasures = new HashSet<Treasure>();
+  private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
   private ExitLock exitlock;
   private boolean levelFinished = false;
@@ -84,17 +84,32 @@ public class Maze {
     }
     return s.toString();
   }
-
+  
+  /**
+   * Add a listener which will respond to MazeEvents produced by this Maze.
+   * 
+   * @param <L>       any type which extends MazeEventListener
+   * @param listener  the object which will listen to events
+   */
   public <L extends MazeEventListener> void addListener(L listener) {
     listeners.add(listener);
   }
-
+  
+  /**
+   * Broadcast MazeEvents to any MazeEventListeners we may have.
+   * @param event
+   */
   public void broadcast(MazeEvent event) {
     for (MazeEventListener listener : listeners) {
       event.recieve(listener);
     }
   }
-
+  
+  /**
+   * Try to move in a direction.
+   * 
+   * @param d   the direction
+   */
   public void move(Direction d) {
     MazeEvent event;
     PathTile current = chap.getContainer();
@@ -116,7 +131,8 @@ public class Maze {
           return;
         }
       }
-
+      
+      // TODO: move this to other package.
       BoardView currentBoard = Gui.board;
       currentBoard.initaliseAnimation(chap, current, next, d);
       currentBoard.setAnimating(true);
@@ -126,30 +142,19 @@ public class Maze {
         // should never override a MazeEventUnlocked or a MazeEventPushed
         // because you can never pick something up in the same move as these
         event = checkEntitiesEvent;
-        if (checkEntitiesEvent instanceof MazeEventPickup) {
-          MazeEventPickup pickupEvent = (MazeEventPickup) checkEntitiesEvent;
-          if (pickupEvent.getPicked() instanceof Treasure) {
-            if (chap.hasAllTreasures(this)) {
-              openExitLock();
-              event = new MazeEventExitUnlocked(this, current, ptnext, d, pickupEvent.getPicked(), exitlock);
-            }
-          }
-        }
-
       }
       ptnext.moveTo(chap);
       broadcast(event);
     }
-
   }
 
   /**
-   * Check if we can move onto a door PathTile
+   * Check if we can move onto a b PathTile
    *
    * We could move onto it if we had the matching key to the blocking door.
    *
-   * @param blocked the PathTile to check
-   * @return if we could move onto it
+   * @param blocked   the PathTile to check
+   * @return          the event for moving to it if we did
    */
   public MazeEvent checkBlocking(PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
@@ -160,7 +165,14 @@ public class Maze {
     }
     return null;
   }
-
+  
+  /**
+   * Check if we could open a door.
+   * 
+   * @param door  the door to check
+   * @param d     the direction we moved to
+   * @return      the event if we opened the door and moved, null if we didn't
+   */
   public MazeEventUnlocked tryUnlockDoor(Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
@@ -173,7 +185,14 @@ public class Maze {
     }
     return null;
   }
-
+  
+  /**
+   * Check and pickup entities on the next PathTile.
+   * 
+   * @param path  the tile to check
+   * @param d     the direction we moved
+   * @return      the event for picking up entity, if any
+   */
   public MazeEvent checkEntities(PathTile path, Direction d) {
     for (Containable e : path.getContainedEntities()) {
       if (e instanceof InfoField) {
@@ -183,6 +202,12 @@ public class Maze {
       } else if (e instanceof Pickup) {
         Pickup p = (Pickup) e;
         p.addToInventory(chap);
+        if(p instanceof Treasure) {
+          if (chap.hasAllTreasures(this)) {
+            openExitLock();
+            return new MazeEventExitUnlocked(this, chap.container, path, d, p, exitlock);
+          }
+        }
         // should never be able to pick up more than one thing in one go.
         return new MazeEventPickup(this, chap.container, path, d, p);
       }
@@ -271,7 +296,7 @@ public class Maze {
     return height;
   }
 
-  public Set<Treasure> getTreasures() {
+  public List<Treasure> getTreasures() {
     return treasures;
   }
 
