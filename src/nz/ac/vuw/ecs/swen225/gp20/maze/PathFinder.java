@@ -70,9 +70,9 @@ public class PathFinder {
     
   }
 
-  public Tile next(Tile current, Mode mode) {
+  public Direction next(Tile current, Mode mode) {
     if(trapped(current)) {
-      return current;
+      return null;
     }
     Direction next = null;
     
@@ -98,9 +98,9 @@ public class PathFinder {
     
     if(next!=null) {
       previous = next;
-      return maze.tileTo(current, next);
+      return next;
     }else {
-      return current;
+      return null;
     }
   }
   

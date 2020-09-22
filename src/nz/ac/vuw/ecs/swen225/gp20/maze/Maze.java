@@ -200,6 +200,7 @@ public class Maze {
       if (e instanceof InfoField) {
         return new MazeEventInfoField(this, chap.container, path, d, (InfoField) e);
       } else if (e instanceof Exit) {
+        pause();
         return new MazeEventWon(this, chap.container, path, d);
       } else if (e instanceof Pickup) {
         Pickup p = (Pickup) e;
@@ -280,13 +281,11 @@ public class Maze {
    */
   public void tickPathFinding() {
     for (Enemy e : enemies) {
-      Tile destination = e.tickPathFinding();
-      if (destination instanceof PathTile) {
-        PathTile pt = (PathTile) destination;
-        if (pt.isWalkable()) {
-          pt.moveTo(e);
-        }
-      }
+      Direction next = e.tickPathFinding();
+      if(next==null) continue;
+      PathTile pt = (PathTile) tileTo(e.getContainer(), next);
+      broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
+      pt.moveTo(e);
     }
   }
   
@@ -320,10 +319,6 @@ public class Maze {
 
   public boolean isLevelFinished() {
     return levelFinished;
-  }
-
-  public void setLevelFinished(boolean levelFinished) {
-    this.levelFinished = levelFinished;
   }
 
   public int getWidth() {
