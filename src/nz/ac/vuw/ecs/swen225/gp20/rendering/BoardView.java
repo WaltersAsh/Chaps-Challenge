@@ -27,12 +27,12 @@ public class BoardView extends JComponent implements ActionListener {
   private int prevRow = 1;
   private int prevCol = 1;
 
-  Chap toAnimate;
+  Movable toAnimate;
 
   private double velx, vely;
 
   public boolean isAnimating = false;
-  private boolean isWindowed = true;
+  private boolean isWindowed = false;
 
   Timer t = new Timer(5, this);
   
@@ -67,6 +67,10 @@ public class BoardView extends JComponent implements ActionListener {
     }
   }
 
+  /**
+   * Draws the whole board.
+   * @param g the graphics it draws.
+   */
   public void drawWholeBoard(Graphics g) {
     if (width > height) {
       blockSize = Gui.boardPanel.getWidth() / width;
@@ -83,8 +87,8 @@ public class BoardView extends JComponent implements ActionListener {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
             for (Containable c : pt.getContainedEntities()) {
-              if (isAnimating && c instanceof Chap) {
-                toAnimate = (Chap) c;
+              if (isAnimating && c instanceof Movable) {
+                toAnimate = (Movable) c;
                 continue;
               }
               g.drawImage(getToolkit().getImage(c.getFilename()), col * blockSize, row * blockSize,
@@ -139,8 +143,8 @@ public class BoardView extends JComponent implements ActionListener {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
             for (Containable c : pt.getContainedEntities()) {
-              if (isAnimating && c instanceof Chap) {
-                toAnimate = (Chap) c;
+              if (isAnimating && c instanceof Movable) {
+                toAnimate = (Movable) c;
                 continue;
               }
               g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,
@@ -155,7 +159,13 @@ public class BoardView extends JComponent implements ActionListener {
     }
   }
 
+  /**
+   * Moves the movable object along.
+   * @param g graphics object its drawing
+   * @param c the movable its moving
+   */
   public void animate(Graphics g, Movable c) {
+    System.out.println(c);
     if (d == Maze.Direction.LEFT) {
       velx = -2;
       vely = 0;
@@ -197,7 +207,6 @@ public class BoardView extends JComponent implements ActionListener {
       toX = to.getCol() * getBlockSize();
       toY = to.getRow() * getBlockSize();
     }
-
 
     // System.out.println(fromX+ " "+toX);
     t.start();
