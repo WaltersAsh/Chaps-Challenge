@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 
 /**
  * An example class of how to implement MazeEventListener.
@@ -11,7 +12,7 @@ import nz.ac.vuw.ecs.swen225.gp20.application.*;
  */
 public class MazeEventListenerExample extends MazeEventListener{
   public static void main(String[] args) {
-    Gui g = new Gui();
+    Gui g = new Gui(BoardRig.lesson1());
     g.getBoard().getMaze().addListener(new MazeEventListenerExample());
     
     g.getFrame().setVisible(true);

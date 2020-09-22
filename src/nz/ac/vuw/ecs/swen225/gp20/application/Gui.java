@@ -27,7 +27,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -109,7 +108,8 @@ public class Gui extends MazeEventListener {
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
-  public Gui() {
+  public Gui(Maze maze) {
+    this.maze = maze;
     // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
@@ -159,7 +159,7 @@ public class Gui extends MazeEventListener {
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
     frame.setSize(1024, 800);
-    frame.setMinimumSize(new Dimension(800, 675));
+    frame.setMinimumSize(new Dimension(875, 675));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
             dimen.height / 2 - frame.getSize().height / 2);
 
@@ -182,13 +182,6 @@ public class Gui extends MazeEventListener {
    */
   public void createBoardPanel() {
     boardPanel = new JLayeredPane();
-    // TODO: Set maze and board somewhere else
-    // maze = BoardRig.lesson1();
-    // maze = BoardRig.crateTest();
-    // maze = BoardRig.crateAndWaterTest();
-    // maze = BoardRig.pathFindTest1();
-    maze = BoardRig.levelEditorTest3();
-
     maze.addListener(this);
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
@@ -577,14 +570,4 @@ public class Gui extends MazeEventListener {
     timer.cancel();
     timer.purge();
   }
-
-  /**
-   * Main method for testing the GUI.
-   *
-   * @param args the commandline arguments
-   */
-  public static void main(String[] args) {
-    new Gui().getFrame().setVisible(true);
-  }
-
 }
