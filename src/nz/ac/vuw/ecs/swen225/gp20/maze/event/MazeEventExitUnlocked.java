@@ -13,7 +13,7 @@ public class MazeEventExitUnlocked extends MazeEventPickup {
 
   public MazeEventExitUnlocked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       Pickup picked, ExitLock exitlock) {
-    super(maze, destination, destination, direction, picked);
+    super(maze, origin, destination, direction, picked);
     this.exitlock= exitlock;
   }
 
@@ -24,7 +24,7 @@ public class MazeEventExitUnlocked extends MazeEventPickup {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
   

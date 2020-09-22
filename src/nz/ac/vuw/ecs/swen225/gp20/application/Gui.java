@@ -413,7 +413,6 @@ public class Gui extends MazeEventListener {
         if (secondsLeft[0] > 0) {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
-          //maze.tickPathFinding(); needs to be moved to maze (separate timer)
         }
       }
     };

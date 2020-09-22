@@ -2,8 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
 import java.util.*;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.PathTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
 public class SoundHandler extends MazeEventListener{
@@ -58,7 +57,6 @@ public class SoundHandler extends MazeEventListener{
   
 
   public void playSound(String s) {
-    System.out.println(s);
     SoundEffect current = sounds.get(s);
     current.play();
   }

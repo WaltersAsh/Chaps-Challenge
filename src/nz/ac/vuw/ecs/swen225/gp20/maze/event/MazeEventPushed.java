@@ -28,7 +28,7 @@ public class MazeEventPushed extends MazeEventWalked {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
 }

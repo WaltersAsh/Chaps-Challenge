@@ -13,7 +13,7 @@ public class MazeEventInfoField extends MazeEventWalked {
 
   public MazeEventInfoField(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       InfoField info) {
-    super(maze, destination, destination, direction);
+    super(maze, origin, destination, direction);
     this.info = info;
   }
 
@@ -28,7 +28,7 @@ public class MazeEventInfoField extends MazeEventWalked {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
 }

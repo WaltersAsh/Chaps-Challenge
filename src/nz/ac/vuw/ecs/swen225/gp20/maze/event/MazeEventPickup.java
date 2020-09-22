@@ -13,7 +13,7 @@ public class MazeEventPickup extends MazeEventWalked {
 
   public MazeEventPickup(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
       Pickup picked) {
-    super(maze, destination, destination, direction);
+    super(maze, origin, destination, direction);
     this.picked = picked;
   }
 
@@ -28,7 +28,7 @@ public class MazeEventPickup extends MazeEventWalked {
   }
   
   @Override
-  public void recieve(MazeEventListener l) {
+  public void receive(MazeEventListener l) {
     l.update(this);
   }
 }
