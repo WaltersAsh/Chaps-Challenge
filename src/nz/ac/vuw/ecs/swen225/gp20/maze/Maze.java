@@ -143,8 +143,10 @@ public class Maze {
         // because you can never pick something up in the same move as these
         event = checkEntitiesEvent;
       }
+
       ptnext.moveTo(chap);
       broadcast(event);
+
     }
   }
 

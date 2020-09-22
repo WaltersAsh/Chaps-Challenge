@@ -16,19 +16,25 @@ public class BoardView extends JComponent implements ActionListener {
   private int blockSize = 40;
   private int width, height, minPanel;
 
+  private int viewTiles = 4;
+
   // Stuff for animation
   private Tile from, to;
   private int fromX, fromY, toX, toY;
   private Maze.Direction d;
   private Movable entity;
 
+  private int prevRow = 1;
+  private int prevCol = 1;
+
   Chap toAnimate;
 
   private double velx, vely;
 
   public boolean isAnimating = false;
+  private boolean isWindowed = true;
 
-  Timer t = new Timer(10, this);
+  Timer t = new Timer(5, this);
   
   SoundHandler sh;
   AnimationHandler ah;
@@ -48,8 +54,14 @@ public class BoardView extends JComponent implements ActionListener {
 
     minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
 
-    drawWholeBoard(g);
-    // drawWindowedBoard(g);
+
+    if(isWindowed) {
+      drawWindowedBoard(g);
+    }
+    else{
+      drawWholeBoard(g);
+    }
+
     if (isAnimating) {
       animate(g, toAnimate);
     }
@@ -91,10 +103,10 @@ public class BoardView extends JComponent implements ActionListener {
    * @param g the graphics used
    */
   public void drawWindowedBoard(Graphics g) {
-    int viewTiles = 3;
+
     int windowSize = (2 * viewTiles) + 1;
 
-    int blockSize = minPanel / windowSize;
+    blockSize = minPanel / windowSize;
 
     int chapRow = m.getChap().getContainer().getRow();
     int chapCol = m.getChap().getContainer().getCol();
@@ -143,24 +155,32 @@ public class BoardView extends JComponent implements ActionListener {
     }
   }
 
-  public void animate(Graphics g, Chap c) {
+  public void animate(Graphics g, Movable c) {
     if (d == Maze.Direction.LEFT) {
-      velx = -1;
+      velx = -2;
       vely = 0;
     } else if (d == Maze.Direction.UP) {
-      vely = -1;
+      vely = -2;
       velx = 0;
     } else if (d == Maze.Direction.DOWN) {
-      vely = 1.5;
+      vely = 2.5;
       velx = 0;
     } else if (d == Maze.Direction.RIGHT) {
-      velx = 1.5;
+      velx = 2.5;
       vely = 0;
     }
 
     g.drawImage(getToolkit().getImage(c.getFilename()), fromX, fromY, blockSize, blockSize, this);
   }
 
+  /**
+   * Initialises the parameters for the animation.
+   *
+   * @param entity what is moving
+   * @param from where from
+   * @param to where its moving to
+   * @param d the direction its moving
+   */
   public void initaliseAnimation(Movable entity, Tile from, Tile to, Maze.Direction d) {
     this.from = from;
     this.to = to;
@@ -168,10 +188,16 @@ public class BoardView extends JComponent implements ActionListener {
     this.entity = entity;
     this.d = d;
 
-    fromX = from.getCol() * getBlockSize();
-    fromY = from.getRow() * getBlockSize();
-    toX = to.getCol() * getBlockSize();
-    toY = to.getRow() * getBlockSize();
+    if(isWindowed){
+      setWindowedPostitions(from, to, d);
+    }
+    else{
+      fromX = from.getCol() * getBlockSize();
+      fromY = from.getRow() * getBlockSize();
+      toX = to.getCol() * getBlockSize();
+      toY = to.getRow() * getBlockSize();
+    }
+
 
     // System.out.println(fromX+ " "+toX);
     t.start();
@@ -188,16 +214,101 @@ public class BoardView extends JComponent implements ActionListener {
     }
   }
 
+  /**
+   * Sets the from and to positions for the windowed board because its more complicated
+   * @param from
+   * @param to
+   * @param d
+   */
+  public void setWindowedPostitions(Tile from, Tile to, Maze.Direction d) {
+    System.out.println(d.toString());
+
+    //Calculate XPos
+    if (from.getCol() < viewTiles) {
+      fromX = from.getCol() * blockSize;
+      toX = to.getCol() * blockSize;
+    } else if (from.getCol() >= viewTiles && from.getCol() < width - viewTiles) {
+      fromX = viewTiles * blockSize;
+      if (d == Maze.Direction.RIGHT) {
+        toX = fromX + blockSize;
+      } else {
+        toX = fromX - blockSize;
+      }
+    } else {
+      fromX = viewTiles*blockSize+(prevCol*blockSize);
+      if (d == Maze.Direction.RIGHT) {
+        toX = fromX + blockSize;
+        prevCol++;
+      } else if(d==Maze.Direction.LEFT) {
+        toX = fromX - blockSize;
+        if(prevCol>1) {
+          prevCol--;
+        }
+      }
+    }
+
+
+    if (from.getRow() < viewTiles) {
+      fromY = from.getRow() * blockSize;
+      toY = to.getRow()*blockSize;
+    } else if (from.getRow() >= viewTiles && from.getRow() <= height - viewTiles) {
+      fromY = viewTiles * blockSize;
+      if (d == Maze.Direction.DOWN) {
+        toY = fromY + blockSize;
+      } else {
+        toY = fromY - blockSize;
+      }
+    } else {
+      fromY = viewTiles*blockSize+(prevRow*blockSize);
+      if (d == Maze.Direction.DOWN) {
+        toY = fromY + blockSize;
+        prevRow++;
+      } else if(d==Maze.Direction.UP){
+        toY = fromY - blockSize;
+        if(prevRow>1) {
+          prevRow--;
+        }
+      }
+    }
+
+
+    System.out.printf("Width = %d | fromCol = %d| toCol = %d| Bounds = %d| prevCol = %d\n", width, from.getCol(), to.getCol(), width-from.getCol()-1, prevCol);
+//    if(entity.getContainer().getCol()>width-viewTiles&&entity.getContainer().getRow()>height-viewTiles){
+//
+//    }
+//    if(entity.getContainer().getCol()>=viewTiles&&entity.getContainer().getRow()>=viewTiles){
+//      fromX = viewTiles*blockSize;
+//      fromY = viewTiles*blockSize;
+//      if(d == Maze.Direction.DOWN){
+//        toX = fromX;
+//        toY = fromY + blockSize;
+//      }
+//      else if(d == Maze.Direction.LEFT){
+//        toY = fromY;
+//        toX = fromX - blockSize;
+//      }
+//
+//    }
+//    else {
+//      fromX = from.getCol() * getBlockSize();
+//      fromY = from.getRow() * getBlockSize();
+//      toX = to.getCol() * getBlockSize();
+//      toY = to.getRow() * getBlockSize();
+//    }
+//  }
+  }
+
   @Override
   public void actionPerformed(ActionEvent e) {
     repaint();
     fromX += velx;
     fromY += vely;
 
-    if ((d == Maze.Direction.LEFT || d == Maze.Direction.RIGHT) && fromX == toX) {
+    if ((d == Maze.Direction.LEFT && fromX<=toX)||(d == Maze.Direction.RIGHT && fromX>=toX)) {
+
       setAnimating(false);
     }
-    if ((d == Maze.Direction.DOWN || d == Maze.Direction.UP) && fromY == toY) {
+    if ((d == Maze.Direction.UP && fromY<=toY)||(d == Maze.Direction.DOWN && fromY>=toY)){
       setAnimating(false);
     }
   }
