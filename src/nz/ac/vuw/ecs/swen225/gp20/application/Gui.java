@@ -185,9 +185,9 @@ public class Gui extends MazeEventListener {
     // TODO: Set maze and board somewhere else
     // maze = BoardRig.lesson1();
     // maze = BoardRig.crateTest();
-    maze = BoardRig.crateAndWaterTest();
+    // maze = BoardRig.crateAndWaterTest();
     // maze = BoardRig.pathFindTest1();
-    // maze = BoardRig.levelEditorTest2();
+    maze = BoardRig.levelEditorTest2();
 
     maze.addListener(this);
     board = new BoardView(maze);

@@ -32,7 +32,7 @@ public class Maze {
   // Logic
   private boolean levelFinished = false;
   private Timer timer;
-  private int pathFindingDelay = 50; // delay between path finding ticks in ms
+  private int pathFindingDelay = 500; // delay between path finding ticks in ms
   
   // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
@@ -129,7 +129,7 @@ public class Maze {
     if (next instanceof PathTile) {
       PathTile ptnext = (PathTile) next;
       event = new MazeEventWalked(this, current, ptnext, d);
-      if (ptnext.isBlocked()) {
+      if (!ptnext.isWalkable()) {
         event = checkBlocking(ptnext, d);
         if (event == null) {
           // we did not move
@@ -231,7 +231,7 @@ public class Maze {
       PathTile pt = (PathTile) destination;
       PathTile original = c.getContainer();
       // if the pathtile we try to push to is free, push the crate
-      if (!pt.isBlocked()) {
+      if (pt.isWalkable()) {
         pt.moveTo(c);
         // can also push crate onto water to make a path
         return new MazeEventPushed(this, chap.container, original, d, c);
@@ -283,7 +283,7 @@ public class Maze {
       Tile destination = e.tickPathFinding();
       if (destination instanceof PathTile) {
         PathTile pt = (PathTile) destination;
-        if (!pt.isBlocked()) {
+        if (pt.isWalkable()) {
           pt.moveTo(e);
         }
       }

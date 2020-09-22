@@ -231,7 +231,6 @@ public class BoardView extends JComponent implements ActionListener {
   public void setAnimating(boolean animating) {
     isAnimating = animating;
     if (!animating) {
-      System.out.println("Cleared");
       animations.clear();
       entitesAnimated.clear();
       t.stop();

@@ -11,13 +11,11 @@ import java.util.*;
 
 public class PathTile extends Tile {
   private Stack<Containable> contains = new Stack<Containable>(); // the items on this FreeTile
-  private boolean isBlocked = false;
   private BlockingContainable blocker;
 
   public PathTile(String filename) {
     super(filename, "PA");
     this.walkable = true;
-
   }
 
   /**
@@ -29,7 +27,7 @@ public class PathTile extends Tile {
     contains.push(c);
     c.setContainer(this);
     if (c instanceof BlockingContainable) {
-      isBlocked = true;
+      walkable = false;
       blocker = (BlockingContainable) c;
     }
   }
@@ -42,7 +40,7 @@ public class PathTile extends Tile {
   public void remove(Containable c) {
     contains.remove(c);
     if (c instanceof BlockingContainable) {
-      isBlocked = false;
+      walkable = true;
       blocker = null;
     }
 
@@ -69,10 +67,6 @@ public class PathTile extends Tile {
     if (!contains.isEmpty())
       return contains.peek().getInitials();
     return super.getInitials();
-  }
-
-  public boolean isBlocked() {
-    return isBlocked;
   }
 
   public BlockingContainable getBlocker() {
