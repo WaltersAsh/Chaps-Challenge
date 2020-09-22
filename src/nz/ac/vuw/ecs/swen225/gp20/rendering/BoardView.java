@@ -19,7 +19,7 @@ public class BoardView extends JComponent implements ActionListener {
   private int blockSize = 40;
   private int width, height, minPanel;
 
-  private int viewTiles = 4;
+  private int viewTiles = 3;
 
   // Stuff for animation
   private Tile from, to;
@@ -42,7 +42,7 @@ public class BoardView extends JComponent implements ActionListener {
   public boolean isAnimating = false;
   private boolean isWindowed = false;
 
-  Timer t = new Timer(2, this);
+  Timer t = new Timer(5, this);
   
   SoundHandler sh;
   AnimationHandler ah;
@@ -71,9 +71,7 @@ public class BoardView extends JComponent implements ActionListener {
     }
 
     if (isAnimating) {
-      for(int i=0; i<animations.size();i++) {
-        animate(g);
-      }
+      animate(g);
     }
   }
 
@@ -98,7 +96,6 @@ public class BoardView extends JComponent implements ActionListener {
           if (!pt.getContainedEntities().isEmpty()) {
             for (Containable c : pt.getContainedEntities()) {
               if (isAnimating && c instanceof Movable&&entitesAnimated.contains(c)) {
-//              toAnimate = (Movable) c;
                 continue;
               }
               g.drawImage(getToolkit().getImage(c.getFilename()), col * blockSize, row * blockSize,
@@ -172,21 +169,20 @@ public class BoardView extends JComponent implements ActionListener {
   /**
    * Moves the movable object along.
    * @param g graphics object its drawing
-   * @param a the animation its moving
    */
   public void animate(Graphics g) {
 
     if (d == Maze.Direction.LEFT) {
-      velx = -2;
+      velx = -3;
       vely = 0;
     } else if (d == Maze.Direction.UP) {
-      vely = -2;
+      vely = -3;
       velx = 0;
     } else if (d == Maze.Direction.DOWN) {
-      vely = 2.5;
+      vely = 3.5;
       velx = 0;
     } else if (d == Maze.Direction.RIGHT) {
-      velx = 2.5;
+      velx = 3.5;
       vely = 0;
     }
 
@@ -211,8 +207,6 @@ public class BoardView extends JComponent implements ActionListener {
     this.from = from;
     this.to = to;
 
-    System.out.println("From Tile: "+from+ "To Tile: "+to);
-
     this.entity = entity;
     this.d = d;
 
@@ -226,9 +220,7 @@ public class BoardView extends JComponent implements ActionListener {
       toY = to.getRow() * getBlockSize();
     }
 
-    //System.out.printf("Movable: %s| fromX: %d; toX:%d\n", entity, fromX,toX);
     animations.add(new Animation(entity, fromX, toX, fromY, toY, d));
-    // System.out.println(fromX+ " "+toX);
     t.start();
   }
 
@@ -239,6 +231,9 @@ public class BoardView extends JComponent implements ActionListener {
   public void setAnimating(boolean animating) {
     isAnimating = animating;
     if (!animating) {
+      System.out.println("Cleared");
+      animations.clear();
+      entitesAnimated.clear();
       t.stop();
     }
   }
@@ -304,6 +299,8 @@ public class BoardView extends JComponent implements ActionListener {
         }
       }
     }
+
+
 
   }
 
