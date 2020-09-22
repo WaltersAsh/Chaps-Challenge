@@ -19,7 +19,7 @@ public class BoardView extends JComponent implements ActionListener {
   private int blockSize = 40;
   private int width, height, minPanel;
 
-  private int viewTiles = 3;
+  private int viewTiles = 4;
 
   // Stuff for animation
   private Tile from, to;
@@ -40,7 +40,8 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = false;
+  private boolean isWindowed = true;
+  private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
   
@@ -186,9 +187,14 @@ public class BoardView extends JComponent implements ActionListener {
       vely = 0;
     }
 
-    for(int i=0;i<animations.size(); i++){
-      Animation a = animations.get(i);
-      g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+    if(!isWindowed||(from.getCol()<=viewTiles)) {
+      for (int i = 0; i < animations.size(); i++) {
+        Animation a = animations.get(i);
+        g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+      }
+    }
+    else{
+      System.out.println("Board");
     }
 
   }
@@ -231,7 +237,6 @@ public class BoardView extends JComponent implements ActionListener {
   public void setAnimating(boolean animating) {
     isAnimating = animating;
     if (!animating) {
-      System.out.println("Cleared");
       animations.clear();
       entitesAnimated.clear();
       t.stop();
@@ -257,12 +262,7 @@ public class BoardView extends JComponent implements ActionListener {
       fromX = from.getCol() * blockSize;
       toX = to.getCol() * blockSize;
     } else if (from.getCol() >= viewTiles && from.getCol() < width - viewTiles) {
-      fromX = viewTiles * blockSize;
-      if (d == Maze.Direction.RIGHT) {
-        toX = fromX + blockSize;
-      } else {
-        toX = fromX - blockSize;
-      }
+      boardNeedMove = true;
     } else {
       fromX = viewTiles*blockSize+(prevCol*blockSize);
       if (d == Maze.Direction.RIGHT) {
@@ -280,13 +280,8 @@ public class BoardView extends JComponent implements ActionListener {
     if (from.getRow() < viewTiles) {
       fromY = from.getRow() * blockSize;
       toY = to.getRow()*blockSize;
-    } else if (from.getRow() >= viewTiles && from.getRow() <= height - viewTiles) {
-      fromY = viewTiles * blockSize;
-      if (d == Maze.Direction.DOWN) {
-        toY = fromY + blockSize;
-      } else {
-        toY = fromY - blockSize;
-      }
+    } else if (from.getRow() >= viewTiles && from.getRow() < height - viewTiles) {
+      boardNeedMove = true;
     } else {
       fromY = viewTiles*blockSize+(prevRow*blockSize);
       if (d == Maze.Direction.DOWN) {

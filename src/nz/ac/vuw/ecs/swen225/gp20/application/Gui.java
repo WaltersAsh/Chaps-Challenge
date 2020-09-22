@@ -184,8 +184,8 @@ public class Gui extends MazeEventListener {
     boardPanel = new JLayeredPane();
     // TODO: Set maze and board somewhere else
     // maze = BoardRig.lesson1();
-    // maze = BoardRig.crateTest();
-    maze = BoardRig.crateAndWaterTest();
+    maze = BoardRig.crateTest();
+    // maze = BoardRig.crateAndWaterTest();
     // maze = BoardRig.pathFindTest1();
     // maze = BoardRig.levelEditorTest2();
 
