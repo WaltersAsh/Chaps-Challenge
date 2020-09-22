@@ -21,6 +21,6 @@ public class Enemy extends Movable {
   }
 
   public Direction tickPathFinding() {
-    return pf.next(container, PathFinder.Mode.STRAIGHT_RANDOM);
+    return pf.next(container, PathFinder.Mode.STRAIGHT_ANTICLOCKWISE);
   }
 }

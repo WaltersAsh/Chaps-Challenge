@@ -95,13 +95,10 @@ public class PathFinder {
     default:
       break;
     }
-    
     if(next!=null) {
       previous = next;
-      return next;
-    }else {
-      return null;
     }
+    return next;
   }
   
   private Direction nextAStar(Tile current) {
@@ -125,9 +122,9 @@ public class PathFinder {
     }else { // not possible, so turn clockwise, return next one possible
       while(!maze.tileTo(current, next).isWalkable()) {
         if(clockwise) {
-          next = clockwise(previous);
+          next = clockwise(next);
         }else {
-          next = antiClockwise(previous);
+          next = antiClockwise(next);
         }
       }
       return next;
