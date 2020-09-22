@@ -187,7 +187,7 @@ public class Gui extends MazeEventListener {
     // maze = BoardRig.crateTest();
     // maze = BoardRig.crateAndWaterTest();
     // maze = BoardRig.pathFindTest1();
-    maze = BoardRig.levelEditorTest2();
+    maze = BoardRig.levelEditorTest3();
 
     maze.addListener(this);
     board = new BoardView(maze);
