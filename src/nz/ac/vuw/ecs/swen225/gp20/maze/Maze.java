@@ -229,15 +229,16 @@ public class Maze {
     // if the tile we try to push to is a pathtile
     if (destination instanceof PathTile) {
       PathTile pt = (PathTile) destination;
+      PathTile original = c.getContainer();
       // if the pathtile we try to push to is free, push the crate
       if (!pt.isBlocked()) {
         pt.moveTo(c);
         // can also push crate onto water to make a path
-        return new MazeEventPushed(this, chap.container, c.container, d, c);
+        return new MazeEventPushed(this, chap.container, original, d, c);
       } else if (pt.getBlocker() instanceof Water) {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-        return new MazeEventPushedWater(this, chap.container, c.container, d, c);
+        return new MazeEventPushedWater(this, chap.container, original, d, c);
       }
     }
     return null;

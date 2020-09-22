@@ -224,7 +224,7 @@ public class BoardView extends JComponent implements ActionListener {
       toY = to.getRow() * getBlockSize();
     }
 
-    System.out.printf("Movable: %s| fromX: %d; toX:%d\n", entity, fromX,toX);
+    //System.out.printf("Movable: %s| fromX: %d; toX:%d\n", entity, fromX,toX);
     animations.add(new Animation(entity, fromX, toX, fromY, toY, d));
     // System.out.println(fromX+ " "+toX);
     t.start();
