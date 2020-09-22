@@ -5,7 +5,7 @@ import java.util.Random;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 
 public class PathFinder {
-  Direction previous;
+  
   public enum Mode{
     STRAIGHT_CLOCKWISE,
     STRAIGHT_ANTICLOCKWISE,
@@ -16,6 +16,7 @@ public class PathFinder {
   
   Maze maze;
   Random random = new Random();
+  Direction previous = randomDirection();
 
   public PathFinder(Maze m) {
     maze = m;
@@ -73,44 +74,82 @@ public class PathFinder {
     if(trapped(current)) {
       return current;
     }
+    Direction next = null;
+    
     switch(mode) {
     case ASTAR:
-      return nextAStar(current);
+      next = nextAStar(current);
+      break;
     case RANDOM:
-      return nextRandom(current);
+      next = nextRandom(current);
+      break;
     case STRAIGHT_ANTICLOCKWISE:
-      return nextStraightAntiClockwise(current);
+      next = nextStraightAntiClockwise(current);
+      break;
     case STRAIGHT_CLOCKWISE:
-      return nextStraightClockwise(current);
+      next = nextStraightClockwise(current);
+      break;
     case STRAIGHT_RANDOM:
-      return nextStraight(current);
+      next = nextStraight(current);
+      break;
     default:
-      return null;
+      break;
+    }
+    
+    if(next!=null) {
+      previous = next;
+      return maze.tileTo(current, next);
+    }else {
+      return current;
     }
   }
   
-  private Tile nextAStar(Tile current) {
-    return current;
+  private Direction nextAStar(Tile current) {
+    return null;
   }
   
-  private Tile nextRandom(Tile current) {
-    Tile next = maze.tileTo(current, randomDirection());
-    while(!next.isWalkable()) {
-      next = maze.tileTo(current, randomDirection());
+  private Direction nextRandom(Tile current) {
+    
+    Direction next = randomDirection();
+    while(!maze.tileTo(current, next).isWalkable()) {
+      next = randomDirection();
     }
     return next;
   }
   
-  private Tile nextStraightClockwise(Tile current) {
-    return current;
+  private Direction nextStraightRotation(Tile current, boolean clockwise) {
+    // go straight if possible
+    Direction next = previous;
+    if(maze.tileTo(current, previous).isWalkable()) {
+      return next;
+    }else { // not possible, so turn clockwise, return next one possible
+      while(!maze.tileTo(current, next).isWalkable()) {
+        if(clockwise) {
+          next = clockwise(previous);
+        }else {
+          next = antiClockwise(previous);
+        }
+      }
+      return next;
+    }
   }
   
-  private Tile nextStraightAntiClockwise(Tile current) {
-    return current;
+  private Direction nextStraightClockwise(Tile current) {
+    return nextStraightRotation(current, true);
   }
   
-  private Tile nextStraight(Tile current) {
-    return current;
+  private Direction nextStraightAntiClockwise(Tile current) {
+    return nextStraightRotation(current, false);
+  }
+  
+  private Direction nextStraight(Tile current) {
+    Direction next = clockwise(clockwise(previous)); // 180 degrees
+    if(maze.tileTo(current, previous).isWalkable()) {
+      return previous;
+    }else if(maze.tileTo(current, next).isWalkable()){
+      return next;
+    }
+    return null;
   }
 
 }

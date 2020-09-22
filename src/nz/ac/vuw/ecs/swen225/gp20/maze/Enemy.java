@@ -19,6 +19,6 @@ public class Enemy extends Movable {
   }
 
   public Tile tickPathFinding() {
-    return pf.next(container, PathFinder.Mode.RANDOM);
+    return pf.next(container, PathFinder.Mode.STRAIGHT_RANDOM);
   }
 }

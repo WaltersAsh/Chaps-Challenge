@@ -9,7 +9,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public abstract class Tile extends Drawable {
   int row, col;
-  boolean walkable = false;
+  protected boolean walkable = false;
 
   public Tile(String filename, String initials) {
     super(filename, initials);
