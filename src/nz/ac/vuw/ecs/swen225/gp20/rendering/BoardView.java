@@ -72,7 +72,7 @@ public class BoardView extends JComponent implements ActionListener {
 
     if (isAnimating) {
       for(int i=0; i<animations.size();i++) {
-        animate(g, animations.get(i));
+        animate(g);
       }
     }
   }
@@ -174,10 +174,8 @@ public class BoardView extends JComponent implements ActionListener {
    * @param g graphics object its drawing
    * @param a the animation its moving
    */
-  public void animate(Graphics g, Animation a) {
+  public void animate(Graphics g) {
 
-
-    currentAnimation = a;
     if (d == Maze.Direction.LEFT) {
       velx = -2;
       vely = 0;
@@ -192,7 +190,11 @@ public class BoardView extends JComponent implements ActionListener {
       vely = 0;
     }
 
-    g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+    for(int i=0;i<animations.size(); i++){
+      Animation a = animations.get(i);
+      g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+    }
+
   }
 
   /**
@@ -237,9 +239,13 @@ public class BoardView extends JComponent implements ActionListener {
   public void setAnimating(boolean animating) {
     isAnimating = animating;
     if (!animating) {
-      entitesAnimated.clear();
-      animations.clear();
       t.stop();
+    }
+  }
+
+  public void checkAnimation(){
+    if(animations.isEmpty()){
+      setAnimating(false);
     }
   }
 
@@ -304,22 +310,33 @@ public class BoardView extends JComponent implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
       repaint();
-      double currentFromX = currentAnimation.getFromX();
-      double currentFromY = currentAnimation.getFromY();
-      currentAnimation.setFromX(currentFromX + velx);
-      currentAnimation.setFromY(currentFromY + vely);
+      for(int i=0; i<animations.size(); i++) {
+        currentAnimation = animations.get(i);
+        double currentFromX = currentAnimation.getFromX();
+        double currentFromY = currentAnimation.getFromY();
+        currentAnimation.setFromX(currentFromX + velx);
+        currentAnimation.setFromY(currentFromY + vely);
 
-      if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX() ) ||
-          (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
-        setAnimating(false);
-      }
-      if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
-          (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
-        setAnimating(false);
+        if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX()) ||
+            (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
+          entitesAnimated.remove(currentAnimation.getM());
+          animations.remove(currentAnimation);
+          checkAnimation();
+        }
+        if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
+            (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
+          entitesAnimated.remove(currentAnimation.getM());
+          animations.remove(currentAnimation);
+          checkAnimation();
+        }
       }
   }
 
   public Maze getMaze() {
     return m;
+  }
+
+  public boolean isAnimating() {
+    return isAnimating;
   }
 }
