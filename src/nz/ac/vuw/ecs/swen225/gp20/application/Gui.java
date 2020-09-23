@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -78,12 +79,26 @@ public class Gui extends MazeEventListener {
   private JLabel infoFieldLabel;
   private JLabel infoFieldLabelText;
 
-  // menu bar and menu
-  // TODO: Add menu items to menus
+  // menu bar and menu items
   private JMenuBar menuBar;
+  
   private JMenu gameMenu;
+  private JMenuItem saveMenuItem;
+  private JMenuItem loadMenuItem;
+  private JMenuItem exitMenuItem;
+  private JMenuItem exitSaveMenuItem;
+
   private JMenu levelMenu;
+  private JMenuItem restartCurrentLevelMenuItem;
+  private JMenuItem startFirstLevelMenuItem;
+
+  //TODO: add submenu and more to recnplay
+  private JMenu recnplayMenu;
+  private JMenuItem playMenuItem;
+  private JMenuItem recMenuItem;
+
   private JMenu helpMenu;
+  private JMenuItem showInstructMenuItem;
 
   // Text sizes and fonts
   private Font regText = new Font("", Font.PLAIN, 25);
@@ -130,6 +145,7 @@ public class Gui extends MazeEventListener {
     // add menus to menu bars
     menuBar.add(gameMenu);
     menuBar.add(levelMenu);
+    menuBar.add(recnplayMenu);
     menuBar.add(helpMenu);
 
     // add content panels to inner side panels
@@ -331,9 +347,32 @@ public class Gui extends MazeEventListener {
    */
   public void createMenuComponents() {
     menuBar = new JMenuBar();
+
     gameMenu = new JMenu("Game");
+    saveMenuItem = new JMenuItem("Save");
+    loadMenuItem = new JMenuItem("Load");
+    exitMenuItem = new JMenuItem("Exit");
+    exitSaveMenuItem = new JMenuItem("Exit + Save");
+    gameMenu.add(saveMenuItem);
+    gameMenu.add(loadMenuItem);
+    gameMenu.add(exitMenuItem);
+    gameMenu.add(exitSaveMenuItem);
+
     levelMenu = new JMenu("Level");
+    restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level");
+    startFirstLevelMenuItem = new JMenuItem("Restart Level 1");
+    levelMenu.add(restartCurrentLevelMenuItem);
+    levelMenu.add(startFirstLevelMenuItem);
+
+    recnplayMenu = new JMenu("Rec'n'play");
+    recMenuItem = new JMenuItem("Record");
+    playMenuItem = new JMenuItem("Replay");
+    recnplayMenu.add(recMenuItem);
+    recnplayMenu.add(playMenuItem);
+
     helpMenu = new JMenu("Help");
+    showInstructMenuItem = new JMenuItem("How to Play");
+    helpMenu.add(showInstructMenuItem);
   }
 
   /**
