@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -24,10 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -43,7 +45,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
  *
  * @author Justin 300470389
  */
-public class Gui extends MazeEventListener {
+public class Gui extends MazeEventListener implements ActionListener {
   // frame and main panels
   private JFrame frame;
   private JPanel framePanel;
@@ -79,12 +81,28 @@ public class Gui extends MazeEventListener {
   private JLabel infoFieldLabel;
   private JLabel infoFieldLabelText;
 
-  // menu bar and menu
-  // TODO: Add menu items to menus
+  // menu bar and menu items
   private JMenuBar menuBar;
+
   private JMenu gameMenu;
+  private JMenuItem resumeMenuItem;
+  private JMenuItem pauseMenuItem;
+  private JMenuItem saveMenuItem;
+  private JMenuItem loadMenuItem;
+  private JMenuItem exitMenuItem;
+  private JMenuItem exitSaveMenuItem;
+
   private JMenu levelMenu;
+  private JMenuItem restartCurrentLevelMenuItem;
+  private JMenuItem startFirstLevelMenuItem;
+
+  //TODO: add submenu and more to recnplay
+  private JMenu recnplayMenu;
+  private JMenuItem playMenuItem;
+  private JMenuItem recMenuItem;
+
   private JMenu helpMenu;
+  private JMenuItem showInstructMenuItem;
 
   // Text sizes and fonts
   private Font regText = new Font("", Font.PLAIN, 25);
@@ -105,11 +123,13 @@ public class Gui extends MazeEventListener {
   private TimerTask timerTask;
   private boolean isTimerActive;
   private int[] secondsLeft;
+  private boolean isPaused;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
-  public Gui() {
+  public Gui(Maze maze) {
+    this.maze = maze;
     // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
@@ -130,6 +150,7 @@ public class Gui extends MazeEventListener {
     // add menus to menu bars
     menuBar.add(gameMenu);
     menuBar.add(levelMenu);
+    menuBar.add(recnplayMenu);
     menuBar.add(helpMenu);
 
     // add content panels to inner side panels
@@ -159,7 +180,7 @@ public class Gui extends MazeEventListener {
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
     frame.setSize(1024, 800);
-    frame.setMinimumSize(new Dimension(800, 675));
+    frame.setMinimumSize(new Dimension(875, 675));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
             dimen.height / 2 - frame.getSize().height / 2);
 
@@ -182,13 +203,6 @@ public class Gui extends MazeEventListener {
    */
   public void createBoardPanel() {
     boardPanel = new JLayeredPane();
-    // TODO: Set maze and board somewhere else
-    // maze = BoardRig.lesson1();
-    maze = BoardRig.crateTest();
-    // maze = BoardRig.crateAndWaterTest();
-    // maze = BoardRig.pathFindTest1();
-    // maze = BoardRig.levelEditorTest2();
-
     maze.addListener(this);
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
@@ -334,14 +348,73 @@ public class Gui extends MazeEventListener {
   }
 
   /**
-   * Create the menu bar, menus and menu items. TODO: Create menu items
+   * Create the menu bar, menus and menu items.
    */
   public void createMenuComponents() {
+
+    final JMenuItem[] gameMenuItems = new JMenuItem[]{
+        resumeMenuItem = new JMenuItem("Resume"),
+        pauseMenuItem = new JMenuItem("Pause"),
+        saveMenuItem = new JMenuItem("Save"),
+        loadMenuItem = new JMenuItem("Load"),
+        exitMenuItem = new JMenuItem("Exit"),
+        exitSaveMenuItem = new JMenuItem("Exit + Save")
+    };
+
+    final JMenuItem[] levelMenuItems = new JMenuItem[]{
+        restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
+        startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
+    };
+
+    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
+        recMenuItem = new JMenuItem("Record"),
+        playMenuItem = new JMenuItem("Replay")
+    };
+
     menuBar = new JMenuBar();
     gameMenu = new JMenu("Game");
     levelMenu = new JMenu("Level");
+    recnplayMenu = new JMenu("Rec'n'play");
     helpMenu = new JMenu("Help");
+
+    for (JMenuItem gameMenuItem : gameMenuItems) {
+      gameMenuItem.addActionListener(this);
+      gameMenu.add(gameMenuItem);
+    }
+
+    for (JMenuItem levelMenuItem : levelMenuItems) {
+      levelMenuItem.addActionListener(this);
+      levelMenu.add(levelMenuItem);
+    }
+
+    for (JMenuItem recnplayMenuItem : recnplayMenuItems) {
+      recnplayMenuItem.addActionListener(this);
+      recnplayMenu.add(recnplayMenuItem);
+    }
+
+    showInstructMenuItem = new JMenuItem("How to Play");
+    showInstructMenuItem.addActionListener(this);
+    helpMenu.add(showInstructMenuItem);
   }
+
+  /**
+   * Listen to menu buttons in menu bar and execute.
+   *
+   * @param e the action event
+   */
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == resumeMenuItem) {
+      resume();
+      System.out.println("Resumed");
+    } else if (e.getSource() == pauseMenuItem) {
+      pause();
+      System.out.println("Paused");
+    } else if (e.getSource() == restartCurrentLevelMenuItem) {
+      restartCurrentLevel();
+    }
+  }
+
 
   /**
    * Key listener to detect keys and key strokes.
@@ -358,35 +431,41 @@ public class Gui extends MazeEventListener {
         }
         showInfoFieldToGui(false);
         // movement
-        if (key == KeyEvent.VK_UP) {
-          maze.move(Maze.Direction.UP);
-        } else if (key == KeyEvent.VK_DOWN) {
-          maze.move(Maze.Direction.DOWN);
-        } else if (key == KeyEvent.VK_LEFT) {
-          maze.move(Maze.Direction.LEFT);
-        } else if (key == KeyEvent.VK_RIGHT) {
-          maze.move(Maze.Direction.RIGHT);
+        if (!isPaused || maze.isLevelFinished()) {
+          if (key == KeyEvent.VK_UP) {
+            maze.move(Maze.Direction.UP);
+          } else if (key == KeyEvent.VK_DOWN) {
+            maze.move(Maze.Direction.DOWN);
+          } else if (key == KeyEvent.VK_LEFT) {
+            maze.move(Maze.Direction.LEFT);
+          } else if (key == KeyEvent.VK_RIGHT) {
+            maze.move(Maze.Direction.RIGHT);
+          }
+          decrementTreasurePickUp();
+          board.repaint();
         }
         decrementTreasurePickUp();
         board.repaint();
 
         // pause and resume
         if (key == KeyEvent.VK_SPACE) {
-          System.out.println("space pressed");
+          pause();
         } else if (key == KeyEvent.VK_ESCAPE) {
-          System.out.println("escape pressed");
+          resume();
+        }
 
-          // shortcuts
-        } else if (e.isControlDown() && key == KeyEvent.VK_X) {
-          System.out.println("ctrl + x pressed");
+        // shortcuts
+        if (e.isControlDown() && key == KeyEvent.VK_X) {
+          System.out.println("ctrl + x pressed - exit game");
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
-          System.out.println("ctrl + s pressed");
+          System.out.println("ctrl + s pressed - exit and save");
         } else if (e.isControlDown() && key == KeyEvent.VK_R) {
-          System.out.println("ctrl + r pressed");
+          System.out.println("ctrl + r pressed - resume saved game");
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
-          System.out.println("ctrl + p pressed");
+          System.out.println("ctrl + p pressed - start new game at last unfinished level");
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
-          System.out.println("ctrl + 1 pressed");
+          restartCurrentLevel();
+          System.out.println("ctrl + 1 pressed - start new game at level 1");
         }
       }
 
@@ -416,6 +495,34 @@ public class Gui extends MazeEventListener {
         }
       }
     };
+  }
+
+  /**
+   * Pause the game, triggering countdown timer and maze to stop.
+   */
+  public void pause() {
+    isPaused = true;
+    maze.pause();
+    timer.cancel();
+  }
+
+  /**
+   * Resume the game, triggering countdown timer and maze to resume.
+   */
+  public void resume() {
+    if (isPaused) {
+      maze.resume();
+      setupTimer();
+      timer.schedule(timerTask, 0, 1000); // start the timer countdown
+      isPaused = false;
+    }
+  }
+
+  /**
+   * Restart the current level.
+   */
+  public void restartCurrentLevel() {
+
   }
 
   /**
@@ -574,17 +681,8 @@ public class Gui extends MazeEventListener {
   @Override
   public void update(MazeEventWon e) {
     //stop the timer
+    pause();
     timer.cancel();
     timer.purge();
   }
-
-  /**
-   * Main method for testing the GUI.
-   *
-   * @param args the commandline arguments
-   */
-  public static void main(String[] args) {
-    new Gui().getFrame().setVisible(true);
-  }
-
 }

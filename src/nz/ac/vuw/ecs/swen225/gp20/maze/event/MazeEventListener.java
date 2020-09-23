@@ -34,6 +34,9 @@ public class MazeEventListener {
   public void update(MazeEventExitUnlocked e) {
   }
   
+  public void update(MazeEventEnemyWalked e) {
+  }
+  
   /**
    * Listen to update from any MazeEvent.
    * 

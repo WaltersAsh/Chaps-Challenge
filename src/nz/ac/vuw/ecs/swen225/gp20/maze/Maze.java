@@ -32,7 +32,7 @@ public class Maze {
   // Logic
   private boolean levelFinished = false;
   private Timer timer;
-  private int pathFindingDelay = 50; // delay between path finding ticks in ms
+  private int pathFindingDelay = 500; // delay between path finding ticks in ms
   
   // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
@@ -129,7 +129,7 @@ public class Maze {
     if (next instanceof PathTile) {
       PathTile ptnext = (PathTile) next;
       event = new MazeEventWalked(this, current, ptnext, d);
-      if (ptnext.isBlocked()) {
+      if (!ptnext.isWalkable()) {
         event = checkBlocking(ptnext, d);
         if (event == null) {
           // we did not move
@@ -200,6 +200,7 @@ public class Maze {
       if (e instanceof InfoField) {
         return new MazeEventInfoField(this, chap.container, path, d, (InfoField) e);
       } else if (e instanceof Exit) {
+        pause();
         return new MazeEventWon(this, chap.container, path, d);
       } else if (e instanceof Pickup) {
         Pickup p = (Pickup) e;
@@ -231,7 +232,7 @@ public class Maze {
       PathTile pt = (PathTile) destination;
       PathTile original = c.getContainer();
       // if the pathtile we try to push to is free, push the crate
-      if (!pt.isBlocked()) {
+      if (pt.isWalkable()) {
         pt.moveTo(c);
         // can also push crate onto water to make a path
         return new MazeEventPushed(this, chap.container, original, d, c);
@@ -280,13 +281,11 @@ public class Maze {
    */
   public void tickPathFinding() {
     for (Enemy e : enemies) {
-      Tile destination = e.tickPathFinding();
-      if (destination instanceof PathTile) {
-        PathTile pt = (PathTile) destination;
-        if (!pt.isBlocked()) {
-          pt.moveTo(e);
-        }
-      }
+      Direction next = e.tickPathFinding();
+      if(next==null) continue;
+      PathTile pt = (PathTile) tileTo(e.getContainer(), next);
+      broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
+      pt.moveTo(e);
     }
   }
   
@@ -320,10 +319,6 @@ public class Maze {
 
   public boolean isLevelFinished() {
     return levelFinished;
-  }
-
-  public void setLevelFinished(boolean levelFinished) {
-    this.levelFinished = levelFinished;
   }
 
   public int getWidth() {
