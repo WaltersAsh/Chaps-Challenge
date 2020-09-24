@@ -18,7 +18,7 @@ import com.google.common.base.Preconditions;
 public class BoardRig {
   private static Pattern keyPat = Pattern.compile("K(.)");
   private static Pattern lockPat = Pattern.compile("L(.)");
-  private static Pattern telePat = Pattern.compile("T(.)");
+  private static Pattern telePat = Pattern.compile("P(.)");
 
   public static void main(String[] args) {
     System.out.println(lesson1());
@@ -94,7 +94,7 @@ public class BoardRig {
   }
 
   public static Maze levelEditorTest2() {
-    String board = "whiteWA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"
+    String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"
         + "WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"
         + "WA PA CH PA PA PA PA PA PA PA PA TR PA KY WA\n"
         + "WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"
@@ -135,9 +135,20 @@ public class BoardRig {
     return BoardRig.fromString(board);
   }
 
+  public static Maze teleporterTest1() {
+    String board = "WA WA WA WA WA WA WA\n"+
+        "WA PA PA PA PA PA WA\n"+
+        "WA PR PG PA PB PY WA\n"+
+        "WA WA WA WA WA WA WA\n"+
+        "WA PB PY PA PR PG WA\n"+
+        "WA PA PA CH PA PA WA\n"+
+        "WA WA WA WA WA WA WA";
+    return BoardRig.fromString(board);
+  }
+
   /**
    * Construct Board from string
-   *
+   *getOther
    * @param input string formatted as in class comment
    * @return
    */
@@ -146,6 +157,7 @@ public class BoardRig {
     String[] lines = input.split("\n");
     Tile[][] tiles = new Tile[lines.length][];
     List<Containable> entities = new ArrayList<>();
+    List<Teleporter> unbound = new ArrayList<>();
 
     for (int r = 0; r < lines.length; r++) {
 
@@ -160,6 +172,16 @@ public class BoardRig {
           p.place((Containable) d);
           row[c] = p;
           entities.add((Containable) d);
+          if(d instanceof Teleporter) {
+            Teleporter tp = (Teleporter) d;
+            Teleporter other = getMatch(tp, unbound);
+            if(other!=null) {
+              tp.setOther(other);
+              other.setOther(tp);
+            }else{
+              unbound.add(tp);
+            }
+          }
         } else { // otherwise it's a Tile
           row[c] = (Tile) d;
         }
@@ -170,6 +192,15 @@ public class BoardRig {
     return new Maze(tiles, entities);
   }
 
+  private static Teleporter getMatch(Teleporter toMatch, List<Teleporter> unbound) {
+    for(Teleporter tele: unbound) {
+      if(toMatch.getColor().equals(tele.getColor())) {
+        return tele;
+      }
+    }
+    return null;
+  }
+
   /**
    * Get a Drawable from a string token
    *
@@ -178,8 +209,8 @@ public class BoardRig {
    *
    */
   public static Drawable fromToken(String token) {
-    Preconditions.checkArgument(token.length() == 2, "Token has length %s but expected 2",
-        token.length());
+    Preconditions.checkArgument(token.length() == 2, "Token %s has length %s but expected 2",
+        token, token.length());
     switch (token) {
     case "WA":
       return new WallTile("resources/textures/board/tile/wall.png");
@@ -216,7 +247,7 @@ public class BoardRig {
       } else if (lockMatch.matches()) {
         return new Door(fileForDoor(lockMatch.group(1)), colorFromToken(lockMatch.group(1)));
       }else if (teleMatch.matches()) {
-          return new Door(fileForTeleporter(teleMatch.group(1)), colorFromToken(teleMatch.group(1)));
+          return new Teleporter(fileForTeleporter(teleMatch.group(1)), colorFromToken(teleMatch.group(1)));
       }
     }
     return null;
@@ -270,13 +301,13 @@ public class BoardRig {
   public static String fileForTeleporter(String token) {
     switch (token) {
     case "B":
-      return "resources/textures/board/pickup/teleporter_brown.png";
+      return "resources/textures/board/pickup/portals/brownportal.png";
     case "R":
-      return "resources/textures/board/pickup/teleporter_white.png";
+      return "resources/textures/board/pickup/portals/whiteportal.png";
     case "G":
-      return "resources/textures/board/pickup/teleporter_blue.png";
+      return "resources/textures/board/pickup/portals/blueportal.png";
     case "Y":
-      return "resources/textures/board/pickup/teleporter_yellow.png";
+      return "resources/textures/board/pickup/portals/yellowportal.png";
     default:
       throw new IllegalArgumentException();
     }

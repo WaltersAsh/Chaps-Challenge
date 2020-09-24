@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * The Maze board, which keeps track of the Tiles and logic in the game
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -28,15 +28,15 @@ public class Maze {
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
   private ExitLock exitlock;
-  
+
   // Logic
   private boolean levelFinished = false;
   private Timer timer;
   private int pathFindingDelay = 500; // delay between path finding ticks in ms
-  
+
   // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
-  
+
   /**
    * Constuct empty Board with a width and height
    *
@@ -73,7 +73,7 @@ public class Maze {
         enemies.add(e);
       }
     }
-    
+
     setupTimer();
   }
 
@@ -88,17 +88,17 @@ public class Maze {
     }
     return s.toString();
   }
-  
+
   /**
    * Add a listener which will respond to MazeEvents produced by this Maze.
-   * 
+   *
    * @param <L>       any type which extends MazeEventListener
    * @param listener  the object which will listen to events
    */
   public <L extends MazeEventListener> void addListener(L listener) {
     listeners.add(listener);
   }
-  
+
   /**
    * Broadcast MazeEvents to any MazeEventListeners we may have.
    * @param event
@@ -109,10 +109,10 @@ public class Maze {
       listener.update(event);
     }
   }
-  
+
   /**
    * Try to move in a direction.
-   * 
+   *
    * @param d   the direction
    */
   public void move(Direction d) {
@@ -136,12 +136,16 @@ public class Maze {
           return;
         }
       }
-      
+
       MazeEvent checkEntitiesEvent = checkEntities(ptnext, d);
       if (checkEntitiesEvent != null) {
         // should never override a MazeEventUnlocked or a MazeEventPushed
         // because you can never pick something up in the same move as these
         event = checkEntitiesEvent;
+        if(event instanceof MazeEventTeleported) {
+          MazeEventTeleported t = (MazeEventTeleported) event;
+          ptnext = t.getTeleporter().getOther().getContainer();
+        }
       }
 
       ptnext.moveTo(chap);
@@ -167,10 +171,10 @@ public class Maze {
     }
     return null;
   }
-  
+
   /**
    * Check if we could open a door.
-   * 
+   *
    * @param door  the door to check
    * @param d     the direction we moved to
    * @return      the event if we opened the door and moved, null if we didn't
@@ -187,10 +191,10 @@ public class Maze {
     }
     return null;
   }
-  
+
   /**
    * Check and pickup entities on the next PathTile.
-   * 
+   *
    * @param path  the tile to check
    * @param d     the direction we moved
    * @return      the event for picking up entity, if any
@@ -202,6 +206,8 @@ public class Maze {
       } else if (e instanceof Exit) {
         pause();
         return new MazeEventWon(this, chap.container, path, d);
+      }else if (e instanceof Teleporter) {
+        return new MazeEventTeleported(this, chap.container, path, d, (Teleporter)e);
       } else if (e instanceof Pickup) {
         Pickup p = (Pickup) e;
         p.addToInventory(chap);
@@ -259,7 +265,7 @@ public class Maze {
       return null;
     }
   }
-  
+
   /**
    * Setup the timer, but only if it's needed.
    */
@@ -267,7 +273,7 @@ public class Maze {
     if(!enemies.isEmpty()) {
       timer = new Timer();
       timer.schedule(new TimerTask() {
-        
+
         @Override
         public void run() {
           tickPathFinding();
@@ -275,7 +281,7 @@ public class Maze {
       }, 0, pathFindingDelay);
     }
   }
-  
+
   /**
    * Tick the enemy path finding.
    */
@@ -288,7 +294,7 @@ public class Maze {
       pt.moveTo(e);
     }
   }
-  
+
   /**
    * Pause the game (suspending the game timer).
    */
@@ -297,7 +303,7 @@ public class Maze {
       timer.cancel();
     }
   }
-  
+
   /**
    * Resume the game.
    */

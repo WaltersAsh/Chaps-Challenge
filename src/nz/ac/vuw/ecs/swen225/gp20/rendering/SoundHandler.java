@@ -12,12 +12,12 @@ public class SoundHandler extends MazeEventListener{
 
   private SoundEffect prevSound = null;
   private SoundEffect currentSound = null;
-  
+
   public SoundHandler(Maze m) {
     initialiseSounds();
     m.addListener(this);
   }
-  
+
   /**
    * WA = wall PA = path KX = key with #X LX = lock with #X TR = treasure IN =
    * info square EL = exit lock EX = exit CH = chap XX = crate WT = water EN =
@@ -54,13 +54,14 @@ public class SoundHandler extends MazeEventListener{
       pathSounds.add(new SoundEffect(s));
     }
   }
-  
+
 
   public void playSound(String s) {
     SoundEffect current = sounds.get(s);
+    if(current==null) return;
     current.play();
   }
-  
+
   public void playRandomSound() {
     SoundEffect currentSound;
     Random rand = new Random();
@@ -73,12 +74,12 @@ public class SoundHandler extends MazeEventListener{
     currentSound.play();
     prevSound = currentSound;
   }
-  
+
   @Override
   public void update(MazeEventUnlocked e) {
     playSound(e.getDoor().getInitials());
   }
-  
+
   @Override
   public void update(MazeEventPushed e) {
     playSound(e.getPushed().getInitials());
@@ -87,30 +88,30 @@ public class SoundHandler extends MazeEventListener{
   @Override
   public void update(MazeEventPushedWater e) {
     playSound("WT");
-    
+
   }
-  
+
   @Override
   public void update(MazeEventWalked e) {
     playRandomSound();
   }
-  
+
   @Override
   public void update(MazeEventPickup e) {
     playSound(e.getPicked().getInitials());
   }
-  
+
   @Override
   public void update(MazeEventWon e) {
     playSound("EX");
   }
-  
+
 
   @Override
   public void update(MazeEventInfoField e) {
     playSound("IN");
   }
-  
+
   @Override
   public void update(MazeEventExitUnlocked e) {
     playSound("EL");

@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 /**
  * An example class of how to implement MazeEventListener.
  * Just prints out the event which occurred.
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -14,7 +14,7 @@ public class MazeEventListenerExample extends MazeEventListener{
   public static void main(String[] args) {
     Gui g = new Gui(BoardRig.lesson1());
     g.getBoard().getMaze().addListener(new MazeEventListenerExample());
-    
+
     g.getFrame().setVisible(true);
   }
 
@@ -45,16 +45,21 @@ public class MazeEventListenerExample extends MazeEventListener{
 
   @Override
   public void update(MazeEventWon e) {
-    System.out.println("won the game");    
+    System.out.println("won the game");
   }
-  
+
   @Override
   public void update(MazeEventPushedWater e) {
     System.out.println("pushed something into water");
   }
-  
+
   @Override
   public void update(MazeEventEnemyWalked e) {
     System.out.println("enemy walked");
+  }
+
+  @Override
+  public void update(MazeEventTeleported e) {
+    System.out.println("teleported");
   }
 }

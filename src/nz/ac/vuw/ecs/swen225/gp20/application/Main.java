@@ -14,7 +14,8 @@ public class Main {
           BoardRig.pathFindTest1(),
           BoardRig.levelEditorTest1(),
           BoardRig.levelEditorTest2(),
-          BoardRig.levelEditorTest3()
+          BoardRig.levelEditorTest3(),
+          BoardRig.teleporterTest1(),
   };
 
   /**
@@ -26,7 +27,7 @@ public class Main {
     //new TextGUI();
     //TODO: Boardview object from the renderer package should be here (instead of in gui)
     // when dependency is fixed
-    Maze maze = levels[6];
+    Maze maze = levels[7];
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }

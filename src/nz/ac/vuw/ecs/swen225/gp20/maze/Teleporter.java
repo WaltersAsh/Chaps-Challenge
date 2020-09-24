@@ -7,11 +7,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 
-public class Teleporter extends Pickup {
+public class Teleporter extends ColoredPickup {
   private Teleporter other;
 
   public Teleporter(String filename, Maze.KeyColor color) {
-    super(filename, "T" + color.toString().charAt(0));
+    super(filename, "T" + color.toString().charAt(0), color);
+    this.color = color;
   }
 
   public void setOther(Teleporter o) {
