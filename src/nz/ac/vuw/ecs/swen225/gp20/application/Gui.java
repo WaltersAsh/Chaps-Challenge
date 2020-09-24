@@ -635,6 +635,34 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Get the level value label.
+   *
+   * @return the label
+   */
+  public JLabel getLevelValueLabel() {
+    return levelValueLabel;
+  }
+
+  /**
+   * Get the time value label.
+   *
+   * @return the label
+   */
+  public JLabel getTimeValueLabel() {
+    return timeValueLabel;
+  }
+
+  /**
+   * Get the inventory labels.
+   *
+   * @return the inventory value labels array
+   */
+  public JLabel[] getInventoryValueLabels() {
+    return inventoryValueLabels;
+  }
+
+
+  /**
    * Get the board.
    *
    * @return the JComponent representing the board.
