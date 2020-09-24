@@ -17,7 +17,19 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
@@ -79,13 +91,15 @@ public class Gui extends MazeEventListener implements ActionListener {
   // menu bar and menu items
   private JMenuBar menuBar;
 
+  private JMenu fileMenu;
+  private JMenuItem saveMenuItem;
+  private JMenuItem loadMenuItem;
+
   private JMenu gameMenu;
   private JMenuItem resumeMenuItem;
   private JMenuItem pauseMenuItem;
   private JMenuItem redoMenuItem;
   private JMenuItem undoMenuItem;
-  private JMenuItem saveMenuItem;
-  private JMenuItem loadMenuItem;
   private JMenuItem exitMenuItem;
   private JMenuItem exitSaveMenuItem;
 
@@ -93,7 +107,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JMenuItem restartCurrentLevelMenuItem;
   private JMenuItem startFirstLevelMenuItem;
 
-  //TODO: add submenu and more to recnplay
   private JMenu recnplayMenu;
   private JMenuItem playMenuItem;
   private JMenuItem stopPlayMenuItem;
@@ -156,14 +169,16 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseInnerSidePanels();
     createMenuComponents();
     createRecnplayControls();
+    initialiseRecnplayIconLabel(false);
 
-    // boardPanel.setLayout(new BorderLayout());
     board.setBounds(0, 0, 1000, 1000);
     boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
     boardPanel.add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
     boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
+    boardPanel.add(recordingIcon, JLayeredPane.PALETTE_LAYER);
 
     // add menus to menu bars
+    menuBar.add(fileMenu);
     menuBar.add(gameMenu);
     menuBar.add(levelMenu);
     menuBar.add(recnplayMenu);
@@ -246,7 +261,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Create the inner side panels.
    */
   public void createInnerSidePanels() {
-    JPanel[] panels = new JPanel[] {
+    final JPanel[] panels = new JPanel[] {
       levelPanel = new JPanel(),
       timePanel = new JPanel(),
       treasuresPanel = new JPanel(),
@@ -280,20 +295,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       inventoryValueLabels[i] = label;
       inventoryGridPanel.add(label);
     }
-  }
-
-  /**
-   * Create and set an icon/indicator for recording/replaying
-   *
-   * @param isRecording the boolean confirming if the game is recording or not
-   */
-  public void createRecnplayIconLabel(boolean isRecording) {
-    recordingIcon = new JLabel();
-    try {
-      Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
-      ImageIcon icon = new ImageIcon(image);
-      recordingIcon.setIcon(icon);
-    }catch (IOException e) {e.printStackTrace();}
   }
 
   /**
@@ -378,6 +379,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     showInfoFieldToGui(false);
   }
 
+  /**
+   * Create the recnplay controls for navigating and interacting.
+   */
   public void createRecnplayControls() {
     recnplayControlsPanel = new JPanel();
     recnplayControlsPanel.setBackground(lightLavender);
@@ -403,33 +407,54 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Create and set an icon/indicator for recording/replaying.
+   *
+   * @param isRecording the boolean confirming if the game is recording or not
+   */
+  public void initialiseRecnplayIconLabel(boolean isRecording) {
+    recordingIcon = new JLabel();
+    try {
+      Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
+      ImageIcon icon = new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+      recordingIcon.setIcon(icon);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    recordingIcon.setBounds(-10, -455, 1000, 1000);
+    recordingIcon.setVisible(false);
+  }
+
+  /**
    * Create the menu bar, menus and menu items.
    */
   public void createMenuComponents() {
-
     menuBar = new JMenuBar();
+    fileMenu = new JMenu("File");
     gameMenu = new JMenu("Game");
     levelMenu = new JMenu("Level");
     recnplayMenu = new JMenu("Rec'n'play");
     helpMenu = new JMenu("Help");
 
-    final JMenuItem[] gameMenuItems = new JMenuItem[]{
+    final JMenuItem[] fileMenuItems = new JMenuItem[] {
+      saveMenuItem = new JMenuItem("Save"),
+      loadMenuItem = new JMenuItem("Load")
+    };
+
+    final JMenuItem[] gameMenuItems = new JMenuItem[] {
         resumeMenuItem = new JMenuItem("Resume"),
         pauseMenuItem = new JMenuItem("Pause"),
         redoMenuItem = new JMenuItem("Redo"),
         undoMenuItem = new JMenuItem("Undo"),
-        saveMenuItem = new JMenuItem("Save"),
-        loadMenuItem = new JMenuItem("Load"),
         exitMenuItem = new JMenuItem("Exit"),
         exitSaveMenuItem = new JMenuItem("Exit + Save")
     };
 
-    final JMenuItem[] levelMenuItems = new JMenuItem[]{
+    final JMenuItem[] levelMenuItems = new JMenuItem[] {
         restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
         startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
     };
 
-    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
+    final JMenuItem[] recnplayMenuItems = new JMenuItem[] {
         startRecordingMenuItem = new JMenuItem("Record"),
         stopRecordingMenuItem = new JMenuItem("Stop Recording"),
         playMenuItem = new JMenuItem("Replay"),
@@ -437,6 +462,11 @@ public class Gui extends MazeEventListener implements ActionListener {
         saveRecordingMenuItem = new JMenuItem("Save Recording"),
         loadRecordingMenuItem = new JMenuItem("Load Recording")
     };
+
+    for (JMenuItem fileMenuItem : fileMenuItems) {
+      fileMenuItem.addActionListener(this);
+      fileMenu.add(fileMenuItem);
+    }
 
     for (JMenuItem gameMenuItem : gameMenuItems) {
       gameMenuItem.addActionListener(this);
@@ -489,9 +519,10 @@ public class Gui extends MazeEventListener implements ActionListener {
       //recnplay menu functionalities
     } else if (e.getSource() == startRecordingMenuItem) {
       recnplay.startRecording();
-
+      recordingIcon.setVisible(true);
     } else if (e.getSource() == stopRecordingMenuItem) {
       recnplay.stopRecording();
+      recordingIcon.setVisible(false);
     } else if (e.getSource() == playMenuItem) {
     } else if (e.getSource() == stopPlayMenuItem) {
     } else if (e.getSource() == loadRecordingMenuItem) {
@@ -519,7 +550,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Moves the player
+   * Moves chap.
    *
    * @param direction the movement direction
    */
@@ -564,9 +595,8 @@ public class Gui extends MazeEventListener implements ActionListener {
               recnplay.addMove(Maze.Direction.RIGHT);
             }
           }
-          decrementTreasurePickUp();
-          board.repaint();
         }
+
         decrementTreasurePickUp();
         board.repaint();
 
@@ -679,7 +709,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Open the file chooser and set the file field
+   * Open the file chooser and set the file field.
    *
    * @param isLoad boolean confirming loading or saving (not loading)
    */
@@ -792,7 +822,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Display the info field to the gui.
-   *private JFileChooser fileChooser = new JFileChooser();
+   *
    * @param confirmation boolean confirming infofield is shown/hidden
    */
   public void showInfoFieldToGui(boolean confirmation) {
