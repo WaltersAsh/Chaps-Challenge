@@ -642,6 +642,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     //maze = BoardRig.levelEditorTest3();
     //board = new BoardView(maze);
     //board.drawWindowedBoard(frame.getGraphics());
+    board.reset();
     System.out.println("Test");
     frame.revalidate();
   }

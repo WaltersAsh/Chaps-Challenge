@@ -13,7 +13,8 @@ import java.util.List;
 
 public class BoardView extends JComponent implements ActionListener {
 
-  private Maze m, startMaze;
+  private Maze m;
+  private final Maze startMaze;
 
   private Tile[][] tiles;
   private int blockSize = 40;
@@ -324,6 +325,13 @@ public class BoardView extends JComponent implements ActionListener {
 
   public void reset(){
     m = startMaze;
+    m = BoardRig.lesson1();
+
+    tiles = m.getTiles();
+    width = m.getWidth();
+    height = m.getHeight();
+    sh = new SoundHandler(m);
+    ah = new AnimationHandler(m, this);
     repaint();
   }
 
