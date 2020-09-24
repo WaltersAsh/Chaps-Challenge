@@ -2,7 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * Base class for objects which may be inside FreeTiles
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -14,7 +14,7 @@ public abstract class Containable extends Drawable {
 
   }
 
-  PathTile container;
+  protected PathTile container;
 
   public PathTile getContainer() {
     return container;

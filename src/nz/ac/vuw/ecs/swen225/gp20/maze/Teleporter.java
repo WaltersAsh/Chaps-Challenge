@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+
 /**
  * Shows an information popup when Chap walks over it
  *
@@ -7,11 +9,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  *
  */
 
-public class Teleporter extends ColoredPickup {
+public class Teleporter extends Trigger {
   private Teleporter other;
+  private KeyColor color;
 
-  public Teleporter(String filename, Maze.KeyColor color) {
-    super(filename, "T" + color.toString().charAt(0), color);
+  public Teleporter(String filename, KeyColor color) {
+    super(filename, "T" + color.toString().charAt(0));
     this.color = color;
   }
 
@@ -21,5 +24,13 @@ public class Teleporter extends ColoredPickup {
 
   public Teleporter getOther() {
     return other;
+  }
+
+  public KeyColor getColor() {
+    return color;
+  }
+
+  public PathTile getDestination() {
+    return other.getContainer();
   }
 }

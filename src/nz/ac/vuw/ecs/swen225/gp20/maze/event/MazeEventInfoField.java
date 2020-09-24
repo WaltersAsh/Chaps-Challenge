@@ -4,7 +4,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
  * Event for when chap walks onto an InfoField
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -17,6 +17,7 @@ public class MazeEventInfoField extends MazeEventWalked {
     this.info = info;
   }
 
+
   public InfoField getInfoField() {
     return info;
   }
@@ -26,7 +27,7 @@ public class MazeEventInfoField extends MazeEventWalked {
     return String.format("Read an info field saying \"%s\" at tile %s,%s", info.getInformation(),
         destination.getCol(), destination.getRow());
   }
-  
+
   @Override
   public void receive(MazeEventListener l) {
     l.update(this);
