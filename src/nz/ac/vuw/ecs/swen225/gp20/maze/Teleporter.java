@@ -11,7 +11,7 @@ public class Teleporter extends ColoredPickup {
   private Teleporter other;
 
   public Teleporter(String filename, Maze.KeyColor color) {
-    super(filename, "T" + color.toString().charAt(0), color);
+    super(filename, "P" + color.toString().charAt(0), color);
     this.color = color;
   }
 
