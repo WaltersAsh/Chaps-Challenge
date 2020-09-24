@@ -28,6 +28,8 @@ public class Main {
     //new TextGUI();
     //TODO: Boardview object from the renderer package should be here (instead of in gui)
     // when dependency is fixed
+    MazeLoader mazeLoader = new MazeLoader();
+
     Maze maze = levels[7];
     Maze persistenceTestMaze = MazeToJsonTest.testLoader();
     Gui gui = new Gui(BoardRig.lesson1());

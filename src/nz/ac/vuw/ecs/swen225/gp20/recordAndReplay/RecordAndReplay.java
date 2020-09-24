@@ -1,12 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.recordAndReplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEvent;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalked;
 
-import javax.swing.plaf.DimensionUIResource;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,9 +16,9 @@ public class RecordAndReplay {
     private Maze maze;
 
     /**
-     * Collection for storing maze events
+     * Collection for storing maze playerMoves
      */
-    private List<MazeEvent> events;
+    private List<Maze.Direction> playerMoves;
 
     /**
      * The current step (index) of this recording
@@ -51,7 +46,7 @@ public class RecordAndReplay {
     public void startRecording() {
         if(isRecording) {return;} //do nothing if already recording
         isRecording = true;
-        events = new ArrayList<>();
+        playerMoves = new ArrayList<>();
     }
 
     /**
@@ -62,28 +57,10 @@ public class RecordAndReplay {
     }
 
     /**
-     * Add a maze event to the collection of events in this recording
+     * Adds a move to the collection of playerMoves in this recording
      */
-    public void addEvent(MazeEvent event) {
-        events.add(event);
-    }
-
-    /**
-     * Apply the event to the maze
-     */
-    public void applyEvent(MazeEvent event, boolean stepForward) {
-        if(event instanceof MazeEventWalked) {
-            MazeEventWalked eventWalked = ((MazeEventWalked) event);
-
-            PathTile destination = stepForward ? eventWalked.getDestination() : eventWalked.getOrigin();
-
-
-            Containable containable = eventWalked.getOrigin().getContainedEntities().peek();
-
-            destination.moveTo(containable);
-
-        }
-
+    public void addMove(Maze.Direction direction) {
+        playerMoves.add(direction);
     }
 
 
@@ -92,16 +69,13 @@ public class RecordAndReplay {
      * Advance the playback of this recording by one step
      */
     public void stepForward() {
-        if(index == events.size()) {return;}
+        if(index == playerMoves.size()) {return;}
 
         //advance the recording one step
         index++;
 
         //get the current maze event
-        MazeEvent event = events.get(index);
-
-        //apply the event
-        applyEvent(event, true);
+        Maze.Direction direction = playerMoves.get(index);
 
     }
 
@@ -112,13 +86,10 @@ public class RecordAndReplay {
         if(index == 0) {return;}
 
         //get the current maze event
-        MazeEvent event = events.get(index);
+        Maze.Direction direction = playerMoves.get(index);
 
         //rewind the recording one step
         index--;
-
-        //apply the event
-        applyEvent(event, false);
 
     }
 
