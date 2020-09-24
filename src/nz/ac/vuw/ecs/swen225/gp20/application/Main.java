@@ -30,8 +30,8 @@ public class Main {
     // when dependency is fixed
     Maze maze = levels[7];
     Maze persistenceTestMaze = MazeToJsonTest.testLoader();
-//    Gui gui = new Gui(BoardRig.lesson1());
-    Gui gui = new Gui(persistenceTestMaze);
+    Gui gui = new Gui(BoardRig.lesson1());
+//    Gui gui = new Gui(persistenceTestMaze);
     gui.getFrame().setVisible(true);
   }
 }
