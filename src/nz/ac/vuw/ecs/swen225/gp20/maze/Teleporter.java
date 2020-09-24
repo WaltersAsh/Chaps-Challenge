@@ -14,7 +14,7 @@ public class Teleporter extends Trigger {
   private KeyColor color;
 
   public Teleporter(String filename, Maze.KeyColor color) {
-    super(filename, "P" + color.toString().charAt(0), color);
+    super(filename, "P" + color.toString().charAt(0));
     this.color = color;
   }
 

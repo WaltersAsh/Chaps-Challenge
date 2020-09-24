@@ -30,7 +30,7 @@ public class Main {
     // when dependency is fixed
     MazeLoader mazeLoader = new MazeLoader();
 
-    Maze maze = levels[7];
+    Maze maze = levels[0];
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }

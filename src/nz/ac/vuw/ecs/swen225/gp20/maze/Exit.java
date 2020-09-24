@@ -17,5 +17,6 @@ public class Exit extends Trigger {
    * Instantiates a new empty Exit. For Jackson.
    */
   public Exit() {
+     super("", "EX");
   }
 }
