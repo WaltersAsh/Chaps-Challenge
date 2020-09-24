@@ -13,8 +13,8 @@ public class Teleporter extends Trigger {
   private Teleporter other;
   private KeyColor color;
 
-  public Teleporter(String filename, KeyColor color) {
-    super(filename, "T" + color.toString().charAt(0));
+  public Teleporter(String filename, Maze.KeyColor color) {
+    super(filename, "P" + color.toString().charAt(0), color);
     this.color = color;
   }
 

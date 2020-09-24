@@ -236,7 +236,7 @@ public class BoardRig {
       return new Water("resources/textures/board/blocking/water.gif");
     case "EN":
       return new Enemy(
-          "resources/textures/board/moveable/character_skins/new_enemy_skin/creeper_leftwalkBig.gif");
+          "resources/textures/board/moveable/character_skins/enemy_skins/creeper/creeper_leftwalkBig.gif");
     default:
       Matcher keyMatch = keyPat.matcher(token);
       Matcher lockMatch = lockPat.matcher(token);
@@ -301,13 +301,13 @@ public class BoardRig {
   public static String fileForTeleporter(String token) {
     switch (token) {
     case "B":
-      return "resources/textures/board/pickup/portals/brownportal.png";
+      return "resources/textures/board/pickup/portals/redportal.gif";
     case "R":
-      return "resources/textures/board/pickup/portals/whiteportal.png";
+      return "resources/textures/board/pickup/portals/greenportal.gif";
     case "G":
-      return "resources/textures/board/pickup/portals/blueportal.png";
+      return "resources/textures/board/pickup/portals/diamondportal.gif";
     case "Y":
-      return "resources/textures/board/pickup/portals/yellowportal.png";
+      return "resources/textures/board/pickup/portals/goldportal.gif";
     default:
       throw new IllegalArgumentException();
     }

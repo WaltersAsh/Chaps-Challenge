@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="CheckStyle-IDEA-Module">
-    <option name="configuration">
-      <map />
-    </option>
-  </component>
   <component name="EclipseModuleManager">
     <libelement value="jar://$MODULE_DIR$/lib/guava-29.0-jre.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/jackson-annotations-2.11.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/jackson-core-2.11.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/jackson-databind-2.11.2.jar!/" />
     <src_description expected_position="0">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
     </src_description>
@@ -18,7 +16,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="JavaSE-11" jdkType="JavaSDK" />
     <orderEntry type="module-library">
       <library name="guava-29.0-jre.jar">
         <CLASSES>
@@ -28,9 +25,33 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="jackson-annotations-2.11.2" level="project" />
-    <orderEntry type="library" name="jackson-databind-2.11.2" level="project" />
-    <orderEntry type="library" name="jackson-core-2.11.2" level="project" />
-    <orderEntry type="library" name="jackson-annotations-2.11.2" level="project" />
+    <orderEntry type="module-library">
+      <library name="jackson-annotations-2.11.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jackson-annotations-2.11.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="jackson-core-2.11.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jackson-core-2.11.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="jackson-databind-2.11.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jackson-databind-2.11.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="inheritedJdk" />
   </component>
 </module>

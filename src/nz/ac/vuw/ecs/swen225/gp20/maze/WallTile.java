@@ -12,4 +12,10 @@ public class WallTile extends Tile {
     super(filename, "▓▓");
     this.walkable = false;
   }
+
+  /**
+   * Instantiates a new Wall tile. For Jackson.
+   */
+  public WallTile() {
+  }
 }

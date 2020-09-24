@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.awt.*;
@@ -8,11 +9,12 @@ import java.util.UUID;
 
 /**
  * Base class for anything which can be drawn on the board
- * 
+ *
  * @author Ian 300474717
  *
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class Drawable {
   public final String id = UUID.randomUUID().toString();
   protected static Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -28,7 +30,9 @@ public class Drawable {
     this.filename = filename;
   }
 
-  public String getInitials() {
+    public Drawable() {}
+
+    public String getInitials() {
     return initials;
   }
 

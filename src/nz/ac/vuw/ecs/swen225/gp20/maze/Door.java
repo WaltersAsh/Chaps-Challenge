@@ -15,6 +15,12 @@ public class Door extends BlockingContainable {
     this.color = color;
   }
 
+  /**
+   * Instantiates a new empty Door. For Jackson.
+   */
+  public Door() {
+  }
+
   public Maze.KeyColor getColor() {
     return color;
   }
