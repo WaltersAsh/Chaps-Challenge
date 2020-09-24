@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -29,6 +28,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
+import nz.ac.vuw.ecs.swen225.gp20.recordAndReplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -94,7 +94,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JMenu recnplayMenu;
   private JMenuItem playMenuItem;
   private JMenuItem stopPlayMenuItem;
-  private JMenuItem recMenuItem;
+  private JMenuItem startRecordingMenuItem;
   private JMenuItem stopRecordingMenuItem;
   private JMenuItem loadRecordingMenuItem;
   private JMenuItem saveRecordingMenuItem;
@@ -122,6 +122,10 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Color fullLavender = new Color(102, 0, 255);
   private Color paleLavender = new Color(237, 224, 255);
 
+  //Files
+  private JFileChooser fileChooser = new JFileChooser();
+  private File file;
+
   public static BoardView board;
   private Maze maze;
   private Timer timer;
@@ -130,11 +134,14 @@ public class Gui extends MazeEventListener implements ActionListener {
   private int[] secondsLeft;
   private boolean isPaused;
 
+  public static RecordAndReplay recnplay;
+
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
   public Gui(Maze maze) {
     this.maze = maze;
+    recnplay = new RecordAndReplay(maze);
     // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
@@ -406,7 +413,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     };
 
     final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
-        recMenuItem = new JMenuItem("Record"),
+        startRecordingMenuItem = new JMenuItem("Record"),
         stopRecordingMenuItem = new JMenuItem("Stop Recording"),
         playMenuItem = new JMenuItem("Replay"),
         stopPlayMenuItem = new JMenuItem("Stop Replay"),
@@ -443,6 +450,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void actionPerformed(ActionEvent e) {
 
     //menu actions
+
+    //maze functionality
     if (e.getSource() == resumeMenuItem) {
       resume();
       System.out.println("Resumed");
@@ -453,10 +462,27 @@ public class Gui extends MazeEventListener implements ActionListener {
       //restartCurrentLevel();
     } else if (e.getSource() == exitMenuItem) {
       System.exit(1);
+
+      //persistence loading and saving
+    } else if (e.getSource() == saveMenuItem) {
+      openFileChooser(false);
+    } else if (e.getSource() == loadMenuItem) {
+      openFileChooser(true);
+
+      //recnplay menu functionalities
+    } else if (e.getSource() == startRecordingMenuItem) {
+      recnplay.startRecording();
+    } else if (e.getSource() == stopRecordingMenuItem) {
+      recnplay.stopRecording();
+    } else if (e.getSource() == playMenuItem) {
+    } else if (e.getSource() == stopPlayMenuItem) {
+    } else if (e.getSource() == loadRecordingMenuItem) {
+      openFileChooser(true);
+    } else if (e.getSource() == saveRecordingMenuItem) {
+      openFileChooser(false);
     }
 
     //recnplay button actions
-
     if (e.getSource() == nextFrameButton) {
 
     } else if (e.getSource() == lastFrameButton) {
@@ -492,12 +518,24 @@ public class Gui extends MazeEventListener implements ActionListener {
         if (!isPaused || maze.isLevelFinished()) {
           if (key == KeyEvent.VK_UP) {
             maze.move(Maze.Direction.UP);
+            if (recnplay.isRecording()) {
+              recnplay.addMove(Maze.Direction.UP);
+            }
           } else if (key == KeyEvent.VK_DOWN) {
             maze.move(Maze.Direction.DOWN);
+            if (recnplay.isRecording()) {
+              recnplay.addMove(Maze.Direction.DOWN);
+            }
           } else if (key == KeyEvent.VK_LEFT) {
             maze.move(Maze.Direction.LEFT);
+            if (recnplay.isRecording()) {
+              recnplay.addMove(Maze.Direction.LEFT);
+            }
           } else if (key == KeyEvent.VK_RIGHT) {
             maze.move(Maze.Direction.RIGHT);
+            if (recnplay.isRecording()) {
+              recnplay.addMove(Maze.Direction.RIGHT);
+            }
           }
           decrementTreasurePickUp();
           board.repaint();
@@ -617,6 +655,23 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Open the file chooser and set the file field
+   *
+   * @param isLoad boolean confirming loading or saving (not loading)
+   */
+  public void openFileChooser(boolean isLoad) {
+    int result = -1;
+    if (isLoad) { //is loading the file
+      result = fileChooser.showOpenDialog(null);
+    } else { //is saving the file
+      result = fileChooser.showSaveDialog(null);
+    }
+    if (result == JFileChooser.APPROVE_OPTION) {
+      file = fileChooser.getSelectedFile();
+    }
+  }
+
+  /**
    * Get the frame.
    *
    * @return the JFrame representing the container for the gui
@@ -713,7 +768,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Display the info field to the gui.
-   *
+   *private JFileChooser fileChooser = new JFileChooser();
    * @param confirmation boolean confirming infofield is shown/hidden
    */
   public void showInfoFieldToGui(boolean confirmation) {
