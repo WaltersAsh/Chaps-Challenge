@@ -11,6 +11,9 @@ import java.util.List;
  */
 
 public class Chap extends Movable {
+  public Chap() {
+  }
+
   private List<Key> keys = new ArrayList<>();
   private List<Treasure> treasures = new ArrayList<>();
 

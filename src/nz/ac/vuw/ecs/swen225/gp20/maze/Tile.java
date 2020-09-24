@@ -1,18 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 /**
  * Base class for all Tiles representable on the board
  *
  * @author Ian 300474717
- *
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = PathTile.class), @JsonSubTypes.Type(value = WallTile.class)
-})
 
 public abstract class Tile extends Drawable {
   /**
@@ -30,7 +22,7 @@ public abstract class Tile extends Drawable {
 
   /**
    * can the Chap walk on this Tile?
-   * 
+   *
    * @return whether Chap can walk on this Tile
    */
   public boolean isWalkable() {
@@ -39,7 +31,7 @@ public abstract class Tile extends Drawable {
 
   /**
    * Set the coordinates of this Drawable
-   * 
+   *
    * @param r the row
    * @param c the column
    */
