@@ -28,7 +28,9 @@ public class Drawable {
     this.filename = filename;
   }
 
-  public String getInitials() {
+    public Drawable() {}
+
+    public String getInitials() {
     return initials;
   }
 

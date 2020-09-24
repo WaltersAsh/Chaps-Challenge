@@ -1,13 +1,26 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * Base class for all Tiles representable on the board
  *
  * @author Ian 300474717
  *
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PathTile.class), @JsonSubTypes.Type(value = WallTile.class)
+})
 
 public abstract class Tile extends Drawable {
+  /**
+   * Instantiates a new Tile. For Jackson.
+   */
+  public Tile() {
+  }
+
   int row, col;
   protected boolean walkable = false;
 

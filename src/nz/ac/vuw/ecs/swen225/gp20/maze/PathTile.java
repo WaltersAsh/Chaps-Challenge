@@ -19,6 +19,12 @@ public class PathTile extends Tile {
   }
 
   /**
+   * Instantiates a new Path tile. For Jackson.
+   */
+  public PathTile() {
+  }
+
+  /**
    * Place a Containable inside this Tile
    * 
    * @param c The Containable
