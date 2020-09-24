@@ -87,6 +87,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JMenu gameMenu;
   private JMenuItem resumeMenuItem;
   private JMenuItem pauseMenuItem;
+  private JMenuItem redoMenuItem;
+  private JMenuItem undoMenuItem;
   private JMenuItem saveMenuItem;
   private JMenuItem loadMenuItem;
   private JMenuItem exitMenuItem;
@@ -99,6 +101,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   //TODO: add submenu and more to recnplay
   private JMenu recnplayMenu;
   private JMenuItem playMenuItem;
+  private JMenuItem stopPlayMenuItem;
   private JMenuItem recMenuItem;
 
   private JMenu helpMenu;
@@ -226,30 +229,31 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Create the inner side panels. TODO: Condense code by adding panels to a
-   * collection and looping configurations
+   * Create the inner side panels.
    */
   public void createInnerSidePanels() {
-    levelPanel = new JPanel();
-    timePanel = new JPanel();
-    treasuresPanel = new JPanel();
-    inventoryPanel = new JPanel();
-    inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
+    JPanel[] panels = new JPanel[] {
+      levelPanel = new JPanel(),
+      timePanel = new JPanel(),
+      treasuresPanel = new JPanel(),
+      inventoryPanel = new JPanel()
+    };
+
     inventoryGridPanel = new JPanel();
+
+    inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
     inventoryGridPanel.setLayout(new GridLayout(2, 4));
+
     levelPanel.setBackground(fullLavender);
     timePanel.setBackground(lavender);
     treasuresPanel.setBackground(deepLavender);
     inventoryPanel.setBackground(darkLavender);
     inventoryGridPanel.setBackground(darkLavender);
-    levelPanel.setPreferredSize(new Dimension(175, 125));
-    timePanel.setPreferredSize(new Dimension(175, 125));
-    treasuresPanel.setPreferredSize(new Dimension(175, 125));
-    inventoryPanel.setPreferredSize(new Dimension(175, 125));
-    levelPanel.setBorder(new LineBorder(paleLavender, 2, false));
-    timePanel.setBorder(new LineBorder(paleLavender, 2, false));
-    treasuresPanel.setBorder(new LineBorder(paleLavender, 2, false));
-    inventoryPanel.setBorder(new LineBorder(paleLavender, 2, false));
+
+    for (JPanel panel : panels) {
+      panel.setPreferredSize(new Dimension(175, 125));
+      panel.setBorder(new LineBorder(paleLavender, 2, false));
+    }
 
     // inventory grid panel initialisation
     inventoryValueLabels = new JLabel[8];
@@ -265,52 +269,51 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Create and initialise the panels in the side panel. TODO: Condense code by
-   * adding panels to a collection and looping configurations
+   * Create and initialise the panels in the side panel.
    */
   public void initialiseInnerSidePanels() {
     // initialise inner panels for inner panels in side panel
-    levelContentPanel = new JPanel();
-    timeContentPanel = new JPanel();
-    treasuresContentPanel = new JPanel();
-    inventoryContentPanel = new JPanel();
-    levelContentPanel.setLayout(new BoxLayout(levelContentPanel, BoxLayout.Y_AXIS));
-    timeContentPanel.setLayout(new BoxLayout(timeContentPanel, BoxLayout.Y_AXIS));
-    treasuresContentPanel.setLayout(new BoxLayout(treasuresContentPanel, BoxLayout.Y_AXIS));
-    inventoryContentPanel.setLayout(new BoxLayout(inventoryContentPanel, BoxLayout.Y_AXIS));
+    JPanel[] panels = new JPanel[] {
+      levelContentPanel = new JPanel(),
+      timeContentPanel = new JPanel(),
+      treasuresContentPanel = new JPanel(),
+      inventoryContentPanel = new JPanel()
+    };
+
+    for (JPanel panel : panels) {
+      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    }
+
     levelContentPanel.setBackground(fullLavender);
     timeContentPanel.setBackground(lavender);
     treasuresContentPanel.setBackground(deepLavender);
     inventoryContentPanel.setBackground(darkLavender);
 
     // initialise title labels for panels in inner side panel
-    levelTitleLabel = new JLabel("LEVEL");
-    timeTitleLabel = new JLabel("TIME LEFT");
-    treasuresTitleLabel = new JLabel("TREASURES REMAINING");
-    inventoryTitleLabel = new JLabel("INVENTORY");
-    levelTitleLabel.setForeground(Color.WHITE);
-    timeTitleLabel.setForeground(Color.WHITE);
-    treasuresTitleLabel.setForeground(Color.WHITE);
-    inventoryTitleLabel.setForeground(Color.WHITE);
-    levelTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    timeTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    treasuresTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    inventoryTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel[] titleLabels = new JLabel[] {
+      levelTitleLabel = new JLabel("LEVEL"),
+      timeTitleLabel = new JLabel("TIME LEFT"),
+      treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
+      inventoryTitleLabel = new JLabel("INVENTORY"),
+    };
+
+    for (JLabel label : titleLabels) {
+      label.setForeground(Color.WHITE);
+      label.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
 
     // initialise value labels
-    levelValueLabel = new JLabel("1");
-    timeValueLabel = new JLabel("60");
-    treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures()));
-    // inventoryValueLabels = new JLabel[8];
-    levelValueLabel.setFont(bigText);
-    timeValueLabel.setFont(bigText);
-    treasuresValueLabel.setFont(bigText);
-    levelValueLabel.setForeground(Color.BLACK);
-    timeValueLabel.setForeground(Color.BLACK);
-    treasuresValueLabel.setForeground(Color.BLACK);
-    levelValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    timeValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    treasuresValueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JLabel[] valueLabels = new JLabel[] {
+      levelValueLabel = new JLabel("1"),
+      timeValueLabel = new JLabel("60"),
+      treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
+    };
+
+    for (JLabel valueLabel : valueLabels) {
+      valueLabel.setFont(bigText);
+      valueLabel.setForeground(Color.BLACK);
+      valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
 
     // add labels and JComponents to inner panels in side panels
     levelContentPanel.add(levelTitleLabel);
@@ -352,9 +355,17 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void createMenuComponents() {
 
+    menuBar = new JMenuBar();
+    gameMenu = new JMenu("Game");
+    levelMenu = new JMenu("Level");
+    recnplayMenu = new JMenu("Rec'n'play");
+    helpMenu = new JMenu("Help");
+
     final JMenuItem[] gameMenuItems = new JMenuItem[]{
         resumeMenuItem = new JMenuItem("Resume"),
         pauseMenuItem = new JMenuItem("Pause"),
+        redoMenuItem = new JMenuItem("Redo"),
+        undoMenuItem = new JMenuItem("Undo"),
         saveMenuItem = new JMenuItem("Save"),
         loadMenuItem = new JMenuItem("Load"),
         exitMenuItem = new JMenuItem("Exit"),
@@ -368,14 +379,9 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
         recMenuItem = new JMenuItem("Record"),
-        playMenuItem = new JMenuItem("Replay")
+        playMenuItem = new JMenuItem("Replay"),
+        stopPlayMenuItem = new JMenuItem("Stop Replay")
     };
-
-    menuBar = new JMenuBar();
-    gameMenu = new JMenu("Game");
-    levelMenu = new JMenu("Level");
-    recnplayMenu = new JMenu("Rec'n'play");
-    helpMenu = new JMenu("Help");
 
     for (JMenuItem gameMenuItem : gameMenuItems) {
       gameMenuItem.addActionListener(this);
@@ -412,9 +418,10 @@ public class Gui extends MazeEventListener implements ActionListener {
       System.out.println("Paused");
     } else if (e.getSource() == restartCurrentLevelMenuItem) {
       restartCurrentLevel();
+    } else if (e.getSource() == exitMenuItem) {
+      System.exit(1);
     }
   }
-
 
   /**
    * Key listener to detect keys and key strokes.
@@ -425,7 +432,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive) {
+        if (!isTimerActive && !e.isControlDown()) {
           timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
         }
@@ -466,6 +473,10 @@ public class Gui extends MazeEventListener implements ActionListener {
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
           restartCurrentLevel();
           System.out.println("ctrl + 1 pressed - start new game at level 1");
+        } else if (key == KeyEvent.VK_A) {
+          System.out.println("a pressed - undo");
+        } else if (key == KeyEvent.VK_D) {
+          System.out.println("d pressed - redo");
         }
       }
 
@@ -522,6 +533,24 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Restart the current level.
    */
   public void restartCurrentLevel() {
+    //reset timer count
+    timer.cancel();
+    isTimerActive = false;
+    setTimeValueLabel(60);
+    setupTimer();
+
+    //reset treasures amount
+    setTreasuresValueLabel(maze.numTreasures());
+
+    //reset inventory
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      inventoryValueLabel.setText(" "); // set label to empty again
+      inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+      break;
+    }
+
+    //reset state of board/maze back to start of level
+
 
   }
 
