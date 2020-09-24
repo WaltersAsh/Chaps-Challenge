@@ -8,6 +8,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 
 public abstract class Movable extends BlockingContainable {
+  public Movable() {
+  }
 
   public Movable(String filename, String initials) {
     super(filename, initials);

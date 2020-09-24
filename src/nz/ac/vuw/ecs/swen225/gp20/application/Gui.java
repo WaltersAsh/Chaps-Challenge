@@ -73,6 +73,9 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JLabel infoFieldLabel;
   private JLabel infoFieldLabelText;
 
+  //recnplay icon labels
+  private JLabel recordingIcon;
+
   // menu bar and menu items
   private JMenuBar menuBar;
 
@@ -280,6 +283,20 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Create and set an icon/indicator for recording/replaying
+   *
+   * @param isRecording the boolean confirming if the game is recording or not
+   */
+  public void createRecnplayIconLabel(boolean isRecording) {
+    recordingIcon = new JLabel();
+    try {
+      Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
+      ImageIcon icon = new ImageIcon(image);
+      recordingIcon.setIcon(icon);
+    }catch (IOException e) {e.printStackTrace();}
+  }
+
+  /**
    * Create and initialise the panels in the side panel.
    */
   public void initialiseInnerSidePanels() {
@@ -472,6 +489,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       //recnplay menu functionalities
     } else if (e.getSource() == startRecordingMenuItem) {
       recnplay.startRecording();
+
     } else if (e.getSource() == stopRecordingMenuItem) {
       recnplay.stopRecording();
     } else if (e.getSource() == playMenuItem) {
@@ -498,6 +516,15 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == fasterReplayButton) {
 
     }
+  }
+
+  /**
+   * Moves the player
+   *
+   * @param direction the movement direction
+   */
+  public void move(Maze.Direction direction) {
+    maze.move(direction);
   }
 
   /**
@@ -639,11 +666,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     }
 
     //reset state of board/maze back to start of level
-    //maze = BoardRig.levelEditorTest3();
-    //board = new BoardView(maze);
-    //board.drawWindowedBoard(frame.getGraphics());
     board.reset();
-    System.out.println("Test");
     frame.revalidate();
   }
 
