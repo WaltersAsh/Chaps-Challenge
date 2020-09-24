@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @author Ian 300474717
  *
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = PathTile.class), @JsonSubTypes.Type(value = WallTile.class)
 })
