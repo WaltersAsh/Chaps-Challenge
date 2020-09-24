@@ -8,6 +8,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 
 public abstract class Pickup extends Containable {
+  /**
+   * Instantiates a new empty Pickup. For Jackson
+   */
+  public Pickup() {
+  }
 
   public Pickup(String filename, String initials) {
     super(filename, initials);

@@ -13,6 +13,12 @@ public class Treasure extends Pickup {
     super(filename, "TR");
   }
 
+  /**
+   * Instantiates a new empty Treasure. For Jackson.
+   */
+  public Treasure() {
+  }
+
   @Override
   public String toString() {
     return "Treasure";

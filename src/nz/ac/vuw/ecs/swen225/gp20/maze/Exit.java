@@ -12,4 +12,10 @@ public class Exit extends Pickup {
   public Exit(String filename) {
     super(filename, "EX");
   }
+
+  /**
+   * Instantiates a new empty Exit. For Jackson.
+   */
+  public Exit() {
+  }
 }
