@@ -31,4 +31,10 @@ public class AnimationHandler extends MazeEventListener {
     bv.initaliseAnimation(e.getPushed(), e.getDestination(), e.getPushed().getContainer(), e.getDirection());
     bv.setAnimating(true);
   }
+
+  @Override
+  public void update(MazeEventEnemyWalked e) {
+    bv.initaliseAnimation(e.getEnemy(), e.getEnemyOrigin(), e.getEnemyDestination(), e.getEnemyDirection());
+    bv.setAnimating(true);
+  }
 }

@@ -19,16 +19,23 @@ public class BoardView extends JComponent implements ActionListener {
   private int blockSize = 40;
   private int width, height, minPanel;
 
-  private int viewTiles = 4;
+  private int viewTiles = 3;
 
   // Stuff for animation
   private Tile from, to;
   private int fromX, fromY, toX, toY;
+
+  private int startRow, startCol;
+  private int windowSize = (2 * viewTiles) + 1;
+
+  private int drawX, drawY;
   private Maze.Direction d;
   private Movable entity;
 
   private int prevRow = 1;
   private int prevCol = 1;
+
+  int startCount = 0;
 
   Movable toAnimate;
 
@@ -40,7 +47,7 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = true;
+  private boolean isWindowed = false;
   private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
@@ -115,16 +122,13 @@ public class BoardView extends JComponent implements ActionListener {
    * @param g the graphics used
    */
   public void drawWindowedBoard(Graphics g) {
-
-    int windowSize = (2 * viewTiles) + 1;
-
     blockSize = minPanel / windowSize;
 
     int chapRow = m.getChap().getContainer().getRow();
     int chapCol = m.getChap().getContainer().getCol();
 
-    int startRow = chapRow - viewTiles;
-    int startCol = chapCol - viewTiles;
+    startRow = chapRow - viewTiles;
+    startCol = chapCol - viewTiles;
 
     if (startRow < 0) {
       startRow = 0;
@@ -141,12 +145,12 @@ public class BoardView extends JComponent implements ActionListener {
     }
 
     int currentRow = 0;
-    for (int row = startRow; row < startRow + windowSize; row++) {
-      int currentCol = 0;
-      for (int col = startCol; col < startCol + windowSize; col++) {
-        Tile t = m.getTileAt(row, col);
-        g.drawImage(getToolkit().getImage(t.getFilename()), currentCol * blockSize,
-            currentRow * blockSize, blockSize, blockSize, this);
+        for (int row = startRow; row < startRow + windowSize; row++) {
+          int currentCol = 0;
+          for (int col = startCol; col < startCol + windowSize; col++) {
+            Tile t = m.getTileAt(row, col);
+            g.drawImage(getToolkit().getImage(t.getFilename()), currentCol * blockSize,
+                currentRow * blockSize, blockSize, blockSize, this);
         if (t instanceof PathTile) {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
@@ -187,15 +191,19 @@ public class BoardView extends JComponent implements ActionListener {
       vely = 0;
     }
 
-    if(!isWindowed||(from.getCol()<=viewTiles)) {
+    if(!isWindowed||(from.getCol()<=viewTiles&&from.getRow()<= viewTiles)) {
       for (int i = 0; i < animations.size(); i++) {
         Animation a = animations.get(i);
-        g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+        //g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
       }
     }
     else{
-      System.out.println("Board");
+      drawMoveBoard(g);
     }
+
+  }
+
+  public void drawMoveBoard(Graphics g){
 
   }
 
@@ -217,7 +225,10 @@ public class BoardView extends JComponent implements ActionListener {
     this.d = d;
 
     if(isWindowed){
-      setWindowedPostitions(from, to, d);
+      startRow = entity.getContainer().getRow() - viewTiles;
+      startCol = entity.getContainer().getCol() - viewTiles;
+
+      System.out.println("___________________");
     }
     else{
       fromX = from.getCol() * getBlockSize();
@@ -230,22 +241,21 @@ public class BoardView extends JComponent implements ActionListener {
     t.start();
   }
 
-  public int getBlockSize() {
-    return blockSize;
-  }
-
   public void setAnimating(boolean animating) {
     isAnimating = animating;
     if (!animating) {
       animations.clear();
       entitesAnimated.clear();
+      startCount = 0;
       t.stop();
+      //System.out.println("Animation Stopped");
     }
   }
 
   public void checkAnimation(){
-    if(animations.isEmpty()){
+    if(animations.isEmpty()||startCount>blockSize){
       setAnimating(false);
+
     }
   }
 
@@ -255,73 +265,42 @@ public class BoardView extends JComponent implements ActionListener {
    * @param to
    * @param d
    */
-  public void setWindowedPostitions(Tile from, Tile to, Maze.Direction d) {
-
-    //Calculate XPos
-    if (from.getCol() < viewTiles) {
-      fromX = from.getCol() * blockSize;
-      toX = to.getCol() * blockSize;
-    } else if (from.getCol() >= viewTiles && from.getCol() < width - viewTiles) {
-      boardNeedMove = true;
-    } else {
-      fromX = viewTiles*blockSize+(prevCol*blockSize);
-      if (d == Maze.Direction.RIGHT) {
-        toX = fromX + blockSize;
-        prevCol++;
-      } else if(d==Maze.Direction.LEFT) {
-        toX = fromX - blockSize;
-        if(prevCol>1) {
-          prevCol--;
-        }
-      }
-    }
-
-    //Calculate yPos
-    if (from.getRow() < viewTiles) {
-      fromY = from.getRow() * blockSize;
-      toY = to.getRow()*blockSize;
-    } else if (from.getRow() >= viewTiles && from.getRow() < height - viewTiles) {
-      boardNeedMove = true;
-    } else {
-      fromY = viewTiles*blockSize+(prevRow*blockSize);
-      if (d == Maze.Direction.DOWN) {
-        toY = fromY + blockSize;
-        prevRow++;
-      } else if(d==Maze.Direction.UP){
-        toY = fromY - blockSize;
-        if(prevRow>1) {
-          prevRow--;
-        }
-      }
-    }
-
-
+  public void setWindowedPositions(Tile from, Tile to, Maze.Direction d) {
 
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
       repaint();
-      for(int i=0; i<animations.size(); i++) {
-        currentAnimation = animations.get(i);
-        double currentFromX = currentAnimation.getFromX();
-        double currentFromY = currentAnimation.getFromY();
-        currentAnimation.setFromX(currentFromX + velx);
-        currentAnimation.setFromY(currentFromY + vely);
+      if(!boardNeedMove) {
+        for (int i = 0; i < animations.size(); i++) {
+          currentAnimation = animations.get(i);
+          double currentFromX = currentAnimation.getFromX();
+          double currentFromY = currentAnimation.getFromY();
+          currentAnimation.setFromX(currentFromX + velx);
+          currentAnimation.setFromY(currentFromY + vely);
 
-        if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX()) ||
-            (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
-          entitesAnimated.remove(currentAnimation.getM());
-          animations.remove(currentAnimation);
-          checkAnimation();
-        }
-        if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
-            (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
-          entitesAnimated.remove(currentAnimation.getM());
-          animations.remove(currentAnimation);
-          checkAnimation();
+          if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX()) ||
+              (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
+            entitesAnimated.remove(currentAnimation.getM());
+            animations.remove(currentAnimation);
+            checkAnimation();
+          }
+          if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
+              (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
+            entitesAnimated.remove(currentAnimation.getM());
+            animations.remove(currentAnimation);
+            checkAnimation();
+          }
         }
       }
+    else if(startCount>blockSize){
+      checkAnimation();
+    }
+    else{
+        drawX += velx;
+        drawY += vely;
+    }
   }
 
   public Maze getMaze() {
@@ -331,4 +310,10 @@ public class BoardView extends JComponent implements ActionListener {
   public boolean isAnimating() {
     return isAnimating;
   }
+
+
+  public int getBlockSize() {
+    return blockSize;
+  }
+
 }
