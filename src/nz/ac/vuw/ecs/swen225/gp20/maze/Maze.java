@@ -147,7 +147,9 @@ public class Maze {
   }
 
   public void checkWalked(PathTile next, Direction d) {
-    for(Containable c: next.getContainedEntities()) {
+    if(next.getContainedEntities().isEmpty())return;
+    for(int i=next.getContainedEntities().size()-1; i>=0; i--) {
+      Containable c = next.getContainedEntities().get(i);
       if(c instanceof Pickup) {
         checkPickup(next, d, (Pickup) c);
       }else if(c instanceof Trigger) {
@@ -171,6 +173,8 @@ public class Maze {
   public void checkPickup(PathTile next, Direction d, Pickup p) {
     if(p instanceof Treasure) {
       checkTreasure(next, d, (Treasure) p);
+      if(chap.hasAllTreasures(this)) openExitLock();
+      dispatch.offer(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, p, exitlock));
     }else if(p instanceof Key) {
 
     }
@@ -179,6 +183,7 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile next, Direction d, Treasure t) {
+    System.out.println(chap.hasAllTreasures(this));
     if(chap.hasAllTreasures(this)){
       openExitLock();
       dispatch.add(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, t, exitlock));
