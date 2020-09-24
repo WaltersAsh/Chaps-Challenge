@@ -9,6 +9,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public abstract class Containable extends Drawable {
 
+  /**
+   * Instantiates a new empty Containable. For Jackson.
+   */
+  public Containable() {
+  }
+
   public Containable(String filename, String initials) {
     super(filename, initials);
 

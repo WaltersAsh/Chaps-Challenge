@@ -12,6 +12,12 @@ import java.util.*;
  */
 
 public class Maze {
+  /**
+   * Instantiates a new Maze. For Jackson.
+   */
+  public Maze() {
+  }
+
   // Enums
   public enum Direction {
     UP, DOWN, LEFT, RIGHT
