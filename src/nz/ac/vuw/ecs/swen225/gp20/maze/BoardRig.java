@@ -191,7 +191,7 @@ public class BoardRig {
     case "EL":
       return new ExitLock("resources/textures/board/blocking/doors/bedrock.png");
     case "EX":
-      return new Exit("resources/textures/board/pickup/exit.png");
+      return new Exit("resources/textures/board/pickup/netherportal.gif");
     case "CH":
       // return new
       // Chap("resources/textures/board/moveable/character_skins/new_player_skin/steve.png");
