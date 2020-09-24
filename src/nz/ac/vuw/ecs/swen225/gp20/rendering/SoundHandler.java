@@ -9,13 +9,17 @@ public class SoundHandler extends MazeEventListener{
 
   private HashMap<String, SoundEffect> sounds = new HashMap<>();
   private List<SoundEffect> pathSounds = new ArrayList<>();
+  private List<SoundEffect> ghastSounds = new ArrayList<>();
 
   private SoundEffect prevSound = null;
   private SoundEffect currentSound = null;
 
+  private Random random = new Random();
+
   public SoundHandler(Maze m) {
     initialiseSounds();
     m.addListener(this);
+
   }
 
   /**
@@ -24,7 +28,7 @@ public class SoundHandler extends MazeEventListener{
    * enemy
    */
   public void initialiseSounds() {
-    initialiseStoneSounds();
+    initialiseListSounds();
 
     sounds.put("EX", new SoundEffect("resources/sound_effects/exit/trigger.wav"));
     sounds.put("TR", new SoundEffect("resources/sound_effects/pickup/pop.wav"));
@@ -40,19 +44,32 @@ public class SoundHandler extends MazeEventListener{
     sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
     sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
     sounds.put("XX", new SoundEffect("resources/sound_effects/crate/grindstone_use1pitch.wav"));
-
+    sounds.put("GH", new SoundEffect("resources/sound_effects/stone_step/random_ghast.wav"));
   }
 
-  public void initialiseStoneSounds() {
+  public void initialiseListSounds() {
     String[] stoneFiles = { "resources/sound_effects/stone_step/step1.wav",
         "resources/sound_effects/stone_step/step2.wav",
         "resources/sound_effects/stone_step/step3.wav",
         "resources/sound_effects/stone_step/step4.wav",
-        "resources/sound_effects/stone_step/step5.wav" };
+        "resources/sound_effects/stone_step/step5.wav"};
+
+    String[] ghastFiles = {
+            "resources/sound_effects/ghast/random_ghast1.wav",
+            "resources/sound_effects/ghast/random_ghast2.wav",
+            "resources/sound_effects/ghast/random_ghast3.wav",
+            "resources/sound_effects/ghast/random_ghast4.wav",
+            "resources/sound_effects/ghast/random_ghast5.wav",
+    };
 
     for (String s : stoneFiles) {
       pathSounds.add(new SoundEffect(s));
     }
+
+    for (String s : ghastFiles) {
+      ghastSounds.add(new SoundEffect(s));
+    }
+
   }
 
 
@@ -62,14 +79,14 @@ public class SoundHandler extends MazeEventListener{
     current.play();
   }
 
-  public void playRandomSound() {
+  public void playRandomSound(List<SoundEffect> sounds) {
     SoundEffect currentSound;
     Random rand = new Random();
 
-    currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
+    currentSound = sounds.get(rand.nextInt(sounds.size()));
     while (prevSound == currentSound) {
       prevSound = currentSound;
-      currentSound = pathSounds.get(rand.nextInt(pathSounds.size()));
+      currentSound = sounds.get(rand.nextInt(sounds.size()));
     }
     currentSound.play();
     prevSound = currentSound;
@@ -93,7 +110,10 @@ public class SoundHandler extends MazeEventListener{
 
   @Override
   public void update(MazeEventWalked e) {
-    playRandomSound();
+    playRandomSound(pathSounds);
+    if(random.nextInt(25)==1){
+      playRandomSound(ghastSounds);
+    }
   }
 
   @Override
