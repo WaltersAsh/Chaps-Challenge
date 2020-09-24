@@ -33,4 +33,9 @@ public class Teleporter extends Trigger {
   public PathTile getDestination() {
     return other.getContainer();
   }
+  
+  @Override
+  public void onWalked(Maze m) {
+    getDestination().moveTo(m.getChap());
+  }
 }

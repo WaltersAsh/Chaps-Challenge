@@ -12,13 +12,4 @@ public abstract class Trigger extends Containable {
   public Trigger(String filename, String initials) {
     super(filename, initials);
   }
-
-  /**
-   * Pick up this Pickup
-   *
-   * @param c Chap
-   */
-  public void addToInventory(Chap c) {
-    this.container.remove(this);
-  }
 }

@@ -12,6 +12,8 @@ import java.util.*;
  */
 
 public class Maze {
+  // TODO: fix all the comments, outdated because of rewrite
+  
   /**
    * Instantiates a new Maze. For Jackson.
    */
@@ -216,66 +218,67 @@ public class Maze {
 
     if (check instanceof PathTile) {
       PathTile next = (PathTile) check;
+      
       if(next.isWalkable()) {
-        checkWalked(next, d);
-
-        overrideDispatch(new MazeEventWalked(this, chap.getContainer(), next, d));
-
+        next.moveTo(chap);
+        checkWalked(current, next, d);
+        overrideDispatch(new MazeEventWalked(this, current, next, d));
       }else {
-        checkBlocking(next, d);
+        if(checkBlocking(current, next, d)) {
+          next.moveTo(chap);
+        }
       }
     }
     
     if(dispatch!=null) {
-      dispatch.getDestination().moveTo(chap);
       broadcast(dispatch);
       dispatch = null;
     }
   }
 
-  public void checkWalked(PathTile next, Direction d) {
+  public void checkWalked(PathTile current, PathTile next, Direction d) {
     if(next.getContainedEntities().isEmpty())return;
     for(int i=next.getContainedEntities().size()-1; i>=0; i--) {
       Containable c = next.getContainedEntities().get(i);
+      c.onWalked(this);
       if(c instanceof Pickup) {
-        checkPickup(next, d, (Pickup) c);
+        checkPickup(current, next, d, (Pickup) c);
       }else if(c instanceof Trigger) {
-        checkTrigger(next, d, (Trigger) c);
+        checkTrigger(current, next, d, (Trigger) c);
       }
     }
   }
 
-  private void checkTrigger(PathTile next, Direction d, Trigger t) {
+  private void checkTrigger(PathTile current, PathTile next, Direction d, Trigger t) {
     if(t instanceof InfoField) {
-      overrideDispatch(new MazeEventInfoField(this, chap.getContainer(), next, d, (InfoField)t));
+      overrideDispatch(new MazeEventInfoField(this, current, next, d, (InfoField)t));
     }else if(t instanceof Exit) {
-      overrideDispatch(new MazeEventWon(this, chap.getContainer(), next, d));
+      overrideDispatch(new MazeEventWon(this, current, next, d));
       pause();
     }else if(t instanceof Teleporter) {
       Teleporter tp = (Teleporter)t;
-      overrideDispatch(new MazeEventTeleported(this, chap.getContainer(), next, d, tp));
+      overrideDispatch(new MazeEventTeleported(this, current, next, d, tp));
     }
   }
 
-  public void checkPickup(PathTile next, Direction d, Pickup p) {
-    chap.pickup(p);
+  public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
     if(p instanceof Treasure) {
-      checkTreasure(next, d, (Treasure) p);
+      checkTreasure(next, current, d, (Treasure) p);
       if(chap.hasAllTreasures(this)) {
         openExitLock();
-        overrideDispatch(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, p, exitlock));
+        overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, p, exitlock));
       }
     }else if(p instanceof Key) {
 
     }
-    overrideDispatch(new MazeEventPickup(this, chap.getContainer(), next, d, p));
+    overrideDispatch(new MazeEventPickup(this, current, next, d, p));
   }
 
-  public void checkTreasure(PathTile next, Direction d, Treasure t) {
+  public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
 
     if(chap.hasAllTreasures(this)){
       openExitLock();
-      overrideDispatch(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, t, exitlock));
+      overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock));
     }
   }
 
@@ -287,12 +290,14 @@ public class Maze {
    * @param blocked   the PathTile to check
    * @return          the event for moving to it if we did
    */
-  public void checkBlocking(PathTile blocked, Direction d) {
+  public boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
     if (bc instanceof Door) {
-      tryUnlockDoor((Door) bc, d);
+      return tryUnlockDoor(current, (Door) bc, d);
     } else if (bc instanceof Crate) {
-      tryPushCrate((Crate) bc, d);
+      return tryPushCrate(current, (Crate) bc, d);
+    }else {
+      return false;
     }
   }
 
@@ -303,7 +308,7 @@ public class Maze {
    * @param d     the direction we moved to
    * @return      the event if we opened the door and moved, null if we didn't
    */
-  public void tryUnlockDoor(Door door, Direction d) {
+  public boolean tryUnlockDoor(PathTile current, Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
       door.getContainer().remove(door);
@@ -311,8 +316,10 @@ public class Maze {
       if (!key.getColor().equals(KeyColor.GREEN)) {
         chap.getKeys().remove(key);
       }
-      overrideDispatch(new MazeEventUnlocked(this, chap.container, door.container, d, door, key));
+      overrideDispatch(new MazeEventUnlocked(this, current, door.container, d, door, key));
+      return true;
     }
+    return false;
   }
 
   /**
@@ -322,7 +329,7 @@ public class Maze {
    * @param d the direction in which to push
    * @return the MazeEvent for pushing the crate
    */
-  public void tryPushCrate(Crate c, Direction d) {
+  public boolean tryPushCrate(PathTile current, Crate c, Direction d) {
     Tile destination = tileTo(c.container, d);
     // if the tile we try to push to is a pathtile
     if (destination instanceof PathTile) {
@@ -336,10 +343,12 @@ public class Maze {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
       }else {
-        return;
+        return false;
       }
-      overrideDispatch(new MazeEventPushedWater(this, chap.container, original, d, c));
+      overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
+      return true;
     }
+    return false;
   }
 
   public Tile tileTo(Tile t, Direction d) {
