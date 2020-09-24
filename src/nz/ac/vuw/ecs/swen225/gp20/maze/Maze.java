@@ -225,6 +225,7 @@ public class Maze {
         checkBlocking(next, d);
       }
     }
+    
     if(dispatch!=null) {
       dispatch.getDestination().moveTo(chap);
       broadcast(dispatch);
