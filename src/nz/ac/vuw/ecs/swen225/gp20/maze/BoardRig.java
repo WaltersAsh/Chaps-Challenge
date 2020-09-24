@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * A testing class for setting up a text only Board
- * 
+ *
  * @author Ian 300474717
  *
  *         WA = wall PA = path KX = key with #X LX = lock with #X TR = treasure
@@ -18,6 +18,7 @@ import com.google.common.base.Preconditions;
 public class BoardRig {
   private static Pattern keyPat = Pattern.compile("K(.)");
   private static Pattern lockPat = Pattern.compile("L(.)");
+  private static Pattern telePat = Pattern.compile("T(.)");
 
   public static void main(String[] args) {
     System.out.println(lesson1());
@@ -93,7 +94,7 @@ public class BoardRig {
   }
 
   public static Maze levelEditorTest2() {
-    String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"
+    String board = "whiteWA WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"
         + "WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"
         + "WA PA CH PA PA PA PA PA PA PA PA TR PA KY WA\n"
         + "WA PA PA PA PA PA PA PA PA PA PA PA PA PA WA\n"
@@ -115,7 +116,7 @@ public class BoardRig {
         + "WA WA WA WA WA WA WA WA WA WA WA WA WA WA WA";
     return BoardRig.fromString(board);
   }
-  
+
   public static Maze levelEditorTest3() {
     String board = "WA WA WA WA WA WA WA WA WA WA WA WA WA WA\n"+
         "WA EN PA PA WA KG PA PA LY PA PA PA EN WA\n"+
@@ -171,10 +172,10 @@ public class BoardRig {
 
   /**
    * Get a Drawable from a string token
-   * 
+   *
    * @param token
    * @return public Set<Treasure> getTreasures() { return treasures; }
-   * 
+   *
    */
   public static Drawable fromToken(String token) {
     Preconditions.checkArgument(token.length() == 2, "Token has length %s but expected 2",
@@ -208,11 +209,14 @@ public class BoardRig {
     default:
       Matcher keyMatch = keyPat.matcher(token);
       Matcher lockMatch = lockPat.matcher(token);
+      Matcher teleMatch = telePat.matcher(token);
 
       if (keyMatch.matches()) {
         return new Key(fileForKey(keyMatch.group(1)), colorFromToken(keyMatch.group(1)));
       } else if (lockMatch.matches()) {
         return new Door(fileForDoor(lockMatch.group(1)), colorFromToken(lockMatch.group(1)));
+      }else if (teleMatch.matches()) {
+          return new Door(fileForTeleporter(teleMatch.group(1)), colorFromToken(teleMatch.group(1)));
       }
     }
     return null;
@@ -258,6 +262,21 @@ public class BoardRig {
       return "resources/textures/board/blocking/doors/diamond_block.png";
     case "Y":
       return "resources/textures/board/blocking/doors/gold_block.png";
+    default:
+      throw new IllegalArgumentException();
+    }
+  }
+
+  public static String fileForTeleporter(String token) {
+    switch (token) {
+    case "B":
+      return "resources/textures/board/pickup/teleporter_brown.png";
+    case "R":
+      return "resources/textures/board/pickup/teleporter_white.png";
+    case "G":
+      return "resources/textures/board/pickup/teleporter_blue.png";
+    case "Y":
+      return "resources/textures/board/pickup/teleporter_yellow.png";
     default:
       throw new IllegalArgumentException();
     }
