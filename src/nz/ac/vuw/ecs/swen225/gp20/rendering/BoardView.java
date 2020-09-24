@@ -194,7 +194,7 @@ public class BoardView extends JComponent implements ActionListener {
     if(!isWindowed||(from.getCol()<=viewTiles&&from.getRow()<= viewTiles)) {
       for (int i = 0; i < animations.size(); i++) {
         Animation a = animations.get(i);
-        //g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
+        g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
       }
     }
     else{
