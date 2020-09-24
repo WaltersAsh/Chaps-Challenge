@@ -155,10 +155,10 @@ public class BoardView extends JComponent implements ActionListener {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
             for (Containable c : pt.getContainedEntities()) {
-              if (isAnimating && c instanceof Movable&&entitesAnimated.contains(c)) {
-                toAnimate = (Movable) c;
-                continue;
-              }
+//              if (isAnimating && c instanceof Movable&&entitesAnimated.contains(c)) {
+//                toAnimate = (Movable) c;
+//                continue;
+//              }
               g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,
                   currentRow * blockSize, blockSize, blockSize, this);
             }
@@ -216,7 +216,7 @@ public class BoardView extends JComponent implements ActionListener {
    * @param d the direction its moving
    */
   public void initaliseAnimation(Movable entity, Tile from, Tile to, Maze.Direction d) {
-    entitesAnimated.add(entity);
+
 
     this.from = from;
     this.to = to;
@@ -225,10 +225,10 @@ public class BoardView extends JComponent implements ActionListener {
     this.d = d;
 
     if(isWindowed){
-      startRow = entity.getContainer().getRow() - viewTiles;
-      startCol = entity.getContainer().getCol() - viewTiles;
+//      startRow = entity.getContainer().getRow() - viewTiles;
+//      startCol = entity.getContainer().getCol() - viewTiles;
 
-      System.out.println("___________________");
+      //System.out.println("___________________");
     }
     else{
       fromX = from.getCol() * getBlockSize();
@@ -237,8 +237,12 @@ public class BoardView extends JComponent implements ActionListener {
       toY = to.getRow() * getBlockSize();
     }
 
-    animations.add(new Animation(entity, fromX, toX, fromY, toY, d));
-    t.start();
+    if(!isWindowed) {
+      entitesAnimated.add(entity);
+      animations.add(new Animation(entity, fromX, toX, fromY, toY, d));
+      t.start();
+    }
+
   }
 
   public void setAnimating(boolean animating) {
