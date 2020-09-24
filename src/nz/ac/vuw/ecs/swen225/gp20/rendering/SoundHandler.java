@@ -44,7 +44,6 @@ public class SoundHandler extends MazeEventListener{
     sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
     sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
     sounds.put("XX", new SoundEffect("resources/sound_effects/crate/grindstone_use1pitch.wav"));
-    sounds.put("GH", new SoundEffect("resources/sound_effects/stone_step/random_ghast.wav"));
   }
 
   public void initialiseListSounds() {
