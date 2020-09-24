@@ -13,6 +13,7 @@ public class InfoField extends Trigger {
    * Instantiates a new empty Info field.
    */
   public InfoField() {
+    super("","");
   }
 
   public InfoField(String filename, String information) {
