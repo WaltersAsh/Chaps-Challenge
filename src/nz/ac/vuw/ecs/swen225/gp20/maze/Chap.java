@@ -11,10 +11,37 @@ import java.util.List;
  */
 
 public class Chap extends Movable {
+  public Chap() {
+  }
+
   private List<Key> keys = new ArrayList<>();
   private List<Treasure> treasures = new ArrayList<>();
 
   String left, right;
+
+  public void setKeys(List<Key> keys) {
+    this.keys = keys;
+  }
+
+  public void setTreasures(List<Treasure> treasures) {
+    this.treasures = treasures;
+  }
+
+  public String getLeft() {
+    return left;
+  }
+
+  public void setLeft(String left) {
+    this.left = left;
+  }
+
+  public String getRight() {
+    return right;
+  }
+
+  public void setRight(String right) {
+    this.right = right;
+  }
 
   public Chap(String left, String right) {
     super(left, "CH");

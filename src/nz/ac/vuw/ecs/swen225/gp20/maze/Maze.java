@@ -35,6 +35,70 @@ public class Maze {
   private List<Enemy> enemies = new ArrayList<Enemy>();
   private ExitLock exitlock;
 
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public void setTiles(Tile[][] tiles) {
+    this.tiles = tiles;
+  }
+
+  public void setChap(Chap chap) {
+    this.chap = chap;
+  }
+
+  public void setTreasures(List<Treasure> treasures) {
+    this.treasures = treasures;
+  }
+
+  public List<Enemy> getEnemies() {
+    return enemies;
+  }
+
+  public void setEnemies(List<Enemy> enemies) {
+    this.enemies = enemies;
+  }
+
+  public ExitLock getExitlock() {
+    return exitlock;
+  }
+
+  public void setExitlock(ExitLock exitlock) {
+    this.exitlock = exitlock;
+  }
+
+  public void setLevelFinished(boolean levelFinished) {
+    this.levelFinished = levelFinished;
+  }
+
+  public Timer getTimer() {
+    return timer;
+  }
+
+  public void setTimer(Timer timer) {
+    this.timer = timer;
+  }
+
+  public int getPathFindingDelay() {
+    return pathFindingDelay;
+  }
+
+  public void setPathFindingDelay(int pathFindingDelay) {
+    this.pathFindingDelay = pathFindingDelay;
+  }
+
+  public List<MazeEventListener> getListeners() {
+    return listeners;
+  }
+
+  public void setListeners(List<MazeEventListener> listeners) {
+    this.listeners = listeners;
+  }
+
   // Logic
   private boolean levelFinished = false;
   private Timer timer;
