@@ -11,9 +11,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class MazeEventPickup extends MazeEventWalked {
   protected Pickup picked;
 
-  public MazeEventPickup(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
+  public MazeEventPickup(Maze maze, PathTile origin, PathTile target, Maze.Direction direction,
       Pickup picked) {
-    super(maze, origin, destination, direction);
+    super(maze, origin, target, direction);
     this.picked = picked;
   }
 
@@ -23,8 +23,8 @@ public class MazeEventPickup extends MazeEventWalked {
 
   @Override
   public String toString() {
-    return String.format("Picked up a %s at %s,%s", picked, destination.getCol(),
-        destination.getRow());
+    return String.format("Picked up a %s at %s,%s", picked, target.getCol(),
+        target.getRow());
   }
   
   @Override

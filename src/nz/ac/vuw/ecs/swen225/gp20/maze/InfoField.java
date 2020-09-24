@@ -6,13 +6,14 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  * @author Ian 300474717
  */
 
-public class InfoField extends Pickup {
+public class InfoField extends Trigger {
   private String information;
 
   /**
    * Instantiates a new empty Info field.
    */
   public InfoField() {
+    super("","");
   }
 
   public InfoField(String filename, String information) {

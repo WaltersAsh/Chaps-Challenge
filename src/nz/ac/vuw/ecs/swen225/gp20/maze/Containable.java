@@ -27,7 +27,7 @@ public abstract class Containable extends Drawable {
 
     }
 
-    PathTile container;
+    protected PathTile container;
 
     public PathTile getContainer() {
         return container;
@@ -36,5 +36,8 @@ public abstract class Containable extends Drawable {
     public void setContainer(PathTile container) {
         this.container = container;
     }
-
+    
+    public void onWalked(Maze m) {
+      
+    }
 }

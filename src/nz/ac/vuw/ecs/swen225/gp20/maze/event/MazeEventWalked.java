@@ -4,24 +4,39 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
  * Event for when chap moves from one tile to another.
- * 
+ *
  * @author Ian 300474717
  *
  */
 public class MazeEventWalked implements MazeEvent {
-  protected PathTile origin, destination;
+  protected PathTile origin, target;
   protected Maze.Direction direction;
   protected Maze maze;
-  
-  public MazeEventWalked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction) {
+
+  public MazeEventWalked(Maze maze, PathTile origin, PathTile target, Maze.Direction direction) {
     this.maze = maze;
     this.origin = origin;
-    this.destination = destination;
+    this.target = target;
     this.direction = direction;
   }
 
+  /**
+   * The tile that Chap moved onto intially (barring teleports)
+   * @return
+   */
+  public PathTile getTarget() {
+    return target;
+  }
+
+  /**
+   * Target and destination are not always the same in subclasses
+   * eg: if teleported, then the Teleporter is the target
+   * but the other end of the Teleporter is the destination
+   *
+   * @return
+   */
   public PathTile getDestination() {
-    return destination;
+    return target;
   }
 
   public PathTile getOrigin() {
@@ -40,9 +55,9 @@ public class MazeEventWalked implements MazeEvent {
   @Override
   public String toString() {
     return String.format("Walked from tile %s,%s to tile %s,%s", origin.getCol(), origin.getRow(),
-        destination.getCol(), destination.getRow());
+        target.getCol(), target.getRow());
   }
-  
+
   @Override
   public void receive(MazeEventListener l) {
     l.update(this);

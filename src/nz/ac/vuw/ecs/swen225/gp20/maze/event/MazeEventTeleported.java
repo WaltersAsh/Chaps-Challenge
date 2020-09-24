@@ -11,9 +11,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class MazeEventTeleported extends MazeEventWalked {
   private Teleporter teleporter;
 
-  public MazeEventTeleported(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
+  public MazeEventTeleported(Maze maze, PathTile origin, PathTile target, Maze.Direction direction,
       Teleporter tele) {
-    super(maze, origin, destination, direction);
+    super(maze, origin, target, direction);
     this.teleporter = tele;
   }
 
@@ -24,11 +24,16 @@ public class MazeEventTeleported extends MazeEventWalked {
   @Override
   public String toString() {
     return String.format("Teleported to %s after walking onto teleporter at tile %s,%s",
-        teleporter.getOther().getContainer(), destination.getCol(), destination.getRow());
+        teleporter.getOther().getContainer(), target.getCol(), target.getRow());
   }
 
   @Override
   public void receive(MazeEventListener l) {
     l.update(this);
+  }
+
+  @Override
+  public PathTile getDestination() {
+    return teleporter.getDestination();
   }
 }

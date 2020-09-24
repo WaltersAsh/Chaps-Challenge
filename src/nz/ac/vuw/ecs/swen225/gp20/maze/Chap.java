@@ -56,6 +56,7 @@ public class Chap extends Movable {
     } else if (p instanceof Key) {
       keys.add((Key) p);
     }
+    p.getContainer().remove(p);
   }
 
   public Key hasMatchingKey(Door d) {

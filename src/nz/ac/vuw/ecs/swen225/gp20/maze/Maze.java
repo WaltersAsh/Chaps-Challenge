@@ -12,6 +12,8 @@ import java.util.*;
  */
 
 public class Maze {
+  // TODO: fix all the comments, outdated because of rewrite
+  
   /**
    * Instantiates a new Maze. For Jackson.
    */
@@ -106,6 +108,7 @@ public class Maze {
 
   // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
+  private MazeEventWalked dispatch;
 
   /**
    * Constuct empty Board with a width and height
@@ -181,14 +184,28 @@ public class Maze {
   }
 
   /**
+   * Replace the event to be dispatched if the new event is a subclass of it
+   *
+   * @param event the new event
+   */
+  private void overrideDispatch(MazeEventWalked event) {
+    // System.out.printf("trying to override current dispatch %s with new %s\n", dispatch, event);
+    if(dispatch==null) {
+      dispatch = event;
+    }else {
+      if(dispatch.getClass().isAssignableFrom(event.getClass())) {
+        dispatch = event;
+      }
+    }
+    // System.out.printf("dispatch = %s\n", dispatch);
+  }
+
+  /**
    * Try to move in a direction.
    *
    * @param d   the direction
    */
   public void move(Direction d) {
-    MazeEvent event;
-    PathTile current = chap.getContainer();
-    Tile next = tileTo(current, d);
     if (d == Direction.LEFT) {
       chap.changeFile(chap.left);
     }
@@ -196,31 +213,72 @@ public class Maze {
       chap.changeFile(chap.right);
     }
 
-    if (next instanceof PathTile) {
-      PathTile ptnext = (PathTile) next;
-      event = new MazeEventWalked(this, current, ptnext, d);
-      if (!ptnext.isWalkable()) {
-        event = checkBlocking(ptnext, d);
-        if (event == null) {
-          // we did not move
-          return;
+    PathTile current = chap.getContainer();
+    Tile check = tileTo(current, d);
+
+    if (check instanceof PathTile) {
+      PathTile next = (PathTile) check;
+      
+      if(next.isWalkable()) {
+        next.moveTo(chap);
+        checkWalked(current, next, d);
+        overrideDispatch(new MazeEventWalked(this, current, next, d));
+      }else {
+        if(checkBlocking(current, next, d)) {
+          next.moveTo(chap);
         }
       }
+    }
+    
+    if(dispatch!=null) {
+      broadcast(dispatch);
+      dispatch = null;
+    }
+  }
 
-      MazeEvent checkEntitiesEvent = checkEntities(ptnext, d);
-      if (checkEntitiesEvent != null) {
-        // should never override a MazeEventUnlocked or a MazeEventPushed
-        // because you can never pick something up in the same move as these
-        event = checkEntitiesEvent;
-        if(event instanceof MazeEventTeleported) {
-          MazeEventTeleported t = (MazeEventTeleported) event;
-          ptnext = t.getTeleporter().getOther().getContainer();
-        }
+  public void checkWalked(PathTile current, PathTile next, Direction d) {
+    if(next.getContainedEntities().isEmpty())return;
+    for(int i=next.getContainedEntities().size()-1; i>=0; i--) {
+      Containable c = next.getContainedEntities().get(i);
+      c.onWalked(this);
+      if(c instanceof Pickup) {
+        checkPickup(current, next, d, (Pickup) c);
+      }else if(c instanceof Trigger) {
+        checkTrigger(current, next, d, (Trigger) c);
       }
+    }
+  }
 
-      ptnext.moveTo(chap);
-      broadcast(event);
+  private void checkTrigger(PathTile current, PathTile next, Direction d, Trigger t) {
+    if(t instanceof InfoField) {
+      overrideDispatch(new MazeEventInfoField(this, current, next, d, (InfoField)t));
+    }else if(t instanceof Exit) {
+      overrideDispatch(new MazeEventWon(this, current, next, d));
+      pause();
+    }else if(t instanceof Teleporter) {
+      Teleporter tp = (Teleporter)t;
+      overrideDispatch(new MazeEventTeleported(this, current, next, d, tp));
+    }
+  }
 
+  public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
+    if(p instanceof Treasure) {
+      checkTreasure(next, current, d, (Treasure) p);
+      if(chap.hasAllTreasures(this)) {
+        openExitLock();
+        overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, p, exitlock));
+      }
+    }else if(p instanceof Key) {
+
+    }
+    overrideDispatch(new MazeEventPickup(this, current, next, d, p));
+  }
+
+  public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
+
+    if(chap.hasAllTreasures(this)){
+      openExitLock();
+      overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock));
     }
   }
 
@@ -232,14 +290,15 @@ public class Maze {
    * @param blocked   the PathTile to check
    * @return          the event for moving to it if we did
    */
-  public MazeEvent checkBlocking(PathTile blocked, Direction d) {
+  public boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
     if (bc instanceof Door) {
-      return tryUnlockDoor((Door) bc, d);
+      return tryUnlockDoor(current, (Door) bc, d);
     } else if (bc instanceof Crate) {
-      return tryPushCrate((Crate) bc, d);
+      return tryPushCrate(current, (Crate) bc, d);
+    }else {
+      return false;
     }
-    return null;
   }
 
   /**
@@ -249,7 +308,7 @@ public class Maze {
    * @param d     the direction we moved to
    * @return      the event if we opened the door and moved, null if we didn't
    */
-  public MazeEventUnlocked tryUnlockDoor(Door door, Direction d) {
+  public boolean tryUnlockDoor(PathTile current, Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
       door.getContainer().remove(door);
@@ -257,41 +316,10 @@ public class Maze {
       if (!key.getColor().equals(KeyColor.GREEN)) {
         chap.getKeys().remove(key);
       }
-      return new MazeEventUnlocked(this, chap.container, door.container, d, door, key);
+      overrideDispatch(new MazeEventUnlocked(this, current, door.container, d, door, key));
+      return true;
     }
-    return null;
-  }
-
-  /**
-   * Check and pickup entities on the next PathTile.
-   *
-   * @param path  the tile to check
-   * @param d     the direction we moved
-   * @return      the event for picking up entity, if any
-   */
-  public MazeEvent checkEntities(PathTile path, Direction d) {
-    for (Containable e : path.getContainedEntities()) {
-      if (e instanceof InfoField) {
-        return new MazeEventInfoField(this, chap.container, path, d, (InfoField) e);
-      } else if (e instanceof Exit) {
-        pause();
-        return new MazeEventWon(this, chap.container, path, d);
-      }else if (e instanceof Teleporter) {
-        return new MazeEventTeleported(this, chap.container, path, d, (Teleporter)e);
-      } else if (e instanceof Pickup) {
-        Pickup p = (Pickup) e;
-        p.addToInventory(chap);
-        if(p instanceof Treasure) {
-          if (chap.hasAllTreasures(this)) {
-            openExitLock();
-            return new MazeEventExitUnlocked(this, chap.container, path, d, p, exitlock);
-          }
-        }
-        // should never be able to pick up more than one thing in one go.
-        return new MazeEventPickup(this, chap.container, path, d, p);
-      }
-    }
-    return null;
+    return false;
   }
 
   /**
@@ -301,7 +329,7 @@ public class Maze {
    * @param d the direction in which to push
    * @return the MazeEvent for pushing the crate
    */
-  public MazeEventPushed tryPushCrate(Crate c, Direction d) {
+  public boolean tryPushCrate(PathTile current, Crate c, Direction d) {
     Tile destination = tileTo(c.container, d);
     // if the tile we try to push to is a pathtile
     if (destination instanceof PathTile) {
@@ -311,14 +339,16 @@ public class Maze {
       if (pt.isWalkable()) {
         pt.moveTo(c);
         // can also push crate onto water to make a path
-        return new MazeEventPushed(this, chap.container, original, d, c);
       } else if (pt.getBlocker() instanceof Water) {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-        return new MazeEventPushedWater(this, chap.container, original, d, c);
+      }else {
+        return false;
       }
+      overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
+      return true;
     }
-    return null;
+    return false;
   }
 
   public Tile tileTo(Tile t, Direction d) {

@@ -31,8 +31,8 @@ public class Main {
     MazeLoader mazeLoader = new MazeLoader();
 
     Maze maze = levels[7];
-    Maze persistenceTestMaze = MazeToJsonTest.testLoader();
-    Gui gui = new Gui(BoardRig.lesson1());
+    //Maze persistenceTestMaze = MazeToJsonTest.testLoader();
+    Gui gui = new Gui(maze);
 //  Gui gui = new Gui(persistenceTestMaze);
     gui.getFrame().setVisible(true);
   }

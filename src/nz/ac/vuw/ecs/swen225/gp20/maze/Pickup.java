@@ -17,14 +17,9 @@ public abstract class Pickup extends Containable {
   public Pickup(String filename, String initials) {
     super(filename, initials);
   }
-
-  /**
-   * Pick up this Pickup
-   *
-   * @param c Chap
-   */
-  public void addToInventory(Chap c) {
-    this.container.remove(this);
-    c.pickup(this);
+  
+  @Override
+  public void onWalked(Maze m) {
+    m.getChap().pickup(this);
   }
 }
