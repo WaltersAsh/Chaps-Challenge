@@ -21,4 +21,17 @@ public class MazeToJsonTest {
     System.out.println(jsonString);
     mapper.readValue(jsonString, Maze.class);
   }
+
+  public static Maze testLoader() {
+    String jsonString = null;
+    try {
+      jsonString = mapper.writeValueAsString(m);
+      System.out.println(jsonString);
+      Maze m2 = mapper.readValue(jsonString, Maze.class);
+      return m2;
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
