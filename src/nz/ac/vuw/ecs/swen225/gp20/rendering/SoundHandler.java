@@ -14,6 +14,8 @@ public class SoundHandler extends MazeEventListener{
   private SoundEffect prevSound = null;
   private SoundEffect currentSound = null;
 
+  private boolean scaryMode = true;
+
   private Random random = new Random();
 
   public SoundHandler(Maze m) {
@@ -44,6 +46,11 @@ public class SoundHandler extends MazeEventListener{
     sounds.put("EL", new SoundEffect("resources/sound_effects/exit/unlocked.wav"));
     sounds.put("WT", new SoundEffect("resources/sound_effects/water/splash.wav"));
     sounds.put("XX", new SoundEffect("resources/sound_effects/crate/grindstone_use1pitch.wav"));
+
+    sounds.put("PB", new SoundEffect("resources/sound_effects/portal/throw.wav"));
+    sounds.put("PR", new SoundEffect("resources/sound_effects/portal/throw.wav"));
+    sounds.put("PG", new SoundEffect("resources/sound_effects/portal/throw.wav"));
+    sounds.put("PY", new SoundEffect("resources/sound_effects/portal/throw.wav"));
   }
 
   public void initialiseListSounds() {
@@ -102,6 +109,11 @@ public class SoundHandler extends MazeEventListener{
   }
 
   @Override
+  public void update(MazeEventTeleported e) {
+    playSound(e.getTeleporter().getInitials());
+  }
+
+  @Override
   public void update(MazeEventPushedWater e) {
     playSound("WT");
 
@@ -110,7 +122,7 @@ public class SoundHandler extends MazeEventListener{
   @Override
   public void update(MazeEventWalked e) {
     playRandomSound(pathSounds);
-    if(random.nextInt(25)==1){
+    if(random.nextInt(100)==1&&scaryMode){
       playRandomSound(ghastSounds);
     }
   }
