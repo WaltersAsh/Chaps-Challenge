@@ -10,14 +10,14 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
  *
  */
 public class MazeEventWon extends MazeEventWalked {
-  public MazeEventWon(Maze maze, PathTile origin, PathTile destination, Direction direction) {
-    super(maze, origin, destination, direction);
+  public MazeEventWon(Maze maze, PathTile origin, PathTile target, Direction direction) {
+    super(maze, origin, target, direction);
   }
 
   @Override
   public String toString() {
     return String.format("Walked onto the exit tile at %s,%s and beat the level!",
-        destination.getCol(), destination.getRow());
+        target.getCol(), target.getRow());
   }
   
   @Override

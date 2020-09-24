@@ -36,7 +36,7 @@ public class Maze {
 
   // Output
   private List<MazeEventListener> listeners = new ArrayList<>();
-  private Queue<MazeEventWalked> dispatch = new ArrayDeque<>();
+  private MazeEventWalked dispatch;
 
   /**
    * Constuct empty Board with a width and height
@@ -112,6 +112,23 @@ public class Maze {
   }
 
   /**
+   * Replace the event to be dispatched if the new event is a subclass of it
+   *
+   * @param event the new event
+   */
+  private void overrideDispatch(MazeEventWalked event) {
+    // System.out.printf("trying to override current dispatch %s with new %s\n", dispatch, event);
+    if(dispatch==null) {
+      dispatch = event;
+    }else {
+      if(dispatch.getClass().isAssignableFrom(event.getClass())) {
+        dispatch = event;
+      }
+    }
+    // System.out.printf("dispatch = %s\n", dispatch);
+  }
+
+  /**
    * Try to move in a direction.
    *
    * @param d   the direction
@@ -131,18 +148,17 @@ public class Maze {
       PathTile next = (PathTile) check;
       if(next.isWalkable()) {
         checkWalked(next, d);
-        if(dispatch.isEmpty()) { // no special events happened but we still moved
-          dispatch.offer(new MazeEventWalked(this, chap.getContainer(), next, d));
-        }
+
+        overrideDispatch(new MazeEventWalked(this, chap.getContainer(), next, d));
+
       }else {
         checkBlocking(next, d);
       }
     }
-    System.out.println(dispatch);
-    while(!dispatch.isEmpty()) {
-      MazeEventWalked e = dispatch.poll();
-      e.getDestination().moveTo(chap);
-      broadcast(e);
+    if(dispatch!=null) {
+      dispatch.getDestination().moveTo(chap);
+      broadcast(dispatch);
+      dispatch = null;
     }
   }
 
@@ -160,33 +176,35 @@ public class Maze {
 
   private void checkTrigger(PathTile next, Direction d, Trigger t) {
     if(t instanceof InfoField) {
-      dispatch.offer(new MazeEventInfoField(this, chap.getContainer(), next, d, (InfoField)t));
+      overrideDispatch(new MazeEventInfoField(this, chap.getContainer(), next, d, (InfoField)t));
     }else if(t instanceof Exit) {
-      dispatch.offer(new MazeEventWon(this, chap.getContainer(), next, d));
+      overrideDispatch(new MazeEventWon(this, chap.getContainer(), next, d));
       pause();
     }else if(t instanceof Teleporter) {
       Teleporter tp = (Teleporter)t;
-      dispatch.offer(new MazeEventTeleported(this, chap.getContainer(), tp.getDestination(), d, tp));
+      overrideDispatch(new MazeEventTeleported(this, chap.getContainer(), next, d, tp));
     }
   }
 
   public void checkPickup(PathTile next, Direction d, Pickup p) {
+    chap.pickup(p);
     if(p instanceof Treasure) {
       checkTreasure(next, d, (Treasure) p);
-      if(chap.hasAllTreasures(this)) openExitLock();
-      dispatch.offer(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, p, exitlock));
+      if(chap.hasAllTreasures(this)) {
+        openExitLock();
+        overrideDispatch(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, p, exitlock));
+      }
     }else if(p instanceof Key) {
 
     }
-    chap.pickup(p);
-    dispatch.offer(new MazeEventPickup(this, chap.getContainer(), next, d, p));
+    overrideDispatch(new MazeEventPickup(this, chap.getContainer(), next, d, p));
   }
 
   public void checkTreasure(PathTile next, Direction d, Treasure t) {
-    System.out.println(chap.hasAllTreasures(this));
+
     if(chap.hasAllTreasures(this)){
       openExitLock();
-      dispatch.add(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, t, exitlock));
+      overrideDispatch(new MazeEventExitUnlocked(this, chap.getContainer(), next, d, t, exitlock));
     }
   }
 
@@ -222,7 +240,7 @@ public class Maze {
       if (!key.getColor().equals(KeyColor.GREEN)) {
         chap.getKeys().remove(key);
       }
-      dispatch.offer(new MazeEventUnlocked(this, chap.container, door.container, d, door, key));
+      overrideDispatch(new MazeEventUnlocked(this, chap.container, door.container, d, door, key));
     }
   }
 
@@ -249,7 +267,7 @@ public class Maze {
       }else {
         return;
       }
-      dispatch.offer(new MazeEventPushedWater(this, chap.container, original, d, c));
+      overrideDispatch(new MazeEventPushedWater(this, chap.container, original, d, c));
     }
   }
 

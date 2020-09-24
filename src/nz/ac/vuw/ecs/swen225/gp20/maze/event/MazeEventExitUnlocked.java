@@ -11,16 +11,16 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class MazeEventExitUnlocked extends MazeEventPickup {
   protected ExitLock exitlock;
 
-  public MazeEventExitUnlocked(Maze maze, PathTile origin, PathTile destination, Maze.Direction direction,
+  public MazeEventExitUnlocked(Maze maze, PathTile origin, PathTile target, Maze.Direction direction,
       Pickup picked, ExitLock exitlock) {
-    super(maze, origin, destination, direction, picked);
+    super(maze, origin, target, direction, picked);
     this.exitlock= exitlock;
   }
 
   @Override
   public String toString() {
-    return String.format("Picked up final treasure %s at %s,%s and unlocked %s", picked, destination.getCol(),
-        destination.getRow(), exitlock);
+    return String.format("Picked up final treasure %s at %s,%s and unlocked %s", picked, target.getCol(),
+        target.getRow(), exitlock);
   }
   
   @Override

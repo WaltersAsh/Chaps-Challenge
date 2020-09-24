@@ -5,7 +5,7 @@ import java.util.Random;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 
 public class PathFinder {
-  
+
   public enum Mode{
     STRAIGHT_CLOCKWISE,
     STRAIGHT_ANTICLOCKWISE,
@@ -13,15 +13,15 @@ public class PathFinder {
     RANDOM,
     ASTAR,
   }
-  
+
   Maze maze;
-  Random random = new Random();
+  Random random = new Random(777);
   Direction previous = randomDirection();
 
   public PathFinder(Maze m) {
     maze = m;
   }
-  
+
   private Direction randomDirection() {
     return Direction.values()[random.nextInt(Direction.values().length)];
   }
@@ -40,7 +40,7 @@ public class PathFinder {
       throw new IllegalArgumentException();
     }
   }
-  
+
   public static Direction antiClockwise(Direction direction){
     switch(direction) {
     case DOWN:
@@ -55,10 +55,10 @@ public class PathFinder {
       throw new IllegalArgumentException();
     }
   }
-  
+
   /**
    * Whether this PathFinder is trapped (can't move)
-   * 
+   *
    * @param current
    * @return
    */
@@ -67,7 +67,7 @@ public class PathFinder {
            maze.tileTo(current, Direction.DOWN).isWalkable() ||
            maze.tileTo(current, Direction.LEFT).isWalkable() ||
            maze.tileTo(current, Direction.RIGHT).isWalkable());
-    
+
   }
 
   public Direction next(Tile current, Mode mode) {
@@ -75,7 +75,7 @@ public class PathFinder {
       return null;
     }
     Direction next = null;
-    
+
     switch(mode) {
     case ASTAR:
       next = nextAStar(current);
@@ -100,20 +100,20 @@ public class PathFinder {
     }
     return next;
   }
-  
+
   private Direction nextAStar(Tile current) {
     return null;
   }
-  
+
   private Direction nextRandom(Tile current) {
-    
+
     Direction next = randomDirection();
     while(!maze.tileTo(current, next).isWalkable()) {
       next = randomDirection();
     }
     return next;
   }
-  
+
   private Direction nextStraightRotation(Tile current, boolean clockwise) {
     // go straight if possible
     Direction next = previous;
@@ -130,15 +130,15 @@ public class PathFinder {
       return next;
     }
   }
-  
+
   private Direction nextStraightClockwise(Tile current) {
     return nextStraightRotation(current, true);
   }
-  
+
   private Direction nextStraightAntiClockwise(Tile current) {
     return nextStraightRotation(current, false);
   }
-  
+
   private Direction nextStraight(Tile current) {
     Direction next = clockwise(clockwise(previous)); // 180 degrees
     if(maze.tileTo(current, previous).isWalkable()) {
