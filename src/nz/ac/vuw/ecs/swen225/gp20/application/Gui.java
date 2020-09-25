@@ -40,7 +40,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
-import nz.ac.vuw.ecs.swen225.gp20.recordAndReplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -157,7 +157,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Gui(Maze maze) {
     this.maze = maze;
-    recnplay = new RecordAndReplay(maze);
+    recnplay = new RecordAndReplay(this);
     // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
@@ -516,20 +516,33 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == loadMenuItem) {
       openFileChooser(true);
 
+
       //recnplay menu functionalities
     } else if (e.getSource() == startRecordingMenuItem) {
-      recnplay.startRecording();
+      RecordAndReplay.startRecording();
       recordingIcon.setVisible(true);
-    } else if (e.getSource() == stopRecordingMenuItem) {
-      recnplay.stopRecording();
+
+    } else if (e.getSource() == stopRecordingMenuItem && RecordAndReplay.isRecording()) {
+      RecordAndReplay.stopRecording();
       recordingIcon.setVisible(false);
+      openFileChooser(false);
+      RecordAndReplay.saveRecording(file.toString());
+
     } else if (e.getSource() == playMenuItem) {
+      recnplay.playRecording();
+
     } else if (e.getSource() == stopPlayMenuItem) {
+
     } else if (e.getSource() == loadRecordingMenuItem) {
       openFileChooser(true);
+      RecordAndReplay.loadRecording(file);
+
+      //no need for save recording button any more as
+      //recnplay automatically promts user to save when the recording stops
     } else if (e.getSource() == saveRecordingMenuItem) {
       openFileChooser(false);
     }
+
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
