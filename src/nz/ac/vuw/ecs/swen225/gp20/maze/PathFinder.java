@@ -2,8 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
-
+@JsonIgnoreType
 public class PathFinder {
 
   public enum Mode{
@@ -148,5 +150,6 @@ public class PathFinder {
     }
     return null;
   }
+
 
 }

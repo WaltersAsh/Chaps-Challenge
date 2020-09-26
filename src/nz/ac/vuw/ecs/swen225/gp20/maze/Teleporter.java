@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
 
 /**
@@ -33,10 +35,15 @@ public class Teleporter extends Trigger {
     return color;
   }
 
+  @JsonIgnore
   public PathTile getDestination() {
     return other.getContainer();
   }
-  
+
+  public void setColor(KeyColor color) {
+    this.color = color;
+  }
+
   @Override
   public void onWalked(Maze m) {
     getDestination().moveTo(m.getChap());
