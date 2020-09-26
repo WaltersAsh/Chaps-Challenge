@@ -1,19 +1,22 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The Maze board, which keeps track of the Tiles and logic in the game
  *
  * @author Ian 300474717
- *
  */
 
 public class Maze {
   // TODO: fix all the comments, outdated because of rewrite
-  
+
   /**
    * Instantiates a new Maze. For Jackson.
    */
@@ -77,10 +80,12 @@ public class Maze {
     this.levelFinished = levelFinished;
   }
 
+  @JsonIgnore
   public Timer getTimer() {
     return timer;
   }
 
+  @JsonIgnore
   public void setTimer(Timer timer) {
     this.timer = timer;
   }
@@ -165,8 +170,8 @@ public class Maze {
   /**
    * Add a listener which will respond to MazeEvents produced by this Maze.
    *
-   * @param <L>       any type which extends MazeEventListener
-   * @param listener  the object which will listen to events
+   * @param <L>      any type which extends MazeEventListener
+   * @param listener the object which will listen to events
    */
   public <L extends MazeEventListener> void addListener(L listener) {
     listeners.add(listener);
@@ -174,6 +179,7 @@ public class Maze {
 
   /**
    * Broadcast MazeEvents to any MazeEventListeners we may have.
+   *
    * @param event
    */
   public void broadcast(MazeEvent event) {
@@ -190,10 +196,10 @@ public class Maze {
    */
   private void overrideDispatch(MazeEventWalked event) {
     // System.out.printf("trying to override current dispatch %s with new %s\n", dispatch, event);
-    if(dispatch==null) {
+    if (dispatch == null) {
       dispatch = event;
-    }else {
-      if(dispatch.getClass().isAssignableFrom(event.getClass())) {
+    } else {
+      if (dispatch.getClass().isAssignableFrom(event.getClass())) {
         dispatch = event;
       }
     }
@@ -203,7 +209,7 @@ public class Maze {
   /**
    * Try to move in a direction.
    *
-   * @param d   the direction
+   * @param d the direction
    */
   public void move(Direction d) {
     if (d == Direction.LEFT) {
@@ -218,57 +224,57 @@ public class Maze {
 
     if (check instanceof PathTile) {
       PathTile next = (PathTile) check;
-      
-      if(next.isWalkable()) {
+
+      if (next.isWalkable()) {
         next.moveTo(chap);
         checkWalked(current, next, d);
         overrideDispatch(new MazeEventWalked(this, current, next, d));
-      }else {
-        if(checkBlocking(current, next, d)) {
+      } else {
+        if (checkBlocking(current, next, d)) {
           next.moveTo(chap);
         }
       }
     }
-    
-    if(dispatch!=null) {
+
+    if (dispatch != null) {
       broadcast(dispatch);
       dispatch = null;
     }
   }
 
   public void checkWalked(PathTile current, PathTile next, Direction d) {
-    if(next.getContainedEntities().isEmpty())return;
-    for(int i=next.getContainedEntities().size()-1; i>=0; i--) {
+    if (next.getContainedEntities().isEmpty()) return;
+    for (int i = next.getContainedEntities().size() - 1; i >= 0; i--) {
       Containable c = next.getContainedEntities().get(i);
       c.onWalked(this);
-      if(c instanceof Pickup) {
+      if (c instanceof Pickup) {
         checkPickup(current, next, d, (Pickup) c);
-      }else if(c instanceof Trigger) {
+      } else if (c instanceof Trigger) {
         checkTrigger(current, next, d, (Trigger) c);
       }
     }
   }
 
   private void checkTrigger(PathTile current, PathTile next, Direction d, Trigger t) {
-    if(t instanceof InfoField) {
-      overrideDispatch(new MazeEventInfoField(this, current, next, d, (InfoField)t));
-    }else if(t instanceof Exit) {
+    if (t instanceof InfoField) {
+      overrideDispatch(new MazeEventInfoField(this, current, next, d, (InfoField) t));
+    } else if (t instanceof Exit) {
       overrideDispatch(new MazeEventWon(this, current, next, d));
       pause();
-    }else if(t instanceof Teleporter) {
-      Teleporter tp = (Teleporter)t;
+    } else if (t instanceof Teleporter) {
+      Teleporter tp = (Teleporter) t;
       overrideDispatch(new MazeEventTeleported(this, current, next, d, tp));
     }
   }
 
   public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
-    if(p instanceof Treasure) {
+    if (p instanceof Treasure) {
       checkTreasure(next, current, d, (Treasure) p);
-      if(chap.hasAllTreasures(this)) {
+      if (chap.hasAllTreasures(this)) {
         openExitLock();
         overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, p, exitlock));
       }
-    }else if(p instanceof Key) {
+    } else if (p instanceof Key) {
 
     }
     overrideDispatch(new MazeEventPickup(this, current, next, d, p));
@@ -276,7 +282,7 @@ public class Maze {
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
 
-    if(chap.hasAllTreasures(this)){
+    if (chap.hasAllTreasures(this)) {
       openExitLock();
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock));
     }
@@ -284,11 +290,11 @@ public class Maze {
 
   /**
    * Check if we can move onto a b PathTile
-   *
+   * <p>
    * We could move onto it if we had the matching key to the blocking door.
    *
-   * @param blocked   the PathTile to check
-   * @return          the event for moving to it if we did
+   * @param blocked the PathTile to check
+   * @return the event for moving to it if we did
    */
   public boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
@@ -296,7 +302,7 @@ public class Maze {
       return tryUnlockDoor(current, (Door) bc, d);
     } else if (bc instanceof Crate) {
       return tryPushCrate(current, (Crate) bc, d);
-    }else {
+    } else {
       return false;
     }
   }
@@ -304,9 +310,9 @@ public class Maze {
   /**
    * Check if we could open a door.
    *
-   * @param door  the door to check
-   * @param d     the direction we moved to
-   * @return      the event if we opened the door and moved, null if we didn't
+   * @param door the door to check
+   * @param d    the direction we moved to
+   * @return the event if we opened the door and moved, null if we didn't
    */
   public boolean tryUnlockDoor(PathTile current, Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
@@ -342,7 +348,7 @@ public class Maze {
       } else if (pt.getBlocker() instanceof Water) {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-      }else {
+      } else {
         return false;
       }
       overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
@@ -353,16 +359,16 @@ public class Maze {
 
   public Tile tileTo(Tile t, Direction d) {
     switch (d) {
-    case DOWN:
-      return tiles[t.row + 1][t.col];
-    case LEFT:
-      return tiles[t.row][t.col - 1];
-    case RIGHT:
-      return tiles[t.row][t.col + 1];
-    case UP:
-      return tiles[t.row - 1][t.col];
-    default:
-      return null;
+      case DOWN:
+        return tiles[t.row + 1][t.col];
+      case LEFT:
+        return tiles[t.row][t.col - 1];
+      case RIGHT:
+        return tiles[t.row][t.col + 1];
+      case UP:
+        return tiles[t.row - 1][t.col];
+      default:
+        return null;
     }
   }
 
@@ -370,7 +376,7 @@ public class Maze {
    * Setup the timer, but only if it's needed.
    */
   public void setupTimer() {
-    if(!enemies.isEmpty()) {
+    if (!enemies.isEmpty()) {
       timer = new Timer();
       timer.schedule(new TimerTask() {
 
@@ -388,7 +394,7 @@ public class Maze {
   public void tickPathFinding() {
     for (Enemy e : enemies) {
       Direction next = e.tickPathFinding();
-      if(next==null) continue;
+      if (next == null) continue;
       PathTile pt = (PathTile) tileTo(e.getContainer(), next);
       broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
       pt.moveTo(e);
@@ -399,7 +405,7 @@ public class Maze {
    * Pause the game (suspending the game timer).
    */
   public void pause() {
-    if(timer!=null) {
+    if (timer != null) {
       timer.cancel();
     }
   }
