@@ -8,11 +8,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  *
  * @author Ian 300474717
  */
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Exit.class),
-        @JsonSubTypes.Type(value = Teleporter.class), @JsonSubTypes.Type(value = Key.class),
-        @JsonSubTypes.Type(value = Treasure.class)
-})
+//@JsonSubTypes({
+//        @JsonSubTypes.Type(value = Exit.class),
+//        @JsonSubTypes.Type(value = Teleporter.class), @JsonSubTypes.Type(value = Key.class),
+//        @JsonSubTypes.Type(value = Treasure.class)
+//})
 
 public abstract class Containable extends Drawable {
 
