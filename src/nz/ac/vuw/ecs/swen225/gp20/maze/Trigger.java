@@ -8,6 +8,8 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 
 public abstract class Trigger extends Containable {
+  public Trigger() {
+  }
 
   public Trigger(String filename, String initials) {
     super(filename, initials);
