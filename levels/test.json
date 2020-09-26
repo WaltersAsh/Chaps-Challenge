@@ -1,0 +1,3144 @@
+{
+  "width": 17,
+  "height": 16,
+  "tiles": [
+    [
+      {
+        "@c": ".PathTile",
+        "id": "63c08649-91f4-4cdc-a3af-d338078bd209",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2c9c924b-95b6-4d9e-a7f8-33215c99ed7f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "447b1bd8-067e-4a81-bfa1-bf48e4131d09",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2cf00e27-fd1a-4c82-8819-a14d9857b63d",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "175c4f96-0e60-400b-b72e-cf6ca5de2eab",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "50a059dc-96ac-4594-98db-a93e40de3958",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 5,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "54e3fc55-df0e-445c-9b04-ec9509499e46",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "be0d190c-4857-468b-8bd3-217babce1603",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a79f9a3e-765c-4fa8-95b6-ee0e1007edf2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5ca88d88-1cc0-4103-b1e5-eceebe1054d9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "64055044-fa16-4772-89b7-bafdf256c427",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "c49f0b84-f76f-458d-820c-45ce3cb56d28",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 11,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "cdb68d74-9fd3-4f10-a059-f01f24261d0c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "60d9badb-9d73-4b41-b8ba-9378b01141a8",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "7350b06e-316f-4da8-9102-379991e0f79b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5ecb2f10-751f-49b4-9d9b-b6f06deb621e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "813ead75-9421-4cf5-8944-b69d15eb887c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 0,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "cd0a3f15-3b71-4cb8-9e7b-ec165849a4d3",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4bbaa9f7-f23e-4385-837e-3772783be985",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0fcd0d4e-5a9f-4c9e-a7c1-237ffa407e19",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a73227af-3554-4c4b-9584-46d2c47a8bc8",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "09a797ce-9d15-45ea-a9d8-8af912de320c",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 4,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "13ffe5ce-7edc-4de2-95b0-8319aeccb1cc",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "6a7493e1-cdaa-4bc3-a288-c3ce966f78c3",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 6,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "2518777c-c176-40da-953c-d522818dda9d",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 7,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "1746f17c-97ab-4c66-abe1-882163f936d7",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "51d1972d-30d3-4a76-8c8d-f9c4ff83dfe6",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 9,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "13e77e55-49ad-45da-834f-3d7ad822adb8",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 10,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "034242c8-6710-44cf-a357-ff88ad91b7ee",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "1c6ddd62-b473-44cc-89ec-0c5c47764e12",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 12,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "0c8165ea-370d-42ba-8061-94442a557f40",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 1,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "103abb9a-62a3-4bb4-98d3-7fa8102ec744",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "50a28f40-f5b9-42e3-a8b3-4e3b068cf2d0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "8f00da5c-0093-4a11-add8-f2c0b03e54e4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 1,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "a9b883d2-4ed5-4ccd-b2b3-d6c5f9a77dd1",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2058b8aa-7da0-4b38-8ae8-9435978343e1",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a395e7f0-4305-4cf3-8cb2-bc4ed4486f12",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "cb49899f-7d3c-429f-b03c-a0daff04786a",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 2,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "728eaa36-dd79-43ab-b0d0-73a90056aa52",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ff568c0b-9118-4fac-ba0d-b50d175c522d",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 5,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a7347a69-0c3e-4da9-addb-1dd7317952d0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "9e5a7f5b-07bd-4922-bdec-79ca6865eaa9",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 2,
+        "col": 7,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "b0a62069-6563-4e84-8c17-ae81987b408d",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 2,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "9422d234-14af-4aed-adc7-1ef11ff87094",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 2,
+        "col": 9,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "8c2e86f2-64c6-4018-a5d7-db8873f8b853",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "edd86b64-62cd-443d-9d3c-0cb8bde6d0b0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 11,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "3da6b7f9-a0e6-40e0-ba15-4e2c434e59a2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "561ae002-1cb4-477c-8dfa-70e11601e9f7",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 2,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "d349f3b7-3834-40ba-9179-94bc11418670",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5a398d68-a266-497f-9701-dc3227eb8dc9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "63b2bbc6-5001-414f-85d5-77c211bc86aa",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 2,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "622818fd-3c83-4357-8628-06a57e4d1ce2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6d63306b-b164-41fc-b84b-fb5ad5454a53",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ff4c0d00-2db0-4ccf-8346-f45f09405812",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "2e7f691a-c3e7-449a-ba60-fd8eda330f9d",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 3,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b50e6c46-cef9-4419-b9ae-9d380e49506b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2c14cbfa-76ef-44b3-8e2d-a634bd06705b",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 5,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "d1b1a233-8f3e-4f55-bd43-06cbf1c0093a",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "2c14cbfa-76ef-44b3-8e2d-a634bd06705b"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "7b39ea88-51a0-40d0-a976-064e77fc3835",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "f30a4a07-e088-4a22-8caf-76b4c51c1325",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 3,
+        "col": 7,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "24bd6089-f202-40df-9cf1-31b204f250cd",
+        "initials": "EX",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Exit",
+            "id": "2a748ee5-432a-432f-a7e2-fddf128fd37c",
+            "initials": "EX",
+            "filename": "resources/textures/board/pickup/netherportal.gif",
+            "container": "24bd6089-f202-40df-9cf1-31b204f250cd"
+          }
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "cc85b83e-f498-4b8c-ba53-0672079b797f",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 3,
+        "col": 9,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "73181923-10eb-44c1-bc51-ffbadb2106bd",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "c51ea6b4-c56d-41e7-a5dd-c1a8b4491147",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 11,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "97c6b106-0bce-4feb-bd05-9649751b365f",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "c51ea6b4-c56d-41e7-a5dd-c1a8b4491147"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "753c5afc-b62b-4039-bb5e-f918020e152e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "eab5a8f8-7eb3-42ba-b91f-427b105ebd38",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 3,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a8f0b208-b904-4964-8fd3-4c5f227b158d",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "762c4963-78b0-4390-982f-9a2415863658",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2affbd24-d1cd-47d6-be4e-53363c3b3f80",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 3,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "464a904f-6598-4156-b9a8-dd8a7fa32bc9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 4,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "79ebc250-0d53-4ec8-967a-a0f65eaec285",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "0756e0de-85ec-49c7-a5cd-7b10777c0221",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 2,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "65ea67e1-24e2-4802-a666-daf3d325d296",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "be055e4a-96fb-4d8e-9f7a-5a627ff1c308",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 4,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "2ebcd740-5f71-4d13-b4f6-7f13cdacbd96",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "65d801e0-bae7-44c5-9037-e8d76591dc87",
+        "initials": "DG",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 4,
+        "col": 6,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "df6938a2-06ad-4c75-ab39-02e6b73f6997",
+          "initials": "DG",
+          "filename": "resources/textures/board/blocking/doors/diamond_block.png",
+          "container": "65d801e0-bae7-44c5-9037-e8d76591dc87",
+          "color": "GREEN"
+        },
+        "containedEntities": [
+          "df6938a2-06ad-4c75-ab39-02e6b73f6997"
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "b2681bf9-3bfc-45a9-8485-d7cf254948bc",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 7,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "45df0550-8bd5-472f-8f65-5cc05e052084",
+        "initials": "EL",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 4,
+        "col": 8,
+        "walkable": false,
+        "blocker": {
+          "@c": ".ExitLock",
+          "id": "1f7395aa-a20d-42ed-bd83-da20e6fd5a55",
+          "initials": "EL",
+          "filename": "resources/textures/board/blocking/doors/bedrock.png",
+          "container": "45df0550-8bd5-472f-8f65-5cc05e052084"
+        },
+        "containedEntities": [
+          "1f7395aa-a20d-42ed-bd83-da20e6fd5a55"
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "fef1b53d-1615-4714-a643-186e7aab496a",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 9,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ab590cc6-dd63-4189-9bd0-3fb7b0fc7a55",
+        "initials": "DG",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 4,
+        "col": 10,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "71dfa883-a9b5-4ce0-9b3f-318ae40b3bb5",
+          "initials": "DG",
+          "filename": "resources/textures/board/blocking/doors/diamond_block.png",
+          "container": "ab590cc6-dd63-4189-9bd0-3fb7b0fc7a55",
+          "color": "GREEN"
+        },
+        "containedEntities": [
+          "71dfa883-a9b5-4ce0-9b3f-318ae40b3bb5"
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "d194e45f-fc08-4635-9d96-5ca439ed0bb5",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a1e9c3ed-5da9-4a5d-a806-154118ad98fa",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 12,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "5f83b407-d128-4acc-bfa8-f01aa4d68c35",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "128ce2e0-6db8-4094-9470-34c1d68eabe6",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 14,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "cf071851-eb25-4b03-bbf0-9dd6ecf04752",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 4,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a8c46a0e-62ad-470c-90d7-e447f27ad18e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 4,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "03abffac-d109-47ba-b20b-5dcec632b965",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "20754d0b-efe7-4f82-8515-b3f43225bef1",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 5,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "d507e07a-b82c-491d-836a-396055b24352",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0b4f1dd4-be4f-4fc6-96ab-e3779e45976d",
+        "initials": "KY",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "43113eaa-4c39-4b95-982d-cc2c0ef0d002",
+            "initials": "KY",
+            "filename": "resources/textures/board/pickup/keys/golden_pickaxe.png",
+            "container": "0b4f1dd4-be4f-4fc6-96ab-e3779e45976d",
+            "color": "YELLOW"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "c34adc22-8e92-48d4-838c-6abaedfe8f85",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "985f8218-64be-475c-b6d1-6910edc298ba",
+        "initials": "DB",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 5,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "c1148895-7282-4854-a04f-b9920eaa1d93",
+          "initials": "DB",
+          "filename": "resources/textures/board/blocking/doors/spruce_planks.png",
+          "container": "985f8218-64be-475c-b6d1-6910edc298ba",
+          "color": "BLUE"
+        },
+        "containedEntities": [
+          "c1148895-7282-4854-a04f-b9920eaa1d93"
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "665c1d73-ef3b-45dc-9f81-3a5eed3f6f75",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4e639e1c-80ea-4bee-b038-e26af727c0c0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "9ca24a86-2fe4-4365-a7aa-2b8140dcf6ce",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "f94965f0-f77b-4d18-b217-43357679ad5d",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6f6efe21-c3b9-4b6f-89c2-eb44f5a506f0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "e19c5342-19a7-4b04-803e-2e5e086c3225",
+        "initials": "DR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 11,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "256095be-e7f2-44a3-87a3-dbae96d43f9c",
+          "initials": "DR",
+          "filename": "resources/textures/board/blocking/doors/iron_block.png",
+          "container": "e19c5342-19a7-4b04-803e-2e5e086c3225",
+          "color": "RED"
+        },
+        "containedEntities": [
+          "256095be-e7f2-44a3-87a3-dbae96d43f9c"
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "f01fd58a-0653-423d-b557-e787ce43a8c4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "58bf8e9c-34b7-49bc-82de-071515aeacec",
+        "initials": "KY",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "25514e4d-30bd-4d7a-8200-dc71c75502b0",
+            "initials": "KY",
+            "filename": "resources/textures/board/pickup/keys/golden_pickaxe.png",
+            "container": "58bf8e9c-34b7-49bc-82de-071515aeacec",
+            "color": "YELLOW"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "548963c2-8d12-4098-80fa-b6af90eca3bb",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "9aba8f18-4223-4a8a-bfa0-fecce7ab0a1a",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 5,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ba0a3621-9ce8-4b9a-900f-cf313ec48ac4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 5,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "82e8f0b2-8fde-4436-8fb2-a1dcfe384982",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "3dcb0d7a-1f22-4d78-9f08-9acb05e6b324",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 6,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "435b5a18-6272-423d-919e-e373acac308b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "dbcac8f4-f84e-4be2-b9a7-6b442078c093",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "55306119-3c3a-4b6c-bdea-ede9055bf4c2",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "dbcac8f4-f84e-4be2-b9a7-6b442078c093"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2be3aace-baea-47a6-b42e-188e571b13c2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "cb4409f0-563e-4fc6-b4da-5620e0ced2e4",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 6,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "187d51ef-8946-4259-90aa-72595a79a342",
+        "initials": "KB",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "8195c596-1ae6-4203-a983-8f2463bdc8fc",
+            "initials": "KB",
+            "filename": "resources/textures/board/pickup/keys/wooden_pickaxe.png",
+            "container": "187d51ef-8946-4259-90aa-72595a79a342",
+            "color": "BLUE"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6e04352f-7a6a-44b2-b0cb-766f18db0ba5",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ac69f27f-dde8-4544-9de3-febe7dd95c78",
+        "initials": "IN",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".InfoField",
+            "id": "94416339-ead8-40e6-80a4-a9b145e74352",
+            "initials": "IN",
+            "filename": "resources/textures/board/pickup/sign.png",
+            "container": "ac69f27f-dde8-4544-9de3-febe7dd95c78",
+            "information": "testing"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b0f94e2d-5667-49b5-8e19-02ed41cb2067",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "bd78728e-7bc8-4cd1-84fb-0ec786af0ead",
+        "initials": "KR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "41e75cac-3255-4381-b6ec-e6f918900e42",
+            "initials": "KR",
+            "filename": "resources/textures/board/pickup/keys/iron_pickaxe.png",
+            "container": "bd78728e-7bc8-4cd1-84fb-0ec786af0ead",
+            "color": "RED"
+          }
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "85accb67-edd2-4fac-8175-8c2e47855a6f",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 6,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "fdb053fe-0b7a-4a16-9825-04800a9f6bc9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0357db76-41ed-4b56-880f-825ea0c9eb9e",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "ce47c086-57a7-4b64-b2ec-d63c684f16eb",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "0357db76-41ed-4b56-880f-825ea0c9eb9e"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "1fe7a908-64da-4c3b-96a4-b8e5a2b3f092",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "e2daa116-0e5b-4e5d-9c7a-f0e747cfd901",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 6,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0b48a587-4376-4163-9fd2-f106544f249b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 6,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "8ea50b2d-0b82-41e5-a80e-a2d5c94dd201",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "dbe27730-9ca2-40e7-916b-94754fa5a5e4",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "6b32487e-14e6-4982-b51c-417fa248649f",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 2,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "6548c290-3952-4b9d-99d2-391d423e506d",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "667928b2-9d47-4fa2-a53e-69f8e0120f6f",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 4,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "40df4563-ea68-4f76-a0c7-1497bfd668d3",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5b9c02d9-a344-41ea-b0f5-a99f52a92e50",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "daacc835-27a8-4623-9c0d-72a7a9edd0e7",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "5b9c02d9-a344-41ea-b0f5-a99f52a92e50"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6f60857f-8bc2-4200-860f-6b5f46046a7a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "e9143cb1-395b-4d5d-acbf-e0014bc15679",
+        "initials": "CH",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 8,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Chap",
+          "id": "e49d07e1-12c8-471d-8482-2bcb3cb7505c",
+          "initials": "CH",
+          "filename": "resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif",
+          "container": "e9143cb1-395b-4d5d-acbf-e0014bc15679",
+          "keys": [],
+          "treasures": [],
+          "left": "resources/textures/board/moveable/character_skins/new_player_skin/SteveLeft_WalkBig.gif",
+          "right": "resources/textures/board/moveable/character_skins/new_player_skin/SteveRight_WalkBig.gif"
+        },
+        "containedEntities": [
+          "e49d07e1-12c8-471d-8482-2bcb3cb7505c"
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "fe6507da-a049-4dd5-b79c-a1ba7d89fb2f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "774c5138-02c8-496e-879f-ab94f246fbbd",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "9b1117c8-722f-440c-8535-045e25722bea",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "774c5138-02c8-496e-879f-ab94f246fbbd"
+          }
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "d8988510-3b99-4706-b372-d9dad8bdd940",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "55f54554-edf1-424f-b62f-1fca596250d0",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 12,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "67dddcf2-79e6-4e50-9210-1c64d2ecdcd4",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "32285bd5-4d6d-4a9e-88de-99fab9a2f8b3",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 14,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "c8b2d499-7e96-4bcc-9596-d81460b9bcbf",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 7,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b17b84d3-e923-40eb-a2f3-18eeea21b02c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 7,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "855b8684-c1a3-4bac-9e1e-c86411f4160c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "35f79ba6-9c5a-43fc-8474-5f307bfff60a",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 8,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5dbe673c-3033-4609-b8bb-a614e4fe26e0",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b85bdf6f-1f5a-4f17-8d2e-8c83f0d75ee1",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "99e3513c-eacf-4a81-a7c4-e58257a31b14",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "b85bdf6f-1f5a-4f17-8d2e-8c83f0d75ee1"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "41f16461-0ab9-4189-ade4-5a0e908fbb9f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4544344c-935f-49d8-b800-e2796d4e4074",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 8,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "53abe744-4d5b-4589-bcf6-4d97fad37521",
+        "initials": "KB",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "2da4b206-c28f-417f-84e7-4c364aed3794",
+            "initials": "KB",
+            "filename": "resources/textures/board/pickup/keys/wooden_pickaxe.png",
+            "container": "53abe744-4d5b-4589-bcf6-4d97fad37521",
+            "color": "BLUE"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a846f7f0-e867-410b-a142-0be3e4728db1",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4e95756d-84cd-4c7d-a46f-2a94553cab9e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "f395a10e-1bc6-4b32-a66a-faec2f8391d4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "468e91c0-00a4-401c-85c3-946823ac6a0b",
+        "initials": "KR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "96912484-5d6a-4f30-8f0f-ed016391765f",
+            "initials": "KR",
+            "filename": "resources/textures/board/pickup/keys/iron_pickaxe.png",
+            "container": "468e91c0-00a4-401c-85c3-946823ac6a0b",
+            "color": "RED"
+          }
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "6c0dbae4-fd26-41c9-91b5-67f6e1d75741",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 8,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "1be23318-7c97-49c8-a868-3ee4d2df8fb4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5e7bdd44-e7a7-4789-aa6f-2aedaec1d23a",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "cff2dd8c-40fe-467f-966a-9ca0a6369040",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "5e7bdd44-e7a7-4789-aa6f-2aedaec1d23a"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5f73c1a9-c973-4649-9180-1aefab1239a4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a1ff287a-01c8-462a-a09c-af549019a95e",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 8,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "67f1ec17-aa89-4dfe-8765-6eebb25bef23",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 8,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "66d5243f-5468-469f-a4a4-16237b2db80f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a3f3daa8-77f4-4693-b66f-84fbe5cc422d",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 9,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6761c870-505f-4450-845f-073f5fddc53b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a614c8c0-1ab9-4241-9edb-264434fa264e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "18599959-0d6e-47a2-9550-1e0359b0ae45",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "17233803-d761-4c5f-8110-ed215d4a5174",
+        "initials": "DR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 5,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "6b222445-f7de-4a2d-bcc2-1a9dbfafdd58",
+          "initials": "DR",
+          "filename": "resources/textures/board/blocking/doors/iron_block.png",
+          "container": "17233803-d761-4c5f-8110-ed215d4a5174",
+          "color": "RED"
+        },
+        "containedEntities": [
+          "6b222445-f7de-4a2d-bcc2-1a9dbfafdd58"
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ed30d96f-065f-4085-9c2f-4416d771e639",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6b680894-a29c-4af5-bd23-5de5c9b5652f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4a3a4b7e-e305-472b-a99d-312c3ba40c3c",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "dc0963e2-795c-4600-8448-8176f1cacb56",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "4a3a4b7e-e305-472b-a99d-312c3ba40c3c"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0c6891dc-a20c-4fb5-8203-f6318dcb63aa",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "c41c2bf4-d622-4908-a1e2-c31abafc452f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "807a545c-2431-4c70-85dc-11e46fb0e91f",
+        "initials": "DB",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 11,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "3b66bdc4-9dee-45c9-8743-b2f9e64985ea",
+          "initials": "DB",
+          "filename": "resources/textures/board/blocking/doors/spruce_planks.png",
+          "container": "807a545c-2431-4c70-85dc-11e46fb0e91f",
+          "color": "BLUE"
+        },
+        "containedEntities": [
+          "3b66bdc4-9dee-45c9-8743-b2f9e64985ea"
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4edb04fb-3137-4b8f-b0d4-e61697801d96",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b8aa4d09-bb1b-46ab-b49e-bd1dd3291fd5",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "328ac65b-2405-4c67-af00-fa8a0c325961",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "2cae2600-f264-4e7d-a037-83ceefecea55",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 9,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "c32de45b-5e13-436e-aa06-ca9c9d97bf16",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 9,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "b97fc927-9e1b-486a-be6d-00a505a63881",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 10,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "1daea44e-7ba3-44fa-aa05-0bd8b9decae7",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 1,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4d627b19-9c64-4de8-ba21-7d934555c62b",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 2,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4631ebc8-b8e5-42ab-a56b-22a6a028aca0",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 3,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "ddf2918b-d570-47d1-bb19-1ba5664ecede",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 4,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "69d898cb-ef84-4c6e-a759-ccf667251449",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a0be2ad1-1460-4053-828c-2f84666e82e7",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 6,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0d17e9a1-af75-4d2f-82b6-84f7d48162fb",
+        "initials": "DY",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 10,
+        "col": 7,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "c96edbae-060e-4db7-a5de-872bf5397f35",
+          "initials": "DY",
+          "filename": "resources/textures/board/blocking/doors/gold_block.png",
+          "container": "0d17e9a1-af75-4d2f-82b6-84f7d48162fb",
+          "color": "YELLOW"
+        },
+        "containedEntities": [
+          "c96edbae-060e-4db7-a5de-872bf5397f35"
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4a471ea1-365a-4783-a2a1-15da7a65feb6",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "68f91f28-f1f8-4825-9946-7892e4d00435",
+        "initials": "DY",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 10,
+        "col": 9,
+        "walkable": false,
+        "blocker": {
+          "@c": ".Door",
+          "id": "aa362238-66a2-4aab-b56e-3ec260123f11",
+          "initials": "DY",
+          "filename": "resources/textures/board/blocking/doors/gold_block.png",
+          "container": "68f91f28-f1f8-4825-9946-7892e4d00435",
+          "color": "YELLOW"
+        },
+        "containedEntities": [
+          "aa362238-66a2-4aab-b56e-3ec260123f11"
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "8b9f673d-ed00-4bc1-8bb2-ad2522cab464",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 10,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "dbd9fa0c-1cf0-4a5a-b3a7-49e501caa387",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "39008205-b010-463c-8a64-d160c4433f32",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 12,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "56b683bb-1c87-4bd2-bd10-e8339d68b0f1",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 13,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "062da412-bfcf-48ec-9547-878f1d13d4ca",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 14,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "7dc396f8-faf6-4407-9be9-3c4d45c1ccc2",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 10,
+        "col": 15,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "08677e53-b48d-401f-9dcc-e3182330d124",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 10,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "de7544a7-ae78-4b36-8daf-81d51e46a99b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "bed2a914-8fb2-4656-bedc-c3447bed19c7",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "aa436b8e-97a8-4cf5-9a1e-117a2950deac",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "108ae297-c18e-4e59-b9e5-8ba155582256",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "37dde1c6-4ebf-43ec-a936-13beffbf2a4a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4ea78c5d-6dc6-46fb-96e9-b71752ce8c24",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 11,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "f6ab581a-97bb-4b0e-b23c-6bb982d75e6a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "cf8ab3d4-cd6c-4a65-bc4e-ba65b89b0dde",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "4454ab9a-de1c-4eb6-afc7-6e78368b09bc",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 11,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "17d4e2dd-3b31-41df-90a1-af3aa10e31a2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4d8d7763-8f67-4124-9350-431f47d64198",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "e6fae4c7-9fa3-4099-8b8a-76d124330696",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 11,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6f468161-f257-477d-b3ee-ccec4e7576c2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "8b6dfa1d-85cc-4d0d-8fc5-aa4055b827f9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "263de74e-8174-4f38-a524-8cc6cc45708c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "7f900033-00e8-4b82-b94d-9b8233a1bb9c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4bafb9c5-ba64-4ad5-9709-c1a795e1d288",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 11,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "31a47d34-9757-459a-bc38-6572fbd7908a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ab7c9f93-34c9-4d01-8616-e0725188cc56",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "09216449-0cc4-4848-90a2-23ae806e1f09",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "93e8afa7-1e1c-4af5-88d0-e381816824bc",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "4cee2036-a362-4d49-990b-1d930023b459",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "ef2bc284-0273-458f-a96b-4b13d5fbb5bf",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 12,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "d8eda555-7018-42d3-8a49-ed961d8d63b8",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6741b1e8-086b-40de-96d4-3ce3dc4b28d9",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "a91e4191-f845-4298-868a-98a11824863f",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "6741b1e8-086b-40de-96d4-3ce3dc4b28d9"
+          }
+        ]
+      },
+      {
+        "@c": ".WallTile",
+        "id": "111f8d60-89b0-43bf-bad5-f1570d15b0be",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 12,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "63f6b6c3-1458-44d4-a54a-3228738900b0",
+        "initials": "TR",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Treasure",
+            "id": "f8f0d793-538c-46ac-8ded-7339c360fefd",
+            "initials": "TR",
+            "filename": "resources/textures/board/pickup/treasure/emerald.gif",
+            "container": "63f6b6c3-1458-44d4-a54a-3228738900b0"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "efbd1f18-dfce-4ba2-9e37-5bf7957d8568",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "f1861976-eddf-4f66-9e21-a2d43f60e7fd",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 12,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "e53eb19e-0a73-4d90-9204-80e405f611ea",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a3831e81-c135-4db9-b27c-7f5375d4164a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "977bdc33-69f0-4b0a-86c4-a792e3433da7",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6332f7c5-47c6-4df0-85c0-4926fcc21ff4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "46ccbace-8abc-43dc-b281-561a5550aac5",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 12,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "1d0a1994-70f8-4810-a55b-b8a6d5add2f6",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "9db627f2-7a87-4b1e-8766-24a2082f2a7b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "2e4abfe9-c1cf-4ac4-b80e-7adbdd48ef2f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "66eb0fd7-56ff-42ae-85ee-68a779fd6425",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a0fcee91-fc44-4b67-93ed-99c322c41b12",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "a6f845e4-afcb-4f91-b090-9fd2291f0953",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 13,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "be012f8e-411d-4931-a376-7227ded3a2e7",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "1b760221-c480-41eb-a53f-ac652efcc0a8",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "035dfcdd-c788-4353-a221-5d8d698eaef4",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 13,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6f1b99a8-4904-4a51-b355-c6ff436ea58c",
+        "initials": "KG",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": [
+          {
+            "@c": ".Key",
+            "id": "1674d831-0d94-4ae0-8bf1-8fc4c4d8696b",
+            "initials": "KG",
+            "filename": "resources/textures/board/pickup/keys/diamond_pickaxe.png",
+            "container": "6f1b99a8-4904-4a51-b355-c6ff436ea58c",
+            "color": "GREEN"
+          }
+        ]
+      },
+      {
+        "@c": ".PathTile",
+        "id": "5a7df522-f80e-4c67-8316-74aea9ff9c02",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "5c64ff16-ffb6-4ee4-bf7b-23b8dc4fbdfd",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 13,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b314f950-c18e-47e8-89a3-b64375610546",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "05b0dff4-2d98-41d0-847b-85a161d41679",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "437466d2-2dae-4496-b268-3029eafb5f5b",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "e3d18bf3-16fc-4679-81cd-fef9e26fc2b9",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "ad8e3839-21c1-4180-a361-bfe45b429e3a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 13,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "68ef7d0c-70e6-45ed-9c27-22871e7148b2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "40acf844-c2d0-42d8-a7a2-b4b5ca5fb4a5",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0380dc03-4285-41c0-bb73-d276d2f2da7a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6f1758dc-6805-4d52-bfee-c555e85c2167",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a270bf14-6dbd-4393-a5ce-8f63d96596cd",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".WallTile",
+        "id": "50948ee3-aa9d-4c0c-91f9-d776b2eab1ad",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 5,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "999d5630-67fb-4f55-94d1-b6e969b029fe",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 6,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "8d565a48-7e0c-4446-b73c-74890d5f1ec0",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 7,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "2679d2d0-becc-46e4-b3ab-1988907c1bb6",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 8,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "fc4798e3-8eb5-4276-94b9-ad5ffbc5d3c1",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 9,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "b5a1bb93-e749-4ca7-8af0-7a2daaea7759",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 10,
+        "walkable": false
+      },
+      {
+        "@c": ".WallTile",
+        "id": "cdd691d7-bccb-49ba-a76f-45a1f3ab743e",
+        "initials": "▓▓",
+        "filename": "resources/textures/board/tile/wall.png",
+        "row": 14,
+        "col": 11,
+        "walkable": false
+      },
+      {
+        "@c": ".PathTile",
+        "id": "62e4fb43-be02-42cd-9296-c90f405fd3cf",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "79c6614e-1a48-404a-be17-fb2337c675cc",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0aaa5a68-c487-4b2c-8da2-d47a47a23182",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "9a7626ac-ac03-419c-a20d-f65e8af851bc",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "3f3773c2-2574-41b1-abab-4e2b993bb5f8",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 14,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ],
+    [
+      {
+        "@c": ".PathTile",
+        "id": "5bf223c4-2162-4d91-90e1-b3946360836c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 0,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "10477d49-291f-4bdb-996c-aaa533225624",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 1,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "49ffc8e9-4791-4cd4-a57b-7e9172a475f3",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 2,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "d27a3ebd-b25d-43be-aa33-fc660ce64b4a",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 3,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "565f8381-9697-46b3-a618-2ca28d879b2c",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 4,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "3a15d373-91c3-43fd-9138-5b2b099beddb",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 5,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "54c67f70-7930-4196-8805-6f01248515b2",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 6,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6a9818c9-5b3a-4f4c-85d6-cc0abd870a4e",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 7,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "d3dd0648-c606-4463-aaed-13f614fde9a4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 8,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "6ed25b1b-4356-468e-817c-8cbfb2c365d4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 9,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "0cf7b543-e2f9-4d23-afd5-3e2de9f6e4ac",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 10,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "20f378fb-d968-419a-bf3d-bfc16dff18be",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 11,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "a0a52bb7-198c-4c58-9fb6-eab29ab3b08f",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 12,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "3dad3dbe-7715-4e8c-a3be-38a5254069fb",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 13,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "20a36163-e5bb-461b-9890-9790f3a48d63",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 14,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "b749094b-92fc-49fd-8140-5698b61381c4",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 15,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      },
+      {
+        "@c": ".PathTile",
+        "id": "084c1a88-276b-48cd-b772-fc1a2f8e85db",
+        "initials": "PA",
+        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "row": 15,
+        "col": 16,
+        "walkable": true,
+        "blocker": null,
+        "containedEntities": []
+      }
+    ]
+  ],
+  "chap": "e49d07e1-12c8-471d-8482-2bcb3cb7505c",
+  "treasures": [
+    "d1b1a233-8f3e-4f55-bd43-06cbf1c0093a",
+    "97c6b106-0bce-4feb-bd05-9649751b365f",
+    "55306119-3c3a-4b6c-bdea-ede9055bf4c2",
+    "ce47c086-57a7-4b64-b2ec-d63c684f16eb",
+    "daacc835-27a8-4623-9c0d-72a7a9edd0e7",
+    "9b1117c8-722f-440c-8535-045e25722bea",
+    "99e3513c-eacf-4a81-a7c4-e58257a31b14",
+    "cff2dd8c-40fe-467f-966a-9ca0a6369040",
+    "dc0963e2-795c-4600-8448-8176f1cacb56",
+    "a91e4191-f845-4298-868a-98a11824863f",
+    "f8f0d793-538c-46ac-8ded-7339c360fefd"
+  ],
+  "enemies": [],
+  "exitlock": "1f7395aa-a20d-42ed-bd83-da20e6fd5a55",
+  "levelFinished": false,
+  "pathFindingDelay": 500
+}

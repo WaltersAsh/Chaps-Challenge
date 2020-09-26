@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 public class MazeToJsonTest {
-  static Maze m = BoardRig.teleporterTest1();
+  static Maze m = BoardRig.lesson1();
   static ObjectMapper mapper = new ObjectMapper();
 
   public static void main(String[] args) throws JsonProcessingException {
@@ -22,6 +22,19 @@ public class MazeToJsonTest {
     mapper.readValue(jsonString, Maze.class);
   }
 
+  public static Maze pathfindLoader() {
+    String json = null;
+    try {
+      json = mapper.writeValueAsString(BoardRig.pathFindTest1());
+      System.out.println(json);
+      return mapper.readValue(json, Maze.class);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return null;
+
+  }
+
   public static Maze testLoader() {
     String jsonString = null;
     try {
@@ -34,4 +47,5 @@ public class MazeToJsonTest {
     }
     return null;
   }
+
 }

@@ -3,30 +3,30 @@
   <ID>JAVA</ID>
   <OriginalElement>nz.ac.vuw.ecs.swen225.gp20.maze</OriginalElement>
   <nodes>
+    <node x="682.75" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.BlockingContainable</node>
+    <node x="675.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Chap</node>
+    <node x="487.0" y="390.0">nz.ac.vuw.ecs.swen225.gp20.maze.Maze</node>
+    <node x="588.0625" y="0.0">nz.ac.vuw.ecs.swen225.gp20.maze.Drawable</node>
+    <node x="424.9375" y="79.0">nz.ac.vuw.ecs.swen225.gp20.maze.Containable</node>
+    <node x="327.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Teleporter</node>
+    <node x="133.0" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Treasure</node>
+    <node x="259.0" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.ColoredPickup</node>
+    <node x="1013.75" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.WallTile</node>
+    <node x="878.3375000000001" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.ExitLock</node>
+    <node x="467.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Crate</node>
     <node x="677.3375000000001" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Water</node>
     <node x="781.3375000000001" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Door</node>
     <node x="558.3375000000001" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Movable</node>
     <node x="336.0" y="390.0">nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig</node>
-    <node x="682.75" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.BlockingContainable</node>
-    <node x="675.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Chap</node>
     <node x="965.25" y="79.0">nz.ac.vuw.ecs.swen225.gp20.maze.Tile</node>
     <node x="237.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Key</node>
     <node x="0.0" y="390.0">nz.ac.vuw.ecs.swen225.gp20.maze.event</node>
     <node x="887.75" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.PathTile</node>
-    <node x="487.0" y="390.0">nz.ac.vuw.ecs.swen225.gp20.maze.Maze</node>
-    <node x="433.45000000000005" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Exit</node>
     <node x="0.0" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.InfoField</node>
-    <node x="588.0625" y="0.0">nz.ac.vuw.ecs.swen225.gp20.maze.Drawable</node>
-    <node x="424.9375" y="79.0">nz.ac.vuw.ecs.swen225.gp20.maze.Containable</node>
-    <node x="327.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Teleporter</node>
+    <node x="433.45000000000005" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Exit</node>
     <node x="212.0" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.Pickup</node>
-    <node x="259.0" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.ColoredPickup</node>
-    <node x="133.0" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.Treasure</node>
     <node x="171.0" y="390.0">nz.ac.vuw.ecs.swen225.gp20.maze.PathFinder</node>
-    <node x="1013.75" y="158.0">nz.ac.vuw.ecs.swen225.gp20.maze.WallTile</node>
     <node x="571.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Enemy</node>
-    <node x="878.3375000000001" y="237.0">nz.ac.vuw.ecs.swen225.gp20.maze.ExitLock</node>
-    <node x="467.5" y="316.0">nz.ac.vuw.ecs.swen225.gp20.maze.Crate</node>
   </nodes>
   <notes />
   <edges>
@@ -48,17 +48,11 @@
       <point x="456.9375" y="133.0" />
       <point x="-32.0" y="14.5" />
     </edge>
-    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Exit" target="nz.ac.vuw.ecs.swen225.gp20.maze.Pickup">
+    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Key" target="nz.ac.vuw.ecs.swen225.gp20.maze.Pickup">
       <point x="0.0" y="-14.5" />
-      <point x="471.95000000000005" y="207.0" />
-      <point x="292.5" y="207.0" />
-      <point x="34.5" y="14.5" />
-    </edge>
-    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Teleporter" target="nz.ac.vuw.ecs.swen225.gp20.maze.ColoredPickup">
-      <point x="0.0" y="-14.5" />
-      <point x="387.5" y="291.0" />
-      <point x="365.5" y="291.0" />
-      <point x="35.5" y="14.5" />
+      <point x="427.35041666666666" y="212.0" />
+      <point x="328.6666666666667" y="212.0" />
+      <point x="30.666666666666686" y="14.5" />
     </edge>
     <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.ColoredPickup" target="nz.ac.vuw.ecs.swen225.gp20.maze.Pickup">
       <point x="0.0" y="-14.5" />
@@ -66,11 +60,11 @@
       <point x="269.5" y="217.0" />
       <point x="11.5" y="14.5" />
     </edge>
-    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.InfoField" target="nz.ac.vuw.ecs.swen225.gp20.maze.Pickup">
+    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.InfoField" target="nz.ac.vuw.ecs.swen225.gp20.maze.Containable">
       <point x="0.0" y="-14.5" />
-      <point x="56.5" y="207.0" />
-      <point x="223.5" y="207.0" />
-      <point x="-34.5" y="14.5" />
+      <point x="498.47541666666666" y="138.0" />
+      <point x="684.5004166666666" y="138.0" />
+      <point x="-25.600000000000023" y="14.5" />
     </edge>
     <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Movable" target="nz.ac.vuw.ecs.swen225.gp20.maze.BlockingContainable">
       <point x="0.0" y="-14.5" />
@@ -96,6 +90,12 @@
       <point x="1023.0" y="133.0" />
       <point x="19.25" y="14.5" />
     </edge>
+    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Exit" target="nz.ac.vuw.ecs.swen225.gp20.maze.Containable">
+      <point x="0.0" y="-14.5" />
+      <point x="861.6004166666667" y="138.0" />
+      <point x="735.7004166666667" y="138.0" />
+      <point x="25.600000000000023" y="14.5" />
+    </edge>
     <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Chap" target="nz.ac.vuw.ecs.swen225.gp20.maze.Movable">
       <point x="0.0" y="-14.5" />
       <point x="714.0" y="291.0" />
@@ -120,6 +120,12 @@
       <point x="984.5" y="133.0" />
       <point x="-19.25" y="14.5" />
     </edge>
+    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Teleporter" target="nz.ac.vuw.ecs.swen225.gp20.maze.Containable">
+      <point x="0.0" y="-14.5" />
+      <point x="980.6004166666667" y="128.0" />
+      <point x="761.3004166666667" y="128.0" />
+      <point x="51.200000000000045" y="14.5" />
+    </edge>
     <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Enemy" target="nz.ac.vuw.ecs.swen225.gp20.maze.Movable">
       <point x="0.0" y="-14.5" />
       <point x="613.5" y="291.0" />
@@ -132,12 +138,6 @@
       <point x="246.5" y="217.0" />
       <point x="-11.5" y="14.5" />
     </edge>
-    <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Key" target="nz.ac.vuw.ecs.swen225.gp20.maze.ColoredPickup">
-      <point x="0.0" y="-14.5" />
-      <point x="272.5" y="291.0" />
-      <point x="294.5" y="291.0" />
-      <point x="-35.5" y="14.5" />
-    </edge>
     <edge source="nz.ac.vuw.ecs.swen225.gp20.maze.Water" target="nz.ac.vuw.ecs.swen225.gp20.maze.BlockingContainable">
       <point x="0.0" y="-14.5" />
       <point x="719.3375000000001" y="217.0" />
@@ -145,7 +145,7 @@
       <point x="-23.125" y="14.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.6932389108758223" x="547.4513409251515" y="216.6566571286246" />
+  <settings layout="Hierarchic Group" zoom="1.0" x="560.0" y="209.5" />
   <SelectedNodes>
     <node>nz.ac.vuw.ecs.swen225.gp20.maze.Crate</node>
   </SelectedNodes>

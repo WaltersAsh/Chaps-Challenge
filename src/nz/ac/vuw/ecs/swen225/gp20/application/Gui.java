@@ -1,13 +1,18 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,38 +21,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.fileToMaze;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.mazeToFile;
 
 /**
  * Gui class for visual display of the game.
  *
  * @author Justin 300470389
  */
+@JsonIgnoreType
 public class Gui extends MazeEventListener implements ActionListener {
   // frame and main panels
   private JFrame frame;
@@ -214,7 +197,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setSize(1024, 800);
     frame.setMinimumSize(new Dimension(875, 675));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
-            dimen.height / 2 - frame.getSize().height / 2);
+        dimen.height / 2 - frame.getSize().height / 2);
     frame.setFocusable(true);
     setupTimer();
     setupKeyListener();
@@ -239,9 +222,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     board = new BoardView(maze);
     boardPanel.setBackground(lightLavender);
     boardPanel.setMinimumSize(
-            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
+        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setPreferredSize(
-            new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
+        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setMaximumSize(new Dimension(800, 800));
   }
 
@@ -261,11 +244,11 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Create the inner side panels.
    */
   public void createInnerSidePanels() {
-    final JPanel[] panels = new JPanel[] {
-      levelPanel = new JPanel(),
-      timePanel = new JPanel(),
-      treasuresPanel = new JPanel(),
-      inventoryPanel = new JPanel()
+    final JPanel[] panels = new JPanel[]{
+        levelPanel = new JPanel(),
+        timePanel = new JPanel(),
+        treasuresPanel = new JPanel(),
+        inventoryPanel = new JPanel()
     };
 
     inventoryGridPanel = new JPanel();
@@ -302,11 +285,11 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void initialiseInnerSidePanels() {
     // initialise inner panels for inner panels in side panel
-    JPanel[] panels = new JPanel[] {
-      levelContentPanel = new JPanel(),
-      timeContentPanel = new JPanel(),
-      treasuresContentPanel = new JPanel(),
-      inventoryContentPanel = new JPanel()
+    JPanel[] panels = new JPanel[]{
+        levelContentPanel = new JPanel(),
+        timeContentPanel = new JPanel(),
+        treasuresContentPanel = new JPanel(),
+        inventoryContentPanel = new JPanel()
     };
 
     for (JPanel panel : panels) {
@@ -319,11 +302,11 @@ public class Gui extends MazeEventListener implements ActionListener {
     inventoryContentPanel.setBackground(darkLavender);
 
     // initialise title labels for panels in inner side panel
-    JLabel[] titleLabels = new JLabel[] {
-      levelTitleLabel = new JLabel("LEVEL"),
-      timeTitleLabel = new JLabel("TIME LEFT"),
-      treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
-      inventoryTitleLabel = new JLabel("INVENTORY"),
+    JLabel[] titleLabels = new JLabel[]{
+        levelTitleLabel = new JLabel("LEVEL"),
+        timeTitleLabel = new JLabel("TIME LEFT"),
+        treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
+        inventoryTitleLabel = new JLabel("INVENTORY"),
     };
 
     for (JLabel label : titleLabels) {
@@ -332,10 +315,10 @@ public class Gui extends MazeEventListener implements ActionListener {
     }
 
     // initialise value labels
-    JLabel[] valueLabels = new JLabel[] {
-      levelValueLabel = new JLabel("1"),
-      timeValueLabel = new JLabel("60"),
-      treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
+    JLabel[] valueLabels = new JLabel[]{
+        levelValueLabel = new JLabel("1"),
+        timeValueLabel = new JLabel("60"),
+        treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
     };
 
     for (JLabel valueLabel : valueLabels) {
@@ -367,7 +350,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     try {
       Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
       infoFieldLabel = new JLabel(
-              new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
+          new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
     } catch (IOException ex) {
       ex.printStackTrace();
     }
@@ -387,13 +370,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     recnplayControlsPanel.setBackground(lightLavender);
     recnplayControlsPanel.setLayout(new BoxLayout(recnplayControlsPanel, BoxLayout.X_AXIS));
 
-    JButton[] buttons = new JButton[] {
-      lastFrameButton = new JButton("<"),
-      autoPlayButton = new JButton("AUTO"),
-      nextFrameButton = new JButton(">"),
-      fasterReplayButton = new JButton("FASTER"),
-      standardReplayButton = new JButton("STANDARD"),
-      slowerReplayButton = new JButton("SLOWER")
+    JButton[] buttons = new JButton[]{
+        lastFrameButton = new JButton("<"),
+        autoPlayButton = new JButton("AUTO"),
+        nextFrameButton = new JButton(">"),
+        fasterReplayButton = new JButton("FASTER"),
+        standardReplayButton = new JButton("STANDARD"),
+        slowerReplayButton = new JButton("SLOWER")
     };
 
     for (JButton button : buttons) {
@@ -435,12 +418,12 @@ public class Gui extends MazeEventListener implements ActionListener {
     recnplayMenu = new JMenu("Rec'n'play");
     helpMenu = new JMenu("Help");
 
-    final JMenuItem[] fileMenuItems = new JMenuItem[] {
-      saveMenuItem = new JMenuItem("Save"),
-      loadMenuItem = new JMenuItem("Load")
+    final JMenuItem[] fileMenuItems = new JMenuItem[]{
+        saveMenuItem = new JMenuItem("Save"),
+        loadMenuItem = new JMenuItem("Load")
     };
 
-    final JMenuItem[] gameMenuItems = new JMenuItem[] {
+    final JMenuItem[] gameMenuItems = new JMenuItem[]{
         resumeMenuItem = new JMenuItem("Resume"),
         pauseMenuItem = new JMenuItem("Pause"),
         redoMenuItem = new JMenuItem("Redo"),
@@ -449,12 +432,12 @@ public class Gui extends MazeEventListener implements ActionListener {
         exitSaveMenuItem = new JMenuItem("Exit + Save")
     };
 
-    final JMenuItem[] levelMenuItems = new JMenuItem[] {
+    final JMenuItem[] levelMenuItems = new JMenuItem[]{
         restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
         startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
     };
 
-    final JMenuItem[] recnplayMenuItems = new JMenuItem[] {
+    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
         startRecordingMenuItem = new JMenuItem("Record"),
         stopRecordingMenuItem = new JMenuItem("Stop Recording"),
         playMenuItem = new JMenuItem("Replay"),
@@ -513,10 +496,13 @@ public class Gui extends MazeEventListener implements ActionListener {
       //persistence loading and saving
     } else if (e.getSource() == saveMenuItem) {
       openFileChooser(false);
+      mazeToFile(maze, file);
     } else if (e.getSource() == loadMenuItem) {
+      //TODO: loading
       openFileChooser(true);
-
-
+      maze = fileToMaze(file);
+//      new Gui(maze);
+      //FIXME: Should do something like refresh the gui
       //recnplay menu functionalities
     } else if (e.getSource() == startRecordingMenuItem) {
       RecordAndReplay.startRecording();
@@ -857,7 +843,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         Image keyImage;
         keyImage = ImageIO.read(new File(key.getFilename()));
         ImageIcon keyIcon = new ImageIcon(
-                keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+            keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
         for (JLabel inventoryValueLabel : inventoryValueLabels) {
           if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
             inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
@@ -901,7 +887,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void update(MazeEventInfoField e) {
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
     infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
-            infoFieldLabel.getY() - 150, 1000, 1000);
+        infoFieldLabel.getY() - 150, 1000, 1000);
     frame.revalidate();
     showInfoFieldToGui(true);
   }

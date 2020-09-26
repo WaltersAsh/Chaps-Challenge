@@ -112,7 +112,9 @@ public class Maze {
   private int pathFindingDelay = 500; // delay between path finding ticks in ms
 
   // Output
+  @JsonIgnore
   private List<MazeEventListener> listeners = new ArrayList<>();
+
   private MazeEventWalked dispatch;
 
   /**
