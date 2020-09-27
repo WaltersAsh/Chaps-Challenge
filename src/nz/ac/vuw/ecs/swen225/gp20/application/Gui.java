@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.fileToMaze;
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.mazeToFile;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import java.awt.BorderLayout;
@@ -536,15 +536,15 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == saveMenuItem) {
       pause();
       openFileChooser(false);
-      mazeToFile(maze, file);
+      saveMaze(maze, file);
       resume();
     } else if (e.getSource() == loadMenuItem) {
       //FIXME: new gui shouldn't be instantiated,
       // find a way to redraw the board - probably a gui problem
       pause();
       openFileChooser(true);
-      if (fileToMaze(file) != null) {
-        maze = fileToMaze(file);
+      if (loadMaze(file) != null) {
+        maze = loadMaze(file);
 
         /*
         board = new BoardView(maze);

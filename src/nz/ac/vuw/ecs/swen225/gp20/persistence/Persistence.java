@@ -7,10 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+
+/**
+ * The type Persistence, to save and load levels.
+ * @author Fangyi Yan 300519195
+ */
 public class Persistence {
   static ObjectMapper mapper = new ObjectMapper();
 
-  public static Maze fileToMaze(File file) {//TODO
+  public static Maze loadMaze(File file) {//TODO
     if (file == null) {
       return null;
     }
@@ -23,12 +28,12 @@ public class Persistence {
     return null;
   }
 
-  public static boolean mazeToFile(Maze maze, File file) {//TODO
+  public static boolean saveMaze(Maze maze, File file) {//TODO
     if (file == null) {
       return false;
     }
-    System.out.println(maze.getListeners());
-    System.out.println(maze);
+//    System.out.println(maze.getListeners());
+//    System.out.println(maze);
     try {
       mapper.writeValue(file, maze);
       return true;
