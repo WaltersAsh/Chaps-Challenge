@@ -19,6 +19,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
@@ -545,7 +546,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       openFileChooser(true);
       if (loadMaze(file) != null) {
         maze = loadMaze(file);
-
         /*
         board = new BoardView(maze);
         Graphics g = frame.getGraphics();
@@ -554,7 +554,9 @@ public class Gui extends MazeEventListener implements ActionListener {
          */
 
         this.frame.setVisible(false);
-        new Gui(maze).getFrame().setVisible(true);
+        Gui updated = new Gui(maze);
+        updated.reloadInventoryPanel();
+        updated.getFrame().setVisible(true);
         resume();
       }
       resume();
@@ -786,6 +788,40 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Find, add and display the key image to the inventory gui.
+   *
+   * @param key the key to be displayed in the inevntory gui
+   */
+  public void addKeyToInventoryPanel(Key key) {
+    Image keyImage;
+    try {
+      keyImage = ImageIO.read(new File(key.getFilename()));
+      ImageIcon keyIcon = new ImageIcon(
+              keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+      for (JLabel inventoryValueLabel : inventoryValueLabels) {
+        if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
+          inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
+          inventoryValueLabel.setIcon(keyIcon);
+          frame.revalidate();
+          break;
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Reload the inventory panel gui.
+   */
+  public void reloadInventoryPanel() {
+    List<Key> inventory = maze.getChap().getKeys();
+    for (Key key : inventory) {
+      addKeyToInventoryPanel(key);
+    }
+  }
+
+  /**
    * Get the frame.
    *
    * @return the JFrame representing the container for the gui
@@ -906,24 +942,9 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void update(MazeEventPickup e) {
-    try {
-      if (e.getPicked() instanceof Key) {
-        Key key = (Key) e.getPicked();
-        Image keyImage;
-        keyImage = ImageIO.read(new File(key.getFilename()));
-        ImageIcon keyIcon = new ImageIcon(
-            keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-        for (JLabel inventoryValueLabel : inventoryValueLabels) {
-          if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
-            inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
-            inventoryValueLabel.setIcon(keyIcon);
-            frame.revalidate();
-            break;
-          }
-        }
-      }
-    } catch (IOException e1) {
-      e1.printStackTrace();
+    if (e.getPicked() instanceof Key) {
+      Key key = (Key) e.getPicked();
+      addKeyToInventoryPanel(key);
     }
   }
 
