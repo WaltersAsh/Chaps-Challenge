@@ -1,29 +1,52 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.fileToMaze;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.mazeToFile;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.fileToMaze;
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.mazeToFile;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
  * Gui class for visual display of the game.
@@ -68,8 +91,9 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JLabel infoFieldLabel;
   private JLabel infoFieldLabelText;
 
-  //recnplay icon labels
-  private JLabel recordingIcon;
+  //icon labels
+  private JLabel recordingIconLabel;
+  private JLabel pausedIconLabel;
 
   // menu bar and menu items
   private JMenuBar menuBar;
@@ -96,17 +120,17 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JMenuItem startRecordingMenuItem;
   private JMenuItem stopRecordingMenuItem;
   private JMenuItem loadRecordingMenuItem;
-  private JMenuItem saveRecordingMenuItem;
 
+  private JMenu helpMenu;
+  private JMenuItem showInstructMenuItem;
+
+  //buttons for controlling replaying in recnplay
   private JButton nextFrameButton;
   private JButton lastFrameButton;
   private JButton autoPlayButton;
   private JButton fasterReplayButton;
   private JButton slowerReplayButton;
   private JButton standardReplayButton;
-
-  private JMenu helpMenu;
-  private JMenuItem showInstructMenuItem;
 
   // Text sizes and fonts
   private Font regText = new Font("", Font.PLAIN, 25);
@@ -127,6 +151,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   public static BoardView board;
   private Maze maze;
+  private Maze initialMaze;
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
@@ -140,6 +165,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Gui(Maze maze) {
     this.maze = maze;
+    initialMaze = maze;
     recnplay = new RecordAndReplay(this);
     // base frame that all JComponents will be added to
     frame = new JFrame();
@@ -152,13 +178,15 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseInnerSidePanels();
     createMenuComponents();
     createRecnplayControls();
-    initialiseRecnplayIconLabel(false);
+    initialiseRecnplayIconLabel();
+    initialisePauseIconLabel();
 
     board.setBounds(0, 0, 1000, 1000);
     boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
     boardPanel.add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
     boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
-    boardPanel.add(recordingIcon, JLayeredPane.PALETTE_LAYER);
+    boardPanel.add(recordingIconLabel, JLayeredPane.PALETTE_LAYER);
+    boardPanel.add(pausedIconLabel, JLayeredPane.PALETTE_LAYER);
 
     // add menus to menu bars
     menuBar.add(fileMenu);
@@ -390,21 +418,35 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Create and set an icon/indicator for recording/replaying.
-   *
-   * @param isRecording the boolean confirming if the game is recording or not
+   * Create and set an icon/indicator for recording.
    */
-  public void initialiseRecnplayIconLabel(boolean isRecording) {
-    recordingIcon = new JLabel();
+  public void initialiseRecnplayIconLabel() {
+    recordingIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
       ImageIcon icon = new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
-      recordingIcon.setIcon(icon);
+      recordingIconLabel.setIcon(icon);
     } catch (IOException e) {
       e.printStackTrace();
     }
-    recordingIcon.setBounds(-10, -455, 1000, 1000);
-    recordingIcon.setVisible(false);
+    recordingIconLabel.setBounds(-10, -455, 1000, 1000);
+    recordingIconLabel.setVisible(false);
+  }
+
+  /**
+   * Create and set an icon/indicator for pausing.
+   */
+  public void initialisePauseIconLabel() {
+    pausedIconLabel = new JLabel();
+    try {
+      Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
+      ImageIcon icon = new ImageIcon(image.getScaledInstance(256, 83, Image.SCALE_DEFAULT));
+      pausedIconLabel.setIcon(icon);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    pausedIconLabel.setBounds(-20, -465, 1000, 1000);
+    pausedIconLabel.setVisible(false);
   }
 
   /**
@@ -442,28 +484,25 @@ public class Gui extends MazeEventListener implements ActionListener {
         stopRecordingMenuItem = new JMenuItem("Stop Recording"),
         playMenuItem = new JMenuItem("Replay"),
         stopPlayMenuItem = new JMenuItem("Stop Replay"),
-        saveRecordingMenuItem = new JMenuItem("Save Recording"),
         loadRecordingMenuItem = new JMenuItem("Load Recording")
     };
 
-    for (JMenuItem fileMenuItem : fileMenuItems) {
-      fileMenuItem.addActionListener(this);
-      fileMenu.add(fileMenuItem);
-    }
+    HashMap<JMenuItem[], JMenu> menuToMenuItems = new HashMap<>();
+    menuToMenuItems.put(fileMenuItems, fileMenu);
+    menuToMenuItems.put(gameMenuItems, gameMenu);
+    menuToMenuItems.put(levelMenuItems, levelMenu);
+    menuToMenuItems.put(recnplayMenuItems, recnplayMenu);
 
-    for (JMenuItem gameMenuItem : gameMenuItems) {
-      gameMenuItem.addActionListener(this);
-      gameMenu.add(gameMenuItem);
-    }
+    final JMenuItem[][] superMenuItems = new JMenuItem[][] {
+      fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
+    };
 
-    for (JMenuItem levelMenuItem : levelMenuItems) {
-      levelMenuItem.addActionListener(this);
-      levelMenu.add(levelMenuItem);
-    }
-
-    for (JMenuItem recnplayMenuItem : recnplayMenuItems) {
-      recnplayMenuItem.addActionListener(this);
-      recnplayMenu.add(recnplayMenuItem);
+    for (JMenuItem[] menuItems : superMenuItems) {
+      for (JMenuItem menuItem : menuItems) {
+        menuItem.addActionListener(this);
+        JMenu menu = menuToMenuItems.get(menuItems);
+        menu.add(menuItem);
+      }
     }
 
     showInstructMenuItem = new JMenuItem("How to Play");
@@ -495,40 +534,58 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //persistence loading and saving
     } else if (e.getSource() == saveMenuItem) {
+      pause();
       openFileChooser(false);
       mazeToFile(maze, file);
+      resume();
     } else if (e.getSource() == loadMenuItem) {
-      //TODO: loading
+      //FIXME: new gui shouldn't be instantiated,
+      // find a way to redraw the board - probably a gui problem
+      pause();
       openFileChooser(true);
-      maze = fileToMaze(file);
-//      new Gui(maze);
-      //FIXME: Should do something like refresh the gui
+      if (fileToMaze(file) != null) {
+        maze = fileToMaze(file);
+
+        /*
+        board = new BoardView(maze);
+        Graphics g = frame.getGraphics();
+        board.drawWholeBoard(g);
+        frame.repaint();
+         */
+
+        this.frame.setVisible(false);
+        new Gui(maze).getFrame().setVisible(true);
+        resume();
+      }
+      resume();
+
       //recnplay menu functionalities
     } else if (e.getSource() == startRecordingMenuItem) {
+      pause();
       RecordAndReplay.startRecording();
-      recordingIcon.setVisible(true);
-
+      recordingIconLabel.setVisible(true);
+      resume();
     } else if (e.getSource() == stopRecordingMenuItem && RecordAndReplay.isRecording()) {
+      pause();
       RecordAndReplay.stopRecording();
-      recordingIcon.setVisible(false);
+      recordingIconLabel.setVisible(false);
       openFileChooser(false);
       RecordAndReplay.saveRecording(file.toString());
+      resume();
 
     } else if (e.getSource() == playMenuItem) {
+      pause();
       recnplay.playRecording();
+      resume();
 
     } else if (e.getSource() == stopPlayMenuItem) {
 
     } else if (e.getSource() == loadRecordingMenuItem) {
+      pause();
       openFileChooser(true);
       RecordAndReplay.loadRecording(file);
-
-      //no need for save recording button any more as
-      //recnplay automatically promts user to save when the recording stops
-    } else if (e.getSource() == saveRecordingMenuItem) {
-      openFileChooser(false);
+      resume();
     }
-
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
@@ -602,8 +659,10 @@ public class Gui extends MazeEventListener implements ActionListener {
         // pause and resume
         if (key == KeyEvent.VK_SPACE) {
           pause();
+          pausedIconLabel.setVisible(true);
         } else if (key == KeyEvent.VK_ESCAPE) {
           resume();
+          pausedIconLabel.setVisible(false);
         }
 
         // shortcuts
@@ -695,8 +754,10 @@ public class Gui extends MazeEventListener implements ActionListener {
     }
 
     //reset state of board/maze back to start of level
-    board.reset();
-    frame.revalidate();
+    //FIXME: new gui shouldn't be instantiated,
+    // find a way to redraw the board - probably a gui problem
+    this.frame.setVisible(false);
+    new Gui(initialMaze).getFrame().setVisible(true);
   }
 
   /**
@@ -769,7 +830,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     return inventoryValueLabels;
   }
 
-
   /**
    * Get the board.
    *
@@ -777,6 +837,15 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public BoardView getBoard() {
     return board;
+  }
+
+  /**
+   * Get the maze.
+   *
+   * @return the maze
+   */
+  public Maze getMaze() {
+    return maze;
   }
 
   /**
@@ -854,7 +923,6 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
       }
     } catch (IOException e1) {
-      // TODO Auto-generated catch block
       e1.printStackTrace();
     }
   }

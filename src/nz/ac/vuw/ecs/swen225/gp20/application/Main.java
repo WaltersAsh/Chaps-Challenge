@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.MazeToJsonTest;
 
 /**
  * Main class for running Chap's Challenge.
@@ -26,14 +25,11 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-    //TODO: Boardview object from the renderer package should be here (instead of in gui)
-    // when dependency is fixed
+    //TODO: Boardview object from the renderer package should probably be here
+    // (instead of in gui) when dependency is fixed
 
-    Maze maze = levels[0];
-//    Maze persistenceTestMaze = MazeToJsonTest.pathfindLoader();
-//    Gui gui = new Gui(maze);
+    Maze maze = levels[6];
     Gui gui = new Gui(maze);
-
     gui.getFrame().setVisible(true);
   }
 }
