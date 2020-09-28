@@ -8,6 +8,12 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 
 public class Water extends BlockingContainable {
+  /**
+   * Instantiates a new Water. Empty constructor for Jackson.
+   */
+  public Water() {
+  }
+
   public Water(String filename) {
     super(filename, "WT");
   }

@@ -3,6 +3,7 @@ module maze {
   requires com.google.common;
   requires java.compiler;
   requires com.fasterxml.jackson.databind;
+  requires org.junit.jupiter.api;
 
   exports nz.ac.vuw.ecs.swen225.gp20.maze to com.fasterxml.jackson.databind;
   exports nz.ac.vuw.ecs.swen225.gp20.maze.event to com.fasterxml.jackson.databind;

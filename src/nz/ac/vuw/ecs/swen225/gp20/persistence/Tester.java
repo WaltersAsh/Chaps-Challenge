@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import org.junit.jupiter.api.Test;
 
 public class Tester {
   static ObjectMapper mapper = new ObjectMapper();
@@ -18,15 +19,16 @@ public class Tester {
       BoardRig.teleporterTest1(),
   };
 
-  public static void main(String[] args) {
+  @Test
+  public void convertTest01() {
     for (Maze level : levels) {
-      String json = null;
       try {
-        json = mapper.writeValueAsString(BoardRig.pathFindTest1());
+        String json = mapper.writeValueAsString(level);
         System.out.println(json);
         mapper.readValue(json, Maze.class);
       } catch (JsonProcessingException e) {
         e.printStackTrace();
+        assert false;
       }
     }
   }
