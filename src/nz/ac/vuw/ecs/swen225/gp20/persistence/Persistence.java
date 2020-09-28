@@ -27,9 +27,11 @@ public class Persistence {
     }
     try {
       Maze loadedMaze = mapper.readValue(file, Maze.class);
-      fixMaze(loadedMaze);
-      return loadedMaze;
-    } catch (IOException e) {
+      if (mazeValidator(loadedMaze)) {
+        fixMaze(loadedMaze);
+        return loadedMaze;
+      }
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return null;
@@ -59,10 +61,21 @@ public class Persistence {
 
   /**
    * Add things things are discarded during serialization.
+   *
    * @param loadedMaze maze going to fix;
    */
   private static void fixMaze(Maze loadedMaze) {
     loadedMaze.getEnemies().forEach(enemy -> enemy.initPathFinder(loadedMaze));
+  }
+
+  private static boolean mazeValidator(Maze loadedMaze) throws Exception {
+    if (loadedMaze == null) {
+      return false;
+    } else if (loadedMaze.getHeight() < 1 || loadedMaze.getWidth() < 1) {
+      throw new Exception("Illegal Maze size, excepted both >0 but height = " + loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
+    }
+
+    return true;
   }
 
 
