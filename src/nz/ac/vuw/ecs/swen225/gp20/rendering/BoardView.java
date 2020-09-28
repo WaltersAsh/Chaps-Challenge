@@ -48,7 +48,7 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = false;
+  private boolean isWindowed = true;
   private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
