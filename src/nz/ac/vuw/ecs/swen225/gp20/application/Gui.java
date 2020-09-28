@@ -1,53 +1,32 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
 /**
  * Gui class for visual display of the game.
@@ -147,7 +126,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Color paleLavender = new Color(237, 224, 255);
 
   //Files
-  private JFileChooser fileChooser = new JFileChooser();
+  private final JFileChooser fileChooser = new JFileChooser(Paths.get(".").toFile());
   private File file;
 
   public static BoardView board;
@@ -494,8 +473,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     menuToMenuItems.put(levelMenuItems, levelMenu);
     menuToMenuItems.put(recnplayMenuItems, recnplayMenu);
 
-    final JMenuItem[][] superMenuItems = new JMenuItem[][] {
-      fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
+    final JMenuItem[][] superMenuItems = new JMenuItem[][]{
+        fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
     };
 
     for (JMenuItem[] menuItems : superMenuItems) {
@@ -536,23 +515,15 @@ public class Gui extends MazeEventListener implements ActionListener {
       //persistence loading and saving
     } else if (e.getSource() == saveMenuItem) {
       pause();
-      openFileChooser(false);
-      saveMaze(maze, file);
+      saveMaze(maze, saveFileChooser(false));
       resume();
     } else if (e.getSource() == loadMenuItem) {
       //FIXME: new gui shouldn't be instantiated,
       // find a way to redraw the board - probably a gui problem
       pause();
-      openFileChooser(true);
-      if (loadMaze(file) != null) {
-        maze = loadMaze(file);
-        /*
-        board = new BoardView(maze);
-        Graphics g = frame.getGraphics();
-        board.drawWholeBoard(g);
-        frame.repaint();
-         */
-
+      Maze loaded = loadMaze(saveFileChooser(true));
+      if (loaded != null) {
+        maze = loaded;
         this.frame.setVisible(false);
         Gui updated = new Gui(maze);
         updated.reloadInventoryPanel();
@@ -774,8 +745,9 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Open the file chooser and set the file field.
    *
    * @param isLoad boolean confirming loading or saving (not loading)
+   * @return target File object, or null is no file was chosen
    */
-  public void openFileChooser(boolean isLoad) {
+  public File openFileChooser(boolean isLoad) {
     int result = -1;
     if (isLoad) { //is loading the file
       result = fileChooser.showOpenDialog(null);
@@ -783,8 +755,29 @@ public class Gui extends MazeEventListener implements ActionListener {
       result = fileChooser.showSaveDialog(null);
     }
     if (result == JFileChooser.APPROVE_OPTION) {
-      file = fileChooser.getSelectedFile();
+      return fileChooser.getSelectedFile();
     }
+    return null;
+  }
+
+  /**
+   * Open the file chooser for game levels.
+   *
+   * @param isLoad boolean confirming loading or saving (not loading)
+   * @return target File object, or null is no file was chosen
+   */
+  public File saveFileChooser(boolean isLoad) {
+    JFileChooser fc = new JFileChooser(Paths.get(".", "levels").toFile());
+    int result = -1;
+    if (isLoad) { //is loading the file
+      result = fc.showOpenDialog(null);
+    } else { //is saving the file
+      result = fc.showSaveDialog(null);
+    }
+    if (result == JFileChooser.APPROVE_OPTION) {
+      return fc.getSelectedFile();
+    }
+    return null;
   }
 
   /**
@@ -797,7 +790,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     try {
       keyImage = ImageIO.read(new File(key.getFilename()));
       ImageIcon keyIcon = new ImageIcon(
-              keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+          keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
       for (JLabel inventoryValueLabel : inventoryValueLabels) {
         if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
           inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
