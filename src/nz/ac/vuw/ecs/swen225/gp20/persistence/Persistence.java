@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.BufferedWriter;
@@ -135,6 +136,7 @@ public class Persistence {
    */
   public static void main(String[] args) {
     try {
+      System.out.println(quickSave(BoardRig.lesson1()));
       System.out.println(quickLoad());
     } catch (Exception e) {
       e.printStackTrace();
