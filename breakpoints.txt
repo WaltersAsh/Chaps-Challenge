@@ -29,28 +29,37 @@ nz.ac.vuw.ecs.swen225.gp20.rendering.SoundHandler;
     update: Line 125;
 
 nz.ac.vuw.ecs.swen225.gp20.application.Main;
-    maze instantiation (maze): Line 31;
+    maze initialisation of levels (maze): Line 10;
 
 nz.ac.vuw.ecs.swen225.gp20.application.Gui;
-    update mazeEventPickup (maze): Line 936;
-           mazeEventUnlocked (maze): Line 949;
-           mazeEventInfoField (maze): Line 968;
-           mazeEventWon (maze): Line 982;
+    update mazeEventPickup (maze): Line 947;
+           mazeEventUnlocked (maze): Line 960;
+           mazeEventInfoField (maze): Line 979;
+           mazeEventWon (maze): Line 993;
 
     BoardView instantiation (renderer): Line 230;
 
     saveMaze call (persistence): Line 518; 
-    loadMaze call (persistence): Line 524;
+    loadMaze call (persistence): Line 522;
 
-    startRecording call (recnplay): Line 538;
-    stopRecording call (recnplay): Line 543;
-    saveRecording call (recnplay): Line 545;
-    playRecording call (recnplay): Line 550;
-    loadRecording call (recnplay): Line 558;
-    addMove calls (recnplay): Line 608;
-                                   613;
-                                   618:
-                                   623;
+    startRecording call (recnplay): Line 530;
+    stopRecording call (recnplay): Line 537;
+    playRecording call (recnplay): Line 544;
+    loadRecording call (recnplay): Line 552;
+
+nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay
+    Persistence.loadMaze (persistence): line 60
+    Gui.loadMazeGui      (application): line 62
+    Persistence.saveMaze (persistence): line 98
+    Gui.getMaze          (application): line 98
+    Persistence.loadMaze (persistence): line 110
+    Maze.setMoves        (maze)       : line 113
+    Gui.getMaze          (application): line 113
+    Maze.getMoves        (maze)       : line 113
+    Persistence.saveMaze (persistence): line 116
+
+
+    
     
 
 

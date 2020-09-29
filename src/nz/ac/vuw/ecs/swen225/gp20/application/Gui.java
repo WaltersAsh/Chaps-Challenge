@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
 import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
 /**
@@ -383,9 +382,9 @@ public class Gui extends MazeEventListener implements ActionListener {
         lastFrameButton = new JButton("<"),
         autoPlayButton = new JButton("AUTO"),
         nextFrameButton = new JButton(">"),
-        fasterReplayButton = new JButton("FASTER"),
+        slowerReplayButton = new JButton("SLOWER"),
         standardReplayButton = new JButton("STANDARD"),
-        slowerReplayButton = new JButton("SLOWER")
+        fasterReplayButton = new JButton("FASTER")
     };
 
     for (JButton button : buttons) {
@@ -520,9 +519,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
     } else if (e.getSource() == loadMenuItem) {
       pause();
-      this.loadMaze(Persistence.loadMaze(saveFileChooser(true)));
+      loadMazeGui(Persistence.loadMaze(saveFileChooser(true)));
       resume();
-
 
       //recnplay menu functionalities
 
@@ -574,9 +572,9 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Loads a maze
+   * Loads a maze.
    */
-  public void loadMaze(Maze loadedMaze) {
+  public void loadMazeGui(Maze loadedMaze) {
     if (loadedMaze != null) {
       maze = loadedMaze;
       this.frame.setVisible(false);
@@ -610,27 +608,32 @@ public class Gui extends MazeEventListener implements ActionListener {
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
         if (!isTimerActive && !e.isControlDown() && !RecordAndReplay.isRecording() && !isPaused) {
-          timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
+          try {
+            timer.schedule(timerTask, 0, 1000); // start the timer countdown
+          } catch (IllegalStateException e1) {
+            e1.getSuppressed();
+          }
         }
         showInfoFieldToGui(false);
 
         // movement
         if (!isPaused || maze.isLevelFinished()) {
           switch (key) {
-          case KeyEvent.VK_UP:
-            move(Maze.Direction.UP);
-            break;
-          case KeyEvent.VK_DOWN:
-            move(Maze.Direction.DOWN);
-            break;
-          case KeyEvent.VK_LEFT:
-            move(Maze.Direction.LEFT);
-            break;
-          case KeyEvent.VK_RIGHT:
-            move(Maze.Direction.RIGHT);
-            break;
-          }
+            case KeyEvent.VK_UP:
+              move(Maze.Direction.UP);
+              break;
+            case KeyEvent.VK_DOWN:
+              move(Maze.Direction.DOWN);
+              break;
+            case KeyEvent.VK_LEFT:
+              move(Maze.Direction.LEFT);
+              break;
+            case KeyEvent.VK_RIGHT:
+              move(Maze.Direction.RIGHT);
+              break;
+            default:
+            }
         }
 
         decrementTreasurePickUp();
