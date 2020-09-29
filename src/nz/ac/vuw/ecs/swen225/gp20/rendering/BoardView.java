@@ -39,7 +39,6 @@ public class BoardView extends JComponent implements ActionListener {
   int startCount = 0;
 
   Movable toAnimate;
-
   Animation currentAnimation;
 
   private double velx, vely;
