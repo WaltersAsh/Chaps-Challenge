@@ -1,9 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -83,13 +85,11 @@ public class Persistence {
   }
 
   public static boolean quickSave(Maze maze) {
-    Path p = Paths.get(".", "levels", "quickSave.json");
-    //check file exist
-
     try {
-      p.toFile().createNewFile();
-      System.out.println(Files.readAllLines(p));
-      mapper.writeValue(p.toFile(), maze);
+      Path p = Paths.get(".", "levels", "quickSave.json");
+      BufferedWriter bw = Files.newBufferedWriter(p, Charsets.UTF_8);
+      bw.write(mapper.writeValueAsString(maze));
+      bw.close();
       return true;
     } catch (IOException e) {
       e.printStackTrace();
