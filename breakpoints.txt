@@ -20,5 +20,30 @@ nz.ac.vuw.ecs.swen225.gp20.rendering.AnimationHandler;
 nz.ac.vuw.ecs.swen225.gp20.rendering.SoundHandler;
     update: Line 125;
 
+nz.ac.vuw.ecs.swen225.gp20.application.Main;
+    maze instantiation (maze): Line 31;
+
+nz.ac.vuw.ecs.swen225.gp20.application.Gui;
+    update mazeEventPickup (maze): Line 936;
+           mazeEventUnlocked (maze): Line 949;
+           mazeEventInfoField (maze): Line 968;
+           mazeEventWon (maze): Line 982;
+
+    BoardView instantiation (renderer): Line 230;
+
+    saveMaze call (persistence): Line 518; 
+    loadMaze call (persistence): Line 524;
+
+    startRecording call (recnplay): Line 538;
+    stopRecording call (recnplay): Line 543;
+    saveRecording call (recnplay): Line 545;
+    playRecording call (recnplay): Line 550;
+    loadRecording call (recnplay): Line 558;
+    addMove calls (recnplay): Line 608;
+                                   613;
+                                   618:
+                                   623;
+    
+
 
 
