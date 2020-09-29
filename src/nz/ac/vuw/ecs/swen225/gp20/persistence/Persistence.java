@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.BufferedWriter;
@@ -84,7 +83,14 @@ public class Persistence {
     return true;
   }
 
-  public static boolean quickSave(Maze maze) {
+  /**
+   * Quick save maze.
+   *
+   * @param maze the maze
+   * @return the boolean indicate saving is successful or not
+   * @throws IOException if saving failed
+   */
+  public static boolean quickSave(Maze maze) throws IOException {
     try {
       Path p = Paths.get(".", "levels", "quickSave.json");
       BufferedWriter bw = Files.newBufferedWriter(p, Charsets.UTF_8);
@@ -98,12 +104,40 @@ public class Persistence {
   }
 
   /**
+   * Quick load maze.
+   *
+   * @return the loaded maze
+   * @throws Exception if file not exist or maze invalid.
+   */
+  public static Maze quickLoad() throws Exception {
+    try {
+      Path p = Paths.get(".", "levels", "quickSave.json");
+      //check file exist
+      if (p.toFile().exists()) {
+        Maze loadedMaze = mapper.readValue(p.toFile(), Maze.class);
+        if (mazeValidator(loadedMaze)) {
+          return loadedMaze;
+        }
+      } else {
+        throw new IOException("quickSave.json not existed");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
    * The tester for quickSave.
    *
    * @param args the input arguments
    */
   public static void main(String[] args) {
-    System.out.println(quickSave(BoardRig.lesson1()));
+    try {
+      System.out.println(quickLoad());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
 }
