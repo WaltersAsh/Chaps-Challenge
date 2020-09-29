@@ -46,5 +46,20 @@ nz.ac.vuw.ecs.swen225.gp20.application.Gui;
     playRecording call (recnplay): Line 544;
     loadRecording call (recnplay): Line 552;
 
+nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay
+    Persistence.loadMaze (persistence): line 60
+    Gui.loadMazeGui      (application): line 62
+    Persistence.saveMaze (persistence): line 98
+    Gui.getMaze          (application): line 98
+    Persistence.loadMaze (persistence): line 110
+    Maze.setMoves        (maze)       : line 113
+    Gui.getMaze          (application): line 113
+    Maze.getMoves        (maze)       : line 113
+    Persistence.saveMaze (persistence): line 116
+
+
+    
+    
+
 
 

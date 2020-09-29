@@ -50,28 +50,17 @@ public class RecordAndReplay {
         RecordAndReplay.gui = gui;
     }
 
-
-    /**
-     * Saves the current recording as a JSON file
-     *
-     * @param file the file to save to
-     */
-    public static void saveRecording(File file) {
-        Persistence.saveMaze(gui.getMaze(), file);
-    }
-
     /**
      * Loads a recording from a JSON file
      *
      * @param file the save file to be loaded
      */
     public static void loadRecording(File file) {
-        if (isRecording) {
-            return;
+        if (!isRecording) {
+            Maze loadedMaze = Persistence.loadMaze(file);
+            loadedRecording = loadedMaze.getMoves();
+            gui.loadMazeGui(loadedMaze);
         }
-        Maze loadedMaze = Persistence.loadMaze(file);
-        loadedRecording = loadedMaze.getMoves();
-        gui.loadMazeGui(loadedMaze);
     }
 
     /**
@@ -91,9 +80,7 @@ public class RecordAndReplay {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
         };
         Thread thread = new Thread(runnable);
         thread.start();
