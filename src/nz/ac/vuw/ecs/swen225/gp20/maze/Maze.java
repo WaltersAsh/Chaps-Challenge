@@ -346,14 +346,16 @@ public class Maze {
       // if the pathtile we try to push to is free, push the crate
       if (pt.isWalkable()) {
         pt.moveTo(c);
+        overrideDispatch(new MazeEventPushed(this, current, original, d, c));
         // can also push crate onto water to make a path
       } else if (pt.getBlocker() instanceof Water) {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
+        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
       } else {
         return false;
       }
-      overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
+
       return true;
     }
     return false;
