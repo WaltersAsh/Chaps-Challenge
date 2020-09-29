@@ -1,10 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -79,8 +83,27 @@ public class Persistence {
   }
 
   public static boolean quickSave(Maze maze) {
-    return true;
+    Path p = Paths.get(".", "levels", "quickSave.json");
+    //check file exist
+
+    try {
+      p.toFile().createNewFile();
+      System.out.println(Files.readAllLines(p));
+      mapper.writeValue(p.toFile(), maze);
+      return true;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
+  /**
+   * The tester for quickSave.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    System.out.println(quickSave(BoardRig.lesson1()));
+  }
 
 }

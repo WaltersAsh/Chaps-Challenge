@@ -6,7 +6,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 public class MazeToJsonTest {
-  static Maze m = BoardRig.levelEditorTest3();
+  static Maze m = BoardRig.levelEditorTest1();
   static ObjectMapper mapper = new ObjectMapper();
 
   public static void main(String[] args) throws JsonProcessingException {
