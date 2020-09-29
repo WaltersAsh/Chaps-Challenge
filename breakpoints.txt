@@ -32,20 +32,32 @@ nz.ac.vuw.ecs.swen225.gp20.application.Main;
     maze initialisation of levels (maze): Line 10;
 
 nz.ac.vuw.ecs.swen225.gp20.application.Gui;
-    update mazeEventPickup (maze): Line 947;
-           mazeEventUnlocked (maze): Line 960;
-           mazeEventInfoField (maze): Line 979;
-           mazeEventWon (maze): Line 993;
 
-    BoardView instantiation (renderer): Line 230;
+    maze
+    add listener to instatiated maze: Line 229;
+    move call: Line 595;
+    accessing chap's treasures: Line 750;
+    accessing maze's treasures size: 751;
+    accessing chap's inventory: Line 821;
+    pausing maze: Line 703;
+    resuming maze: Line 712;
+    update mazeEventPickup: Line 947;
+           mazeEventUnlocked: Line 960;
+           mazeEventInfoField: Line 979;
+           mazeEventWon: Line 993;
 
-    saveMaze call (persistence): Line 518; 
-    loadMaze call (persistence): Line 522;
+    renderer
+    BoardView instantiation: Line 230;
 
-    startRecording call (recnplay): Line 530;
-    stopRecording call (recnplay): Line 537;
-    playRecording call (recnplay): Line 544;
-    loadRecording call (recnplay): Line 552;
+    persistence
+    saveMaze call: Line 518; 
+    loadMaze call: Line 522;
+
+    recnplay
+    startRecording call: Line 530;
+    stopRecording call: Line 537;
+    playRecording call: Line 544;
+    loadRecording call: Line 552;
 
 nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay
     Persistence.loadMaze (persistence): line 60
