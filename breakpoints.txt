@@ -6,3 +6,19 @@ nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
     broadcast: Line 187;
     move: Line 216;
 
+nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+    paintComponent: Line 71;
+    drawWholeBoard: Line 93;
+    drawWholeBoard: Line 102;
+    drawWindowedBoard: Line 154;
+    initialiseAnimation: Line 221;
+    reset: Line 326;
+
+nz.ac.vuw.ecs.swen225.gp20.rendering.AnimationHandler;
+    update: Line 15;
+
+nz.ac.vuw.ecs.swen225.gp20.rendering.SoundHandler;
+    update: Line 125;
+
+
+
