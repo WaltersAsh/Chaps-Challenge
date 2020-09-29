@@ -78,5 +78,9 @@ public class Persistence {
     return true;
   }
 
+  public static boolean quickSave(Maze maze) {
+    return true;
+  }
+
 
 }
