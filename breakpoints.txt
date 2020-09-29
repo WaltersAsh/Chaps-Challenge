@@ -1,3 +1,10 @@
+Quick Note on Cloning and importing this project:
+Upon git cloning in the commandline and opening the project in Intellij, the side project side panel may disappear, close and reopen project.
+If it still doesn't work, go to view -> Tool Window -> Project
+Add the junit tests in the persistence package in the "Tester" class (alt enter and select junit 5.4.2).
+Run the Main java file in the application module.
+If there are issues with the libraries, go to lib folder and for each file right click 'add as library'
+
 nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence:
     loadMaze: Line 24;
     saveMaze: Line 47;

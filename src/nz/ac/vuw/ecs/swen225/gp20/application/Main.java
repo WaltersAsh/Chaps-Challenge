@@ -28,7 +28,7 @@ public class Main {
     //TODO: Boardview object from the renderer package should probably be here
     // (instead of in gui) when dependency is fixed
 
-    Maze maze = levels[6];
+    Maze maze = levels[0];
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }
