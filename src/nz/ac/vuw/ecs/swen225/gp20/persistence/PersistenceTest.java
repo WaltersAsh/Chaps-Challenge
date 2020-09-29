@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -33,16 +32,14 @@ public class PersistenceTest {
     for (Maze level : levels) {
       try {
         String json = mapper.writeValueAsString(level);
-        System.out.println(json);
-        Maze mazeFromJson = mapper.readValue(json, Maze.class);
-        String json2 = mapper.writeValueAsString(mazeFromJson);
+        Persistence.quickSave(level);
+        String json2 = mapper.writeValueAsString(Persistence.quickLoad());
         assertEquals(json, json2);
-      } catch (JsonProcessingException e) {
+      } catch (Exception e) {
         e.printStackTrace();
         assert false;
       }
     }
-
   }
 
   @Test
