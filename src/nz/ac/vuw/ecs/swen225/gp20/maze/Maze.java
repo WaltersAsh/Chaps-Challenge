@@ -38,6 +38,18 @@ public class Maze {
   private Chap chap;
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
+
+
+  //FIXME test for record and replay
+  public List<Direction> moves = new ArrayList<Direction>();
+  public void setMoves(List<Direction> moves) {
+    this.moves = moves;
+  }
+  public List<Direction> getMoves() {
+    return moves;
+  }
+
+
   private ExitLock exitlock;
 
   public void setWidth(int width) {
