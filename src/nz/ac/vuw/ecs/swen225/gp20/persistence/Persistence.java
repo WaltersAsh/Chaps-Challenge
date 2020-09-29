@@ -77,7 +77,8 @@ public class Persistence {
     if (loadedMaze == null) {
       return false;
     } else if (loadedMaze.getHeight() < 1 || loadedMaze.getWidth() < 1) {
-      throw new Exception("Illegal Maze size, excepted both >0 but height = " + loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
+      throw new Exception("Illegal Maze size, excepted both >0 but height = " +
+          loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
     }
 
     return true;
