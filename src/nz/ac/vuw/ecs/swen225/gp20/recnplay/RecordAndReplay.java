@@ -1,16 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
-import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Class used for recording are replaying gameplay
@@ -20,11 +16,6 @@ import java.util.ArrayList;
 public class RecordAndReplay {
 
     private static Gui gui;
-
-    /**
-     * The current loaded recording
-     */
-    private static List<Maze.Direction> currentRecording;
 
     /**
      * The current step (index) of this recording
@@ -40,10 +31,15 @@ public class RecordAndReplay {
     /**
      * Delay for playback speed
      */
-    private static int wait = 600;
+    private static int wait = 120;
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static List<Maze.Direction> loadedRecording;
 
+    /**
+     * The save file of this recording,
+     * necessary for appending moves to the original game state
+     */
+    private static File saveFile;
 
     /**
      * Constructor
@@ -58,70 +54,36 @@ public class RecordAndReplay {
     /**
      * Saves the current recording as a JSON file
      *
-     * @param saveName the name of the save file
+     * @param file the file to save to
      */
-    public static void saveRecording(String saveName) {
-        if (currentRecording == null) {
-            return; //no moves to save
-        }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(saveName));
-            writer.write(mapper.writeValueAsString(currentRecording));
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error writing save game file: " + e);
-        }
+    public static void saveRecording(File file) {
+        Persistence.saveMaze(gui.getMaze(), file);
     }
 
     /**
      * Loads a recording from a JSON file
      *
-     * @param jsonSave the JSON file of this recording
+     * @param file the save file to be loaded
      */
-    public static void loadRecording(File jsonSave) {
-        if (isRecording || jsonSave == null) {
+    public static void loadRecording(File file) {
+        if (isRecording) {
             return;
-        } //if game play is being recorded or there is no file, return
-        try {
-            currentRecording = new ArrayList<>();
-            for(Object obj : mapper.readValue(jsonSave, ArrayList.class)) {
-                Maze.Direction move;
-                switch((String) obj) {
-                    case "UP":
-                        move = Maze.Direction.UP;
-                        break;
-                    case "DOWN":
-                        move = Maze.Direction.DOWN;
-                        break;
-                    case "LEFT":
-                        move = Maze.Direction.LEFT;
-                        break;
-                    case "RIGHT":
-                        move = Maze.Direction.RIGHT;
-                        break;
-                    default:
-                        return;
-                }
-                currentRecording.add(move);
-            }
-        } catch (IOException e) {
-            System.out.println("Failed to load recording: " + e);
         }
+        Maze loadedMaze = Persistence.loadMaze(file);
+        loadedRecording = loadedMaze.getMoves();
+        gui.loadMaze(loadedMaze);
     }
 
     /**
-     * Replays the current recording
+     * Replays the current loaded recording
      */
     public void playRecording() {
-        if (isRecording || currentRecording == null) {
+        if (isRecording || loadedRecording == null) {
             return;
         }
-
-        //set game state here
-
         Runnable runnable = () -> {
             //execute moves
-            for(Maze.Direction move : currentRecording) {
+            for(Maze.Direction move : loadedRecording) {
                 gui.move(move);
                 //pause
                 try {
@@ -138,48 +100,45 @@ public class RecordAndReplay {
     }
 
     /**
-     * Starts a new recording, sets the gameState JSON field
+     * Starts a new recording, saves the gameState as a json
+     *
+     * @param file the file to save the game state to
      */
-    public static void startRecording() {
-        if (isRecording) {
-            return;
-        } //do nothing if already recording
-        isRecording = true;
-        currentRecording = new ArrayList<>();
+    public static void startRecording(File file) {
+        if (!isRecording) {
+            isRecording = true;
+            saveFile = file;
+            Persistence.saveMaze(gui.getMaze(), file);
+        }
     }
 
     /**
-     * Stops the current recording
+     * Stops the current recording and updates the list of moves
+     * in the original game state
      */
     public static void stopRecording() {
         isRecording = false;
-    }
 
-    /**
-     * Adds a move to the collection of playerMoves in this recording
-     *
-     * @param direction the direction of this move
-     */
-    public static void addMove(Maze.Direction direction) {
-        currentRecording.add(direction);
+        //load the original game state from the start of the recording
+        Maze maze = Persistence.loadMaze(saveFile);
+
+        //update the moves
+        maze.setMoves(gui.getMaze().getMoves());
+
+        //save the maze with the list of moves
+        Persistence.saveMaze(maze, saveFile);
     }
 
     /**
      * Advance the playback of this recording by one step
      */
     public void stepForward() {
-        if (currentRecording == null || index == currentRecording.size()) {
-            return;
-        }
     }
 
     /**
      * Rewind the playback of this recording by one step
      */
     public void stepBack() {
-        if (currentRecording == null || index == 0) {
-            return;
-        }
     }
 
     /**

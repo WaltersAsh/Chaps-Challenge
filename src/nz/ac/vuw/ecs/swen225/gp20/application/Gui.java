@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
@@ -518,44 +519,39 @@ public class Gui extends MazeEventListener implements ActionListener {
       saveMaze(maze, saveFileChooser(false));
       resume();
     } else if (e.getSource() == loadMenuItem) {
-      //FIXME: new gui shouldn't be instantiated,
-      // find a way to redraw the board - probably a gui problem
       pause();
-      Maze loaded = loadMaze(saveFileChooser(true));
-      if (loaded != null) {
-        maze = loaded;
-        this.frame.setVisible(false);
-        Gui updated = new Gui(maze);
-        updated.reloadInventoryPanel();
-        updated.getFrame().setVisible(true);
-        resume();
-      }
+      this.loadMaze(Persistence.loadMaze(saveFileChooser(true)));
       resume();
 
+
       //recnplay menu functionalities
+
+      //start recording game play
     } else if (e.getSource() == startRecordingMenuItem) {
       pause();
-      RecordAndReplay.startRecording();
+      RecordAndReplay.startRecording(openFileChooser(false));
       recordingIconLabel.setVisible(true);
       resume();
+
+      //stop recording game play
     } else if (e.getSource() == stopRecordingMenuItem && RecordAndReplay.isRecording()) {
       pause();
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
-      RecordAndReplay.saveRecording(openFileChooser(false).toString());
       resume();
 
+      //play recording
     } else if (e.getSource() == playMenuItem) {
       pause();
       recnplay.playRecording();
       resume();
 
+      //stop playing recording
     } else if (e.getSource() == stopPlayMenuItem) {
 
     } else if (e.getSource() == loadRecordingMenuItem) {
       pause();
-      openFileChooser(true);
-      RecordAndReplay.loadRecording(file);
+      RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
     }
 
@@ -578,12 +574,30 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Loads a maze
+   */
+  public void loadMaze(Maze loadedMaze) {
+    if (loadedMaze != null) {
+      maze = loadedMaze;
+      this.frame.setVisible(false);
+      //FIXME: new gui shouldn't be instantiated,
+      // find a way to redraw the board - probably a gui problem
+      Gui updated = new Gui(maze);
+      updated.reloadInventoryPanel();
+      updated.getFrame().setVisible(true);
+    }
+  }
+
+  /**
    * Moves chap.
    *
    * @param direction the movement direction
    */
   public void move(Maze.Direction direction) {
     maze.move(direction);
+    if (RecordAndReplay.isRecording()) {
+      this.maze.moves.add(direction);
+    }
   }
 
   /**
@@ -595,33 +609,27 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !isPaused) {
+        if (!isTimerActive && !e.isControlDown() && !RecordAndReplay.isRecording() && !isPaused) {
           timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
         }
         showInfoFieldToGui(false);
+
         // movement
         if (!isPaused || maze.isLevelFinished()) {
-          if (key == KeyEvent.VK_UP) {
-            maze.move(Maze.Direction.UP);
-            if (recnplay.isRecording()) {
-              recnplay.addMove(Maze.Direction.UP);
-            }
-          } else if (key == KeyEvent.VK_DOWN) {
-            maze.move(Maze.Direction.DOWN);
-            if (recnplay.isRecording()) {
-              recnplay.addMove(Maze.Direction.DOWN);
-            }
-          } else if (key == KeyEvent.VK_LEFT) {
-            maze.move(Maze.Direction.LEFT);
-            if (recnplay.isRecording()) {
-              recnplay.addMove(Maze.Direction.LEFT);
-            }
-          } else if (key == KeyEvent.VK_RIGHT) {
-            maze.move(Maze.Direction.RIGHT);
-            if (recnplay.isRecording()) {
-              recnplay.addMove(Maze.Direction.RIGHT);
-            }
+          switch (key) {
+          case KeyEvent.VK_UP:
+            move(Maze.Direction.UP);
+            break;
+          case KeyEvent.VK_DOWN:
+            move(Maze.Direction.DOWN);
+            break;
+          case KeyEvent.VK_LEFT:
+            move(Maze.Direction.LEFT);
+            break;
+          case KeyEvent.VK_RIGHT:
+            move(Maze.Direction.RIGHT);
+            break;
           }
         }
 
