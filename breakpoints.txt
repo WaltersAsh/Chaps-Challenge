@@ -8,6 +8,7 @@ If there are issues with the libraries, go to lib folder and for each file right
 nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence:
     loadMaze: Line 30;
     saveMaze: Line 53;
+    fixMaze : Line 74 calls Maze.enemy;
 
 nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
     broadcast: Line 187;
