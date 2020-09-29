@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class Tester {
+public class PersistenceTest {
   static ObjectMapper mapper = new ObjectMapper();
   private static final Maze[] levels = new Maze[]{
       BoardRig.lesson1(),
