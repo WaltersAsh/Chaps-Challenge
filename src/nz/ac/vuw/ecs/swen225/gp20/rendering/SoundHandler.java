@@ -118,7 +118,6 @@ public class SoundHandler extends MazeEventListener{
   public void update(MazeEventPushedWater e) {
     System.out.println(e);
     playSound("WT");
-
   }
 
   @Override
