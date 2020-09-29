@@ -542,8 +542,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       pause();
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
-      openFileChooser(false);
-      RecordAndReplay.saveRecording(file.toString());
+      RecordAndReplay.saveRecording(openFileChooser(false).toString());
       resume();
 
     } else if (e.getSource() == playMenuItem) {
@@ -596,7 +595,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown()) {
+        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !isPaused) {
           timer.schedule(timerTask, 0, 1000); // start the timer countdown
           isTimerActive = true;
         }
