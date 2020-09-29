@@ -90,9 +90,8 @@ public class Persistence {
    *
    * @param maze the maze
    * @return the boolean indicate saving is successful or not
-   * @throws IOException if saving failed
    */
-  public static boolean quickSave(Maze maze) throws IOException {
+  public static boolean quickSave(Maze maze) {
     try {
       Path p = Paths.get(".", "levels", "quickSave.json");
       BufferedWriter bw = Files.newBufferedWriter(p, Charsets.UTF_8);
@@ -109,9 +108,8 @@ public class Persistence {
    * Quick load maze.
    *
    * @return the loaded maze
-   * @throws Exception if file not exist or maze invalid.
    */
-  public static Maze quickLoad() throws Exception {
+  public static Maze quickLoad() {
     try {
       Path p = Paths.get(".", "levels", "quickSave.json");
       //check file exist
@@ -120,8 +118,8 @@ public class Persistence {
         if (mazeValidator(loadedMaze)) {
           return loadedMaze;
         }
-      } else {
-        throw new IOException("quickSave.json not existed");
+      } else {//if file not exist
+        throw new IOException("levels/quickSave.json not existed");
       }
     } catch (Exception e) {
       e.printStackTrace();
