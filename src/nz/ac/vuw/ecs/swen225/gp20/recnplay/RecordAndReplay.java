@@ -71,7 +71,7 @@ public class RecordAndReplay {
         }
         Maze loadedMaze = Persistence.loadMaze(file);
         loadedRecording = loadedMaze.getMoves();
-        gui.loadMaze(loadedMaze);
+        gui.loadMazeGui(loadedMaze);
     }
 
     /**
