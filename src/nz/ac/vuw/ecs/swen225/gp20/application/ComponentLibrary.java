@@ -1,14 +1,15 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  * A utility class used for storing and retrieving fonts, colours and icon images.
@@ -22,6 +23,7 @@ public class ComponentLibrary {
   //fonts
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = null;
+
   static {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
@@ -29,6 +31,7 @@ public class ComponentLibrary {
       e.printStackTrace();
     }
   }
+
   public static final Font buttonFont = font.deriveFont(Font.PLAIN, 20);
   public static final Font sideFont = font.deriveFont(Font.PLAIN, 11);
   public static final Font bigFont = font.deriveFont(Font.BOLD, 40);

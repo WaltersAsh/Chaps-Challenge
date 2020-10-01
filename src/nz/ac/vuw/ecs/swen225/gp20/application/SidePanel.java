@@ -1,8 +1,11 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,12 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+
+
+/**
+ * SidePanel class for instantiating a side panel for the gui.
+ */
 public class SidePanel extends JPanel {
 
   // inner panels inside of side panel
@@ -40,6 +45,11 @@ public class SidePanel extends JPanel {
 
   private Maze maze;
 
+  /**
+   * Side panel is constructed with its inner side panels.
+   *
+   * @param m the maze passed through from the gui
+   */
   public SidePanel(Maze m) {
     maze = m;
 
@@ -76,10 +86,10 @@ public class SidePanel extends JPanel {
    */
   public void createInnerSidePanels() {
     final JPanel[] panels = new JPanel[]{
-            levelPanel = new JPanel(),
-            timePanel = new JPanel(),
-            treasuresPanel = new JPanel(),
-            inventoryPanel = new JPanel()
+      levelPanel = new JPanel(),
+      timePanel = new JPanel(),
+      treasuresPanel = new JPanel(),
+      inventoryPanel = new JPanel()
     };
 
     inventoryGridPanel = new JPanel();
@@ -117,10 +127,10 @@ public class SidePanel extends JPanel {
   public void initialiseInnerSidePanels() {
     // initialise inner panels for inner panels in side panel
     JPanel[] panels = new JPanel[]{
-            levelContentPanel = new JPanel(),
-            timeContentPanel = new JPanel(),
-            treasuresContentPanel = new JPanel(),
-            inventoryContentPanel = new JPanel()
+      levelContentPanel = new JPanel(),
+      timeContentPanel = new JPanel(),
+      treasuresContentPanel = new JPanel(),
+      inventoryContentPanel = new JPanel()
     };
 
     for (JPanel panel : panels) {
@@ -139,10 +149,10 @@ public class SidePanel extends JPanel {
     JLabel treasuresTitleLabel;
     JLabel inventoryTitleLabel;
     JLabel[] titleLabels = new JLabel[]{
-            levelTitleLabel = new JLabel("LEVEL"),
-            timeTitleLabel = new JLabel("TIME LEFT"),
-            treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
-            inventoryTitleLabel = new JLabel("INVENTORY"),
+      levelTitleLabel = new JLabel("LEVEL"),
+      timeTitleLabel = new JLabel("TIME LEFT"),
+      treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
+      inventoryTitleLabel = new JLabel("INVENTORY"),
     };
 
     for (JLabel label : titleLabels) {
@@ -153,9 +163,9 @@ public class SidePanel extends JPanel {
 
     // initialise value labels
     JLabel[] valueLabels = new JLabel[]{
-            levelValueLabel = new JLabel("1"),
-            timeValueLabel = new JLabel("60"),
-            treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
+      levelValueLabel = new JLabel("1"),
+      timeValueLabel = new JLabel("60"),
+      treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
     };
 
     for (JLabel valueLabel : valueLabels) {

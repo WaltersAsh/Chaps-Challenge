@@ -1,18 +1,14 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
+import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,12 +16,30 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
  * Gui class for visual display of the game.
@@ -55,34 +69,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JLabel recordingIconLabel;
   private JLabel pausedIconLabel;
 
-  // menu bar and menu items
-  private JMenuBar menuBar;
-
-  private JMenu fileMenu;
-  private JMenuItem saveMenuItem;
-  private JMenuItem loadMenuItem;
-
-  private JMenu gameMenu;
-  private JMenuItem resumeMenuItem;
-  private JMenuItem pauseMenuItem;
-  private JMenuItem redoMenuItem;
-  private JMenuItem undoMenuItem;
-  private JMenuItem exitMenuItem;
-  private JMenuItem exitSaveMenuItem;
-
-  private JMenu levelMenu;
-  private JMenuItem restartCurrentLevelMenuItem;
-  private JMenuItem startFirstLevelMenuItem;
-
-  private JMenu recnplayMenu;
-  private JMenuItem playMenuItem;
-  private JMenuItem stopPlayMenuItem;
-  private JMenuItem startRecordingMenuItem;
-  private JMenuItem stopRecordingMenuItem;
-  private JMenuItem loadRecordingMenuItem;
-
-  private JMenu helpMenu;
-  private JMenuItem showInstructMenuItem;
+  //menu bar
+  private MenuBar menuBar;
 
   //buttons for controlling replaying in recnplay
   private JButton nextFrameButton;
@@ -109,7 +97,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
-  public Gui(Maze maze){
+  public Gui(Maze maze) {
     this.maze = maze;
     initialMaze = maze;
     recnplay = new RecordAndReplay(this);
@@ -118,19 +106,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setLayout(new BorderLayout());
     createFramePanel();
     createBoardPanel();
+    initialiseSidePanel();
+    initialiseMenuBar();
     createInfoFieldLabel();
-
-    sidePanel = new SidePanel(maze);
-    timeValueLabel = sidePanel.getTimeValueLabel();
-    treasuresValueLabel = sidePanel.getTreasuresValueLabel();
-    inventoryValueLabels = sidePanel.getInventoryValueLabels();
-
-    /*
-    createSidePanel();
-    createInnerSidePanels();
-    initialiseInnerSidePanels();
-     */
-    createMenuComponents();
     createRecnplayControls();
 
     recordingIconLabel = ComponentLibrary.initialiseRecnplayIconLabel();
@@ -142,13 +120,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
     boardPanel.add(recordingIconLabel, JLayeredPane.PALETTE_LAYER);
     boardPanel.add(pausedIconLabel, JLayeredPane.PALETTE_LAYER);
-
-    // add menus to menu bars
-    menuBar.add(fileMenu);
-    menuBar.add(gameMenu);
-    menuBar.add(levelMenu);
-    menuBar.add(recnplayMenu);
-    menuBar.add(helpMenu);
 
     // set up board and side panels into frame panel
     // framePanel.add(Box.createHorizontalGlue());
@@ -200,6 +171,25 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Initialise the side panel of the gui.
+   */
+  public void initialiseSidePanel() {
+    sidePanel = new SidePanel(maze);
+    timeValueLabel = sidePanel.getTimeValueLabel();
+    treasuresValueLabel = sidePanel.getTreasuresValueLabel();
+    inventoryValueLabels = sidePanel.getInventoryValueLabels();
+  }
+
+  /**
+   * Initialise the menu bar of the gui.
+   */
+  public void initialiseMenuBar() {
+    menuBar = new MenuBar();
+    menuBar.createMenuComponents(this);
+    menuBar.addMenus();
+  }
+
+  /**
    * Create the info field label and text label.
    */
   public void createInfoFieldLabel() {
@@ -247,67 +237,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Create the menu bar, menus and menu items.
-   */
-  public void createMenuComponents() {
-    menuBar = new JMenuBar();
-    fileMenu = new JMenu("File");
-    gameMenu = new JMenu("Game");
-    levelMenu = new JMenu("Level");
-    recnplayMenu = new JMenu("Rec'n'play");
-    helpMenu = new JMenu("Help");
-
-    final JMenuItem[] fileMenuItems = new JMenuItem[]{
-        saveMenuItem = new JMenuItem("Save"),
-        loadMenuItem = new JMenuItem("Load")
-    };
-
-    final JMenuItem[] gameMenuItems = new JMenuItem[]{
-        resumeMenuItem = new JMenuItem("Resume"),
-        pauseMenuItem = new JMenuItem("Pause"),
-        redoMenuItem = new JMenuItem("Redo"),
-        undoMenuItem = new JMenuItem("Undo"),
-        exitMenuItem = new JMenuItem("Exit"),
-        exitSaveMenuItem = new JMenuItem("Exit + Save")
-    };
-
-    final JMenuItem[] levelMenuItems = new JMenuItem[]{
-        restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
-        startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
-    };
-
-    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
-        startRecordingMenuItem = new JMenuItem("Record"),
-        stopRecordingMenuItem = new JMenuItem("Stop Recording"),
-        playMenuItem = new JMenuItem("Replay"),
-        stopPlayMenuItem = new JMenuItem("Stop Replay"),
-        loadRecordingMenuItem = new JMenuItem("Load Recording")
-    };
-
-    HashMap<JMenuItem[], JMenu> menuToMenuItems = new HashMap<>();
-    menuToMenuItems.put(fileMenuItems, fileMenu);
-    menuToMenuItems.put(gameMenuItems, gameMenu);
-    menuToMenuItems.put(levelMenuItems, levelMenu);
-    menuToMenuItems.put(recnplayMenuItems, recnplayMenu);
-
-    final JMenuItem[][] superMenuItems = new JMenuItem[][]{
-        fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
-    };
-
-    for (JMenuItem[] menuItems : superMenuItems) {
-      for (JMenuItem menuItem : menuItems) {
-        menuItem.addActionListener(this);
-        JMenu menu = menuToMenuItems.get(menuItems);
-        menu.add(menuItem);
-      }
-    }
-
-    showInstructMenuItem = new JMenuItem("How to Play");
-    showInstructMenuItem.addActionListener(this);
-    helpMenu.add(showInstructMenuItem);
-  }
-
-  /**
    * Listen to menu buttons in menu bar, recnplay buttons and execute.
    *
    * @param e the action event
@@ -318,53 +247,53 @@ public class Gui extends MazeEventListener implements ActionListener {
     //menu actions
 
     //maze functionality
-    if (e.getSource() == resumeMenuItem) {
+    if (e.getSource() == MenuBar.resumeMenuItem) {
       resume();
-      System.out.println("Resumed");
-    } else if (e.getSource() == pauseMenuItem) {
+      pausedIconLabel.setVisible(false);
+    } else if (e.getSource() == MenuBar.pauseMenuItem) {
       pause();
-      System.out.println("Paused");
-    } else if (e.getSource() == restartCurrentLevelMenuItem) {
+      pausedIconLabel.setVisible(true);
+    } else if (e.getSource() == MenuBar.restartCurrentLevelMenuItem) {
       //restartCurrentLevel();
-    } else if (e.getSource() == exitMenuItem) {
+    } else if (e.getSource() == MenuBar.exitMenuItem) {
       System.exit(1);
 
       //persistence loading and saving
-    } else if (e.getSource() == saveMenuItem) {
+    } else if (e.getSource() == MenuBar.saveMenuItem) {
       pause();
-      saveMaze(maze, saveFileChooser(false));
+      saveMaze(maze, openFileChooser(false));
       resume();
-    } else if (e.getSource() == loadMenuItem) {
+    } else if (e.getSource() == MenuBar.loadMenuItem) {
       pause();
-      loadMazeGui(Persistence.loadMaze(saveFileChooser(true)));
+      loadMazeGui(loadMaze(openFileChooser(true)));
       resume();
 
       //recnplay menu functionalities
 
       //start recording game play
-    } else if (e.getSource() == startRecordingMenuItem) {
+    } else if (e.getSource() == MenuBar.startRecordingMenuItem) {
       pause();
       RecordAndReplay.startRecording(openFileChooser(false));
       recordingIconLabel.setVisible(true);
       resume();
 
       //stop recording game play
-    } else if (e.getSource() == stopRecordingMenuItem && RecordAndReplay.isRecording()) {
+    } else if (e.getSource() == MenuBar.stopRecordingMenuItem && RecordAndReplay.isRecording()) {
       pause();
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
       //play recording
-    } else if (e.getSource() == playMenuItem) {
+    } else if (e.getSource() == MenuBar.playMenuItem) {
       pause();
       recnplay.playRecording();
       resume();
 
       //stop playing recording
-    } else if (e.getSource() == stopPlayMenuItem) {
+    } else if (e.getSource() == MenuBar.stopPlayMenuItem) {
 
-    } else if (e.getSource() == loadRecordingMenuItem) {
+    } else if (e.getSource() == MenuBar.loadRecordingMenuItem) {
       pause();
       RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
@@ -576,26 +505,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public File openFileChooser(boolean isLoad) {
     int result = -1;
-    if (isLoad) { //is loading the file
-      result = fileChooser.showOpenDialog(null);
-    } else { //is saving the file
-      result = fileChooser.showSaveDialog(null);
-    }
-    if (result == JFileChooser.APPROVE_OPTION) {
-      return fileChooser.getSelectedFile();
-    }
-    return null;
-  }
-
-  /**
-   * Open the file chooser for game levels.
-   *
-   * @param isLoad boolean confirming loading or saving (not loading)
-   * @return target File object, or null is no file was chosen
-   */
-  public File saveFileChooser(boolean isLoad) {
-    JFileChooser fc = new JFileChooser(Paths.get(".", "levels").toFile());
-    int result = -1;
+    JFileChooser fc = new JFileChooser(Paths.get(".", "levels").toFile());;
     if (isLoad) { //is loading the file
       result = fc.showOpenDialog(null);
     } else { //is saving the file
@@ -648,42 +558,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public JFrame getFrame() {
     return frame;
-  }
-
-  /**
-   * Get the board panel.
-   *
-   * @return the JPanel representing the container for the board
-   */
-  public JLayeredPane getBoardPanel() {
-    return boardPanel;
-  }
-
-  /**
-   * Get the level value label.
-   *
-   * @return the label
-   */
-  public JLabel getLevelValueLabel() {
-    return levelValueLabel;
-  }
-
-  /**
-   * Get the time value label.
-   *
-   * @return the label
-   */
-  public JLabel getTimeValueLabel() {
-    return timeValueLabel;
-  }
-
-  /**
-   * Get the inventory labels.
-   *
-   * @return the inventory value labels array
-   */
-  public JLabel[] getInventoryValueLabels() {
-    return inventoryValueLabels;
   }
 
   /**
