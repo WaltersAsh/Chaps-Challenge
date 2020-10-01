@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -139,11 +140,25 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isPaused;
 
   public static RecordAndReplay recnplay;
+  Font font, buttonFont, sideFont, bigFont, infoFont;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
-  public Gui(Maze maze) {
+  public Gui(Maze maze){
+    try {
+      File font_file = new File("resources/textures/gui/font/minecraft_font.ttf");
+      font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+      buttonFont = font.deriveFont(Font.PLAIN, 20);
+      sideFont = font.deriveFont(Font.PLAIN, 11);
+      bigFont = font.deriveFont(Font.BOLD, 40);
+      infoFont = font.deriveFont(Font.PLAIN, 40);
+      System.out.println(font.getSize());
+    }
+    catch(IOException | FontFormatException e){
+      System.out.println(e);
+    }
+
     this.maze = maze;
     initialMaze = maze;
     recnplay = new RecordAndReplay(this);
@@ -318,6 +333,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     };
 
     for (JLabel label : titleLabels) {
+      label.setFont(sideFont);
       label.setForeground(Color.WHITE);
       label.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
@@ -330,7 +346,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     };
 
     for (JLabel valueLabel : valueLabels) {
-      valueLabel.setFont(bigText);
+      valueLabel.setFont(bigFont);
       valueLabel.setForeground(Color.BLACK);
       valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
@@ -365,7 +381,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabelText = new JLabel("swing is pain :(");
     infoFieldLabelText.setBounds(150, -225, 1000, 1000);
-    infoFieldLabelText.setFont(new Font("", Font.BOLD, 50));
+    infoFieldLabelText.setFont(infoFont);
+
     infoFieldLabelText.setForeground(Color.BLACK);
     showInfoFieldToGui(false);
   }
@@ -388,7 +405,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     };
 
     for (JButton button : buttons) {
-      button.setFont(regText);
+      button.setFont(buttonFont);
       button.setForeground(Color.WHITE);
       button.setBackground(lavender);
       button.addActionListener(this);
