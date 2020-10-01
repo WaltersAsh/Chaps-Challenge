@@ -12,7 +12,6 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +19,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -40,27 +38,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JFrame frame;
   private JPanel framePanel;
   public static JLayeredPane boardPanel;
-  private JPanel sidePanel;
+  private SidePanel sidePanel;
   private JPanel recnplayControlsPanel;
-
-  // inner panels inside of side panel
-  private JPanel levelPanel;
-  private JPanel timePanel;
-  private JPanel treasuresPanel;
-  private JPanel inventoryPanel;
-
-  // inner panels inside of inner panels of side panel
-  private JPanel levelContentPanel;
-  private JPanel timeContentPanel;
-  private JPanel treasuresContentPanel;
-  private JPanel inventoryGridPanel;
-  private JPanel inventoryContentPanel;
-
-  // title labels
-  private JLabel levelTitleLabel;
-  private JLabel timeTitleLabel;
-  private JLabel treasuresTitleLabel;
-  private JLabel inventoryTitleLabel;
 
   // value labels
   private JLabel levelValueLabel;
@@ -113,22 +92,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JButton slowerReplayButton;
   private JButton standardReplayButton;
 
-  // Text sizes and fonts
-  private Font regText = new Font("", Font.PLAIN, 25);
-  private Font bigText = new Font("", Font.BOLD, 45);
-
-  // Background colours
-  // TODO: Replace background color for theme of renderer assets
-  private Color lavender = new Color(74, 29, 138);
-  private Color lightLavender = new Color(179, 159, 207);
-  private Color darkLavender = new Color(50, 38, 66);
-  private Color deepLavender = new Color(85, 52, 130);
-  private Color fullLavender = new Color(102, 0, 255);
-  private Color paleLavender = new Color(237, 224, 255);
-
   //Files
   private final JFileChooser fileChooser = new JFileChooser(Paths.get(".").toFile());
-  private File file;
 
   public static BoardView board;
   private Maze maze;
@@ -140,25 +105,11 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isPaused;
 
   public static RecordAndReplay recnplay;
-  Font font, buttonFont, sideFont, bigFont, infoFont;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
    */
   public Gui(Maze maze){
-    try {
-      File font_file = new File("resources/textures/gui/font/minecraft_font.ttf");
-      font = Font.createFont(Font.TRUETYPE_FONT, font_file);
-      buttonFont = font.deriveFont(Font.PLAIN, 20);
-      sideFont = font.deriveFont(Font.PLAIN, 11);
-      bigFont = font.deriveFont(Font.BOLD, 40);
-      infoFont = font.deriveFont(Font.PLAIN, 40);
-      System.out.println(font.getSize());
-    }
-    catch(IOException | FontFormatException e){
-      System.out.println(e);
-    }
-
     this.maze = maze;
     initialMaze = maze;
     recnplay = new RecordAndReplay(this);
@@ -168,13 +119,22 @@ public class Gui extends MazeEventListener implements ActionListener {
     createFramePanel();
     createBoardPanel();
     createInfoFieldLabel();
+
+    sidePanel = new SidePanel(maze);
+    timeValueLabel = sidePanel.getTimeValueLabel();
+    treasuresValueLabel = sidePanel.getTreasuresValueLabel();
+    inventoryValueLabels = sidePanel.getInventoryValueLabels();
+
+    /*
     createSidePanel();
     createInnerSidePanels();
     initialiseInnerSidePanels();
+     */
     createMenuComponents();
     createRecnplayControls();
-    initialiseRecnplayIconLabel();
-    initialisePauseIconLabel();
+
+    recordingIconLabel = ComponentLibrary.initialiseRecnplayIconLabel();
+    pausedIconLabel = ComponentLibrary.initialisePauseIconLabel();
 
     board.setBounds(0, 0, 1000, 1000);
     boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
@@ -189,18 +149,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     menuBar.add(levelMenu);
     menuBar.add(recnplayMenu);
     menuBar.add(helpMenu);
-
-    // add content panels to inner side panels
-    levelPanel.add(levelContentPanel);
-    timePanel.add(timeContentPanel);
-    treasuresPanel.add(treasuresContentPanel);
-    inventoryPanel.add(inventoryContentPanel);
-
-    // add panels to side panels
-    sidePanel.add(levelPanel);
-    sidePanel.add(timePanel);
-    sidePanel.add(treasuresPanel);
-    sidePanel.add(inventoryPanel);
 
     // set up board and side panels into frame panel
     // framePanel.add(Box.createHorizontalGlue());
@@ -232,7 +180,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void createFramePanel() {
     framePanel = new JPanel();
     framePanel.setLayout(new BoxLayout(framePanel, BoxLayout.X_AXIS));
-    framePanel.setBackground(lightLavender);
+    framePanel.setBackground(ComponentLibrary.lightLavender);
     framePanel.setBorder(new EmptyBorder(50, 50, 50, 50));
   }
 
@@ -243,128 +191,12 @@ public class Gui extends MazeEventListener implements ActionListener {
     boardPanel = new JLayeredPane();
     maze.addListener(this);
     board = new BoardView(maze);
-    boardPanel.setBackground(lightLavender);
+    boardPanel.setBackground(ComponentLibrary.lightLavender);
     boardPanel.setMinimumSize(
         new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setPreferredSize(
         new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     boardPanel.setMaximumSize(new Dimension(800, 800));
-  }
-
-  /**
-   * Create the side panel.
-   */
-  public void createSidePanel() {
-    sidePanel = new JPanel();
-    sidePanel.setBackground(paleLavender);
-    sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
-    sidePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-    sidePanel.setPreferredSize(new Dimension(175, 500));
-    sidePanel.setMaximumSize(new Dimension(250, 800));
-  }
-
-  /**
-   * Create the inner side panels.
-   */
-  public void createInnerSidePanels() {
-    final JPanel[] panels = new JPanel[]{
-        levelPanel = new JPanel(),
-        timePanel = new JPanel(),
-        treasuresPanel = new JPanel(),
-        inventoryPanel = new JPanel()
-    };
-
-    inventoryGridPanel = new JPanel();
-
-    inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
-    inventoryGridPanel.setLayout(new GridLayout(2, 4));
-
-    levelPanel.setBackground(fullLavender);
-    timePanel.setBackground(lavender);
-    treasuresPanel.setBackground(deepLavender);
-    inventoryPanel.setBackground(darkLavender);
-    inventoryGridPanel.setBackground(darkLavender);
-
-    for (JPanel panel : panels) {
-      panel.setPreferredSize(new Dimension(175, 125));
-      panel.setBorder(new LineBorder(paleLavender, 2, false));
-    }
-
-    // inventory grid panel initialisation
-    inventoryValueLabels = new JLabel[8];
-    for (int i = 0; i < 8; i++) {
-      JLabel label = new JLabel();
-      label.setText(" ");
-      label.setOpaque(true);
-      label.setBackground(darkLavender);
-      label.setBorder(BorderFactory.createLineBorder(paleLavender));
-      inventoryValueLabels[i] = label;
-      inventoryGridPanel.add(label);
-    }
-  }
-
-  /**
-   * Create and initialise the panels in the side panel.
-   */
-  public void initialiseInnerSidePanels() {
-    // initialise inner panels for inner panels in side panel
-    JPanel[] panels = new JPanel[]{
-        levelContentPanel = new JPanel(),
-        timeContentPanel = new JPanel(),
-        treasuresContentPanel = new JPanel(),
-        inventoryContentPanel = new JPanel()
-    };
-
-    for (JPanel panel : panels) {
-      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    }
-
-    levelContentPanel.setBackground(fullLavender);
-    timeContentPanel.setBackground(lavender);
-    treasuresContentPanel.setBackground(deepLavender);
-    inventoryContentPanel.setBackground(darkLavender);
-
-    // initialise title labels for panels in inner side panel
-    JLabel[] titleLabels = new JLabel[]{
-        levelTitleLabel = new JLabel("LEVEL"),
-        timeTitleLabel = new JLabel("TIME LEFT"),
-        treasuresTitleLabel = new JLabel("TREASURES REMAINING"),
-        inventoryTitleLabel = new JLabel("INVENTORY"),
-    };
-
-    for (JLabel label : titleLabels) {
-      label.setFont(sideFont);
-      label.setForeground(Color.WHITE);
-      label.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
-
-    // initialise value labels
-    JLabel[] valueLabels = new JLabel[]{
-        levelValueLabel = new JLabel("1"),
-        timeValueLabel = new JLabel("60"),
-        treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
-    };
-
-    for (JLabel valueLabel : valueLabels) {
-      valueLabel.setFont(bigFont);
-      valueLabel.setForeground(Color.BLACK);
-      valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
-
-    // add labels and JComponents to inner panels in side panels
-    levelContentPanel.add(levelTitleLabel);
-    levelContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
-    levelContentPanel.add(levelValueLabel);
-    timeContentPanel.add(timeTitleLabel);
-    timeContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
-    timeContentPanel.add(timeValueLabel);
-    treasuresContentPanel.add(treasuresTitleLabel);
-    treasuresContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
-    treasuresContentPanel.add(treasuresValueLabel);
-    inventoryContentPanel.add(inventoryTitleLabel);
-    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-    inventoryContentPanel.add(inventoryGridPanel);
-    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
   }
 
   /**
@@ -381,7 +213,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabelText = new JLabel("swing is pain :(");
     infoFieldLabelText.setBounds(150, -225, 1000, 1000);
-    infoFieldLabelText.setFont(infoFont);
+    infoFieldLabelText.setFont(ComponentLibrary.infoFont);
 
     infoFieldLabelText.setForeground(Color.BLACK);
     showInfoFieldToGui(false);
@@ -392,7 +224,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void createRecnplayControls() {
     recnplayControlsPanel = new JPanel();
-    recnplayControlsPanel.setBackground(lightLavender);
+    recnplayControlsPanel.setBackground(ComponentLibrary.lightLavender);
     recnplayControlsPanel.setLayout(new BoxLayout(recnplayControlsPanel, BoxLayout.X_AXIS));
 
     JButton[] buttons = new JButton[]{
@@ -405,45 +237,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     };
 
     for (JButton button : buttons) {
-      button.setFont(buttonFont);
+      button.setFont(ComponentLibrary.buttonFont);
       button.setForeground(Color.WHITE);
-      button.setBackground(lavender);
+      button.setBackground(ComponentLibrary.lavender);
       button.addActionListener(this);
       recnplayControlsPanel.add(button);
       recnplayControlsPanel.add(Box.createRigidArea(new Dimension(50, 0)));
     }
-  }
-
-  /**
-   * Create and set an icon/indicator for recording.
-   */
-  public void initialiseRecnplayIconLabel() {
-    recordingIconLabel = new JLabel();
-    try {
-      Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
-      ImageIcon icon = new ImageIcon(image.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
-      recordingIconLabel.setIcon(icon);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    recordingIconLabel.setBounds(-10, -455, 1000, 1000);
-    recordingIconLabel.setVisible(false);
-  }
-
-  /**
-   * Create and set an icon/indicator for pausing.
-   */
-  public void initialisePauseIconLabel() {
-    pausedIconLabel = new JLabel();
-    try {
-      Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
-      ImageIcon icon = new ImageIcon(image.getScaledInstance(256, 83, Image.SCALE_DEFAULT));
-      pausedIconLabel.setIcon(icon);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    pausedIconLabel.setBounds(-20, -465, 1000, 1000);
-    pausedIconLabel.setVisible(false);
   }
 
   /**
