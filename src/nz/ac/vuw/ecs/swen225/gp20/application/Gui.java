@@ -80,9 +80,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JButton slowerReplayButton;
   private JButton standardReplayButton;
 
-  //Files
-  private final JFileChooser fileChooser = new JFileChooser(Paths.get(".").toFile());
-
   public static BoardView board;
   private Maze maze;
   private Maze initialMaze;
@@ -107,10 +104,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     createFramePanel();
     createBoardPanel();
     initialiseSidePanel();
-    initialiseMenuBar();
     createInfoFieldLabel();
     createRecnplayControls();
-
+    menuBar = new MenuBar(this);
     recordingIconLabel = ComponentLibrary.initialiseRecnplayIconLabel();
     pausedIconLabel = ComponentLibrary.initialisePauseIconLabel();
 
@@ -178,15 +174,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
-  }
-
-  /**
-   * Initialise the menu bar of the gui.
-   */
-  public void initialiseMenuBar() {
-    menuBar = new MenuBar();
-    menuBar.createMenuComponents(this);
-    menuBar.addMenus();
   }
 
   /**

@@ -40,9 +40,13 @@ public class MenuBar extends JMenuBar {
   public static JMenuItem showInstructMenuItem;
 
   /**
-   * Empty constructor.
+   * Construct a menu bar and add all menus + menu items.
+   *
+   * @param actionListener the action listener passed (this - in gui)
    */
-  public MenuBar() {
+  public MenuBar(ActionListener actionListener) {
+    createMenuComponents(actionListener);
+    addMenus();
   }
 
   /**
@@ -109,10 +113,8 @@ public class MenuBar extends JMenuBar {
 
   /**
    * Add menus to this menubar.
-   *
-   * <p>DO NOT CALL THIS METHOD BEFORE CALLING THE ONE ABOVE THIS</p>
    */
-  public void addMenus() {
+  private void addMenus() {
     add(fileMenu);
     add(gameMenu);
     add(levelMenu);
