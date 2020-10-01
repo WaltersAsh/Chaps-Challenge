@@ -27,7 +27,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
@@ -51,7 +50,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   // frame and main panels
   private JFrame frame;
   private JPanel framePanel;
-  public static JLayeredPane boardPanel;
+  public static BoardPanel boardPanel;
   private SidePanel sidePanel;
   private JPanel recnplayControlsPanel;
 
@@ -63,7 +62,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   // infofield label
   private JLabel infoFieldLabel;
-  private JLabel infoFieldLabelText;
+  private JLabel infoFieldTextLabel;
 
   //icon labels
   private JLabel recordingIconLabel;
@@ -97,25 +96,23 @@ public class Gui extends MazeEventListener implements ActionListener {
   public Gui(Maze maze) {
     this.maze = maze;
     initialMaze = maze;
+
     recnplay = new RecordAndReplay(this);
+
     // base frame that all JComponents will be added to
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
     createFramePanel();
-    createBoardPanel();
     initialiseSidePanel();
-    createInfoFieldLabel();
     createRecnplayControls();
     menuBar = new MenuBar(this);
-    recordingIconLabel = ComponentLibrary.initialiseRecnplayIconLabel();
-    pausedIconLabel = ComponentLibrary.initialisePauseIconLabel();
-
-    board.setBounds(0, 0, 1000, 1000);
-    boardPanel.add(board, JLayeredPane.DEFAULT_LAYER);
-    boardPanel.add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
-    boardPanel.add(infoFieldLabelText, JLayeredPane.MODAL_LAYER);
-    boardPanel.add(recordingIconLabel, JLayeredPane.PALETTE_LAYER);
-    boardPanel.add(pausedIconLabel, JLayeredPane.PALETTE_LAYER);
+    boardPanel = new BoardPanel(maze);
+    board = boardPanel.getBoard();
+    infoFieldLabel = boardPanel.getInfoFieldLabel();
+    infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
+    recordingIconLabel = boardPanel.getRecordingIconLabel();
+    pausedIconLabel = boardPanel.getPausedIconLabel();
+    maze.addListener(this);
 
     // set up board and side panels into frame panel
     // framePanel.add(Box.createHorizontalGlue());
@@ -152,48 +149,14 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Create the board panel and rendered board.
-   */
-  public void createBoardPanel() {
-    boardPanel = new JLayeredPane();
-    maze.addListener(this);
-    board = new BoardView(maze);
-    boardPanel.setBackground(ComponentLibrary.lightLavender);
-    boardPanel.setMinimumSize(
-        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
-    boardPanel.setPreferredSize(
-        new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
-    boardPanel.setMaximumSize(new Dimension(800, 800));
-  }
-
-  /**
    * Initialise the side panel of the gui.
    */
   public void initialiseSidePanel() {
     sidePanel = new SidePanel(maze);
+    levelValueLabel = sidePanel.getLevelValueLabel();
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
-  }
-
-  /**
-   * Create the info field label and text label.
-   */
-  public void createInfoFieldLabel() {
-    try {
-      Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
-      infoFieldLabel = new JLabel(
-          new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-    infoFieldLabel.setBounds(-180, -90, 1000, 1000);
-    infoFieldLabelText = new JLabel("swing is pain :(");
-    infoFieldLabelText.setBounds(150, -225, 1000, 1000);
-    infoFieldLabelText.setFont(ComponentLibrary.infoFont);
-
-    infoFieldLabelText.setForeground(Color.BLACK);
-    showInfoFieldToGui(false);
   }
 
   /**
@@ -600,8 +563,8 @@ public class Gui extends MazeEventListener implements ActionListener {
    *
    * @param text the desired text to be entered into the text label
    */
-  public void setInfoFieldLabelText(String text) {
-    infoFieldLabelText.setText(text);
+  public void setInfoFieldTextLabel(String text) {
+    infoFieldTextLabel.setText(text);
     frame.revalidate();
   }
 
@@ -612,7 +575,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void showInfoFieldToGui(boolean confirmation) {
     infoFieldLabel.setVisible(confirmation);
-    infoFieldLabelText.setVisible(confirmation);
+    infoFieldTextLabel.setVisible(confirmation);
     frame.revalidate();
   }
 
@@ -656,7 +619,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void update(MazeEventInfoField e) {
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
-    infoFieldLabelText.setBounds(infoFieldLabel.getX() + 300,
+    infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
         infoFieldLabel.getY() - 150, 1000, 1000);
     frame.revalidate();
     showInfoFieldToGui(true);

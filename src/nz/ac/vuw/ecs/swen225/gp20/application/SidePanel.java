@@ -17,10 +17,10 @@ import javax.swing.border.LineBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
-
-
 /**
  * SidePanel class for instantiating a side panel for the gui.
+ *
+ * @author Justin 300470389
  */
 public class SidePanel extends JPanel {
 

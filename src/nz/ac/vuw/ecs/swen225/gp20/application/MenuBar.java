@@ -9,6 +9,8 @@ import javax.swing.JMenuItem;
 
 /**
  * MenuBar class for instantiating a menu bar for gui.
+ *
+ * @author Justin 300470389
  */
 public class MenuBar extends JMenuBar {
 
@@ -46,7 +48,11 @@ public class MenuBar extends JMenuBar {
    */
   public MenuBar(ActionListener actionListener) {
     createMenuComponents(actionListener);
-    addMenus();
+    add(fileMenu);
+    add(gameMenu);
+    add(levelMenu);
+    add(recnplayMenu);
+    add(helpMenu);
   }
 
   /**
@@ -109,16 +115,5 @@ public class MenuBar extends JMenuBar {
     showInstructMenuItem = new JMenuItem("How to Play");
     showInstructMenuItem.addActionListener(actionListener);
     helpMenu.add(showInstructMenuItem);
-  }
-
-  /**
-   * Add menus to this menubar.
-   */
-  private void addMenus() {
-    add(fileMenu);
-    add(gameMenu);
-    add(levelMenu);
-    add(recnplayMenu);
-    add(helpMenu);
   }
 }

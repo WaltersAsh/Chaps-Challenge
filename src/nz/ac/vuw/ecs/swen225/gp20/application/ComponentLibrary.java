@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -13,6 +12,8 @@ import javax.swing.JLabel;
 
 /**
  * A utility class used for storing and retrieving fonts, colours and icon images.
+ *
+ * @author Justin 300470389
  */
 public class ComponentLibrary {
 
@@ -48,7 +49,7 @@ public class ComponentLibrary {
   /**
    * Create and return a icon/indicator for recording and return.
    */
-  public static JLabel initialiseRecnplayIconLabel() {
+  public static JLabel recordingIconLabel() {
     JLabel recordingIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
@@ -65,7 +66,7 @@ public class ComponentLibrary {
   /**
    * Create and return an icon/indicator for pausing.
    */
-  public static JLabel initialisePauseIconLabel() {
+  public static JLabel pausedIconLabel() {
     JLabel pausedIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
@@ -77,6 +78,39 @@ public class ComponentLibrary {
     pausedIconLabel.setBounds(-20, -465, 1000, 1000);
     pausedIconLabel.setVisible(false);
     return pausedIconLabel;
+  }
+
+  /**
+   * Create and return an info field label.
+   *
+   * @return the info field JLabel
+   */
+  public static JLabel infoFieldLabel() {
+    JLabel infoFieldLabel = null;
+    try {
+      Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
+      infoFieldLabel = new JLabel(
+              new ImageIcon(sign.getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+    infoFieldLabel.setBounds(-180, -90, 1000, 1000);
+    infoFieldLabel.setVisible(false);
+    return infoFieldLabel;
+  }
+
+  /**
+   * Create and return an info field text label.
+   *
+   * @return the info field text JLabel
+   */
+  public static JLabel infoFieldTextLabel() {
+    JLabel infoFieldTextLabel = new JLabel("swing is pain :(");
+    infoFieldTextLabel.setBounds(150, -225, 1000, 1000);
+    infoFieldTextLabel.setFont(ComponentLibrary.infoFont);
+    infoFieldTextLabel.setForeground(Color.BLACK);
+    infoFieldTextLabel.setVisible(false);
+    return infoFieldTextLabel;
   }
 
 }
