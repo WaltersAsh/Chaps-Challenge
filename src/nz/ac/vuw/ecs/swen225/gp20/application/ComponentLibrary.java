@@ -113,4 +113,18 @@ public class ComponentLibrary {
     return infoFieldTextLabel;
   }
 
+  /**
+   * Create and return a background image label.
+   *
+   * @return the background image JLabel.
+   */
+  public static JLabel backgroundImageLabel() {
+    File backgroundFile = new File("resources/textures/gui/background.jpg");
+    ImageIcon backgroundIcon = new ImageIcon(String.valueOf(backgroundFile));
+    JLabel background = new JLabel("", backgroundIcon, JLabel.CENTER);
+    background.setBounds(0, 0, 1280, 800);
+    background.setVisible(true);
+    return background;
+  }
+
 }

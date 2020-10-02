@@ -5,7 +5,6 @@ import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -48,11 +47,10 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 @JsonIgnoreType
 public class Gui extends MazeEventListener implements ActionListener {
   // frame and main panels
-  private JFrame frame;
+  private final JFrame frame;
   private JPanel framePanel;
   public static BoardPanel boardPanel;
   private SidePanel sidePanel;
-  private JPanel recnplayControlsPanel;
 
   // value labels
   private JLabel levelValueLabel;
@@ -65,23 +63,20 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JLabel infoFieldTextLabel;
 
   //icon labels
-  private JLabel recordingIconLabel;
-  private JLabel pausedIconLabel;
-
-  //menu bar
-  private MenuBar menuBar;
+  private final JLabel recordingIconLabel;
+  private final JLabel pausedIconLabel;
 
   //buttons for controlling replaying in recnplay
-  private JButton nextFrameButton;
-  private JButton lastFrameButton;
-  private JButton autoPlayButton;
-  private JButton fasterReplayButton;
-  private JButton slowerReplayButton;
-  private JButton standardReplayButton;
+  private final JButton nextFrameButton;
+  private final JButton lastFrameButton;
+  private final JButton autoPlayButton;
+  private final JButton fasterReplayButton;
+  private final JButton slowerReplayButton;
+  private final JButton standardReplayButton;
 
   public static BoardView board;
   private Maze maze;
-  private Maze initialMaze;
+  private final Maze initialMaze;
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
@@ -104,22 +99,31 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setLayout(new BorderLayout());
     createFramePanel();
     initialiseSidePanel();
-    createRecnplayControls();
-    menuBar = new MenuBar(this);
+
+    //menu bar
+    MenuBar menuBar = new MenuBar(this);
+
     boardPanel = new BoardPanel(maze);
     board = boardPanel.getBoard();
+    maze.addListener(this);
+
     infoFieldLabel = boardPanel.getInfoFieldLabel();
     infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
-    maze.addListener(this);
+
+    RecnplayControlsPanel recnplayControlsPanel = new RecnplayControlsPanel(this);
+    nextFrameButton = recnplayControlsPanel.getNextFrameButton();
+    lastFrameButton = recnplayControlsPanel.getLastFrameButton();
+    autoPlayButton = recnplayControlsPanel.getAutoPlayButton();
+    fasterReplayButton = recnplayControlsPanel.getFasterReplayButton();
+    slowerReplayButton = recnplayControlsPanel.getSlowerReplayButton();
+    standardReplayButton = recnplayControlsPanel.getStandardReplayButton();
 
     // set up board and side panels into frame panel
-    // framePanel.add(Box.createHorizontalGlue());
     framePanel.add(boardPanel);
     framePanel.add(Box.createRigidArea(new Dimension(20, 0)));
     framePanel.add(sidePanel);
-    // framePanel.add(Box.createHorizontalGlue());
 
     // initialise frame
     frame.add(framePanel);
@@ -157,33 +161,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
-  }
-
-  /**
-   * Create the recnplay controls for navigating and interacting.
-   */
-  public void createRecnplayControls() {
-    recnplayControlsPanel = new JPanel();
-    recnplayControlsPanel.setBackground(ComponentLibrary.lightLavender);
-    recnplayControlsPanel.setLayout(new BoxLayout(recnplayControlsPanel, BoxLayout.X_AXIS));
-
-    JButton[] buttons = new JButton[]{
-        lastFrameButton = new JButton("<"),
-        autoPlayButton = new JButton("AUTO"),
-        nextFrameButton = new JButton(">"),
-        slowerReplayButton = new JButton("SLOWER"),
-        standardReplayButton = new JButton("STANDARD"),
-        fasterReplayButton = new JButton("FASTER")
-    };
-
-    for (JButton button : buttons) {
-      button.setFont(ComponentLibrary.buttonFont);
-      button.setForeground(Color.WHITE);
-      button.setBackground(ComponentLibrary.lavender);
-      button.addActionListener(this);
-      recnplayControlsPanel.add(button);
-      recnplayControlsPanel.add(Box.createRigidArea(new Dimension(50, 0)));
-    }
   }
 
   /**
@@ -251,19 +228,17 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
-
+      System.out.println("Next frame button pressed");
     } else if (e.getSource() == lastFrameButton) {
-
-    } else if (e.getSource() == lastFrameButton) {
-
+      System.out.println("Last frame button pressed");
     } else if (e.getSource() == autoPlayButton) {
-
+      System.out.println("Auto play button pressed");
     } else if (e.getSource() == slowerReplayButton) {
-
+      System.out.println("Slower replay button pressed");
     } else if (e.getSource() == standardReplayButton) {
-
+      System.out.println("Standard replay button pressed");
     } else if (e.getSource() == fasterReplayButton) {
-
+      System.out.println("Faster replay button pressed");
     }
   }
 
