@@ -6,7 +6,6 @@ import javax.swing.JLayeredPane;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
-
 /**
  * BoardPanel class for instantiating a new board panel for the gui.
  *

@@ -9,7 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * The type Recnplay controls panel.
+ * RecnplayControlsPanel class for instantiating a new control panel for the gui.
+ *
+ * @author Justin 300470389
  */
 public class RecnplayControlsPanel extends JPanel {
 

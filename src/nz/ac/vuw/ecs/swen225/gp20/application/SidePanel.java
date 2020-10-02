@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,12 +7,10 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 /**
@@ -224,18 +220,5 @@ public class SidePanel extends JPanel {
    */
   public JLabel getLevelValueLabel() {
     return levelValueLabel;
-  }
-
-  /**
-   * Panel tester.
-   *
-   * @param args the commandline arguments
-   */
-  public static void main(String[] args) {
-    SidePanel sp = new SidePanel(BoardRig.lesson1());
-    JFrame frame = new JFrame();
-    frame.setLayout(new BorderLayout());
-    frame.add(sp, BorderLayout.EAST);
-    frame.setVisible(true);
   }
 }
