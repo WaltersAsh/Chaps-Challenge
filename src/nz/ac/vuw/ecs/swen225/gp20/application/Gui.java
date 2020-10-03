@@ -275,7 +275,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       maze = loadMaze(Main.level2);
       restartLevel(maze);
       levelCompleteDialog.setVisible(false);
-      maze.resume();
     }
     if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
       System.out.println("Restart button pressed");
@@ -286,7 +285,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       }
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
-      maze.resume();
     }
   }
 
