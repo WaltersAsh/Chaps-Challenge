@@ -6,12 +6,15 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 /**
  * PopupDialog class for instantiating a new popup box to the gui.
@@ -29,28 +32,35 @@ public class PopupDialog extends JDialog {
    * Instantiates a new Popup dialog for the gui.
    *
    * @param isLevelComplete boolean confirming level is complete
+   * @param actionListener the action listener to be added
    */
-  public PopupDialog(boolean isLevelComplete) {
+  public PopupDialog(boolean isLevelComplete, ActionListener actionListener) {
     setLayout(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
     if (isLevelComplete) {
-      levelFinishDialog();
+      levelFinishDialog(actionListener);
     } else {
-      timerCountdownDialog();
+      timerCountdownDialog(actionListener);
     }
     buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     add(Box.createRigidArea(new Dimension(0, 50)));
     add(messageLabel, gbc);
-    add(Box.createRigidArea(new Dimension(0, 100)));
+    add(Box.createRigidArea(new Dimension(0, 75)));
     add(buttonPanel, gbc);
 
     stylise();
     setBackground(ComponentLibrary.deepLavender);
-    setSize(300, 200);
+    Border border = BorderFactory.createEmptyBorder(15, 15, 15, 15);
+    border = BorderFactory.createCompoundBorder(border,
+            BorderFactory.createLineBorder(Color.WHITE, 2));
+    border = BorderFactory.createCompoundBorder(border,
+            BorderFactory.createEmptyBorder(15, 15, 15, 15));
+    getRootPane().setBorder(border);
+    pack();
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension scrnsize = toolkit.getScreenSize();
     setBounds((scrnsize.width - getWidth()) / 2,
@@ -60,8 +70,8 @@ public class PopupDialog extends JDialog {
   /**
    * Dialog for finished level.
    */
-  public void levelFinishDialog() {
-    messageLabel = new JLabel("LEVEL COMPLETE");
+  public void levelFinishDialog(ActionListener actionListener) {
+    messageLabel = new JLabel(" LEVEL COMPLETE ");
     restartButton = new JButton("Restart Level");
     nextButton = new JButton("Next Level");
     buttonPanel.add(restartButton);
@@ -69,14 +79,18 @@ public class PopupDialog extends JDialog {
     buttonPanel.add(nextButton);
     nextButton.setBackground(ComponentLibrary.fullLavender);
     nextButton.setForeground(Color.WHITE);
+    nextButton.setFont(ComponentLibrary.buttonFont);
+    nextButton.addActionListener(actionListener);
+    restartButton.addActionListener(actionListener);
   }
 
   /**
    * Dialog for countdown timer expiry.
    */
-  public void timerCountdownDialog() {
-    messageLabel = new JLabel("COUNTDOWN TIMER EXPIRED");
+  public void timerCountdownDialog(ActionListener actionListener) {
+    messageLabel = new JLabel(" COUNTDOWN TIMER EXPIRED ");
     restartButton = new JButton("Restart Level");
+    restartButton.addActionListener(actionListener);
     buttonPanel.add(restartButton);
   }
 
@@ -89,5 +103,11 @@ public class PopupDialog extends JDialog {
     messageLabel.setForeground(Color.BLACK);
     restartButton.setBackground(ComponentLibrary.fullLavender);
     restartButton.setForeground(Color.WHITE);
+    messageLabel.setFont(ComponentLibrary.bigFont);
+    restartButton.setFont(ComponentLibrary.buttonFont);
+  }
+
+  public static void main(String[] args) {
+    new PopupDialog(true, null).setVisible(true);
   }
 }

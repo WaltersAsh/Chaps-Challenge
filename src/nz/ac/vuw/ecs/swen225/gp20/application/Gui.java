@@ -94,7 +94,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     recnplay = new RecordAndReplay(this);
 
-    // base frame that all JComponents will be added to
+    // base frame
     frame = new JFrame();
     frame.setLayout(new BorderLayout());
     createFramePanel();
@@ -103,15 +103,18 @@ public class Gui extends MazeEventListener implements ActionListener {
     //menu bar
     MenuBar menuBar = new MenuBar(this);
 
+    //board panel
     boardPanel = new BoardPanel(maze);
     board = boardPanel.getBoard();
     maze.addListener(this);
 
+    //labels/icons initialised
     infoFieldLabel = boardPanel.getInfoFieldLabel();
     infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
 
+    //recnplay initialisation
     RecnplayControlsPanel recnplayControlsPanel = new RecnplayControlsPanel(this);
     nextFrameButton = recnplayControlsPanel.getNextFrameButton();
     lastFrameButton = recnplayControlsPanel.getLastFrameButton();
