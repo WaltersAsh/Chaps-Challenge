@@ -31,6 +31,8 @@ import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.PathTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalked;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
@@ -175,6 +177,12 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
+
+    //level panel
+    if (currentLevel == ComponentLibrary.Levels.LEVEL2) {
+      levelValueLabel.setText("2");
+      timeValueLabel.setText("40");
+    }
   }
 
   /**
@@ -649,12 +657,28 @@ public class Gui extends MazeEventListener implements ActionListener {
    *
    * @param e the info field activation event
    */
+  @Override
   public void update(MazeEventInfoField e) {
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
     infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
         infoFieldLabel.getY() - 150, 1000, 1000);
     frame.revalidate();
     showInfoFieldToGui(true);
+  }
+
+  /**
+   * Update tracking when chap gets consumed by an enemy.
+   *
+   * @param e the enemy movement event
+   */
+  @Override
+  //TODO: TO IMPLEMENT
+  public void update(MazeEventEnemyWalked e) {
+    PathTile enemy = e.getEnemyOrigin();
+    PathTile chap = e.getEnemyTarget();
+    if (enemy == chap) {
+      System.out.println("Test");
+    }
   }
 
   /**
