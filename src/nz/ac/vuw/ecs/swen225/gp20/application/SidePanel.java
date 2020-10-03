@@ -180,6 +180,7 @@ public class SidePanel extends JPanel {
     treasuresContentPanel.add(treasuresTitleLabel);
     treasuresContentPanel.add(Box.createRigidArea(new Dimension(0, 35)));
     treasuresContentPanel.add(treasuresValueLabel);
+    inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
     inventoryContentPanel.add(inventoryTitleLabel);
     inventoryContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
     inventoryContentPanel.add(inventoryGridPanel);
