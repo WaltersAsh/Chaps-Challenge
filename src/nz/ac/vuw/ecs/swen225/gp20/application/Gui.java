@@ -74,14 +74,22 @@ public class Gui extends MazeEventListener implements ActionListener {
   private final JButton slowerReplayButton;
   private final JButton standardReplayButton;
 
+  //popup dialog
+  private PopupDialog levelCompleteDialog;
+  private PopupDialog timerExpiryDialog;
+
+  private JButton nextButton;
+  private JButton levelCompleteRestartButton;
+  private JButton timerExpiryRestartButton;
+
   public static BoardView board;
   private Maze maze;
-  private final Maze initialMaze;
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
   private int[] secondsLeft;
   private boolean isPaused;
+  private static ComponentLibrary.Levels currentLevel = ComponentLibrary.Levels.LEVEL1;
 
   public static RecordAndReplay recnplay;
 
@@ -90,7 +98,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Gui(Maze maze) {
     this.maze = maze;
-    initialMaze = maze;
 
     recnplay = new RecordAndReplay(this);
 
@@ -101,7 +108,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseSidePanel();
 
     //menu bar
-    MenuBar menuBar = new MenuBar(this);
+    final MenuBar menuBar = new MenuBar(this);
 
     //board panel
     boardPanel = new BoardPanel(maze);
@@ -128,6 +135,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     framePanel.add(Box.createRigidArea(new Dimension(20, 0)));
     framePanel.add(sidePanel);
 
+    //popup dialogs initialisation
+    initialisePopupDialogs();
+
     // initialise frame
     frame.add(framePanel);
     frame.add(recnplayControlsPanel, BorderLayout.SOUTH);
@@ -143,6 +153,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setFocusable(true);
     setupTimer();
     setupKeyListener();
+    maze.resume();
   }
 
   /**
@@ -164,6 +175,19 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
+  }
+
+  /**
+   * Initialise the popup dialogs.
+   */
+  public void initialisePopupDialogs() {
+    levelCompleteDialog = new PopupDialog(true, this);
+    timerExpiryDialog = new PopupDialog(false, this);
+    nextButton = levelCompleteDialog.getNextButton();
+    levelCompleteRestartButton = levelCompleteDialog.getRestartButton();
+    timerExpiryRestartButton = timerExpiryDialog.getRestartButton();
+    levelCompleteDialog.setVisible(false);
+    timerExpiryDialog.setVisible(false);
   }
 
   /**
@@ -242,6 +266,27 @@ public class Gui extends MazeEventListener implements ActionListener {
       System.out.println("Standard replay button pressed");
     } else if (e.getSource() == fasterReplayButton) {
       System.out.println("Faster replay button pressed");
+    }
+
+    //popup dialog button actions
+    if (e.getSource() == nextButton) {
+      System.out.println("Next button pressed");
+      currentLevel = ComponentLibrary.Levels.LEVEL2;
+      maze = loadMaze(Main.level2);
+      restartLevel(maze);
+      levelCompleteDialog.setVisible(false);
+      maze.resume();
+    }
+    if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
+      System.out.println("Restart button pressed");
+      if (currentLevel == ComponentLibrary.Levels.LEVEL1) {
+        restartLevel(loadMaze(Main.level1));
+      } else {
+        restartLevel(loadMaze(Main.level2));
+      }
+      levelCompleteDialog.setVisible(false);
+      timerExpiryDialog.setVisible(false);
+      maze.resume();
     }
   }
 
@@ -331,8 +376,13 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + r pressed - resume saved game");
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
+          if (currentLevel == ComponentLibrary.Levels.LEVEL1) {
+            restartLevel(loadMaze(Main.level1));
+          } else {
+            restartLevel(loadMaze(Main.level2));
+          }
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
-          restartCurrentLevel();
+          restartLevel(loadMaze(Main.level1));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
           System.out.println("a pressed - undo");
@@ -365,6 +415,10 @@ public class Gui extends MazeEventListener implements ActionListener {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
         }
+        if (secondsLeft[0] == 0) {
+          pause();
+          timerExpiryDialog.setVisible(true);
+        }
       }
     };
   }
@@ -392,8 +446,10 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Restart the current level.
+   *
+   * @param maze the maze to be loaded
    */
-  public void restartCurrentLevel() {
+  public void restartLevel(Maze maze) {
     //reset timer count
     timer.cancel();
     isTimerActive = false;
@@ -414,7 +470,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     //FIXME: new gui shouldn't be instantiated,
     // find a way to redraw the board - probably a gui problem
     this.frame.setVisible(false);
-    new Gui(initialMaze).getFrame().setVisible(true);
+    new Gui(maze).getFrame().setVisible(true);
   }
 
   /**
@@ -612,6 +668,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void update(MazeEventWon e) {
     //stop the timer
     pause();
+    levelCompleteDialog.setVisible(true);
     timer.cancel();
     timer.purge();
   }

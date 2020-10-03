@@ -46,6 +46,12 @@ public class ComponentLibrary {
   public static final Color fullLavender = new Color(102, 0, 255);
   public static final Color paleLavender = new Color(237, 224, 255);
 
+  //level enum indicator
+  enum Levels {
+    LEVEL1,
+    LEVEL2
+  }
+
   /**
    * Create and return a icon/indicator for recording and return.
    */

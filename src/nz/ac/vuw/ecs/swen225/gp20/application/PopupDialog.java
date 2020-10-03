@@ -25,6 +25,7 @@ public class PopupDialog extends JDialog {
 
   private JPanel buttonPanel;
   private JLabel messageLabel;
+
   private JButton restartButton;
   private JButton nextButton;
 
@@ -107,7 +108,21 @@ public class PopupDialog extends JDialog {
     restartButton.setFont(ComponentLibrary.buttonFont);
   }
 
-  public static void main(String[] args) {
-    new PopupDialog(true, null).setVisible(true);
+  /**
+   * Get the next button.
+   *
+   * @return the next JButton
+   */
+  public JButton getNextButton() {
+    return nextButton;
+  }
+
+  /**
+   * Get the restart button.
+   *
+   * @return the restart JButton
+   */
+  public JButton getRestartButton() {
+    return restartButton;
   }
 }
