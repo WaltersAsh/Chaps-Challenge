@@ -5,6 +5,7 @@ import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -65,8 +66,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JLabel infoFieldTextLabel;
 
   //icon labels
-  private final JLabel recordingIconLabel;
-  private final JLabel pausedIconLabel;
+  private JLabel recordingIconLabel;
+  private JLabel pausedIconLabel;
 
   //buttons for controlling replaying in recnplay
   private final JButton nextFrameButton;
@@ -91,7 +92,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isTimerActive;
   private int[] secondsLeft;
   private boolean isPaused;
-  private static ComponentLibrary.Levels currentLevel = ComponentLibrary.Levels.LEVEL1;
+  private File currentLevel = Main.level1;
 
   public static RecordAndReplay recnplay;
 
@@ -179,7 +180,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
 
     //level panel
-    if (currentLevel == ComponentLibrary.Levels.LEVEL2) {
+    if (currentLevel == Main.level2) {
       levelValueLabel.setText("2");
       timeValueLabel.setText("40");
     }
@@ -279,14 +280,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     //popup dialog button actions
     if (e.getSource() == nextButton) {
       System.out.println("Next button pressed");
-      currentLevel = ComponentLibrary.Levels.LEVEL2;
-      maze = loadMaze(Main.level2);
-      restartLevel(maze);
+      currentLevel = Main.level2;
+      restartLevel(loadMaze(currentLevel));
       levelCompleteDialog.setVisible(false);
     }
     if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
       System.out.println("Restart button pressed");
-      if (currentLevel == ComponentLibrary.Levels.LEVEL1) {
+      if (currentLevel == Main.level1) {
         restartLevel(loadMaze(Main.level1));
       } else {
         restartLevel(loadMaze(Main.level2));
@@ -302,12 +302,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void loadMazeGui(Maze loadedMaze) {
     if (loadedMaze != null) {
       maze = loadedMaze;
-      this.frame.setVisible(false);
-      //FIXME: new gui shouldn't be instantiated,
-      // find a way to redraw the board - probably a gui problem
-      Gui updated = new Gui(maze);
-      updated.reloadInventoryPanel();
-      updated.getFrame().setVisible(true);
+      reinitialiseBoard(maze);
+      reloadInventoryPanel();
     }
   }
 
@@ -343,7 +339,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         showInfoFieldToGui(false);
 
         // movement
-        if (!isPaused || maze.isLevelFinished()) {
+        if (!isPaused || !maze.isLevelFinished()) {
           switch (key) {
             case KeyEvent.VK_UP:
               move(Maze.Direction.UP);
@@ -382,13 +378,14 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + r pressed - resume saved game");
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
-          if (currentLevel == ComponentLibrary.Levels.LEVEL1) {
+          if (currentLevel == Main.level1) {
             restartLevel(loadMaze(Main.level1));
           } else {
             restartLevel(loadMaze(Main.level2));
           }
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
-          restartLevel(loadMaze(Main.level1));
+          currentLevel = Main.level1;
+          restartLevel(loadMaze(currentLevel));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
           System.out.println("a pressed - undo");
@@ -414,6 +411,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void setupTimer() {
     secondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
     timer = new Timer();
+    timeValueLabel.setForeground(Color.BLACK);
     timerTask = new TimerTask() {
       @Override
       public void run() {
@@ -421,6 +419,11 @@ public class Gui extends MazeEventListener implements ActionListener {
           secondsLeft[0]--;
           setTimeValueLabel(secondsLeft[0]);
         }
+        //timer drops down to last 10
+        if (secondsLeft[0] <= 10) {
+          timeValueLabel.setForeground(Color.RED);
+        }
+        //timer expires
         if (secondsLeft[0] == 0) {
           pause();
           timerExpiryDialog.setVisible(true);
@@ -473,10 +476,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     }
 
     //reset state of board/maze back to start of level
-    //FIXME: new gui shouldn't be instantiated,
-    // find a way to redraw the board - probably a gui problem
-    this.frame.setVisible(false);
-    new Gui(maze).getFrame().setVisible(true);
+    reinitialiseBoard(maze);
   }
 
   /**
@@ -485,6 +485,37 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void decrementTreasurePickUp() {
     int treasureCount = maze.getChap().getTreasures().size();
     setTreasuresValueLabel(maze.numTreasures() - treasureCount);
+
+    //treasures are all collected
+    if (maze.numTreasures() - treasureCount == 0) {
+      treasuresValueLabel.setForeground(Color.GREEN);
+    }
+  }
+
+  /**
+   * Reinitialise the boardview
+   *
+   * @param maze the maze that the boardview is reinitialised.
+   */
+  public void reinitialiseBoard(Maze maze) {
+    this.maze = maze;
+    board = new BoardView(maze);
+    board = boardPanel.getBoard();
+    board.reset(maze);
+    infoFieldLabel = boardPanel.getInfoFieldLabel();
+    infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
+    recordingIconLabel = boardPanel.getRecordingIconLabel();
+    pausedIconLabel = boardPanel.getPausedIconLabel();
+    maze.addListener(this);
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      inventoryValueLabel.setText(" "); // set label to empty again
+      inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+    }
+    reloadInventoryPanel();
+    treasuresValueLabel.setForeground(Color.BLACK);
+    isTimerActive = false;
+    isPaused = false;
+    maze.resume();
   }
 
   /**

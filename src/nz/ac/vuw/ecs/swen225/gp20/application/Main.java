@@ -30,8 +30,6 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-    //TODO: Boardview object from the renderer package should probably be here
-    // (instead of in gui) when dependency is fixed
     //Maze maze = levels[0];
     Maze maze = Persistence.loadMaze(level1);
     Gui gui = new Gui(maze);

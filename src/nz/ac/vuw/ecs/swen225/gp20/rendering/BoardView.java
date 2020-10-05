@@ -322,9 +322,9 @@ public class BoardView extends JComponent implements ActionListener {
     return blockSize;
   }
 
-  public void reset(){
+  public void reset(Maze maze){
     m = startMaze;
-    m = BoardRig.lesson1();
+    m = maze;
 
     tiles = m.getTiles();
     width = m.getWidth();
