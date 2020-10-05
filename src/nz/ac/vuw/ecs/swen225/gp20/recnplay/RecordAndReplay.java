@@ -59,7 +59,7 @@ public class RecordAndReplay {
         if (!isRecording) {
             Maze loadedMaze = Persistence.loadMaze(file);
             loadedRecording = loadedMaze.getMoves();
-            gui.loadMazeGui(loadedMaze);
+            gui.loadLevel(loadedMaze);
         }
     }
 

@@ -222,7 +222,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
     } else if (e.getSource() == MenuBar.loadMenuItem) {
       pause();
-      loadMazeGui(loadMaze(openFileChooser(true)));
+      loadLevel(loadMaze(openFileChooser(true)));
       resume();
 
       //recnplay menu functionalities
@@ -275,29 +275,18 @@ public class Gui extends MazeEventListener implements ActionListener {
     if (e.getSource() == nextButton) {
       System.out.println("Next button pressed");
       currentLevel = Main.level2;
-      restartLevel(loadMaze(currentLevel));
+      loadLevel(loadMaze(currentLevel));
       levelCompleteDialog.setVisible(false);
     }
     if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
       System.out.println("Restart button pressed");
       if (currentLevel == Main.level1) {
-        restartLevel(loadMaze(Main.level1));
+        loadLevel(loadMaze(Main.level1));
       } else {
-        restartLevel(loadMaze(Main.level2));
+        loadLevel(loadMaze(Main.level2));
       }
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
-    }
-  }
-
-  /**
-   * Loads a maze.
-   */
-  public void loadMazeGui(Maze loadedMaze) {
-    if (loadedMaze != null) {
-      maze = loadedMaze;
-      reinitialiseBoard(maze);
-      reloadInventoryPanel();
     }
   }
 
@@ -373,13 +362,13 @@ public class Gui extends MazeEventListener implements ActionListener {
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
           if (currentLevel == Main.level1) {
-            restartLevel(loadMaze(Main.level1));
+            loadLevel(loadMaze(Main.level1));
           } else {
-            restartLevel(loadMaze(Main.level2));
+            loadLevel(loadMaze(Main.level2));
           }
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
           currentLevel = Main.level1;
-          restartLevel(loadMaze(currentLevel));
+          loadLevel(loadMaze(currentLevel));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
           System.out.println("a pressed - undo");
@@ -452,7 +441,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    *
    * @param maze the maze to be loaded
    */
-  public void restartLevel(Maze maze) {
+  public void loadLevel(Maze maze) {
     //reset timer count
     timer.cancel();
     isTimerActive = false;
