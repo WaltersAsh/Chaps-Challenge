@@ -178,12 +178,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel = sidePanel.getTimeValueLabel();
     treasuresValueLabel = sidePanel.getTreasuresValueLabel();
     inventoryValueLabels = sidePanel.getInventoryValueLabels();
-
-    //level panel
-    if (currentLevel == Main.level2) {
-      levelValueLabel.setText("2");
-      timeValueLabel.setText("40");
-    }
   }
 
   /**
@@ -462,7 +456,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     //reset timer count
     timer.cancel();
     isTimerActive = false;
-    setTimeValueLabel(60);
     setupTimer();
 
     //reset treasures amount
@@ -477,6 +470,15 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
+    //level panel
+    if (currentLevel == Main.level2) {
+      setTimeValueLabel(40);
+      levelValueLabel.setText("2");
+    } else {
+      levelValueLabel.setText("1");
+      setTimeValueLabel(60);
+    }
+    setupTimer();
   }
 
   /**
