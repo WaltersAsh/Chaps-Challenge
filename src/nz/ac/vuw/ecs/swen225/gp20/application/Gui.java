@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -150,7 +151,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.add(framePanel);
     frame.add(recnplayControlsPanel, BorderLayout.SOUTH);
     frame.setJMenuBar(menuBar);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     frame.setTitle("Chap's Challenge");
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
@@ -606,7 +607,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Get timer active
+   * Get timer active.
    */
   public boolean getIsTimerActive() {
     return isTimerActive;
@@ -746,12 +747,16 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        if (JOptionPane.showConfirmDialog(frame,
-                "Are you sure you want to exit?", "Exit?",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-
-          System.exit(0);
+        pause();
+        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?",
+                "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } else {
+          frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+          if (isTimerActive) {
+            resume();
+          }
         }
       }
     });
