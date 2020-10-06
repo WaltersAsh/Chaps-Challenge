@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
@@ -54,6 +55,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JPanel framePanel;
   public static BoardPanel boardPanel;
   private SidePanel sidePanel;
+  private InstructionsFrame instructionsFrame;
 
   // value labels
   private JLabel levelValueLabel;
@@ -141,6 +143,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     //popup dialogs initialisation
     initialisePopupDialogs();
 
+    //instuctions initialisation
+    instructionsFrame = new InstructionsFrame(this);
+
     // initialise frame
     frame.add(framePanel);
     frame.add(recnplayControlsPanel, BorderLayout.SOUTH);
@@ -154,6 +159,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
         dimen.height / 2 - frame.getSize().height / 2);
     frame.setFocusable(true);
+    initialiseWindowListener();
     setupTimer();
     setupKeyListener();
     maze.resume();
@@ -254,6 +260,11 @@ public class Gui extends MazeEventListener implements ActionListener {
       pause();
       RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
+
+      //instructions
+    } else if (e.getSource() == MenuBar.showInstructMenuItem) {
+      pause();
+      instructionsFrame.setVisible(true);
     }
 
     //recnplay button actions
@@ -321,28 +332,6 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         showInfoFieldToGui(false);
 
-        // movement
-        if (!isPaused || !maze.isLevelFinished()) {
-          switch (key) {
-            case KeyEvent.VK_UP:
-              move(Maze.Direction.UP);
-              break;
-            case KeyEvent.VK_DOWN:
-              move(Maze.Direction.DOWN);
-              break;
-            case KeyEvent.VK_LEFT:
-              move(Maze.Direction.LEFT);
-              break;
-            case KeyEvent.VK_RIGHT:
-              move(Maze.Direction.RIGHT);
-              break;
-            default:
-            }
-        }
-
-        decrementTreasurePickUp();
-        board.repaint();
-
         // pause and resume
         if (key == KeyEvent.VK_SPACE) {
           pause();
@@ -351,6 +340,29 @@ public class Gui extends MazeEventListener implements ActionListener {
           resume();
           pausedIconLabel.setVisible(false);
         }
+
+        // movement
+        if (isPaused || maze.isLevelFinished()) {
+          return;
+        }
+        switch (key) {
+          case KeyEvent.VK_UP:
+            move(Maze.Direction.UP);
+            break;
+          case KeyEvent.VK_DOWN:
+            move(Maze.Direction.DOWN);
+            break;
+          case KeyEvent.VK_LEFT:
+            move(Maze.Direction.LEFT);
+            break;
+          case KeyEvent.VK_RIGHT:
+            move(Maze.Direction.RIGHT);
+            break;
+          default:
+          }
+
+        decrementTreasurePickUp();
+        board.repaint();
 
         // shortcuts
         if (e.isControlDown() && key == KeyEvent.VK_X) {
@@ -420,6 +432,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void pause() {
     isPaused = true;
+    pausedIconLabel.setVisible(true);
     maze.pause();
     timer.cancel();
   }
@@ -429,6 +442,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void resume() {
     if (isPaused) {
+      pausedIconLabel.setVisible(false);
       maze.resume();
       setupTimer();
       timer.schedule(timerTask, 0, 1000); // start the timer countdown
@@ -467,6 +481,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       levelValueLabel.setText("1");
       setTimeValueLabel(60);
     }
+    pausedIconLabel.setVisible(false);
     setupTimer();
   }
 
@@ -484,7 +499,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Reinitialise the boardview
+   * Reinitialise the boardview.
    *
    * @param maze the maze that the boardview is reinitialised.
    */
@@ -588,6 +603,13 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Maze getMaze() {
     return maze;
+  }
+
+  /**
+   * Get timer active
+   */
+  public boolean getIsTimerActive() {
+    return isTimerActive;
   }
 
   /**
@@ -715,5 +737,23 @@ public class Gui extends MazeEventListener implements ActionListener {
     levelCompleteDialog.setVisible(true);
     timer.cancel();
     timer.purge();
+  }
+
+  /**
+   * Initialise the window listener.
+   */
+  public void initialiseWindowListener() {
+    frame.addWindowListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+        if (JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to exit?", "Exit?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+
+          System.exit(0);
+        }
+      }
+    });
   }
 }
