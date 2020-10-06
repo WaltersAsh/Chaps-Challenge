@@ -96,7 +96,7 @@ public class InstructionsFrame extends JFrame {
         + "<br>"
         + "<br>"
         + "<br>"
-        + "<h1> HOW TO PLAY </h1>"
+        + "<h1> GAMEPLAY </h1>"
         + "<a>"
           + "Use the arrow keys to guide chap around the maze."
           + "<br>"
