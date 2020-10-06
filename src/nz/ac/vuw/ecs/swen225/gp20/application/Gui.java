@@ -56,7 +56,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JPanel framePanel;
   public static BoardPanel boardPanel;
   private SidePanel sidePanel;
-  private InstructionsFrame instructionsFrame;
+  private final InstructionsFrame instructionsFrame;
+  private final MenuBar menuBar;
 
   // value labels
   private JLabel levelValueLabel;
@@ -97,7 +98,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isPaused;
   private File currentLevel = Main.level1;
 
-  public static RecordAndReplay recnplay;
+  private RecordAndReplay recnplay;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -114,7 +115,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseSidePanel();
 
     //menu bar
-    final MenuBar menuBar = new MenuBar(this);
+    menuBar = new MenuBar(this);
 
     //board panel
     boardPanel = new BoardPanel(maze);
@@ -211,23 +212,27 @@ public class Gui extends MazeEventListener implements ActionListener {
     //menu actions
 
     //maze functionality
-    if (e.getSource() == MenuBar.resumeMenuItem) {
+    if (e.getSource() == menuBar.getResumeMenuItem()) {
       resume();
       pausedIconLabel.setVisible(false);
-    } else if (e.getSource() == MenuBar.pauseMenuItem) {
+    } else if (e.getSource() == menuBar.getPauseMenuItem()) {
       pause();
       pausedIconLabel.setVisible(true);
-    } else if (e.getSource() == MenuBar.restartCurrentLevelMenuItem) {
-      //restartCurrentLevel();
-    } else if (e.getSource() == MenuBar.exitMenuItem) {
-      System.exit(1);
+    } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
+      if (currentLevel == Main.level1) {
+        loadLevel(loadMaze(Main.level1));
+      } else {
+        loadLevel(loadMaze(Main.level2));
+      }
+    } else if (e.getSource() == menuBar.getExitMenuItem()) {
+      System.exit(0);
 
       //persistence loading and saving
-    } else if (e.getSource() == MenuBar.saveMenuItem) {
+    } else if (e.getSource() == menuBar.getSaveMenuItem()) {
       pause();
       saveMaze(maze, openFileChooser(false));
       resume();
-    } else if (e.getSource() == MenuBar.loadMenuItem) {
+    } else if (e.getSource() == menuBar.getLoadMenuItem()) {
       pause();
       loadLevel(loadMaze(openFileChooser(true)));
       resume();
@@ -235,35 +240,36 @@ public class Gui extends MazeEventListener implements ActionListener {
       //recnplay menu functionalities
 
       //start recording game play
-    } else if (e.getSource() == MenuBar.startRecordingMenuItem) {
+    } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
       pause();
       RecordAndReplay.startRecording(openFileChooser(false));
       recordingIconLabel.setVisible(true);
       resume();
 
       //stop recording game play
-    } else if (e.getSource() == MenuBar.stopRecordingMenuItem && RecordAndReplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
+            && RecordAndReplay.isRecording()) {
       pause();
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
       //play recording
-    } else if (e.getSource() == MenuBar.playMenuItem) {
+    } else if (e.getSource() == menuBar.getPlayMenuItem()) {
       pause();
       recnplay.playRecording();
       resume();
 
       //stop playing recording
-    } else if (e.getSource() == MenuBar.stopPlayMenuItem) {
+    } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
 
-    } else if (e.getSource() == MenuBar.loadRecordingMenuItem) {
+    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause();
       RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
 
       //instructions
-    } else if (e.getSource() == MenuBar.showInstructMenuItem) {
+    } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
       pause();
       instructionsFrame.setVisible(true);
     }
@@ -327,8 +333,8 @@ public class Gui extends MazeEventListener implements ActionListener {
           isTimerActive = true;
           try {
             timer.schedule(timerTask, 0, 1000); // start the timer countdown
-          } catch (IllegalStateException e1) {
-            e1.getSuppressed();
+          } catch (IllegalStateException ignored) {
+            ignored.printStackTrace();
           }
         }
         showInfoFieldToGui(false);

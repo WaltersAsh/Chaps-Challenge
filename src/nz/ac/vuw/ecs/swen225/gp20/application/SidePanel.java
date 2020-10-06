@@ -211,7 +211,8 @@ public class SidePanel extends JPanel {
    * @return the inventory value JLabel
    */
   public JLabel[] getInventoryValueLabels() {
-    return inventoryValueLabels;
+    JLabel[] copy =  inventoryValueLabels;
+    return copy;
   }
 
   /**

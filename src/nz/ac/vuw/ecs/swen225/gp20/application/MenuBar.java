@@ -16,30 +16,30 @@ public class MenuBar extends JMenuBar {
 
   //menu items
   private JMenu fileMenu;
-  public static JMenuItem saveMenuItem;
-  public static JMenuItem loadMenuItem;
+  private JMenuItem saveMenuItem;
+  private JMenuItem loadMenuItem;
 
   private JMenu gameMenu;
-  public static JMenuItem resumeMenuItem;
-  public static JMenuItem pauseMenuItem;
-  public static JMenuItem redoMenuItem;
-  public static JMenuItem undoMenuItem;
-  public static JMenuItem exitMenuItem;
-  public static JMenuItem exitSaveMenuItem;
+  private JMenuItem resumeMenuItem;
+  private JMenuItem pauseMenuItem;
+  private JMenuItem redoMenuItem;
+  private JMenuItem undoMenuItem;
+  private JMenuItem exitMenuItem;
+  private JMenuItem exitSaveMenuItem;
 
   private JMenu levelMenu;
-  public static JMenuItem restartCurrentLevelMenuItem;
-  public static JMenuItem startFirstLevelMenuItem;
+  private JMenuItem restartCurrentLevelMenuItem;
+  private JMenuItem startFirstLevelMenuItem;
 
   private JMenu recnplayMenu;
-  public static JMenuItem playMenuItem;
-  public static JMenuItem stopPlayMenuItem;
-  public static JMenuItem startRecordingMenuItem;
-  public static JMenuItem stopRecordingMenuItem;
-  public static JMenuItem loadRecordingMenuItem;
+  private JMenuItem playMenuItem;
+  private JMenuItem stopPlayMenuItem;
+  private JMenuItem startRecordingMenuItem;
+  private JMenuItem stopRecordingMenuItem;
+  private JMenuItem loadRecordingMenuItem;
 
   private JMenu helpMenu;
-  public static JMenuItem showInstructMenuItem;
+  private JMenuItem showInstructMenuItem;
 
   /**
    * Construct a menu bar and add all menus + menu items.
@@ -67,12 +67,12 @@ public class MenuBar extends JMenuBar {
     recnplayMenu = new JMenu("Rec'n'play");
     helpMenu = new JMenu("Help");
 
-    final JMenuItem[] fileMenuItems = new JMenuItem[]{
+    JMenuItem[] fileMenuItems = new JMenuItem[]{
       saveMenuItem = new JMenuItem("Save"),
       loadMenuItem = new JMenuItem("Load")
     };
 
-    final JMenuItem[] gameMenuItems = new JMenuItem[]{
+    JMenuItem[] gameMenuItems = new JMenuItem[]{
       resumeMenuItem = new JMenuItem("Resume"),
       pauseMenuItem = new JMenuItem("Pause"),
       redoMenuItem = new JMenuItem("Redo"),
@@ -81,12 +81,12 @@ public class MenuBar extends JMenuBar {
       exitSaveMenuItem = new JMenuItem("Exit + Save")
     };
 
-    final JMenuItem[] levelMenuItems = new JMenuItem[]{
+    JMenuItem[] levelMenuItems = new JMenuItem[]{
       restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
       startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
     };
 
-    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
+    JMenuItem[] recnplayMenuItems = new JMenuItem[]{
       startRecordingMenuItem = new JMenuItem("Record"),
       stopRecordingMenuItem = new JMenuItem("Stop Recording"),
       playMenuItem = new JMenuItem("Replay"),
@@ -115,5 +115,149 @@ public class MenuBar extends JMenuBar {
     showInstructMenuItem = new JMenuItem("How to Play");
     showInstructMenuItem.addActionListener(actionListener);
     helpMenu.add(showInstructMenuItem);
+  }
+
+  /**
+   * Gets save menu item.
+   *
+   * @return the save menu item
+   */
+  public JMenuItem getSaveMenuItem() {
+    return saveMenuItem;
+  }
+
+  /**
+   * Gets load menu item.
+   *
+   * @return the load menu item
+   */
+  public JMenuItem getLoadMenuItem() {
+    return loadMenuItem;
+  }
+
+  /**
+   * Gets exit menu item.
+   *
+   * @return the exit menu item
+   */
+  public JMenuItem getExitMenuItem() {
+    return exitMenuItem;
+  }
+
+  /**
+   * Gets pause menu item.
+   *
+   * @return the pause menu item
+   */
+  public JMenuItem getPauseMenuItem() {
+    return pauseMenuItem;
+  }
+
+  /**
+   * Gets play menu item.
+   *
+   * @return the play menu item
+   */
+  public JMenuItem getPlayMenuItem() {
+    return playMenuItem;
+  }
+
+  /**
+   * Gets redo menu item.
+   *
+   * @return the redo menu item
+   */
+  public JMenuItem getRedoMenuItem() {
+    return redoMenuItem;
+  }
+
+  /**
+   * Gets resume menu item.
+   *
+   * @return the resume menu item
+   */
+  public JMenuItem getResumeMenuItem() {
+    return resumeMenuItem;
+  }
+
+  /**
+   * Gets undo menu item.
+   *
+   * @return the undo menu item
+   */
+  public JMenuItem getUndoMenuItem() {
+    return undoMenuItem;
+  }
+
+  /**
+   * Gets exit save menu item.
+   *
+   * @return the exit save menu item
+   */
+  public JMenuItem getExitSaveMenuItem() {
+    return exitSaveMenuItem;
+  }
+
+  /**
+   * Gets load recording menu item.
+   *
+   * @return the load recording menu item
+   */
+  public JMenuItem getLoadRecordingMenuItem() {
+    return loadRecordingMenuItem;
+  }
+
+  /**
+   * Gets start recording menu item.
+   *
+   * @return the start recording menu item
+   */
+  public JMenuItem getStartRecordingMenuItem() {
+    return startRecordingMenuItem;
+  }
+
+  /**
+   * Gets show instruct menu item.
+   *
+   * @return the show instruct menu item
+   */
+  public JMenuItem getShowInstructMenuItem() {
+    return showInstructMenuItem;
+  }
+
+  /**
+   * Gets stop play menu item.
+   *
+   * @return the stop play menu item
+   */
+  public JMenuItem getStopPlayMenuItem() {
+    return stopPlayMenuItem;
+  }
+
+  /**
+   * Gets stop recording menu item.
+   *
+   * @return the stop recording menu item
+   */
+  public JMenuItem getStopRecordingMenuItem() {
+    return stopRecordingMenuItem;
+  }
+
+  /**
+   * Gets restart current level menu item.
+   *
+   * @return the restart current level menu item
+   */
+  public JMenuItem getRestartCurrentLevelMenuItem() {
+    return restartCurrentLevelMenuItem;
+  }
+
+  /**
+   * Gets start first level menu item.
+   *
+   * @return the start first level menu item
+   */
+  public JMenuItem getStartFirstLevelMenuItem() {
+    return startFirstLevelMenuItem;
   }
 }

@@ -125,6 +125,7 @@ public class InstructionsFrame extends JFrame {
     instructLabel.setFont(ComponentLibrary.bodyFont);
     return instructLabel;
   }
+
   /**
    * Initialise the window listener.
    */

@@ -17,10 +17,6 @@ import javax.swing.JLabel;
  */
 public class ComponentLibrary {
 
-  // Text sizes
-  public static final Font regText = new Font("", Font.PLAIN, 25);
-  public static final Font bigText = new Font("", Font.BOLD, 45);
-
   //fonts
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = null;
@@ -106,6 +102,7 @@ public class ComponentLibrary {
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+    assert infoFieldLabel != null;
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabel.setVisible(false);
     return infoFieldLabel;
