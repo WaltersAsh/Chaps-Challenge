@@ -225,7 +225,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         loadLevel(loadMaze(Main.level2));
       }
     } else if (e.getSource() == menuBar.getExitMenuItem()) {
-      System.exit(0);
+      frame.dispose();
 
       //persistence loading and saving
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
@@ -334,7 +334,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           try {
             timer.schedule(timerTask, 0, 1000); // start the timer countdown
           } catch (IllegalStateException ignored) {
-            ignored.printStackTrace();
+            System.out.println();
           }
         }
         showInfoFieldToGui(false);

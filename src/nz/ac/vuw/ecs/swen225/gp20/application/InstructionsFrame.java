@@ -33,6 +33,7 @@ public class InstructionsFrame extends JFrame {
     add(jsp);
     initialiseWindowListener();
     setSize(1024, 800);
+    setTitle("Chap's Challenge - Instructions (Game is Paused)");
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension scrnsize = toolkit.getScreenSize();
     setBounds((scrnsize.width - getWidth()) / 2,
@@ -103,11 +104,14 @@ public class InstructionsFrame extends JFrame {
           + "<img src=\"file:" + ComponentLibrary.moveDemo.toString() + "\" border=\"3\">"
           + "<br>"
           + "<br>"
-          + "Collect the pickaxes to mine through certain blocks/unlock."
-          + "<br>"
-          + "Collect the emerald treasures to unlock the portal."
+          + "Collect the emerald treasures."
           + "<br>"
           + "<img src=\"file:" + ComponentLibrary.collectDemo.toString() + "\" border=\"3\">"
+          + "<br>"
+          + "<br>"
+          + "Collect the pickaxes to mine through certain blocks/unlock doors."
+          + "<br>"
+          + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString() + "\" border=\"3\">"
           + "<br>"
           + "<br>"
           + "Avoid enemies."
