@@ -216,7 +216,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
       pausedIconLabel.setVisible(false);
     } else if (e.getSource() == menuBar.getPauseMenuItem()) {
-      pause();
+      pause(true);
       pausedIconLabel.setVisible(true);
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
       if (currentLevel == Main.level1) {
@@ -229,11 +229,11 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //persistence loading and saving
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
-      pause();
+      pause(false);
       saveMaze(maze, openFileChooser(false));
       resume();
     } else if (e.getSource() == menuBar.getLoadMenuItem()) {
-      pause();
+      pause(false);
       loadLevel(loadMaze(openFileChooser(true)));
       resume();
 
@@ -241,7 +241,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //start recording game play
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
-      pause();
+      pause(false);
       RecordAndReplay.startRecording(openFileChooser(false));
       recordingIconLabel.setVisible(true);
       resume();
@@ -249,14 +249,14 @@ public class Gui extends MazeEventListener implements ActionListener {
       //stop recording game play
     } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
             && RecordAndReplay.isRecording()) {
-      pause();
+      pause(false);
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
       //play recording
     } else if (e.getSource() == menuBar.getPlayMenuItem()) {
-      pause();
+      pause(false);
       recnplay.playRecording();
       resume();
 
@@ -264,13 +264,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
 
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
-      pause();
+      pause(false);
       RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
 
       //instructions
     } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
-      pause();
+      pause(true);
       instructionsFrame.setVisible(true);
     }
 
@@ -341,7 +341,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
         // pause and resume
         if (key == KeyEvent.VK_SPACE) {
-          pause();
+          pause(true);
           pausedIconLabel.setVisible(true);
         } else if (key == KeyEvent.VK_ESCAPE) {
           resume();
@@ -427,7 +427,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         //timer expires
         if (secondsLeft[0] == 0) {
-          pause();
+          pause(false);
           timerExpiryDialog.setVisible(true);
         }
       }
@@ -437,7 +437,13 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Pause the game, triggering countdown timer and maze to stop.
    */
-  public void pause() {
+  public void pause(boolean showDialog) {
+    if (showDialog) {
+      int response = JOptionPane.showOptionDialog(frame, "CURRENTLY PAUSED - Press esc to resume",
+              "Game Paused", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null,
+              null, null);
+    }
+
     isPaused = true;
     pausedIconLabel.setVisible(true);
     maze.pause();
@@ -740,7 +746,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   @Override
   public void update(MazeEventWon e) {
     //stop the timer
-    pause();
+    pause(false);
     levelCompleteDialog.setVisible(true);
     timer.cancel();
     timer.purge();
@@ -753,7 +759,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        pause();
+        pause(false);
         int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?",
                 "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
