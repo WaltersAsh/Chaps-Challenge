@@ -17,7 +17,6 @@ public class UndoRedoHandler extends MazeEventListener {
   @Override
   public void update(MazeEvent e) {
     undo.push(e);
-    System.out.println(undo);
   }
   
   public void undo() {

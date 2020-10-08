@@ -37,5 +37,6 @@ public class MazeEventExitUnlocked extends MazeEventPickup {
   @Override
   public void invert() {
     exitlocktile.place(exitlock);
+    super.invert();
   }
 }

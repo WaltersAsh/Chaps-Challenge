@@ -17,7 +17,6 @@ public class MazeEventUnlocked extends MazeEventWalked {
     super(maze, origin, target, direction);
     this.door = door;
     this.key = key;
-
   }
 
   public Door getDoor() {
@@ -41,8 +40,9 @@ public class MazeEventUnlocked extends MazeEventWalked {
   
   @Override
   public void invert() {
+    super.invert();
     target.place(door);
     maze.getChap().pickup(key);
-    super.invert();
+    
   }
 }
