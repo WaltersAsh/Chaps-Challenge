@@ -129,6 +129,7 @@ public class InstructionsFrame extends JFrame {
         + "</body>"
       + "</html>");
     instructLabel.setFont(ComponentLibrary.bodyFont);
+    instructLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     return instructLabel;
   }
 

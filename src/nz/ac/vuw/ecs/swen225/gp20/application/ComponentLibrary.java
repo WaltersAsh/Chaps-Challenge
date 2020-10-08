@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.Icon;
 
 /**
  * A utility class used for storing and retrieving fonts, colours and icon images.
@@ -21,9 +22,15 @@ public class ComponentLibrary {
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = null;
 
+  //Icons
+  public static Icon pausedIcon;
+
   static {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+      Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
+      image = image.getScaledInstance(206, 83, Image.SCALE_DEFAULT);
+      pausedIcon = new ImageIcon(image);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
@@ -114,7 +121,7 @@ public class ComponentLibrary {
    * @return the info field text JLabel
    */
   public static JLabel infoFieldTextLabel() {
-    JLabel infoFieldTextLabel = new JLabel("swing is pain :(");
+    JLabel infoFieldTextLabel = new JLabel();
     infoFieldTextLabel.setBounds(150, -225, 1000, 1000);
     infoFieldTextLabel.setFont(ComponentLibrary.infoFont);
     infoFieldTextLabel.setForeground(Color.BLACK);

@@ -164,7 +164,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseWindowListener();
     setupTimer();
     setupKeyListener();
-    maze.resume();
   }
 
   /**
@@ -436,18 +435,19 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Pause the game, triggering countdown timer and maze to stop.
+   *
+   * @param showDialog boolean confirming if dialog should be shown.
    */
   public void pause(boolean showDialog) {
-    if (showDialog) {
-      int response = JOptionPane.showOptionDialog(frame, "CURRENTLY PAUSED - Press esc to resume",
-              "Game Paused", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null,
-              null, null);
-    }
-
     isPaused = true;
     pausedIconLabel.setVisible(true);
     maze.pause();
     timer.cancel();
+    if (showDialog) {
+      int response = JOptionPane.showOptionDialog(frame, "CURRENTLY PAUSED - Press esc to resume",
+              "Game Paused", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+              null, null);
+    }
   }
 
   /**
@@ -716,6 +716,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void update(MazeEventInfoField e) {
+    infoFieldTextLabel.setText(e.getInfoField().getInformation());
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
     infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
         infoFieldLabel.getY() - 150, 1000, 1000);
