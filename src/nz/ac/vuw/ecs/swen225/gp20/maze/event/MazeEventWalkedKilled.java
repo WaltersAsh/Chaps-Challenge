@@ -9,9 +9,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
  * @author Ian 300474717
  *
  */
-public class MazeEventKilled extends MazeEventWalked {
+public class MazeEventWalkedKilled extends MazeEventWalked {
   Enemy enemy;
-  public MazeEventKilled(Maze maze, Enemy enemy, PathTile origin, PathTile target, Maze.Direction direction) {
+  public MazeEventWalkedKilled(Maze maze, Enemy enemy, PathTile origin, PathTile target, Maze.Direction direction) {
     super(maze, origin, target, direction);
     this.enemy = enemy;
   }
@@ -22,7 +22,7 @@ public class MazeEventKilled extends MazeEventWalked {
 
   @Override
   public String toString() {
-    return String.format("Walked onto the exit tile at %s,%s and beat the level!",
+    return String.format("Walked onto the an enemy at %s,%s and got killed.",
         target.getCol(), target.getRow());
   }
 
