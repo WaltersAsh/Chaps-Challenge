@@ -459,14 +459,16 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @param showDialog boolean confirming if dialog should be shown.
    */
   public void pause(boolean showDialog) {
-    isPaused = true;
-    pausedIconLabel.setVisible(true);
-    maze.pause();
-    timer.cancel();
-    if (showDialog) {
-      int response = JOptionPane.showOptionDialog(frame, "CURRENTLY PAUSED - Press esc to resume",
-              "Game Paused", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
-              null, null);
+    if (!isPaused) {
+      isPaused = true;
+      pausedIconLabel.setVisible(true);
+      maze.pause();
+      timer.cancel();
+      if (showDialog) {
+        int response = JOptionPane.showOptionDialog(frame, "PAUSED - Press esc to resume",
+                "Game Paused", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+                null, null);
+      }
     }
   }
 
@@ -752,21 +754,6 @@ public class Gui extends MazeEventListener implements ActionListener {
         infoFieldLabel.getY() - 150, 1000, 1000);
     frame.revalidate();
     showInfoFieldToGui(true);
-  }
-
-  /**
-   * Update tracking when chap gets consumed by an enemy.
-   *
-   * @param e the enemy movement event
-   */
-  @Override
-  //TODO: TO IMPLEMENT
-  public void update(MazeEventEnemyWalked e) {
-    PathTile enemy = e.getEnemyOrigin();
-    PathTile chap = e.getEnemyTarget();
-    if (enemy == chap) {
-      System.out.println("Test");
-    }
   }
 
   /**

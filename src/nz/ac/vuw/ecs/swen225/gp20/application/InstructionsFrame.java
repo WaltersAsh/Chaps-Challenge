@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
- * HelpPanel class for instantiating a new help panel to gui.
+ * InstructionsFrame class for instantiating a new instructions frame to gui.
  *
  * @author Justin 300470389
  */
@@ -120,6 +120,11 @@ public class InstructionsFrame extends JFrame implements ActionListener {
             + "Collect the pickaxes to mine through certain blocks/unlock doors."
             + "<br>"
             + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString() + "\" border=\"3\">"
+            + "<br>"
+            + "<br>"
+            + "Move crates to create a path in the water."
+            + "<br>"
+            + "<img src=\"file:" + ComponentLibrary.crateDemo.toString() + "\" border=\"3\">"
             + "<br>"
             + "<br>"
             + "Avoid enemies."

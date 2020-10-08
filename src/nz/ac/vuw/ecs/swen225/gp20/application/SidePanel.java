@@ -39,7 +39,7 @@ public class SidePanel extends JPanel {
   private JLabel treasuresValueLabel;
   private JLabel[] inventoryValueLabels;
 
-  private Maze maze;
+  private final Maze maze;
 
   /**
    * Side panel is constructed with its inner side panels.

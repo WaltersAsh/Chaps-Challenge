@@ -60,21 +60,20 @@ public class PopupDialog extends JDialog {
       default:
         break;
     }
+
+    //transparent background
+    setUndecorated(true);
+    getRootPane().setOpaque(false);
+    getContentPane().setBackground(new Color(0, 0, 0, 0));
+    setBackground(new Color(0, 0, 0, 0));
+
     buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     add(Box.createRigidArea(new Dimension(0, 50)));
     add(messageLabel, gbc);
     add(Box.createRigidArea(new Dimension(0, 75)));
     add(buttonPanel, gbc);
-
     stylise();
-    setBackground(ComponentLibrary.deepLavender);
-    Border border = BorderFactory.createEmptyBorder(15, 15, 15, 15);
-    border = BorderFactory.createCompoundBorder(border,
-            BorderFactory.createLineBorder(Color.WHITE, 2));
-    border = BorderFactory.createCompoundBorder(border,
-            BorderFactory.createEmptyBorder(15, 15, 15, 15));
-    getRootPane().setBorder(border);
     pack();
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension scrnsize = toolkit.getScreenSize();
