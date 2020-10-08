@@ -16,9 +16,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -35,12 +33,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.PathTile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalked;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
@@ -94,11 +88,12 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  private int[] secondsLeft;
+  private int[] millisecondsLeft;
   private boolean isPaused;
   private File currentLevel = Main.level1;
 
   private RecordAndReplay recnplay;
+  private Map<Long, List<Move>> timeToMoveMap = new HashMap<>();
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -191,8 +186,8 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Initialise the popup dialogs.
    */
   public void initialisePopupDialogs() {
-    levelCompleteDialog = new PopupDialog(true, this);
-    timerExpiryDialog = new PopupDialog(false, this);
+    levelCompleteDialog = new PopupDialog(PopupDialog.DialogState.LEVEL_COMPLETE, this);
+    timerExpiryDialog = new PopupDialog(PopupDialog.DialogState.TIME_EXPIRED, this);
     nextButton = levelCompleteDialog.getNextButton();
     levelCompleteRestartButton = levelCompleteDialog.getRestartButton();
     timerExpiryRestartButton = timerExpiryDialog.getRestartButton();
@@ -312,10 +307,19 @@ public class Gui extends MazeEventListener implements ActionListener {
    *
    * @param direction the movement direction
    */
-  public void move(Maze.Direction direction) {
+  public void move(Maze.Direction direction, KeyEvent keyEvent) {
     maze.move(direction);
     if (RecordAndReplay.isRecording()) {
       this.maze.moves.add(direction);
+      Move move = new Move(1, keyEvent);
+      long timestamp = Long.parseLong(timeValueLabel.getText());
+      if (timeToMoveMap.containsKey(timestamp)) {
+        timeToMoveMap.get(timestamp).add(move);
+      } else {
+        List<Move> newList = new ArrayList<>();
+        timeToMoveMap.put(timestamp, newList);
+      }
+
     }
   }
 
@@ -331,7 +335,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         if (!isTimerActive && !e.isControlDown() && !RecordAndReplay.isRecording() && !isPaused) {
           isTimerActive = true;
           try {
-            timer.schedule(timerTask, 0, 1000); // start the timer countdown
+            timer.schedule(timerTask, 0, 1); // start the timer countdown
           } catch (IllegalStateException ignored) {
             System.out.println();
           }
@@ -353,16 +357,16 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         switch (key) {
           case KeyEvent.VK_UP:
-            move(Maze.Direction.UP);
+            move(Maze.Direction.UP, e);
             break;
           case KeyEvent.VK_DOWN:
-            move(Maze.Direction.DOWN);
+            move(Maze.Direction.DOWN, e);
             break;
           case KeyEvent.VK_LEFT:
-            move(Maze.Direction.LEFT);
+            move(Maze.Direction.LEFT, e);
             break;
           case KeyEvent.VK_RIGHT:
-            move(Maze.Direction.RIGHT);
+            move(Maze.Direction.RIGHT, e);
             break;
           default:
           }
@@ -410,22 +414,23 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Setup the timer.
    */
   public void setupTimer() {
-    secondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
+
+    millisecondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
     timer = new Timer();
     timeValueLabel.setForeground(Color.BLACK);
     timerTask = new TimerTask() {
       @Override
       public void run() {
-        if (secondsLeft[0] > 0) {
-          secondsLeft[0]--;
-          setTimeValueLabel(secondsLeft[0]);
+        if (millisecondsLeft[0] > 0) {
+          millisecondsLeft[0]--;
+          setTimeValueLabel(millisecondsLeft[0]);
         }
         //timer drops down to last 10
-        if (secondsLeft[0] <= 10) {
+        if (millisecondsLeft[0] <= 10000) {
           timeValueLabel.setForeground(Color.RED);
         }
         //timer expires
-        if (secondsLeft[0] == 0) {
+        if (millisecondsLeft[0] == 0) {
           pause(false);
           timerExpiryDialog.setVisible(true);
         }
@@ -458,7 +463,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       pausedIconLabel.setVisible(false);
       maze.resume();
       setupTimer();
-      timer.schedule(timerTask, 0, 1000); // start the timer countdown
+      timer.schedule(timerTask, 0, 1); // start the timer countdown
       isPaused = false;
     }
   }
@@ -488,11 +493,11 @@ public class Gui extends MazeEventListener implements ActionListener {
     reinitialiseBoard(maze);
     //level panel
     if (currentLevel == Main.level2) {
-      setTimeValueLabel(40);
+      setTimeValueLabel(40000);
       levelValueLabel.setText("2");
     } else {
       levelValueLabel.setText("1");
-      setTimeValueLabel(60);
+      setTimeValueLabel(60000);
     }
     pausedIconLabel.setVisible(false);
     setupTimer();
@@ -751,6 +756,11 @@ public class Gui extends MazeEventListener implements ActionListener {
     levelCompleteDialog.setVisible(true);
     timer.cancel();
     timer.purge();
+  }
+
+  public void update(MazeEventWalkedKilled e) {
+    pause(false);
+
   }
 
   /**

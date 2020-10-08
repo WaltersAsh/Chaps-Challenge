@@ -23,6 +23,12 @@ import javax.swing.border.Border;
  */
 public class PopupDialog extends JDialog {
 
+  public enum DialogState {
+    LEVEL_COMPLETE,
+    TIME_EXPIRED,
+    DEATH
+  }
+
   private final JPanel buttonPanel;
   private JLabel messageLabel;
 
@@ -32,19 +38,20 @@ public class PopupDialog extends JDialog {
   /**
    * Instantiates a new Popup dialog for the gui.
    *
-   * @param isLevelComplete boolean confirming level is complete
+   * @param state the enum representing which dialog should be presented.
    * @param actionListener the action listener to be added
    */
-  public PopupDialog(boolean isLevelComplete, ActionListener actionListener) {
+  public PopupDialog(DialogState state, ActionListener actionListener) {
     setLayout(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-    if (isLevelComplete) {
-      levelFinishDialog(actionListener);
-    } else {
-      timerCountdownDialog(actionListener);
+    switch (state) {
+      case LEVEL_COMPLETE -> levelFinishDialog(actionListener);
+      case TIME_EXPIRED -> messageDialog(actionListener, "TIME EXPIRED");
+      case DEATH -> messageDialog(actionListener, "YOU DIED");
+
     }
     buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -87,8 +94,11 @@ public class PopupDialog extends JDialog {
 
   /**
    * Dialog for countdown timer expiry.
+   *
+   * @param actionListener the actionlistener to be added.
+   * @param text the text to be set for the message label initialised.
    */
-  public void timerCountdownDialog(ActionListener actionListener) {
+  public void messageDialog(ActionListener actionListener, String text) {
     messageLabel = new JLabel(" COUNTDOWN TIMER EXPIRED ");
     restartButton = new JButton("Restart Level");
     restartButton.addActionListener(actionListener);
