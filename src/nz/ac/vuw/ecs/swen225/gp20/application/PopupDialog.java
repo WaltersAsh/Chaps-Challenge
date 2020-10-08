@@ -48,10 +48,17 @@ public class PopupDialog extends JDialog {
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
     switch (state) {
-      case LEVEL_COMPLETE -> levelFinishDialog(actionListener);
-      case TIME_EXPIRED -> messageDialog(actionListener, "TIME EXPIRED");
-      case DEATH -> messageDialog(actionListener, "YOU DIED");
-
+      case LEVEL_COMPLETE:
+        levelFinishDialog(actionListener);
+        break;
+      case TIME_EXPIRED:
+        messageDialog(actionListener, "TIME EXPIRED");
+        break;
+      case DEATH:
+        messageDialog(actionListener, "YOU DIED");
+        break;
+      default:
+        break;
     }
     buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

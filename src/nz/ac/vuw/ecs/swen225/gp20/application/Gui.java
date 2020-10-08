@@ -159,6 +159,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseWindowListener();
     setupTimer();
     setupKeyListener();
+    maze.resume();
   }
 
   /**
@@ -497,7 +498,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       levelValueLabel.setText("2");
     } else {
       levelValueLabel.setText("1");
-      setTimeValueLabel(60000);
+      setTimeValueLabel(60000); //remember that it is also initialised in SidePanel
     }
     pausedIconLabel.setVisible(false);
     setupTimer();
@@ -769,6 +770,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   public void update(MazeEventWalkedKilled e) {
     pause(false);
+
 
   }
 
