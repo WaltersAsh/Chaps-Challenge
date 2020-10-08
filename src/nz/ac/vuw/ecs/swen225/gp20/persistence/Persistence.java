@@ -116,6 +116,7 @@ public class Persistence {
       if (p.toFile().exists()) {
         Maze loadedMaze = mapper.readValue(p.toFile(), Maze.class);
         if (mazeValidator(loadedMaze)) {
+          fixMaze(loadedMaze);
           return loadedMaze;
         }
       } else {//if file not exist
