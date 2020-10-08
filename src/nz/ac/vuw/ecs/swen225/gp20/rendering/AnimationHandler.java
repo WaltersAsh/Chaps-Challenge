@@ -37,4 +37,13 @@ public class AnimationHandler extends MazeEventListener {
     bv.initaliseAnimation(e.getEnemy(), e.getEnemyOrigin(), e.getEnemyTarget(), e.getEnemyDirection());
     bv.setAnimating(true);
   }
+
+  @Override
+  public void update(MazeEventWalkedKilled e) {
+    Chap c = e.getMaze().getChap();
+    System.out.println();
+    c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
+
+
+  }
 }
