@@ -63,6 +63,9 @@ public class BoardView extends JComponent implements ActionListener {
     sh = new SoundHandler(m);
     ah = new AnimationHandler(m, this);
 
+    if(windowSize>height||windowSize>width){
+      windowSize = Math.min(height,width);
+    }
     startMaze = m;
   }
 
@@ -147,12 +150,12 @@ public class BoardView extends JComponent implements ActionListener {
     }
 
     int currentRow = 0;
-        for (int row = startRow; row < startRow + windowSize; row++) {
-          int currentCol = 0;
-          for (int col = startCol; col < startCol + windowSize; col++) {
-            Tile t = m.getTileAt(row, col);
-            g.drawImage(getToolkit().getImage(t.getFilename()), currentCol * blockSize,
-                currentRow * blockSize, blockSize, blockSize, this);
+    for (int row = startRow; row < startRow + windowSize; row++) {
+      int currentCol = 0;
+      for (int col = startCol; col < startCol + windowSize; col++) {
+        Tile t = m.getTileAt(row, col);
+        g.drawImage(getToolkit().getImage(t.getFilename()), currentCol * blockSize,
+            currentRow * blockSize, blockSize, blockSize, this);
         if (t instanceof PathTile) {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
@@ -277,35 +280,35 @@ public class BoardView extends JComponent implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-      repaint();
-      if(!boardNeedMove) {
-        for (int i = 0; i < animations.size(); i++) {
-          currentAnimation = animations.get(i);
-          double currentFromX = currentAnimation.getFromX();
-          double currentFromY = currentAnimation.getFromY();
-          currentAnimation.setFromX(currentFromX + velx);
-          currentAnimation.setFromY(currentFromY + vely);
+    repaint();
+    if(!boardNeedMove) {
+      for (int i = 0; i < animations.size(); i++) {
+        currentAnimation = animations.get(i);
+        double currentFromX = currentAnimation.getFromX();
+        double currentFromY = currentAnimation.getFromY();
+        currentAnimation.setFromX(currentFromX + velx);
+        currentAnimation.setFromY(currentFromY + vely);
 
-          if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX()) ||
-              (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
-            entitesAnimated.remove(currentAnimation.getM());
-            animations.remove(currentAnimation);
-            checkAnimation();
-          }
-          if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
-              (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
-            entitesAnimated.remove(currentAnimation.getM());
-            animations.remove(currentAnimation);
-            checkAnimation();
-          }
+        if ((d == Maze.Direction.LEFT && currentAnimation.getFromX() <= currentAnimation.getToX()) ||
+            (d == Maze.Direction.RIGHT && currentAnimation.getFromX() >= currentAnimation.getToX())) {
+          entitesAnimated.remove(currentAnimation.getM());
+          animations.remove(currentAnimation);
+          checkAnimation();
+        }
+        if ((d == Maze.Direction.UP && currentAnimation.getFromY() <= currentAnimation.getToY()) ||
+            (d == Maze.Direction.DOWN && currentAnimation.getFromY() >= currentAnimation.getToY())) {
+          entitesAnimated.remove(currentAnimation.getM());
+          animations.remove(currentAnimation);
+          checkAnimation();
         }
       }
+    }
     else if(startCount>blockSize){
       checkAnimation();
     }
     else{
-        drawX += velx;
-        drawY += vely;
+      drawX += velx;
+      drawY += vely;
     }
   }
 
