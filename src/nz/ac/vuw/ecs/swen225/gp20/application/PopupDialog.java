@@ -52,10 +52,10 @@ public class PopupDialog extends JDialog {
         levelFinishDialog(actionListener);
         break;
       case TIME_EXPIRED:
-        messageDialog(actionListener, "TIME EXPIRED");
+        messageDialog(actionListener, " TIME EXPIRED ");
         break;
       case DEATH:
-        messageDialog(actionListener, "YOU DIED");
+        messageDialog(actionListener, " YOU DIED ");
         break;
       default:
         break;
@@ -106,7 +106,7 @@ public class PopupDialog extends JDialog {
    * @param text the text to be set for the message label initialised.
    */
   public void messageDialog(ActionListener actionListener, String text) {
-    messageLabel = new JLabel(" COUNTDOWN TIMER EXPIRED ");
+    messageLabel = new JLabel(text);
     restartButton = new JButton("Restart Level");
     restartButton.addActionListener(actionListener);
     buttonPanel.add(restartButton);

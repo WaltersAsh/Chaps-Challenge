@@ -76,10 +76,12 @@ public class Gui extends MazeEventListener implements ActionListener {
   //popup dialog
   private PopupDialog levelCompleteDialog;
   private PopupDialog timerExpiryDialog;
+  private PopupDialog deathDialog;
 
   private JButton nextButton;
   private JButton levelCompleteRestartButton;
   private JButton timerExpiryRestartButton;
+  private JButton deathRestartButton;
 
   public static BoardView board;
   private Maze maze;
@@ -187,11 +189,14 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void initialisePopupDialogs() {
     levelCompleteDialog = new PopupDialog(PopupDialog.DialogState.LEVEL_COMPLETE, this);
     timerExpiryDialog = new PopupDialog(PopupDialog.DialogState.TIME_EXPIRED, this);
+    deathDialog = new PopupDialog(PopupDialog.DialogState.DEATH, this);
     nextButton = levelCompleteDialog.getNextButton();
     levelCompleteRestartButton = levelCompleteDialog.getRestartButton();
     timerExpiryRestartButton = timerExpiryDialog.getRestartButton();
+    deathRestartButton = deathDialog.getRestartButton();
     levelCompleteDialog.setVisible(false);
     timerExpiryDialog.setVisible(false);
+    deathDialog.setVisible(false);
   }
 
   /**
@@ -289,7 +294,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       loadLevel(Persistence.loadMaze(currentLevel));
       levelCompleteDialog.setVisible(false);
     }
-    if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
+    if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton ||
+            e.getSource() == deathRestartButton) {
       System.out.println("Restart button pressed");
       if (currentLevel == Main.level1) {
         loadLevel(Persistence.loadMaze(Main.level1));
@@ -298,6 +304,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       }
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
+      deathDialog.setVisible(false);
     }
   }
 
@@ -483,6 +490,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void loadLevel(Maze maze) {
     //reset timer count
+    pause(false);
     timer.cancel();
     isTimerActive = false;
     setupTimer();
@@ -762,7 +770,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Execute operations when maze has been won.
+   * Update operations when maze has been won.
    *
    * @param e the maze won event
    */
@@ -775,10 +783,26 @@ public class Gui extends MazeEventListener implements ActionListener {
     timer.purge();
   }
 
+  /**
+   * Update death upon chap walking into an enemy.
+   *
+   * @param e the walked and killed event
+   */
+  @Override
   public void update(MazeEventWalkedKilled e) {
     pause(false);
+    deathDialog.setVisible(true);
+  }
 
-
+  /**
+   * Update death upon enemy walking into chap.
+   *
+   * @param e the enemy walked and killed event
+   */
+  @Override
+  public void update(MazeEventEnemyWalkedKilled e) {
+    pause(false);
+    deathDialog.setVisible(true);
   }
 
   /**
