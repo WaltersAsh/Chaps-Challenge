@@ -40,6 +40,9 @@ public class MazeEventListener {
   public void update(MazeEventTeleported e) {
   }
 
+  public void update(MazeEventKilled e) {
+  }
+
   /**
    * Listen to update from any MazeEvent.
    *
