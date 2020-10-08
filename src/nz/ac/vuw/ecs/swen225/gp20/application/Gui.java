@@ -29,7 +29,6 @@ import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.PathTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
@@ -88,7 +87,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  private int[] millisecondsLeft;
+  private long millisecondsLeft;
   private boolean isPaused;
   private File currentLevel = Main.level1;
 
@@ -101,6 +100,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public Gui(Maze maze) {
     this.maze = maze;
 
+    millisecondsLeft = 60000;
     recnplay = new RecordAndReplay(this);
 
     // base frame
@@ -318,7 +318,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     if (RecordAndReplay.isRecording()) {
       this.maze.moves.add(direction);
       Move move = new Move(1, keyEvent);
-      long timestamp = Long.parseLong(timeValueLabel.getText());
+      long timestamp = millisecondsLeft;
       if (timeToMoveMap.containsKey(timestamp)) {
         timeToMoveMap.get(timestamp).add(move);
       } else {
@@ -341,7 +341,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         if (!isTimerActive && !e.isControlDown() && !RecordAndReplay.isRecording() && !isPaused) {
           isTimerActive = true;
           try {
-            timer.schedule(timerTask, 0, 1); // start the timer countdown
+            timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
           } catch (IllegalStateException ignored) {
             System.out.println();
           }
@@ -429,23 +429,26 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Setup the timer.
    */
   public void setupTimer() {
-
-    millisecondsLeft = new int[]{Integer.parseInt(timeValueLabel.getText())};
     timer = new Timer();
     timeValueLabel.setForeground(Color.BLACK);
     timerTask = new TimerTask() {
       @Override
       public void run() {
-        if (millisecondsLeft[0] > 0) {
-          millisecondsLeft[0]--;
-          setTimeValueLabel(millisecondsLeft[0]);
+        if (millisecondsLeft > 0) {
+          millisecondsLeft--;
+          System.out.println(millisecondsLeft);
+          if (millisecondsLeft > 9) {
+            timeValueLabel.setText(Long.toString(millisecondsLeft).substring(0, 2));
+          } else {
+            timeValueLabel.setText(Long.toString(millisecondsLeft));
+          }
         }
         //timer drops down to last 10
-        if (millisecondsLeft[0] <= 10000) {
+        if (millisecondsLeft <= 11000) {
           timeValueLabel.setForeground(Color.RED);
         }
         //timer expires
-        if (millisecondsLeft[0] == 0) {
+        if (millisecondsLeft == 0) {
           pause(false);
           timerExpiryDialog.setVisible(true);
         }
@@ -465,9 +468,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       maze.pause();
       timer.cancel();
       if (showDialog) {
-        int response = JOptionPane.showOptionDialog(frame, "PAUSED - Press esc to resume",
-                "Game Paused", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
-                null, null);
+        JOptionPane.showOptionDialog(frame, "PAUSED - Press esc to resume",
+        "Game Paused", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+        null, null);
       }
     }
   }
@@ -480,7 +483,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       pausedIconLabel.setVisible(false);
       maze.resume();
       setupTimer();
-      timer.schedule(timerTask, 0, 1); // start the timer countdown
+      timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       isPaused = false;
     }
   }
@@ -511,12 +514,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     reinitialiseBoard(maze);
     //level panel
     if (currentLevel == Main.level2) {
-      setTimeValueLabel(40000);
+      millisecondsLeft = 40000;
       levelValueLabel.setText("2");
     } else {
       levelValueLabel.setText("1");
-      setTimeValueLabel(60000); //remember that it is also initialised in SidePanel
+      millisecondsLeft = 60000;
     }
+    timeValueLabel.setText(Long.toString(millisecondsLeft).substring(0, 2));
     pausedIconLabel.setVisible(false);
     setupTimer();
   }
@@ -654,7 +658,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @return the timestamp
    */
   public Long getCurrentTimeStamp() {
-    return Long.parseLong(timeValueLabel.getText());
+    return millisecondsLeft;
   }
 
   /**
@@ -664,16 +668,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void setLevelValueLabel(String levelValue) {
     levelValueLabel.setText(levelValue);
-    frame.revalidate();
-  }
-
-  /**
-   * Set the time value text of the label.
-   *
-   * @param timeValue the String representing the time value to be set
-   */
-  public void setTimeValueLabel(int timeValue) {
-    timeValueLabel.setText(String.valueOf(timeValue));
     frame.revalidate();
   }
 
@@ -793,6 +787,17 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Update death upon chap walking into water.
+   *
+   * @param e the walked and drowned event.
+   */
+  @Override
+  public void update(MazeEventWalkedDrowned e) {
+    pause(false);
+    deathDialog.setVisible(true);
+  }
+
+  /**
    * Initialise the window listener.
    */
   public void initialiseWindowListener() {
@@ -800,7 +805,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         pause(false);
-        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?",
+        JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
+        temp.setAlwaysOnTop(true);
+        int response = JOptionPane.showConfirmDialog(temp, "Are you sure you want to exit?",
                 "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
           frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

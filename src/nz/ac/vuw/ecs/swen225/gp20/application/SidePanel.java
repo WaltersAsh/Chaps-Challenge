@@ -160,7 +160,7 @@ public class SidePanel extends JPanel {
     // initialise value labels
     JLabel[] valueLabels = new JLabel[]{
       levelValueLabel = new JLabel("1"),
-      timeValueLabel = new JLabel("60000"),
+      timeValueLabel = new JLabel("60"),
       treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
     };
 

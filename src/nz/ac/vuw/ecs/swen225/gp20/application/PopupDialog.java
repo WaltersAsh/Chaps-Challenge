@@ -82,6 +82,7 @@ public class PopupDialog extends JDialog {
     Dimension scrnsize = toolkit.getScreenSize();
     setBounds((scrnsize.width - getWidth()) / 2,
             (scrnsize.height - getHeight()) / 2, getWidth(), getHeight());
+    setAlwaysOnTop(true);
   }
 
   /**
