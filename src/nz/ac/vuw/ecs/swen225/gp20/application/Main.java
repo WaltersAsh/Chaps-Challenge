@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.File;
+
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
@@ -19,7 +21,7 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-//    Maze maze = BoardRig.enemyKillTest1();
+    //Maze maze = BoardRig.enemyKillTest1();
     Maze maze = Persistence.loadMaze(level1);
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);

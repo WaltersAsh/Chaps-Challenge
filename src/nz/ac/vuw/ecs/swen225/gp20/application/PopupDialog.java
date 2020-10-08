@@ -30,6 +30,7 @@ public class PopupDialog extends JDialog {
   }
 
   private final JPanel buttonPanel;
+  private JPanel messagePanel;
   private JLabel messageLabel;
 
   private JButton restartButton;
@@ -43,6 +44,7 @@ public class PopupDialog extends JDialog {
    */
   public PopupDialog(DialogState state, ActionListener actionListener) {
     setLayout(new GridBagLayout());
+    messagePanel = new JPanel();
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     buttonPanel = new JPanel();
@@ -67,10 +69,11 @@ public class PopupDialog extends JDialog {
     getContentPane().setBackground(new Color(0, 0, 0, 0));
     setBackground(new Color(0, 0, 0, 0));
 
+    messagePanel.add(messageLabel);
     buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     add(Box.createRigidArea(new Dimension(0, 50)));
-    add(messageLabel, gbc);
+    add(messagePanel, gbc);
     add(Box.createRigidArea(new Dimension(0, 75)));
     add(buttonPanel, gbc);
     stylise();
@@ -115,8 +118,12 @@ public class PopupDialog extends JDialog {
    * Stylise the dialog.
    */
   public void stylise() {
-    getContentPane().setBackground(ComponentLibrary.lightLavender);
-    buttonPanel.setBackground(ComponentLibrary.lightLavender);
+    Border border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+    border = BorderFactory.createCompoundBorder(border,
+            BorderFactory.createLineBorder(Color.WHITE, 2));
+    messagePanel.setBackground(ComponentLibrary.fullLavender);
+    messagePanel.setBorder(border);
+    buttonPanel.setBackground(new Color(0, 0, 0, 0));
     messageLabel.setForeground(Color.BLACK);
     restartButton.setBackground(ComponentLibrary.fullLavender);
     restartButton.setForeground(Color.WHITE);
