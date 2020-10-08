@@ -487,11 +487,11 @@ public class Maze {
     pause();
   }
 
-  public long getMsLeft() {
+  public long getMillisecondsLeft() {
     return millisecondsLeft;
   }
   
-  public void setMsLeft(long ms) {
+  public void setMillisecondsLeft(long ms) {
     this.millisecondsLeft = ms;
   }
   public int getLevelID() {

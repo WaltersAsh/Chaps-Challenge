@@ -317,7 +317,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     if (RecordAndReplay.isRecording()) {
       this.maze.moves.add(direction);
       Move move = new Move(1, keyEvent);
-      long timestamp = maze.getMsLeft();
+      long timestamp = maze.getMillisecondsLeft();
       if (timeToMoveMap.containsKey(timestamp)) {
         timeToMoveMap.get(timestamp).add(move);
       } else {
@@ -433,9 +433,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     timerTask = new TimerTask() {
       @Override
       public void run() {
-        if (maze.getMsLeft() > 0) {
-          maze.setMsLeft(maze.getMsLeft()-1);
-          long millisecondsLeft = maze.getMsLeft();
+        if (maze.getMillisecondsLeft() > 0) {
+          maze.setMillisecondsLeft(maze.getMillisecondsLeft()-1);
+          long millisecondsLeft = maze.getMillisecondsLeft();
           if (millisecondsLeft > 9) {
             timeValueLabel.setText(Long.toString(millisecondsLeft).substring(0, 2));
           } else {
@@ -513,13 +513,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     reinitialiseBoard(maze);
     //level panel
     if (currentLevel == Main.level2) {
-      maze.setMsLeft(40000);
+      maze.setMillisecondsLeft(40000);
       levelValueLabel.setText("2");
     } else {
       levelValueLabel.setText("1");
-      maze.setMsLeft(60000);
+      maze.setMillisecondsLeft(60000);
     }
-    timeValueLabel.setText(Long.toString(maze.getMsLeft()).substring(0, 2));
+    timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft()).substring(0, 2));
     pausedIconLabel.setVisible(false);
     setupTimer();
   }
@@ -657,7 +657,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @return the timestamp
    */
   public Long getCurrentTimeStamp() {
-    return maze.getMsLeft();
+    return maze.getMillisecondsLeft();
   }
 
   /**
