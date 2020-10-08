@@ -12,7 +12,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
  */
 public class MazeEventListenerExample extends MazeEventListener{
   public static void main(String[] args) {
-    Gui g = new Gui(BoardRig.enemyKillTest1());
+    Gui g = new Gui(BoardRig.crateAndWaterTest());
     g.getBoard().getMaze().addListener(new MazeEventListenerExample());
 
     g.getFrame().setVisible(true);
@@ -64,7 +64,18 @@ public class MazeEventListenerExample extends MazeEventListener{
   }
 
   @Override
-  public void update(MazeEventKilled e) {
-    System.out.println("Got killed");
+  public void update(MazeEventWalkedKilled e) {
+    System.out.println("Chap walked onto an enemy and got killed");
   }
+
+  @Override
+  public void update(MazeEventEnemyWalkedKilled e) {
+    System.out.println("Enemy walked onto chap and chap got killed");
+  }
+
+  @Override
+  public void update(MazeEventWalkedDrowned e) {
+    System.out.println("Chap walked into water and drowned");
+  }
+
 }

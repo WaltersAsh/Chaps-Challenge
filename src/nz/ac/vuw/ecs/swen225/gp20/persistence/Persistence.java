@@ -116,7 +116,10 @@ public class Persistence {
       if (p.toFile().exists()) {
         Maze loadedMaze = mapper.readValue(p.toFile(), Maze.class);
         if (mazeValidator(loadedMaze)) {
+          fixMaze(loadedMaze);
           return loadedMaze;
+        }else{
+          throw new Exception("Maze file not valid");
         }
       } else {//if file not exist
         throw new IOException("levels/quickSave.json not existed");
@@ -132,13 +135,13 @@ public class Persistence {
    *
    * @param args the input arguments
    */
-  public static void main(String[] args) {
-    try {
-      System.out.println(quickSave(BoardRig.lesson1()));
-      System.out.println(quickLoad());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+//  public static void main(String[] args) {
+//    try {
+//      System.out.println(quickSave(BoardRig.lesson1()));
+//      System.out.println(quickLoad());
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//  }
 
 }

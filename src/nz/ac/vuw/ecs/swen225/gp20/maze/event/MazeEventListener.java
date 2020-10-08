@@ -40,7 +40,13 @@ public class MazeEventListener {
   public void update(MazeEventTeleported e) {
   }
 
-  public void update(MazeEventKilled e) {
+  public void update(MazeEventWalkedKilled e) {
+  }
+
+  public void update(MazeEventEnemyWalkedKilled e) {
+  }
+
+  public void update(MazeEventWalkedDrowned e) {
   }
 
   /**

@@ -73,7 +73,7 @@ public class RecordAndReplay {
         Runnable runnable = () -> {
             //execute moves
             for(Maze.Direction move : loadedRecording) {
-                gui.move(move);
+                //gui.move(move);
                 //pause
                 try {
                     Thread.sleep(wait);
