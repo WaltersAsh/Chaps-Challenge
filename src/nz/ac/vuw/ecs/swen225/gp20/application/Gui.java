@@ -1,8 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.loadMaze;
-import static nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence.saveMaze;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,6 +31,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
 import nz.ac.vuw.ecs.swen225.gp20.maze.PathTile;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
@@ -215,9 +213,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       pausedIconLabel.setVisible(true);
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
       if (currentLevel == Main.level1) {
-        loadLevel(loadMaze(Main.level1));
+        loadLevel(Persistence.loadMaze(Main.level1));
       } else {
-        loadLevel(loadMaze(Main.level2));
+        loadLevel(Persistence.loadMaze(Main.level2));
       }
     } else if (e.getSource() == menuBar.getExitMenuItem()) {
       frame.dispose();
@@ -225,11 +223,11 @@ public class Gui extends MazeEventListener implements ActionListener {
       //persistence loading and saving
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
       pause(false);
-      saveMaze(maze, openFileChooser(false));
+      Persistence.saveMaze(maze, openFileChooser(false));
       resume();
     } else if (e.getSource() == menuBar.getLoadMenuItem()) {
       pause(false);
-      loadLevel(loadMaze(openFileChooser(true)));
+      loadLevel(Persistence.loadMaze(openFileChooser(true)));
       resume();
 
       //recnplay menu functionalities
@@ -288,15 +286,15 @@ public class Gui extends MazeEventListener implements ActionListener {
     if (e.getSource() == nextButton) {
       System.out.println("Next button pressed");
       currentLevel = Main.level2;
-      loadLevel(loadMaze(currentLevel));
+      loadLevel(Persistence.loadMaze(currentLevel));
       levelCompleteDialog.setVisible(false);
     }
     if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton) {
       System.out.println("Restart button pressed");
       if (currentLevel == Main.level1) {
-        loadLevel(loadMaze(Main.level1));
+        loadLevel(Persistence.loadMaze(Main.level1));
       } else {
-        loadLevel(loadMaze(Main.level2));
+        loadLevel(Persistence.loadMaze(Main.level2));
       }
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
@@ -380,18 +378,27 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + x pressed - exit game");
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
           System.out.println("ctrl + s pressed - exit and save");
+          pause(false);
+          Persistence.quickSave(maze);
+          resume();
         } else if (e.isControlDown() && key == KeyEvent.VK_R) {
           System.out.println("ctrl + r pressed - resume saved game");
+          pause(false);
+          Maze loadedMaze = Persistence.quickLoad();
+          if (loadedMaze != null) {
+            loadLevel(loadedMaze);
+          }
+          resume();
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
           if (currentLevel == Main.level1) {
-            loadLevel(loadMaze(Main.level1));
+            loadLevel(Persistence.loadMaze(Main.level1));
           } else {
-            loadLevel(loadMaze(Main.level2));
+            loadLevel(Persistence.loadMaze(Main.level2));
           }
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
           currentLevel = Main.level1;
-          loadLevel(loadMaze(currentLevel));
+          loadLevel(Persistence.loadMaze(currentLevel));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
           System.out.println("a pressed - undo");
