@@ -631,6 +631,15 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Get the time stamp.
+   *
+   * @return the timestamp
+   */
+  public Long getCurrentTimeStamp() {
+    return Long.parseLong(timeValueLabel.getText());
+  }
+
+  /**
    * Set the level value text of the label.
    *
    * @param levelValue the String representing the level value to be set
