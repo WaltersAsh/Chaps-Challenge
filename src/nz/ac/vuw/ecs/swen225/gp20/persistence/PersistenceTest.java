@@ -6,9 +6,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class PersistenceTest {
@@ -44,12 +48,20 @@ public class PersistenceTest {
 
   @Test
   public void fileWritingTest01() {
-
+    Path p = Paths.get(".", "levels", "quickSave.json");
+    try {
+      Files.deleteIfExists(p);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+//    Exception exception = assertThrows(IOException.class, () -> Persistence.quickLoad());
+//    String message = "levels/quickSave.json not existed";
+    assert Persistence.quickLoad()==null;
   }
 
-  public static void main(String[] args) {
-    System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
-    new JFileChooser(Paths.get(".").toFile());
-  }
+//  public static void main(String[] args) {
+////    System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
+////    new JFileChooser(Paths.get(".").toFile());
+//  }
 
 }
