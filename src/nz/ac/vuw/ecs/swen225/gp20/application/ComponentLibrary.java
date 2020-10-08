@@ -29,7 +29,7 @@ public class ComponentLibrary {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
-      image = image.getScaledInstance(206, 83, Image.SCALE_DEFAULT);
+      image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
       pausedIcon = new ImageIcon(image);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();

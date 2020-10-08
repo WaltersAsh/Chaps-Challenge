@@ -14,10 +14,10 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 public class BoardPanel extends JLayeredPane {
 
   private BoardView board;
-  private JLabel infoFieldLabel;
-  private JLabel infoFieldTextLabel;
-  private JLabel recordingIconLabel;
-  private JLabel pausedIconLabel;
+  private final JLabel infoFieldLabel;
+  private final JLabel infoFieldTextLabel;
+  private final JLabel recordingIconLabel;
+  private final JLabel pausedIconLabel;
 
   /**
    * Construct a board panel and add all required components.

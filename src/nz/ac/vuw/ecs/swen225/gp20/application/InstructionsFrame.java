@@ -1,23 +1,22 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 /**
- * HelpPanel class for instantiating a new help panel to gui.
+ * InstructionsFrame class for instantiating a new instructions frame to gui.
  *
  * @author Justin 300470389
  */
-public class InstructionsFrame extends JFrame {
+public class InstructionsFrame extends JFrame implements ActionListener {
 
   private Gui gui;
   private JPanel contentPanel;
   private JLabel titleLabel;
   private JLabel instructLabel;
+  private JButton exitButton;
 
   /**
    * A help panel is constructed with its content panel.
@@ -45,11 +44,19 @@ public class InstructionsFrame extends JFrame {
    */
   private JPanel initialiseContentPanel() {
     titleLabel = new JLabel("HOW TO PLAY");
+    exitButton = new JButton("EXIT");
+    exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    exitButton.setBackground(ComponentLibrary.fullLavender);
+    exitButton.setForeground(Color.WHITE);
+    exitButton.setFont(ComponentLibrary.bigFont);
+    exitButton.addActionListener(this);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     titleLabel.setFont(ComponentLibrary.titleScreenFont);
     contentPanel = new JPanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
     contentPanel.add(titleLabel);
+    contentPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+    contentPanel.add(exitButton);
     contentPanel.add(instructionsLabel());
     contentPanel.setBackground(ComponentLibrary.lightLavender);
     return contentPanel;
@@ -115,6 +122,11 @@ public class InstructionsFrame extends JFrame {
             + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString() + "\" border=\"3\">"
             + "<br>"
             + "<br>"
+            + "Move crates to create a path in the water."
+            + "<br>"
+            + "<img src=\"file:" + ComponentLibrary.crateDemo.toString() + "\" border=\"3\">"
+            + "<br>"
+            + "<br>"
             + "Avoid enemies."
             + "<br>"
             + "<img src=\"file:" + ComponentLibrary.enemiesDemo.toString() + "\" border=\"3\">"
@@ -146,5 +158,15 @@ public class InstructionsFrame extends JFrame {
         }
       }
     });
+  }
+
+  /**
+   * Performs the action of the exit button.
+   *
+   * @param actionEvent the action event
+   */
+  @Override
+  public void actionPerformed(ActionEvent actionEvent) {
+    dispose(); //close the frame
   }
 }
