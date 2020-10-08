@@ -30,9 +30,8 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-    Maze maze = BoardRig.enemyKillTest1();
-//    Maze maze = Persistence.loadMaze(level2);
-
+//    Maze maze = BoardRig.enemyKillTest1();
+    Maze maze = Persistence.loadMaze(level1);
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }
