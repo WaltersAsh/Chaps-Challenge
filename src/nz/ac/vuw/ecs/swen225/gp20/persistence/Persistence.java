@@ -118,6 +118,8 @@ public class Persistence {
         if (mazeValidator(loadedMaze)) {
           fixMaze(loadedMaze);
           return loadedMaze;
+        }else{
+          throw new Exception("Maze file not valid");
         }
       } else {//if file not exist
         throw new IOException("levels/quickSave.json not existed");
