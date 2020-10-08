@@ -51,6 +51,7 @@ public class SoundHandler extends MazeEventListener{
     sounds.put("PR", new SoundEffect("resources/sound_effects/portal/throw.wav"));
     sounds.put("PG", new SoundEffect("resources/sound_effects/portal/throw.wav"));
     sounds.put("PY", new SoundEffect("resources/sound_effects/portal/throw.wav"));
+    sounds.put("DE", new SoundEffect("resources/sound_effects/death/death.wav"));
   }
 
   public void initialiseListSounds() {
