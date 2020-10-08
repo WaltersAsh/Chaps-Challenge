@@ -132,13 +132,13 @@ public class Persistence {
    *
    * @param args the input arguments
    */
-  public static void main(String[] args) {
-    try {
-      System.out.println(quickSave(BoardRig.lesson1()));
-      System.out.println(quickLoad());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+//  public static void main(String[] args) {
+//    try {
+//      System.out.println(quickSave(BoardRig.lesson1()));
+//      System.out.println(quickLoad());
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//  }
 
 }
