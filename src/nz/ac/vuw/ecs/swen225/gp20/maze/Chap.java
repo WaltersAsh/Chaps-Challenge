@@ -58,6 +58,20 @@ public class Chap extends Movable {
     }
     p.getContainer().remove(p);
   }
+  
+  /**
+   * Un-pickup a Pickup
+   * Note that this does not replace the Pickup onto 
+   * its Tile as it no longer knows what Tile it was on
+   * @param p
+   */
+  public void unPickup(Pickup p) {
+    if (p instanceof Treasure) {
+      treasures.remove((Treasure) p);
+    } else if (p instanceof Key) {
+      keys.remove((Key) p);
+    }
+  }
 
   public Key hasMatchingKey(Door d) {
     for (Key key : keys) {

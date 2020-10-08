@@ -53,4 +53,9 @@ public class MazeEventEnemyWalkedKilled implements MazeEvent {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+
+  @Override
+  public void invert() {
+    throw new UnsupportedOperationException("Not implemented."); 
+  }
 }

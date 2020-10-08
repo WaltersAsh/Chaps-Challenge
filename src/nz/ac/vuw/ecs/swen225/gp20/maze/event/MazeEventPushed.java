@@ -31,4 +31,10 @@ public class MazeEventPushed extends MazeEventWalked {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+  
+  @Override
+  public void invert() {
+    target.moveTo(pushed);
+    super.invert();
+  }
 }

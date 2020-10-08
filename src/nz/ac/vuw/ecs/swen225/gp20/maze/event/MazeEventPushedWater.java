@@ -10,11 +10,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  */
 public class MazeEventPushedWater extends MazeEventPushed {
   private Movable pushed;
+  private Water water;
 
   public MazeEventPushedWater(Maze maze, PathTile origin, PathTile target, Maze.Direction direction,
-      Movable pushed) {
+      Movable pushed, Water water) {
     super(maze, origin, target, direction, pushed);
     this.pushed = pushed;
+    this.water = water;
   }
 
   public Movable getPushed() {
@@ -30,5 +32,13 @@ public class MazeEventPushedWater extends MazeEventPushed {
   @Override
   public void receive(MazeEventListener l) {
     l.update(this);
+  }
+  
+  @Override
+  public void invert() {
+    PathTile watertile = pushed.getContainer();
+    target.moveTo(pushed);
+    watertile.place(water);
+    super.invert();
   }
 }

@@ -31,4 +31,11 @@ public class MazeEventPickup extends MazeEventWalked {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+  
+  @Override
+  public void invert() {
+    target.place(picked);
+    maze.getChap().unPickup(picked);
+    super.invert();
+  }
 }

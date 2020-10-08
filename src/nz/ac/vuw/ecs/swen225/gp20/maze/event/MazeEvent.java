@@ -13,4 +13,9 @@ public interface MazeEvent {
    * @param listener
    */
   public void receive(MazeEventListener listener);
+  
+  /**
+   * Undo this MazeEvent
+   */
+  public void invert();
 }

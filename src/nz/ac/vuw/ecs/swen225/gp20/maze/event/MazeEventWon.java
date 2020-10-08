@@ -24,4 +24,9 @@ public class MazeEventWon extends MazeEventWalked {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+  
+  @Override
+  public void invert() {
+    throw new UnsupportedOperationException("Not implemented."); 
+  }
 }

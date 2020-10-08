@@ -36,4 +36,10 @@ public class MazeEventTeleported extends MazeEventWalked {
   public PathTile getDestination() {
     return teleporter.getDestination();
   }
+  
+  @Override
+  public void invert() {
+    teleporter.getContainer().moveTo(maze.getChap());
+    super.invert();
+  }
 }

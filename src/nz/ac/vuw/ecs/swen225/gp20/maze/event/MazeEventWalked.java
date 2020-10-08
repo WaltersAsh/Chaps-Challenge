@@ -62,4 +62,9 @@ public class MazeEventWalked implements MazeEvent {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+
+  @Override
+  public void invert() {
+    origin.moveTo(maze.getChap());
+  }
 }

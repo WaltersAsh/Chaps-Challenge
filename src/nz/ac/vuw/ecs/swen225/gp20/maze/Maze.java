@@ -17,12 +17,6 @@ import java.util.TimerTask;
 public class Maze {
   // TODO: fix all the comments, outdated because of rewrite
 
-  /**
-   * Instantiates a new Maze. For Jackson.
-   */
-  public Maze() {
-  }
-
   // Enums
   public enum Direction {
     UP, DOWN, LEFT, RIGHT
@@ -57,82 +51,17 @@ public class Maze {
   //FIXME test for record and replay
   public List<Direction> moves = new ArrayList<Direction>();
   
+  private UndoRedoHandler undoredo = new UndoRedoHandler(this);
+
+
+  /**
+   * Instantiates a new Maze. For Jackson.
+   */
+  public Maze() {
+    
+  }
   
-  public void setMoves(List<Direction> moves) {
-    this.moves = moves;
-  }
-  public List<Direction> getMoves() {
-    return moves;
-  }
-
-  private ExitLock exitlock;
-
-  public void setWidth(int width) {
-    this.width = width;
-  }
-
-  public void setHeight(int height) {
-    this.height = height;
-  }
-
-  public void setTiles(Tile[][] tiles) {
-    this.tiles = tiles;
-  }
-
-  public void setChap(Chap chap) {
-    this.chap = chap;
-  }
-
-  public void setTreasures(List<Treasure> treasures) {
-    this.treasures = treasures;
-  }
-
-  public List<Enemy> getEnemies() {
-    return enemies;
-  }
-
-  public void setEnemies(List<Enemy> enemies) {
-    this.enemies = enemies;
-  }
-
-  public ExitLock getExitlock() {
-    return exitlock;
-  }
-
-  public void setExitlock(ExitLock exitlock) {
-    this.exitlock = exitlock;
-  }
-
-  public void setLevelFinished(boolean levelFinished) {
-    this.levelFinished = levelFinished;
-  }
-
-  @JsonIgnore
-  public Timer getPathFindingTimer() {
-    return pathFindingTimer;
-  }
-
-  @JsonIgnore
-  public void setPathFindingTimer(Timer timer) {
-    this.pathFindingTimer = timer;
-  }
-
-  public int getPathFindingDelay() {
-    return pathFindingDelay;
-  }
-
-  public void setPathFindingDelay(int pathFindingDelay) {
-    this.pathFindingDelay = pathFindingDelay;
-  }
-
-  public List<MazeEventListener> getListeners() {
-    return listeners;
-  }
-
-  public void setListeners(List<MazeEventListener> listeners) {
-    this.listeners = listeners;
-  }
-
+  
   /**
    * Constuct empty Board with a width and height
    *
@@ -244,12 +173,12 @@ public class Maze {
       PathTile next = (PathTile) check;
 
       if (next.isWalkable()) {
-        next.moveTo(chap);
+        moveChap(next);
         checkWalked(current, next, d);
         overrideDispatch(new MazeEventWalked(this, current, next, d));
       } else {
         if (checkBlocking(current, next, d)) {
-          next.moveTo(chap);
+          moveChap(next);
         }
       }
     }
@@ -258,6 +187,11 @@ public class Maze {
       broadcast(dispatch);
       dispatch = null;
     }
+  }
+  
+  public void moveChap(PathTile next) {
+    next.moveTo(chap);
+    undoredo.clearRedoStack();
   }
 
   public void checkWalked(PathTile current, PathTile next, Direction d) {
@@ -288,10 +222,7 @@ public class Maze {
   public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
     if (p instanceof Treasure) {
       checkTreasure(next, current, d, (Treasure) p);
-      if (chap.hasAllTreasures(this)) {
-        openExitLock();
-        overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, p, exitlock));
-      }
+      
     } else if (p instanceof Key) {
 
     }
@@ -300,8 +231,8 @@ public class Maze {
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
     if (chap.hasAllTreasures(this)) {
+      overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
-      overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock));
     }
   }
 
@@ -372,7 +303,7 @@ public class Maze {
       } else if (pt.getBlocker() instanceof Water) {
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c));
+        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, (Water)pt.getBlocker()));
       } else {
         return false;
       }
@@ -499,5 +430,84 @@ public class Maze {
   }
   public void setLevelID(int levelID) {
     this.levelID = levelID;
+  }
+  
+  public void setMoves(List<Direction> moves) {
+    this.moves = moves;
+  }
+  public List<Direction> getMoves() {
+    return moves;
+  }
+
+  private ExitLock exitlock;
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public void setTiles(Tile[][] tiles) {
+    this.tiles = tiles;
+  }
+
+  public void setChap(Chap chap) {
+    this.chap = chap;
+  }
+
+  public void setTreasures(List<Treasure> treasures) {
+    this.treasures = treasures;
+  }
+
+  public List<Enemy> getEnemies() {
+    return enemies;
+  }
+
+  public void setEnemies(List<Enemy> enemies) {
+    this.enemies = enemies;
+  }
+
+  public ExitLock getExitlock() {
+    return exitlock;
+  }
+
+  public void setExitlock(ExitLock exitlock) {
+    this.exitlock = exitlock;
+  }
+
+  public void setLevelFinished(boolean levelFinished) {
+    this.levelFinished = levelFinished;
+  }
+
+  @JsonIgnore
+  public Timer getPathFindingTimer() {
+    return pathFindingTimer;
+  }
+
+  @JsonIgnore
+  public void setPathFindingTimer(Timer timer) {
+    this.pathFindingTimer = timer;
+  }
+
+  public int getPathFindingDelay() {
+    return pathFindingDelay;
+  }
+
+  public void setPathFindingDelay(int pathFindingDelay) {
+    this.pathFindingDelay = pathFindingDelay;
+  }
+
+  public List<MazeEventListener> getListeners() {
+    return listeners;
+  }
+
+  public void setListeners(List<MazeEventListener> listeners) {
+    this.listeners = listeners;
+  }
+
+  public UndoRedoHandler getUndoRedo() {
+    return undoredo;
   }
 }

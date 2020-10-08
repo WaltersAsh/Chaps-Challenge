@@ -53,4 +53,9 @@ public class MazeEventEnemyWalked implements MazeEvent {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+  
+  @Override
+  public void invert() {
+    origin.moveTo(enemy);
+  }
 }

@@ -407,9 +407,9 @@ public class Gui extends MazeEventListener implements ActionListener {
           loadLevel(Persistence.loadMaze(currentLevel));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
-          System.out.println("a pressed - undo");
+          maze.getUndoRedo().undo();
         } else if (key == KeyEvent.VK_D) {
-          System.out.println("d pressed - redo");
+          maze.getUndoRedo().redo();
         }
       }
 

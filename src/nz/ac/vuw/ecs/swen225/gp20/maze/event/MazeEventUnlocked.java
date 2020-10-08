@@ -38,4 +38,11 @@ public class MazeEventUnlocked extends MazeEventWalked {
   public void receive(MazeEventListener l) {
     l.update(this);
   }
+  
+  @Override
+  public void invert() {
+    target.place(door);
+    maze.getChap().pickup(key);
+    super.invert();
+  }
 }
