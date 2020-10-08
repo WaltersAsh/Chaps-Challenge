@@ -27,7 +27,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -54,6 +56,8 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JPanel framePanel;
   public static BoardPanel boardPanel;
   private SidePanel sidePanel;
+  private final InstructionsFrame instructionsFrame;
+  private final MenuBar menuBar;
 
   // value labels
   private JLabel levelValueLabel;
@@ -94,7 +98,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isPaused;
   private File currentLevel = Main.level1;
 
-  public static RecordAndReplay recnplay;
+  private RecordAndReplay recnplay;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -111,7 +115,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseSidePanel();
 
     //menu bar
-    final MenuBar menuBar = new MenuBar(this);
+    menuBar = new MenuBar(this);
 
     //board panel
     boardPanel = new BoardPanel(maze);
@@ -141,11 +145,14 @@ public class Gui extends MazeEventListener implements ActionListener {
     //popup dialogs initialisation
     initialisePopupDialogs();
 
+    //instuctions initialisation
+    instructionsFrame = new InstructionsFrame(this);
+
     // initialise frame
     frame.add(framePanel);
     frame.add(recnplayControlsPanel, BorderLayout.SOUTH);
     frame.setJMenuBar(menuBar);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     frame.setTitle("Chap's Challenge");
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
@@ -154,6 +161,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
         dimen.height / 2 - frame.getSize().height / 2);
     frame.setFocusable(true);
+    initialiseWindowListener();
     setupTimer();
     setupKeyListener();
     maze.resume();
@@ -204,56 +212,66 @@ public class Gui extends MazeEventListener implements ActionListener {
     //menu actions
 
     //maze functionality
-    if (e.getSource() == MenuBar.resumeMenuItem) {
+    if (e.getSource() == menuBar.getResumeMenuItem()) {
       resume();
       pausedIconLabel.setVisible(false);
-    } else if (e.getSource() == MenuBar.pauseMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getPauseMenuItem()) {
+      pause(true);
       pausedIconLabel.setVisible(true);
-    } else if (e.getSource() == MenuBar.restartCurrentLevelMenuItem) {
-      //restartCurrentLevel();
-    } else if (e.getSource() == MenuBar.exitMenuItem) {
-      System.exit(1);
+    } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
+      if (currentLevel == Main.level1) {
+        loadLevel(loadMaze(Main.level1));
+      } else {
+        loadLevel(loadMaze(Main.level2));
+      }
+    } else if (e.getSource() == menuBar.getExitMenuItem()) {
+      frame.dispose();
 
       //persistence loading and saving
-    } else if (e.getSource() == MenuBar.saveMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getSaveMenuItem()) {
+      pause(false);
       saveMaze(maze, openFileChooser(false));
       resume();
-    } else if (e.getSource() == MenuBar.loadMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getLoadMenuItem()) {
+      pause(false);
       loadLevel(loadMaze(openFileChooser(true)));
       resume();
 
       //recnplay menu functionalities
 
       //start recording game play
-    } else if (e.getSource() == MenuBar.startRecordingMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
+      pause(false);
       RecordAndReplay.startRecording(openFileChooser(false));
       recordingIconLabel.setVisible(true);
       resume();
 
       //stop recording game play
-    } else if (e.getSource() == MenuBar.stopRecordingMenuItem && RecordAndReplay.isRecording()) {
-      pause();
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
+            && RecordAndReplay.isRecording()) {
+      pause(false);
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
       //play recording
-    } else if (e.getSource() == MenuBar.playMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getPlayMenuItem()) {
+      pause(false);
       recnplay.playRecording();
       resume();
 
       //stop playing recording
-    } else if (e.getSource() == MenuBar.stopPlayMenuItem) {
+    } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
 
-    } else if (e.getSource() == MenuBar.loadRecordingMenuItem) {
-      pause();
+    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
+      pause(false);
       RecordAndReplay.loadRecording(openFileChooser(true));
       resume();
+
+      //instructions
+    } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
+      pause(true);
+      instructionsFrame.setVisible(true);
     }
 
     //recnplay button actions
@@ -315,42 +333,43 @@ public class Gui extends MazeEventListener implements ActionListener {
           isTimerActive = true;
           try {
             timer.schedule(timerTask, 0, 1000); // start the timer countdown
-          } catch (IllegalStateException e1) {
-            e1.getSuppressed();
+          } catch (IllegalStateException ignored) {
+            System.out.println();
           }
         }
         showInfoFieldToGui(false);
 
-        // movement
-        if (!isPaused || !maze.isLevelFinished()) {
-          switch (key) {
-            case KeyEvent.VK_UP:
-              move(Maze.Direction.UP);
-              break;
-            case KeyEvent.VK_DOWN:
-              move(Maze.Direction.DOWN);
-              break;
-            case KeyEvent.VK_LEFT:
-              move(Maze.Direction.LEFT);
-              break;
-            case KeyEvent.VK_RIGHT:
-              move(Maze.Direction.RIGHT);
-              break;
-            default:
-            }
-        }
-
-        decrementTreasurePickUp();
-        board.repaint();
-
         // pause and resume
         if (key == KeyEvent.VK_SPACE) {
-          pause();
+          pause(true);
           pausedIconLabel.setVisible(true);
         } else if (key == KeyEvent.VK_ESCAPE) {
           resume();
           pausedIconLabel.setVisible(false);
         }
+
+        // movement
+        if (isPaused || maze.isLevelFinished()) {
+          return;
+        }
+        switch (key) {
+          case KeyEvent.VK_UP:
+            move(Maze.Direction.UP);
+            break;
+          case KeyEvent.VK_DOWN:
+            move(Maze.Direction.DOWN);
+            break;
+          case KeyEvent.VK_LEFT:
+            move(Maze.Direction.LEFT);
+            break;
+          case KeyEvent.VK_RIGHT:
+            move(Maze.Direction.RIGHT);
+            break;
+          default:
+          }
+
+        decrementTreasurePickUp();
+        board.repaint();
 
         // shortcuts
         if (e.isControlDown() && key == KeyEvent.VK_X) {
@@ -408,7 +427,7 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         //timer expires
         if (secondsLeft[0] == 0) {
-          pause();
+          pause(false);
           timerExpiryDialog.setVisible(true);
         }
       }
@@ -418,8 +437,15 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Pause the game, triggering countdown timer and maze to stop.
    */
-  public void pause() {
+  public void pause(boolean showDialog) {
+    if (showDialog) {
+      int response = JOptionPane.showOptionDialog(frame, "CURRENTLY PAUSED - Press esc to resume",
+              "Game Paused", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null,
+              null, null);
+    }
+
     isPaused = true;
+    pausedIconLabel.setVisible(true);
     maze.pause();
     timer.cancel();
   }
@@ -429,6 +455,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public void resume() {
     if (isPaused) {
+      pausedIconLabel.setVisible(false);
       maze.resume();
       setupTimer();
       timer.schedule(timerTask, 0, 1000); // start the timer countdown
@@ -467,6 +494,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       levelValueLabel.setText("1");
       setTimeValueLabel(60);
     }
+    pausedIconLabel.setVisible(false);
     setupTimer();
   }
 
@@ -484,7 +512,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Reinitialise the boardview
+   * Reinitialise the boardview.
    *
    * @param maze the maze that the boardview is reinitialised.
    */
@@ -588,6 +616,13 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Maze getMaze() {
     return maze;
+  }
+
+  /**
+   * Get timer active.
+   */
+  public boolean getIsTimerActive() {
+    return isTimerActive;
   }
 
   /**
@@ -711,9 +746,31 @@ public class Gui extends MazeEventListener implements ActionListener {
   @Override
   public void update(MazeEventWon e) {
     //stop the timer
-    pause();
+    pause(false);
     levelCompleteDialog.setVisible(true);
     timer.cancel();
     timer.purge();
+  }
+
+  /**
+   * Initialise the window listener.
+   */
+  public void initialiseWindowListener() {
+    frame.addWindowListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+        pause(false);
+        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to exit?",
+                "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } else {
+          frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+          if (isTimerActive) {
+            resume();
+          }
+        }
+      }
+    });
   }
 }

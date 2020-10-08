@@ -17,10 +17,6 @@ import javax.swing.JLabel;
  */
 public class ComponentLibrary {
 
-  // Text sizes
-  public static final Font regText = new Font("", Font.PLAIN, 25);
-  public static final Font bigText = new Font("", Font.BOLD, 45);
-
   //fonts
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = null;
@@ -37,6 +33,8 @@ public class ComponentLibrary {
   public static final Font sideFont = font.deriveFont(Font.PLAIN, 11);
   public static final Font bigFont = font.deriveFont(Font.BOLD, 40);
   public static final Font infoFont = font.deriveFont(Font.PLAIN, 40);
+  public static final Font titleScreenFont = font.deriveFont(Font.BOLD, 95);
+  public static final Font bodyFont = font.deriveFont(Font.PLAIN, 13);
 
   //Colours
   public static final Color lavender = new Color(74, 29, 138);
@@ -45,6 +43,16 @@ public class ComponentLibrary {
   public static final Color deepLavender = new Color(85, 52, 130);
   public static final Color fullLavender = new Color(102, 0, 255);
   public static final Color paleLavender = new Color(237, 224, 255);
+
+  //demo files
+  public static final File collectDemo = new File(
+          "resources/textures/gui/instructions/collect.gif");
+  public static final File crateDemo = new File("resources/textures/gui/instructions/crate.gif");
+  public static final File enemiesDemo = new File(
+          "resources/textures/gui/instructions/enemies.gif");
+  public static final File moveDemo = new File("resources/textures/gui/instructions/movement.gif");
+  public static final File portalDemo = new File("resources/textures/gui/instructions/portal.gif");
+  public static final File unlockDemo = new File("resources/textures/gui/instructions/unlock.gif");
 
   /**
    * Create and return a icon/indicator for recording and return.
@@ -94,6 +102,7 @@ public class ComponentLibrary {
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+    assert infoFieldLabel != null;
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabel.setVisible(false);
     return infoFieldLabel;

@@ -23,7 +23,7 @@ import javax.swing.border.Border;
  */
 public class PopupDialog extends JDialog {
 
-  private JPanel buttonPanel;
+  private final JPanel buttonPanel;
   private JLabel messageLabel;
 
   private JButton restartButton;
