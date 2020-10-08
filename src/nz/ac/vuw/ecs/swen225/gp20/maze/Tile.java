@@ -57,4 +57,8 @@ public abstract class Tile extends Drawable {
   public String toString() {
     return this.getClass() + " at " + row + ", " + col;
   }
+
+  public boolean equals(Tile other) {
+    return other.getCol()==col && other.getRow()==row;
+  }
 }

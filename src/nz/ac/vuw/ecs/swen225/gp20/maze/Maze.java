@@ -120,7 +120,7 @@ public class Maze {
   // Logic
   private boolean levelFinished = false;
   private Timer pathFindingTimer;
-  private int pathFindingDelay = 5000; // delay between path finding ticks in ms
+  private int pathFindingDelay = 1000; // delay between path finding ticks in ms
 
   // Output
   @JsonIgnore
@@ -315,9 +315,11 @@ public class Maze {
     } else if (bc instanceof Crate) {
       return tryPushCrate(current, (Crate) bc, d);
     } else if (bc instanceof Enemy) {
-      overrideDispatch(new MazeEventKilled(this,(Enemy)bc, current, blocked, d));
-      System.out.println("rekt");
-      pause();
+      overrideDispatch(new MazeEventWalkedKilled(this,(Enemy)bc, current, blocked, d));
+      killChap();
+    } else if (bc instanceof Water) {
+      overrideDispatch(new MazeEventWalkedDrowned(this,(Water)bc, current, blocked, d));
+      killChap();
     }
     return false;
   }
@@ -401,7 +403,6 @@ public class Maze {
         @Override
         public void run() {
           tickPathFinding();
-          System.out.println("ticking");
         }
       }, 0, pathFindingDelay);
     }
@@ -415,8 +416,13 @@ public class Maze {
       Direction next = e.tickPathFinding();
       if (next == null) continue;
       PathTile pt = (PathTile) tileTo(e.getContainer(), next);
-      broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
-      pt.moveTo(e);
+      if(pt.equals(chap.getContainer())) {
+        broadcast(new MazeEventEnemyWalkedKilled(this, e, e.getContainer(), pt, next));
+        killChap();
+      }else {
+        broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
+        pt.moveTo(e);
+      }
     }
   }
 
@@ -470,5 +476,9 @@ public class Maze {
 
   public void openExitLock() {
     exitlock.getContainer().remove(exitlock);
+  }
+
+  public void killChap() {
+    pause();
   }
 }
