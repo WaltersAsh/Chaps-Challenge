@@ -39,7 +39,7 @@ public class AnimationHandler extends MazeEventListener {
   }
 
   @Override
-  public void update(MazeEventKilled e) {
+  public void update(MazeEventWalkedKilled e) {
     Chap c = e.getMaze().getChap();
     System.out.println();
     c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
