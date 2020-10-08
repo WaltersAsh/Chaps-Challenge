@@ -5,21 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class MazeToJsonTest {
-  static Maze m = BoardRig.levelEditorTest1();
+  static Maze m = BoardRig.lesson1();
   static ObjectMapper mapper = new ObjectMapper();
 
   public static void main(String[] args) throws JsonProcessingException {
-
-    System.out.println();
-//        for (Tile[] row : m.getTiles()) {
-//            for (Tile col : row) {
-//                System.out.println(col.getClass().getSimpleName());
-//            }
-//        }
-    String jsonString = mapper.writeValueAsString(m);
-    System.out.println(jsonString);
-    mapper.readValue(jsonString, Maze.class);
+    try {
+      mapper.writeValue(Paths.get(".","levels",java.time.LocalDate.now()+"_"+java.time.LocalTime.now()+".json").toFile(),BoardRig.enemyKillTest1());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static Maze pathfindLoader() {
