@@ -49,7 +49,6 @@ public class Maze {
     return moves;
   }
 
-
   private ExitLock exitlock;
 
   public void setWidth(int width) {
@@ -93,13 +92,13 @@ public class Maze {
   }
 
   @JsonIgnore
-  public Timer getTimer() {
-    return timer;
+  public Timer getPathFindingTimer() {
+    return pathFindingTimer;
   }
 
   @JsonIgnore
-  public void setTimer(Timer timer) {
-    this.timer = timer;
+  public void setPathFindingTimer(Timer timer) {
+    this.pathFindingTimer = timer;
   }
 
   public int getPathFindingDelay() {
@@ -120,8 +119,8 @@ public class Maze {
 
   // Logic
   private boolean levelFinished = false;
-  private Timer timer;
-  private int pathFindingDelay = 500; // delay between path finding ticks in ms
+  private Timer pathFindingTimer;
+  private int pathFindingDelay = 5000; // delay between path finding ticks in ms
 
   // Output
   @JsonIgnore
@@ -295,7 +294,6 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
-
     if (chap.hasAllTreasures(this)) {
       openExitLock();
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock));
@@ -316,10 +314,14 @@ public class Maze {
       return tryUnlockDoor(current, (Door) bc, d);
     } else if (bc instanceof Crate) {
       return tryPushCrate(current, (Crate) bc, d);
-    } else {
-      return false;
+    } else if (bc instanceof Enemy) {
+      overrideDispatch(new MazeEventKilled(this,(Enemy)bc, current, blocked, d));
+      System.out.println("rekt");
+      pause();
     }
+    return false;
   }
+
 
   /**
    * Check if we could open a door.
@@ -393,12 +395,13 @@ public class Maze {
    */
   public void setupTimer() {
     if (!enemies.isEmpty()) {
-      timer = new Timer();
-      timer.schedule(new TimerTask() {
+      pathFindingTimer = new Timer();
+      pathFindingTimer.schedule(new TimerTask() {
 
         @Override
         public void run() {
           tickPathFinding();
+          System.out.println("ticking");
         }
       }, 0, pathFindingDelay);
     }
@@ -421,8 +424,8 @@ public class Maze {
    * Pause the game (suspending the game timer).
    */
   public void pause() {
-    if (timer != null) {
-      timer.cancel();
+    if (pathFindingTimer != null) {
+      pathFindingTimer.cancel();
     }
   }
 

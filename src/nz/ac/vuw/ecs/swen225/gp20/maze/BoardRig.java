@@ -146,6 +146,15 @@ public class BoardRig {
     return BoardRig.fromString(board);
   }
 
+  public static Maze enemyKillTest1() {
+    String board = "WA WA WA WA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA EN PA CH WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA WA WA WA WA";
+    return BoardRig.fromString(board);
+  }
+
   /**
    * Construct Board from string
    *getOther
@@ -189,6 +198,7 @@ public class BoardRig {
       }
       tiles[r] = row;
     }
+    System.out.println(entities);
     return new Maze(tiles, entities);
   }
 

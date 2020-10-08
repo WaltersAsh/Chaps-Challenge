@@ -9,7 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
  * Main class for running Chap's Challenge.
  */
 public class Main {
-  private static final Maze[] levels = new Maze[]{
+  /*private static final Maze[] levels = new Maze[]{
       BoardRig.lesson1(),
       BoardRig.crateTest(),
       BoardRig.crateAndWaterTest(),
@@ -18,7 +18,7 @@ public class Main {
       BoardRig.levelEditorTest2(),
       BoardRig.levelEditorTest3(),
       BoardRig.teleporterTest1(),
-  };
+  };*/
 
   public static final File level1 = new File("levels/official_levels/level1.json");
   public static final File level2 = new File("levels/official_levels/level2.json");
@@ -30,8 +30,9 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-    //Maze maze = levels[0];
-    Maze maze = Persistence.loadMaze(level1);
+    Maze maze = BoardRig.enemyKillTest1();
+    //Maze maze = Persistence.loadMaze(level1);
+
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }

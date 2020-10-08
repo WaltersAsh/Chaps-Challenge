@@ -47,11 +47,11 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = true;
+  private boolean isWindowed = false;
   private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
-  
+
   SoundHandler sh;
   AnimationHandler ah;
 
@@ -120,7 +120,7 @@ public class BoardView extends JComponent implements ActionListener {
 
   /**
    * Draws the windowed board on the screen.
-   * 
+   *
    * @param g the graphics used
    */
   public void drawWindowedBoard(Graphics g) {

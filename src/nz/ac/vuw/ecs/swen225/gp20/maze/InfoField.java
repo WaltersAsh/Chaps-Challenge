@@ -21,6 +21,10 @@ public class InfoField extends Trigger {
     this.information = information;
   }
 
+  public void setInformation(String i) {
+    this.information = i;
+  }
+
   public String getInformation() {
     return information;
   }

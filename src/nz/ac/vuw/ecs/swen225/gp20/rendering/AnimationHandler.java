@@ -5,12 +5,12 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
 public class AnimationHandler extends MazeEventListener {
   BoardView bv;
-  
+
   public AnimationHandler(Maze m, BoardView bv) {
     m.addListener(this);
     this.bv = bv;
   }
-  
+
   @Override
   public void update(MazeEvent e) {
     if(e instanceof MazeEventWalked) {

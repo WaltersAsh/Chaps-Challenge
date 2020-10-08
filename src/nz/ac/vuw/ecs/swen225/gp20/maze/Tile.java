@@ -29,6 +29,11 @@ public abstract class Tile extends Drawable {
     return walkable;
   }
 
+
+  public boolean enemyWalkable() {
+    return walkable;
+  }
+
   /**
    * Set the coordinates of this Drawable
    *

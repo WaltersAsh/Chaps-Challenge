@@ -65,10 +65,10 @@ public class PathFinder {
    * @return
    */
   public boolean trapped(Tile current) {
-    return !(maze.tileTo(current, Direction.UP).isWalkable() ||
-           maze.tileTo(current, Direction.DOWN).isWalkable() ||
-           maze.tileTo(current, Direction.LEFT).isWalkable() ||
-           maze.tileTo(current, Direction.RIGHT).isWalkable());
+    return !(maze.tileTo(current, Direction.UP).enemyWalkable() ||
+           maze.tileTo(current, Direction.DOWN).enemyWalkable() ||
+           maze.tileTo(current, Direction.LEFT).enemyWalkable() ||
+           maze.tileTo(current, Direction.RIGHT).enemyWalkable());
 
   }
 
@@ -108,9 +108,8 @@ public class PathFinder {
   }
 
   private Direction nextRandom(Tile current) {
-
     Direction next = randomDirection();
-    while(!maze.tileTo(current, next).isWalkable()) {
+    while(!maze.tileTo(current, next).enemyWalkable()) {
       next = randomDirection();
     }
     return next;
@@ -119,10 +118,10 @@ public class PathFinder {
   private Direction nextStraightRotation(Tile current, boolean clockwise) {
     // go straight if possible
     Direction next = previous;
-    if(maze.tileTo(current, previous).isWalkable()) {
+    if(maze.tileTo(current, previous).enemyWalkable()) {
       return next;
     }else { // not possible, so turn clockwise, return next one possible
-      while(!maze.tileTo(current, next).isWalkable()) {
+      while(!maze.tileTo(current, next).enemyWalkable()) {
         if(clockwise) {
           next = clockwise(next);
         }else {
@@ -143,9 +142,9 @@ public class PathFinder {
 
   private Direction nextStraight(Tile current) {
     Direction next = clockwise(clockwise(previous)); // 180 degrees
-    if(maze.tileTo(current, previous).isWalkable()) {
+    if(maze.tileTo(current, previous).enemyWalkable()) {
       return previous;
-    }else if(maze.tileTo(current, next).isWalkable()){
+    }else if(maze.tileTo(current, next).enemyWalkable()){
       return next;
     }
     return null;

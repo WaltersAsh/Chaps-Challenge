@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * A tile which Chap may walk on, and may contain Containables
- * 
+ *
  * @author Ian 300474717
  *
  */
@@ -25,8 +25,26 @@ public class PathTile extends Tile {
   }
 
   /**
+   * If the enemy can walk on this Tile
+   * Different to isWalkable as the enemy can walk on
+   * a Tile which contains Chap and kill him
+   *
+   * @return if the enemy can walk on the Tile
+   */
+  @Override
+  public boolean enemyWalkable() {
+    if(!walkable) {
+      if(blocker instanceof Chap) {
+        return true;
+      }
+    }
+    return walkable;
+  }
+
+
+  /**
    * Place a Containable inside this Tile
-   * 
+   *
    * @param c The Containable
    */
   public void place(Containable c) {
@@ -40,7 +58,7 @@ public class PathTile extends Tile {
 
   /**
    * Remove a Containable inside this Tile
-   * 
+   *
    * @param c The Containable
    */
   public void remove(Containable c) {
@@ -57,7 +75,7 @@ public class PathTile extends Tile {
 
   /**
    * Move a Containable inside this Tile and update the previous Container
-   * 
+   *
    * @param c The Containable
    */
   public void moveTo(Containable c) {
