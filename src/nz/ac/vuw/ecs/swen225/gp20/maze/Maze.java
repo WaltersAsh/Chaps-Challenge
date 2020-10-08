@@ -40,8 +40,24 @@ public class Maze {
   private List<Enemy> enemies = new ArrayList<Enemy>();
 
 
+  // Logic
+  private boolean levelFinished = false;
+  private long millisecondsLeft = 60000;
+  private int levelID;
+  private Timer pathFindingTimer;
+  private int pathFindingDelay = 1000; // delay between path finding ticks in ms
+
+  // Output
+  @JsonIgnore
+  private List<MazeEventListener> listeners = new ArrayList<>();
+
+  private MazeEventWalked dispatch;
+
+  
   //FIXME test for record and replay
   public List<Direction> moves = new ArrayList<Direction>();
+  
+  
   public void setMoves(List<Direction> moves) {
     this.moves = moves;
   }
@@ -116,17 +132,6 @@ public class Maze {
   public void setListeners(List<MazeEventListener> listeners) {
     this.listeners = listeners;
   }
-
-  // Logic
-  private boolean levelFinished = false;
-  private Timer pathFindingTimer;
-  private int pathFindingDelay = 1000; // delay between path finding ticks in ms
-
-  // Output
-  @JsonIgnore
-  private List<MazeEventListener> listeners = new ArrayList<>();
-
-  private MazeEventWalked dispatch;
 
   /**
    * Constuct empty Board with a width and height
@@ -480,5 +485,19 @@ public class Maze {
 
   public void killChap() {
     pause();
+  }
+
+  public long getMsLeft() {
+    return millisecondsLeft;
+  }
+  
+  public void setMsLeft(long ms) {
+    this.millisecondsLeft = ms;
+  }
+  public int getLevelID() {
+    return levelID;
+  }
+  public void setLevelID(int levelID) {
+    this.levelID = levelID;
   }
 }
