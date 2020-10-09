@@ -34,6 +34,8 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
+
+import nz.ac.vuw.ecs.swen225.gp20.maze.Enemy;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -308,17 +310,16 @@ public class Gui extends MazeEventListener implements ActionListener {
       //start recording game play
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
       pause(false);
-      RecordAndReplay.startRecording(openFileChooser(false));
-      if (RecordAndReplay.isRecording()) {
-        recordingIconLabel.setVisible(true);
-      }
+      //Todo record game state here, maze clone method perhaps
+      RecordAndReplay.startRecording();
+      recordingIconLabel.setVisible(true);
       resume();
 
       //stop recording game play
     } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
             && RecordAndReplay.isRecording()) {
       pause(false);
-      RecordAndReplay.stopRecording();
+      RecordAndReplay.stopRecording(openFileChooser(false));
       recordingIconLabel.setVisible(false);
       resume();
 
@@ -378,24 +379,63 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Moves chap.
+   * Moves chap, tells recnplay to record the move
+   * if game play is being recorded
    *
    * @param direction the movement direction
-   * @param keyEvent the registered keyEvent
    */
-  public void move(Maze.Direction direction, KeyEvent keyEvent) {
+  public void move(Maze.Direction direction) {
     maze.move(direction);
-    if (RecordAndReplay.isRecording()) {
-      this.maze.moves.add(direction);
-      Move move = new Move(1, keyEvent);
-      long timestamp = maze.getMillisecondsLeft();
-      if (timeToMoveMap.containsKey(timestamp)) {
-        timeToMoveMap.get(timestamp).add(move);
-      } else {
-        List<Move> newList = new ArrayList<>();
-        timeToMoveMap.put(timestamp, newList);
-      }
 
+    if (RecordAndReplay.isRecording()) {
+
+      //save chaps id as -1 so enemies can be saved by their index, (0, 1, 2, 3, etc...)
+      Move move = new Move(-1, direction.ordinal());
+
+      //add the move to the current collection of moves i.e. the current recording
+      recnplay.addMove(move);
+    }
+  }
+
+  /**
+   * Executes a move on the maze from a recording
+   * @param move the move to be executed
+   */
+  public void executeMove(Move move) {
+
+    //get the direction from the moves ordinal value (this is to follow dependency diagram)
+    Maze.Direction direction = Maze.Direction.values()[move.direction];
+
+    if (move.actorId == -1) {
+      //move chap
+      maze.move(direction);
+    } else {
+      //move enemy
+      maze.moveEnemy(move.actorId, direction);
+    }
+  }
+
+  /**
+   * Tick the enemy path finding and record enemy moves
+   * if needed
+   */
+  public void tickPathFinding() {
+    for(Enemy enemy : maze.getEnemies()) {
+
+      //get the direction from enemy path finding
+      Maze.Direction direction = enemy.tickPathFinding();
+
+      //add the mobs move to the current time stamps list of moves in gui
+      int enemyId = maze.getEnemies().indexOf(enemy);
+
+      //move the enemy
+      maze.moveEnemy(enemyId, direction);
+
+      //if game play is being recorded add the move to the recording
+      if (RecordAndReplay.isRecording()) {
+        Move move = new Move(enemyId, direction.ordinal());
+        recnplay.addMove(move);
+      }
     }
   }
 
@@ -433,16 +473,16 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         switch (key) {
           case KeyEvent.VK_UP:
-            move(Maze.Direction.UP, e);
+            move(Maze.Direction.UP);
             break;
           case KeyEvent.VK_DOWN:
-            move(Maze.Direction.DOWN, e);
+            move(Maze.Direction.DOWN);
             break;
           case KeyEvent.VK_LEFT:
-            move(Maze.Direction.LEFT, e);
+            move(Maze.Direction.LEFT);
             break;
           case KeyEvent.VK_RIGHT:
-            move(Maze.Direction.RIGHT, e);
+            move(Maze.Direction.RIGHT);
             break;
           default:
           }
@@ -497,6 +537,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           undoRedoGui(false);
           System.out.println("Redo activated");
         }
+
       }
 
       // dead code
@@ -519,18 +560,42 @@ public class Gui extends MazeEventListener implements ActionListener {
     timerTask = new TimerTask() {
       @Override
       public void run() {
-        if (maze.getMillisecondsLeft() > 0) {
-          maze.setMillisecondsLeft(maze.getMillisecondsLeft() - 1);
-          long millisecondsLeft = maze.getMillisecondsLeft();
-          if (millisecondsLeft > 9) {
-            timeValueLabel.setText(Long.toString(millisecondsLeft / 1000));
+
+        //get time remaining
+        long millisLeft = maze.getMillisecondsLeft();
+
+        if(millisLeft > 0) {
+          //decrement milliseconds left
+          millisLeft--;
+          maze.setMillisecondsLeft(millisLeft);
+
+          //tick enemy path finding every half second/500 milliseconds
+          if(millisLeft % 500 ==0) {
+            tickPathFinding();
           }
-          //timer drops down to last 10
-          if (millisecondsLeft <= 11000) {
+
+          //first two digits of the remaining time
+          String value = millisLeft > 10 ? Long.toString(millisLeft).substring(0, 2) : Long.toString(millisLeft);
+
+          //if its the last ten seconds
+          if (millisLeft < 9999) {
+
+            //set the label colour to red
             timeValueLabel.setForeground(Color.RED);
+
+            //if its the last ten seconds but not the last second
+            if(millisLeft > 999) {
+              value = value.charAt(0) + "." + value.charAt(1);
+            } else {
+              value = "0." + value.charAt(0);
+            }
           }
-          //timer expires
-          if (millisecondsLeft == 0) {
+
+          //set the label
+          timeValueLabel.setText(value);
+
+          //if time runs out
+          if(millisLeft == 0) {
             pause(false);
             timerExpiryDialog.setVisible(true);
           }

@@ -2,15 +2,21 @@ package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * Class for recording a move, stores the
+ * id of the actor that moved and the direction they moved
+ *
+ * @author Ford Leins 300314179
+ */
 public class Move {
 
     public int actorId;
-    public KeyEvent keyEvent;
+    public int direction;
 
-    public Move(int actorId, KeyEvent keyEvent) {
+    public Move(int actorId, int direction) {
         //for enemies this id will be their index in the list of enemies in maze
         this.actorId = actorId;
-        this.keyEvent = keyEvent;
+        this.direction = direction;
     }
 
 }

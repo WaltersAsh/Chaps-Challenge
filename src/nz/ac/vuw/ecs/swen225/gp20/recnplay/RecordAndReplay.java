@@ -6,7 +6,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class used for recording are replaying gameplay
@@ -18,11 +21,6 @@ public class RecordAndReplay {
     private static Gui gui;
 
     /**
-     * The current step (index) of this recording
-     */
-    private static int index = 0;
-
-    /**
      * Fields for remembering whether gameplay is currently being recorded
      * or playback is paused
      */
@@ -31,15 +29,33 @@ public class RecordAndReplay {
     /**
      * Delay for playback speed
      */
-    private static int wait = 120;
-
-    private static List<Maze.Direction> loadedRecording;
+    private static long playbackSpeed = 1000L;
 
     /**
-     * The save file of this recording,
-     * necessary for appending moves to the original game state
+     * The current step/time in this recording in milliseconds
+     */
+    private static long step;
+
+    /**
+     * The time stamp of the beginning of this recording i.e. the time left (milliseconds)
+     */
+    private static long beginning;
+
+    /**
+     * The current recording either being constructed or loaded
+     */
+    private static Map<Long, List<Move>> currentRecording;
+
+    /**
+     * The save file of this recording
      */
     private static File saveFile;
+
+
+
+
+
+
 
     /**
      * Constructor
@@ -57,11 +73,7 @@ public class RecordAndReplay {
      */
     public static void loadRecording(File file) {
         if (!isRecording) {
-            Maze loadedMaze = Persistence.loadMaze(file);
-            if (loadedMaze != null) {
-                loadedRecording = loadedMaze.getMoves();
-                gui.loadLevel(loadedMaze);
-            }
+            //Todo need game state and map of moves
         }
     }
 
@@ -69,70 +81,98 @@ public class RecordAndReplay {
      * Replays the current loaded recording
      */
     public void playRecording() {
-        if (isRecording || loadedRecording == null) {
-            return;
-        }
-        Runnable runnable = () -> {
-            //execute moves
-            for(Maze.Direction move : loadedRecording) {
-                //gui.move(move);
-                //pause
-                try {
-                    Thread.sleep(wait);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+
     }
 
     /**
-     * Starts a new recording, saves the gameState as a json
-     *
-     * @param file the file to save the game state to
+     * Starts a new recording
      */
-    public static void startRecording(File file) {
+    public static void startRecording() {
         if (!isRecording) {
             isRecording = true;
-            saveFile = file;
-            Persistence.saveMaze(gui.getMaze(), file);
+            currentRecording = new HashMap<>();
 
-            //user selects cancel in filechooser
-            if (file == null) {
-                isRecording = false;
+        }
+    }
+
+    /**
+     * Stops and saves the current recording to a json file
+     */
+    public static void stopRecording(File file) {
+        if(!isRecording) {
+            return;
+        }
+        isRecording = false;
+    }
+
+    /**
+     * Add the given move to the current list of moves i.e. the recording
+     *
+     * @param move the move object containing the id of the actor which moved
+     *             and which direction it was
+     */
+    public void addMove(Move move) {
+
+        //the time when this move was made, used as the key
+        long timeStamp = gui.getCurrentTimeStamp();
+
+        //check if a move has already been made at this time
+        if (currentRecording.containsKey(timeStamp)) {
+            currentRecording.get(timeStamp).add(move);
+        } else {
+            //if not then create a new list to store moves at this time
+            List<Move> newList = new ArrayList<>();
+            newList.add(move);
+            currentRecording.put(timeStamp, newList);
+        }
+    }
+
+    /**
+     * Advance the playback of this recording by one
+     * step (1 millisecond or until the next move)
+     */
+    public void stepForward() {
+        if (!isRecording && step > 0) {
+            step--;
+            List<Move> movesAtStep = getMovesAtStep(step);
+            if(movesAtStep != null) {
+                //execute all the moves on the appropriate actors
+                for (Move move : movesAtStep) {
+                    //gui.executeMove(move);
+                }
             }
         }
     }
 
     /**
-     * Stops the current recording and updates the list of moves
-     * in the original game state
-     */
-    public static void stopRecording() {
-        isRecording = false;
-
-        //load the original game state from the start of the recording
-        Maze maze = Persistence.loadMaze(saveFile);
-
-        //update the moves
-        maze.setMoves(gui.getMaze().getMoves());
-
-        //save the maze with the list of moves
-        Persistence.saveMaze(maze, saveFile);
-    }
-
-    /**
-     * Advance the playback of this recording by one step
-     */
-    public void stepForward() {
-    }
-
-    /**
-     * Rewind the playback of this recording by one step
+     * Rewind the playback of this recording by one
+     * step (1 millisecond or until the next move)
      */
     public void stepBack() {
+        if (!isRecording && step < beginning) {
+            step++;
+            List<Move> movesAtStep = getMovesAtStep(step);
+            if(movesAtStep != null) {
+                //execute all the moves on the appropriate actors
+                for (Move move : movesAtStep) {
+                    //gui.executeMove(move);
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets the list of moves at a given point in time
+     * in the recording
+     *
+     * @param step the time stamp to retrieve
+     * @return the list of move objects
+     */
+    private List<Move> getMovesAtStep(long step) {
+        if (!isRecording && !currentRecording.isEmpty() && currentRecording.containsKey(step)) {
+            return currentRecording.get(step);
+        }
+        return null;
     }
 
     /**
