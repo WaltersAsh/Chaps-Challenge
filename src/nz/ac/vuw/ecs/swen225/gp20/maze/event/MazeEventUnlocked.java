@@ -42,7 +42,9 @@ public class MazeEventUnlocked extends MazeEventWalked {
   public void invert() {
     super.invert();
     target.place(door);
-    maze.getChap().pickup(key);
+    if(key.getColor()!=Maze.KeyColor.GREEN) {
+      maze.getChap().pickup(key);
+    }
     
   }
 }
