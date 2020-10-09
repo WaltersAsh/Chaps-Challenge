@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.File;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;

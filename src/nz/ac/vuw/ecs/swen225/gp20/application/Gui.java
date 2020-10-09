@@ -13,7 +13,12 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,7 +34,14 @@ import javax.swing.border.EmptyBorder;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalkedKilled;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalkedDrowned;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalkedKilled;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
@@ -293,8 +305,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       loadLevel(Persistence.loadMaze(currentLevel));
       levelCompleteDialog.setVisible(false);
     }
-    if (e.getSource() == levelCompleteRestartButton || e.getSource() == timerExpiryRestartButton ||
-            e.getSource() == deathRestartButton) {
+    if (e.getSource() == levelCompleteRestartButton
+            || e.getSource() == timerExpiryRestartButton
+            || e.getSource() == deathRestartButton) {
       System.out.println("Restart button pressed");
       if (currentLevel == Main.level1) {
         loadLevel(Persistence.loadMaze(Main.level1));
@@ -408,8 +421,16 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + 1 pressed - start new game at level 1");
         } else if (key == KeyEvent.VK_A) {
           maze.getUndoRedo().undo();
+          clearInventoryPanel();
+          reloadInventoryPanel();
+          decrementTreasurePickUp();
+          System.out.println("Undo activated");
         } else if (key == KeyEvent.VK_D) {
           maze.getUndoRedo().redo();
+          clearInventoryPanel();
+          reloadInventoryPanel();
+          decrementTreasurePickUp();
+          System.out.println("Redo activated");
         }
       }
 
@@ -434,7 +455,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void run() {
         if (maze.getMillisecondsLeft() > 0) {
-          maze.setMillisecondsLeft(maze.getMillisecondsLeft()-1);
+          maze.setMillisecondsLeft(maze.getMillisecondsLeft() - 1);
           long millisecondsLeft = maze.getMillisecondsLeft();
           if (millisecondsLeft > 9) {
             timeValueLabel.setText(Long.toString(millisecondsLeft).substring(0, 2));
@@ -468,8 +489,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       timer.cancel();
       if (showDialog) {
         JOptionPane.showOptionDialog(frame, "PAUSED - Press esc to resume",
-        "Game Paused", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
-        null, null);
+            "Game Paused", JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+            null, null);
       }
     }
   }
@@ -605,6 +627,18 @@ public class Gui extends MazeEventListener implements ActionListener {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Clear the whole inventory panel.
+   */
+  public void clearInventoryPanel() {
+    //reset whole inventory display
+    for (JLabel inventoryValueLabel : inventoryValueLabels) {
+      inventoryValueLabel.setText(" "); // set label to empty again
+      inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
+    }
+    frame.revalidate();
   }
 
   /**

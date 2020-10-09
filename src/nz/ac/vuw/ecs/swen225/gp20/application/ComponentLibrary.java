@@ -7,9 +7,10 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.Icon;
+
 
 /**
  * A utility class used for storing and retrieving fonts, colours and icon images.
