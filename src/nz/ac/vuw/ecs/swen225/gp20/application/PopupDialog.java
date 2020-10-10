@@ -36,6 +36,8 @@ public class PopupDialog extends JDialog {
   private JButton restartButton;
   private JButton nextButton;
 
+  private Border border;
+
   /**
    * Instantiates a new Popup dialog for the gui.
    *
@@ -49,6 +51,11 @@ public class PopupDialog extends JDialog {
     gbc.gridwidth = GridBagConstraints.REMAINDER;
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+    border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+    border = BorderFactory.createCompoundBorder(border,
+            BorderFactory.createLineBorder(Color.WHITE, 2));
+
     switch (state) {
       case LEVEL_COMPLETE:
         levelFinishDialog(actionListener);
@@ -90,14 +97,15 @@ public class PopupDialog extends JDialog {
    */
   public void levelFinishDialog(ActionListener actionListener) {
     messageLabel = new JLabel(" LEVEL COMPLETE ");
-    restartButton = new JButton("Restart Level");
-    nextButton = new JButton("Next Level");
+    restartButton = new JButton(" Restart Level ");
+    nextButton = new JButton(" Next Level ");
     buttonPanel.add(restartButton);
     buttonPanel.add(Box.createRigidArea(new Dimension(50, 0)));
     buttonPanel.add(nextButton);
     nextButton.setBackground(ComponentLibrary.fullLavender);
     nextButton.setForeground(Color.WHITE);
     nextButton.setFont(ComponentLibrary.buttonFont);
+    nextButton.setBorder(border);
     nextButton.addActionListener(actionListener);
     restartButton.addActionListener(actionListener);
   }
@@ -110,7 +118,7 @@ public class PopupDialog extends JDialog {
    */
   public void messageDialog(ActionListener actionListener, String text) {
     messageLabel = new JLabel(text);
-    restartButton = new JButton("Restart Level");
+    restartButton = new JButton(" Restart Level ");
     restartButton.addActionListener(actionListener);
     buttonPanel.add(restartButton);
   }
@@ -119,15 +127,13 @@ public class PopupDialog extends JDialog {
    * Stylise the dialog.
    */
   public void stylise() {
-    Border border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-    border = BorderFactory.createCompoundBorder(border,
-            BorderFactory.createLineBorder(Color.WHITE, 2));
     messagePanel.setBackground(ComponentLibrary.fullLavender);
     messagePanel.setBorder(border);
     buttonPanel.setBackground(new Color(0, 0, 0, 0));
     messageLabel.setForeground(Color.BLACK);
     restartButton.setBackground(ComponentLibrary.fullLavender);
     restartButton.setForeground(Color.WHITE);
+    restartButton.setBorder(border);
     messageLabel.setFont(ComponentLibrary.bigFont);
     restartButton.setFont(ComponentLibrary.buttonFont);
   }

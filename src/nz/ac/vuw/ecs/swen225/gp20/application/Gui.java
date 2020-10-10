@@ -458,9 +458,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           maze.setMillisecondsLeft(maze.getMillisecondsLeft() - 1);
           long millisecondsLeft = maze.getMillisecondsLeft();
           if (millisecondsLeft > 9) {
-            timeValueLabel.setText(Long.toString(millisecondsLeft).substring(0, 2));
-          } else {
-            timeValueLabel.setText(Long.toString(millisecondsLeft));
+            timeValueLabel.setText(Long.toString(millisecondsLeft / 1000));
           }
           //timer drops down to last 10
           if (millisecondsLeft <= 11000) {
@@ -541,7 +539,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       levelValueLabel.setText("1");
       maze.setMillisecondsLeft(60000);
     }
-    timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft()).substring(0, 2));
+    timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
     setupTimer();
   }
