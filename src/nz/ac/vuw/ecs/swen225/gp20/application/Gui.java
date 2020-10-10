@@ -99,7 +99,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  
+  private boolean isNewLevel;
   private boolean isPaused;
   private int currentLevel = 1;
 
@@ -111,6 +111,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Gui(Maze maze) {
     this.maze = maze;
+    isNewLevel = true;
 
     recnplay = new RecordAndReplay(this);
 
@@ -239,6 +240,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       //persistence loading and saving
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
       pause(false);
+      isNewLevel = false;
       Persistence.saveMaze(maze, openFileChooser(false));
       resume();
     } else if (e.getSource() == menuBar.getLoadMenuItem()) {
@@ -531,14 +533,18 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
+
     //level panel
-    if (currentLevel == 2) {
-      maze.setMillisecondsLeft(40000);
-      levelValueLabel.setText("2");
+    if (isNewLevel) {
+      if (currentLevel == 2) {
+        maze.setMillisecondsLeft(40000);
+      } else {
+        maze.setMillisecondsLeft(60000);
+      }
     } else {
-      levelValueLabel.setText("1");
-      maze.setMillisecondsLeft(60000);
+      currentLevel = maze.getLevelID();
     }
+    levelValueLabel.setText(String.valueOf(currentLevel));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
     setupTimer();
