@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -99,14 +101,14 @@ public class SidePanel extends JPanel {
     inventoryPanel.setBackground(ComponentLibrary.darkLavender);
     inventoryGridPanel.setBackground(ComponentLibrary.darkLavender);
 
-    for (JPanel panel : panels) {
+    Arrays.stream(panels).forEach(panel -> {
       panel.setPreferredSize(new Dimension(175, 125));
       panel.setBorder(new LineBorder(ComponentLibrary.paleLavender, 2, false));
-    }
+    });
 
     // inventory grid panel initialisation
     inventoryValueLabels = new JLabel[8];
-    for (int i = 0; i < 8; i++) {
+    IntStream.range(0, 8).forEach(i -> {
       JLabel label = new JLabel();
       label.setText(" ");
       label.setOpaque(true);
@@ -114,7 +116,7 @@ public class SidePanel extends JPanel {
       label.setBorder(BorderFactory.createLineBorder(ComponentLibrary.paleLavender));
       inventoryValueLabels[i] = label;
       inventoryGridPanel.add(label);
-    }
+    });
   }
 
   /**
@@ -129,9 +131,7 @@ public class SidePanel extends JPanel {
       inventoryContentPanel = new JPanel()
     };
 
-    for (JPanel panel : panels) {
-      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    }
+    Arrays.stream(panels).forEach(panel -> panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)));
 
     levelContentPanel.setBackground(ComponentLibrary.fullLavender);
     timeContentPanel.setBackground(ComponentLibrary.lavender);
@@ -151,11 +151,11 @@ public class SidePanel extends JPanel {
       inventoryTitleLabel = new JLabel("INVENTORY"),
     };
 
-    for (JLabel label : titleLabels) {
+    Arrays.stream(titleLabels).forEach(label -> {
       label.setFont(ComponentLibrary.sideFont);
       label.setForeground(Color.WHITE);
       label.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
+    });
 
     // initialise value labels
     JLabel[] valueLabels = new JLabel[]{
@@ -164,11 +164,11 @@ public class SidePanel extends JPanel {
       treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
     };
 
-    for (JLabel valueLabel : valueLabels) {
+    Arrays.stream(valueLabels).forEach(valueLabel -> {
       valueLabel.setFont(ComponentLibrary.bigFont);
       valueLabel.setForeground(Color.BLACK);
       valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
+    });
 
     // add labels and JComponents to inner panels in side panels
     levelContentPanel.add(levelTitleLabel);

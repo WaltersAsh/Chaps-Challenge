@@ -219,36 +219,46 @@ public class Gui extends MazeEventListener implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
 
-    //menu actions
+    //MAZE FUNCTIONALITY
 
-    //maze functionality
+    //resume
     if (e.getSource() == menuBar.getResumeMenuItem()) {
       resume();
       pausedIconLabel.setVisible(false);
+
+      //pause
     } else if (e.getSource() == menuBar.getPauseMenuItem()) {
       pause(true);
       pausedIconLabel.setVisible(true);
+
+      //restart unfinished level
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
       if (currentLevel == 1) {
         loadLevel(Persistence.loadMaze(Main.level1));
       } else {
         loadLevel(Persistence.loadMaze(Main.level2));
       }
+
+      //exit
     } else if (e.getSource() == menuBar.getExitMenuItem()) {
       frame.dispose();
 
-      //persistence loading and saving
+      //PERSISTENCE FUNCTIONALITY
+
+      //save
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
       pause(false);
       isNewLevel = false;
       Persistence.saveMaze(maze, openFileChooser(false));
       resume();
+
+      //load
     } else if (e.getSource() == menuBar.getLoadMenuItem()) {
       pause(false);
       loadLevel(Persistence.loadMaze(openFileChooser(true)));
       resume();
 
-      //recnplay menu functionalities
+      //RECNPLAY FUNCTIONALITIES
 
       //start recording game play
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
@@ -274,6 +284,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       //stop playing recording
     } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
 
+      //load recording
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause(false);
       RecordAndReplay.loadRecording(openFileChooser(true));
@@ -395,13 +406,23 @@ public class Gui extends MazeEventListener implements ActionListener {
         board.repaint();
 
         // shortcuts
+
+        //exit and save at last unfinished level
         if (e.isControlDown() && key == KeyEvent.VK_X) {
           System.out.println("ctrl + x pressed - exit game");
+          pause(false);
+          displayExitOptionPanel("Are you sure you want to exit? (resume at last unfinished level");
+          resume();
+
+          //exit and save
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
           System.out.println("ctrl + s pressed - exit and save");
           pause(false);
           Persistence.quickSave(maze);
+          displayExitOptionPanel("Are you sure you want to exit? (resume current state)");
           resume();
+
+          //resume a saved game
         } else if (e.isControlDown() && key == KeyEvent.VK_R) {
           System.out.println("ctrl + r pressed - resume saved game");
           pause(false);
@@ -410,6 +431,8 @@ public class Gui extends MazeEventListener implements ActionListener {
             loadLevel(loadedMaze);
           }
           resume();
+
+          //restart unfinished level
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
           if (currentLevel == 1) {
@@ -417,16 +440,22 @@ public class Gui extends MazeEventListener implements ActionListener {
           } else {
             loadLevel(Persistence.loadMaze(Main.level2));
           }
+
+          //restart from level 1
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
           currentLevel = 1;
           loadLevel(Persistence.loadMaze(Main.level1));
           System.out.println("ctrl + 1 pressed - start new game at level 1");
+
+          //undo last move
         } else if (key == KeyEvent.VK_A) {
           maze.getUndoRedo().undo();
           clearInventoryPanel();
           reloadInventoryPanel();
           decrementTreasurePickUp();
           System.out.println("Undo activated");
+
+          //redo last move
         } else if (key == KeyEvent.VK_D) {
           maze.getUndoRedo().redo();
           clearInventoryPanel();
@@ -835,6 +864,26 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Display an option panel that exits the frame.
+   *
+   * @param message the String to display a message
+   */
+  public void displayExitOptionPanel(String message) {
+    JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
+    temp.setAlwaysOnTop(true);
+    int response = JOptionPane.showConfirmDialog(temp, message,
+            "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.YES_OPTION) {
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    } else {
+      frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      if (isTimerActive) {
+        resume();
+      }
+    }
+  }
+
+  /**
    * Initialise the window listener.
    */
   public void initialiseWindowListener() {
@@ -842,18 +891,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         pause(false);
-        JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
-        temp.setAlwaysOnTop(true);
-        int response = JOptionPane.showConfirmDialog(temp, "Are you sure you want to exit?",
-                "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        } else {
-          frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-          if (isTimerActive) {
-            resume();
-          }
-        }
+        displayExitOptionPanel("Are you sure you want to exit?");
       }
     });
   }

@@ -21,7 +21,7 @@ public class ComponentLibrary {
 
   //fonts
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
-  private static Font font = null;
+  private static Font font = new Font("Arial", Font.PLAIN, 24);
 
   //Icons
   public static Icon pausedIcon;

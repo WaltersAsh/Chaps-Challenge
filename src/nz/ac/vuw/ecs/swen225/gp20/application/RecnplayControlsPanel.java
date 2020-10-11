@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -49,14 +50,14 @@ public class RecnplayControlsPanel extends JPanel {
       fasterReplayButton = new JButton("FASTER")
     };
 
-    for (JButton button : buttons) {
+    Arrays.stream(buttons).forEach(button -> {
       button.setFont(ComponentLibrary.buttonFont);
       button.setForeground(Color.WHITE);
       button.setBackground(ComponentLibrary.lavender);
       button.addActionListener(actionListener);
       add(button);
       add(Box.createRigidArea(new Dimension(50, 0)));
-    }
+    });
   }
 
   /**

@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -104,13 +105,13 @@ public class MenuBar extends JMenuBar {
       fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
     };
 
-    for (JMenuItem[] menuItems : superMenuItems) {
-      for (JMenuItem menuItem : menuItems) {
+    Arrays.stream(superMenuItems).forEach(menuItems -> {
+      Arrays.stream(menuItems).forEach(menuItem -> {
         menuItem.addActionListener(actionListener);
         JMenu menu = menuToMenuItems.get(menuItems);
         menu.add(menuItem);
-      }
-    }
+      });
+    });
 
     showInstructMenuItem = new JMenuItem("How to Play");
     showInstructMenuItem.addActionListener(actionListener);
