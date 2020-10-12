@@ -50,7 +50,8 @@ public class Maze {
   
   //FIXME test for record and replay
   public List<Direction> moves = new ArrayList<Direction>();
-  
+
+  @JsonIgnore
   private UndoRedoHandler undoredo = new UndoRedoHandler(this);
 
 

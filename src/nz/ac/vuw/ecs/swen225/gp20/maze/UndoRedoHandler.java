@@ -1,9 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import java.util.*;
-
+@JsonIgnoreType
 public class UndoRedoHandler extends MazeEventListener {
   Maze maze;
   public UndoRedoHandler(Maze m) {
