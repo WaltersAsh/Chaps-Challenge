@@ -164,7 +164,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     Dimension dimen = Toolkit.getDefaultToolkit().getScreenSize();
     frame.pack();
     frame.setSize(1024, 800);
-    frame.setMinimumSize(new Dimension(875, 675));
+    frame.setMinimumSize(new Dimension(1010, 820));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
         dimen.height / 2 - frame.getSize().height / 2);
     frame.setFocusable(true);

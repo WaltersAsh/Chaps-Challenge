@@ -1,6 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
@@ -19,6 +18,8 @@ public class BoardView extends JComponent implements ActionListener {
   private Tile[][] tiles;
   private int blockSize = 40;
   private int width, height, minPanel;
+  private int boardWidth = 650;
+  private int boardHeight = 650;
 
   private int viewTiles = 3;
 
@@ -73,7 +74,7 @@ public class BoardView extends JComponent implements ActionListener {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    minPanel = Math.min(Gui.boardPanel.getHeight(), Gui.boardPanel.getWidth());
+    minPanel = Math.min(boardHeight, boardWidth);
 
 
     if(isWindowed) {
@@ -94,9 +95,9 @@ public class BoardView extends JComponent implements ActionListener {
    */
   public void drawWholeBoard(Graphics g) {
     if (width > height) {
-      blockSize = Gui.boardPanel.getWidth() / width;
+      blockSize = boardWidth / width;
     } else {
-      blockSize = Gui.boardPanel.getHeight() / height;
+      blockSize = boardHeight/ height;
     }
 
     for (int row = 0; row < height; row++) {
