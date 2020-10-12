@@ -57,7 +57,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   // frame and main panels
   private final JFrame frame;
   private JPanel framePanel;
-  public static BoardPanel boardPanel;
+  public BoardPanel boardPanel;
   private SidePanel sidePanel;
   private final InstructionsFrame instructionsFrame;
   private final MenuBar menuBar;
@@ -94,7 +94,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private JButton timerExpiryRestartButton;
   private JButton deathRestartButton;
 
-  public static BoardView board;
+  public BoardView board;
   private Maze maze;
   private Timer timer;
   private TimerTask timerTask;

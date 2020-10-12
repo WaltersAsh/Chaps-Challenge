@@ -19,24 +19,26 @@ import javax.swing.JLabel;
  */
 public class ComponentLibrary {
 
-  //fonts
+  //static resources to be initialised
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = new Font("Arial", Font.PLAIN, 24);
-
-  //Icons
-  public static Icon pausedIcon;
+  private static Icon pausedIc = new ImageIcon();
 
   static {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
       image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
-      pausedIcon = new ImageIcon(image);
+      pausedIc = new ImageIcon(image);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
   }
 
+  //Icons
+  public static final Icon pausedIcon = pausedIc;
+
+  //Fonts
   public static final Font buttonFont = font.deriveFont(Font.PLAIN, 20);
   public static final Font sideFont = font.deriveFont(Font.PLAIN, 11);
   public static final Font bigFont = font.deriveFont(Font.BOLD, 40);
