@@ -10,6 +10,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
  */
 public class Main {
 
+  public static final File main = new File("levels/quickSave.json");
   public static final File level1 = new File("levels/official_levels/level1.json");
   public static final File level2 = new File("levels/official_levels/level2.json");
 
@@ -23,6 +24,10 @@ public class Main {
     //Maze maze = BoardRig.enemyKillTest1();
     Maze maze = Persistence.loadMaze(level1);
     maze.setLevelID(1);
+    if (main.length() != 0)  {
+      //game has already been played before
+      maze = Persistence.quickLoad();
+    }
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }

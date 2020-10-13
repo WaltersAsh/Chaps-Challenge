@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
@@ -154,6 +155,12 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //instuctions initialisation
     instructionsFrame = new InstructionsFrame(this);
+
+    //reload gui information (for save and exit shortcuts)
+    clearInventoryPanel();
+    reloadInventoryPanel();
+    levelValueLabel.setText(String.valueOf(currentLevel));
+    timeValueLabel.setText(String.valueOf(maze.getMillisecondsLeft() / 1000));
 
     // initialise frame
     frame.add(framePanel);
@@ -411,7 +418,8 @@ public class Gui extends MazeEventListener implements ActionListener {
         if (e.isControlDown() && key == KeyEvent.VK_X) {
           System.out.println("ctrl + x pressed - exit game");
           pause(false);
-          displayExitOptionPanel("Are you sure you want to exit? (resume at last unfinished level");
+          displayExitOptionPanel("Are you sure you want to exit? "
+                  + "(resume at last unfinished level)", "ctrl + x");
           resume();
 
           //exit and save
@@ -419,7 +427,8 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + s pressed - exit and save");
           pause(false);
           Persistence.quickSave(maze);
-          displayExitOptionPanel("Are you sure you want to exit? (resume current state)");
+          displayExitOptionPanel("Are you sure you want to exit? "
+                  + "(resume current state)", "ctrl + s");
           resume();
 
           //resume a saved game
@@ -550,15 +559,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     isTimerActive = false;
     setupTimer();
 
-    //reset treasures amount
+    //reset treasures amount and inventory
     setTreasuresValueLabel(maze.numTreasures());
-
-    //reset inventory
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      inventoryValueLabel.setText(" "); // set label to empty again
-      inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
-      break;
-    }
+    clearInventoryPanel();
 
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
@@ -576,6 +579,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     levelValueLabel.setText(String.valueOf(currentLevel));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
+    frame.revalidate();
     setupTimer();
   }
 
@@ -606,10 +610,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
     maze.addListener(this);
-    for (JLabel inventoryValueLabel : inventoryValueLabels) {
-      inventoryValueLabel.setText(" "); // set label to empty again
-      inventoryValueLabel.setIcon(null); // remove the icon (display nothing)
-    }
+    clearInventoryPanel();
     reloadInventoryPanel();
     treasuresValueLabel.setForeground(Color.BLACK);
     isTimerActive = false;
@@ -866,14 +867,36 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Display an option panel that exits the frame.
    *
    * @param message the String to display a message
+   * @param operationOnClose the String representing an operation to execute before closing
    */
-  public void displayExitOptionPanel(String message) {
+  public void displayExitOptionPanel(String message, String operationOnClose) {
     JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
     temp.setAlwaysOnTop(true);
     int response = JOptionPane.showConfirmDialog(temp, message,
             "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     if (response == JOptionPane.YES_OPTION) {
+      if (operationOnClose == null) {
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.dispose();
+        System.exit(0);
+      }
+      switch (Objects.requireNonNull(operationOnClose)) {
+        case "ctrl + x":
+          if (currentLevel == 1) {
+            loadLevel(Persistence.loadMaze(Main.level1));
+          } else {
+            loadLevel(Persistence.loadMaze(Main.level2));
+          }
+          Persistence.quickSave(maze);
+          break;
+        case "ctrl + s":
+          Persistence.quickSave(maze);
+          break;
+        default:
+      }
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.dispose();
+      System.exit(0);
     } else {
       frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       if (isTimerActive) {
@@ -890,7 +913,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         pause(false);
-        displayExitOptionPanel("Are you sure you want to exit?");
+        displayExitOptionPanel("Are you sure you want to exit? "
+                + "(All progress lost up to last save)", null);
       }
     });
   }
