@@ -30,8 +30,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ColorUIResource;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -100,7 +102,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   private Timer timer;
   private TimerTask timerTask;
   private boolean isTimerActive;
-  private boolean isNewLevel;
   private boolean isPaused;
   private int currentLevel = 1;
 
@@ -112,7 +113,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Gui(Maze maze) {
     this.maze = maze;
-    isNewLevel = true;
 
     recnplay = new RecordAndReplay(this);
 
@@ -161,6 +161,20 @@ public class Gui extends MazeEventListener implements ActionListener {
     reloadInventoryPanel();
     levelValueLabel.setText(String.valueOf(currentLevel));
     timeValueLabel.setText(String.valueOf(maze.getMillisecondsLeft() / 1000));
+
+    //initialise optionpane
+    UIManager.put("OptionPane.background", new ColorUIResource(ComponentLibrary.deepLavender));
+    UIManager.put("Panel.background", new ColorUIResource(ComponentLibrary.lightLavender));
+    UIManager.put("OptionPane.messageFont", ComponentLibrary.buttonFont);
+    UIManager.put("OptionPane.buttonFont", ComponentLibrary.buttonFont);
+    UIManager.put("OptionPane.messageForeground", Color.BLACK);
+    UIManager.put("Button.background", ComponentLibrary.fullLavender);
+    UIManager.put("Button.foreground", Color.WHITE);
+
+    //initialise filechooser styling
+    UIManager.put("List.background", ComponentLibrary.deepLavender);
+    UIManager.put("List.foreground", Color.WHITE);
+    UIManager.put("FileChooser.listFont", ComponentLibrary.sideFont);
 
     // initialise frame
     frame.add(framePanel);
@@ -255,7 +269,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       //save
     } else if (e.getSource() == menuBar.getSaveMenuItem()) {
       pause(false);
-      isNewLevel = false;
       Persistence.saveMaze(maze, openFileChooser(false));
       resume();
 
@@ -418,8 +431,8 @@ public class Gui extends MazeEventListener implements ActionListener {
         if (e.isControlDown() && key == KeyEvent.VK_X) {
           System.out.println("ctrl + x pressed - exit game");
           pause(false);
-          displayExitOptionPanel("Are you sure you want to exit? "
-                  + "(resume at last unfinished level)", "ctrl + x");
+          displayExitOptionPanel("Are you sure you want to exit? \n"
+                  + "resume at last unfinished level ", "ctrl + x");
           resume();
 
           //exit and save
@@ -427,8 +440,8 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + s pressed - exit and save");
           pause(false);
           Persistence.quickSave(maze);
-          displayExitOptionPanel("Are you sure you want to exit? "
-                  + "(resume current state)", "ctrl + s");
+          displayExitOptionPanel("Are you sure you want to exit? \n"
+                  + "resume current state ", "ctrl + s");
           resume();
 
           //resume a saved game
@@ -526,7 +539,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       maze.pause();
       timer.cancel();
       if (showDialog) {
-        JOptionPane.showOptionDialog(frame, "PAUSED - Press esc to resume",
+        JOptionPane.showOptionDialog(frame, "Press esc to resume ",
             "Game Paused", JOptionPane.DEFAULT_OPTION,
             JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
             null, null);
@@ -567,15 +580,13 @@ public class Gui extends MazeEventListener implements ActionListener {
     reinitialiseBoard(maze);
 
     //level panel
-    if (isNewLevel) {
-      if (currentLevel == 2) {
-        maze.setMillisecondsLeft(40000);
-      } else {
-        maze.setMillisecondsLeft(60000);
-      }
+
+    if (currentLevel == 2) {
+      maze.setMillisecondsLeft(40000);
     } else {
-      currentLevel = maze.getLevelID();
+      maze.setMillisecondsLeft(60000);
     }
+
     levelValueLabel.setText(String.valueOf(currentLevel));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
@@ -913,8 +924,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         pause(false);
-        displayExitOptionPanel("Are you sure you want to exit? "
-                + "(All progress lost up to last save)", null);
+        displayExitOptionPanel("Are you sure you want to exit? \n"
+                + "All progress will be lost up to last save ", null);
       }
     });
   }

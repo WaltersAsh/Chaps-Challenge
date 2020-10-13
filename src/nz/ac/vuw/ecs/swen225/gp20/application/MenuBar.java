@@ -1,11 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.border.LineBorder;
 
 
 /**
@@ -54,6 +56,9 @@ public class MenuBar extends JMenuBar {
     add(levelMenu);
     add(recnplayMenu);
     add(helpMenu);
+    setBackground(ComponentLibrary.deepLavender);
+    setBorder(new LineBorder(ComponentLibrary.lightLavender, 10));
+    setOpaque(true);
   }
 
   /**
@@ -108,14 +113,25 @@ public class MenuBar extends JMenuBar {
     Arrays.stream(superMenuItems).forEach(menuItems -> {
       Arrays.stream(menuItems).forEach(menuItem -> {
         menuItem.addActionListener(actionListener);
+        menuItem.setBackground(ComponentLibrary.deepLavender);
+        menuItem.setForeground(Color.WHITE);
+        menuItem.setFont(ComponentLibrary.bodyFont);
         JMenu menu = menuToMenuItems.get(menuItems);
+        menu.setForeground(Color.WHITE);
+        menu.setFont(ComponentLibrary.bodyFont);
         menu.add(menuItem);
       });
     });
 
     showInstructMenuItem = new JMenuItem("How to Play");
     showInstructMenuItem.addActionListener(actionListener);
+    helpMenu.setForeground(Color.WHITE);
     helpMenu.add(showInstructMenuItem);
+    helpMenu.setBackground(ComponentLibrary.deepLavender);
+    helpMenu.setFont(ComponentLibrary.bodyFont);
+    showInstructMenuItem.setBackground(ComponentLibrary.deepLavender);
+    showInstructMenuItem.setForeground(Color.WHITE);
+    showInstructMenuItem.setFont(ComponentLibrary.bodyFont);
   }
 
   /**
