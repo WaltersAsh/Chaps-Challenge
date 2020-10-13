@@ -41,9 +41,12 @@ public class AnimationHandler extends MazeEventListener {
   @Override
   public void update(MazeEventWalkedKilled e) {
     Chap c = e.getMaze().getChap();
-    System.out.println();
     c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
+  }
 
-
+  @Override
+  public void update(MazeEventEnemyWalkedKilled e) {
+    Chap c = e.getMaze().getChap();
+    c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
   }
 }
