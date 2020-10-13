@@ -23,4 +23,10 @@ public class Treasure extends Pickup {
   public String toString() {
     return "Treasure";
   }
+
+  @Override
+  public void onWalked(Maze m) {
+    super.onWalked(m);
+    m.getTreasures().remove(this);
+  }
 }

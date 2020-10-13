@@ -17,7 +17,7 @@ public abstract class Pickup extends Containable {
   public Pickup(String filename, String initials) {
     super(filename, initials);
   }
-  
+
   @Override
   public void onWalked(Maze m) {
     m.getChap().pickup(this);

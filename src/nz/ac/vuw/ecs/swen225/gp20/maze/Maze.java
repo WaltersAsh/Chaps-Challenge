@@ -3,10 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * The Maze board, which keeps track of the Tiles and logic in the game
@@ -33,7 +30,6 @@ public class Maze {
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
 
-
   // Logic
   private boolean levelFinished = false;
   private long millisecondsLeft = 60000;
@@ -47,7 +43,7 @@ public class Maze {
 
   private MazeEventWalked dispatch;
 
-  
+
   //FIXME test for record and replay
   public List<Direction> moves = new ArrayList<Direction>();
 
@@ -59,10 +55,10 @@ public class Maze {
    * Instantiates a new Maze. For Jackson.
    */
   public Maze() {
-    
+
   }
-  
-  
+
+
   /**
    * Constuct empty Board with a width and height
    *
@@ -183,13 +179,20 @@ public class Maze {
         }
       }
     }
-
+    postMoveChecks();
     if (dispatch != null) {
       broadcast(dispatch);
       dispatch = null;
     }
   }
-  
+
+  /**
+   * Postcondition checks after moving
+   */
+  public void postMoveChecks() {
+    assert(chap.getContainer() instanceof PathTile);
+  }
+
   public void moveChap(PathTile next) {
     next.moveTo(chap);
     undoredo.clearRedoStack();
@@ -223,7 +226,7 @@ public class Maze {
   public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
     if (p instanceof Treasure) {
       checkTreasure(next, current, d, (Treasure) p);
-      
+      System.out.println(treasures.size());
     } else if (p instanceof Key) {
 
     }
@@ -231,7 +234,7 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
-    if (chap.hasAllTreasures(this)) {
+    if (treasures.isEmpty()) {
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
     }
@@ -422,7 +425,7 @@ public class Maze {
   public long getMillisecondsLeft() {
     return millisecondsLeft;
   }
-  
+
   public void setMillisecondsLeft(long ms) {
     this.millisecondsLeft = ms;
   }
@@ -432,7 +435,7 @@ public class Maze {
   public void setLevelID(int levelID) {
     this.levelID = levelID;
   }
-  
+
   public void setMoves(List<Direction> moves) {
     this.moves = moves;
   }
