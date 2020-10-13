@@ -244,7 +244,7 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
-    Preconditions.checkArgument(treasures.size()>0, "No treasures left"); // can't pick up treasure if none exist
+    Preconditions.checkArgument(treasures.size()>=0, "No treasures left"); // can't pick up treasure if none exist
     if (treasures.isEmpty()) {
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
