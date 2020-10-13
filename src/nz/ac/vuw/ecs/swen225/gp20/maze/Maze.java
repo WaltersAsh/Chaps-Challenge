@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
 import java.util.*;
@@ -51,6 +53,7 @@ public class Maze {
   @JsonIgnore
   private UndoRedoHandler undoredo = new UndoRedoHandler(this);
 
+  private boolean dead = false;
 
   /**
    * Instantiates a new Maze. For Jackson.
@@ -156,6 +159,7 @@ public class Maze {
    * @param d the direction
    */
   public void move(Direction d) {
+    preMoveChecks();
     if (d == Direction.LEFT) {
       chap.changeFile(chap.left);
     }
@@ -186,12 +190,16 @@ public class Maze {
     }
   }
 
+  public void preMoveChecks() {
+    Preconditions.checkArgument(!dead, "Chap is dead, cannot move");
+  }
+
   /**
    * Postcondition checks after moving
    */
   public void postMoveChecks() {
     assert(chap.getContainer() instanceof PathTile); // chap can only ever stand on a PathTile
-    assert(chap.getContainer().getBlocker() instanceof Chap); // the PathTile Chap is on can only ever contain Chap
+    assert(chap.getContainer().getBlocker() instanceof Chap); // the PathTile Chap is on can only ever be blocked by Chap
     assert(treasures.size()>=0); // treasures may never be below 0
     assert(treasures.size()+chap.getTreasures().size()==numTreasures); // total treasures is constant
   }
@@ -236,6 +244,7 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
+    Preconditions.checkArgument(treasures.size()>0, "No treasures left"); // can't pick up treasure if none exist
     if (treasures.isEmpty()) {
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
@@ -422,6 +431,7 @@ public class Maze {
 
   public void killChap() {
     pause();
+    dead = true;
   }
 
   public long getMillisecondsLeft() {
