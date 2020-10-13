@@ -58,10 +58,10 @@ public class Chap extends Movable {
     }
     p.getContainer().remove(p);
   }
-  
+
   /**
    * Un-pickup a Pickup
-   * Note that this does not replace the Pickup onto 
+   * Note that this does not replace the Pickup onto
    * its Tile as it no longer knows what Tile it was on
    * @param p
    */
@@ -95,9 +95,5 @@ public class Chap extends Movable {
 
   public List<Key> getKeys() {
     return keys;
-  }
-
-  public boolean hasAllTreasures(Maze m) {
-    return m.numTreasures() == this.treasures.size();
   }
 }

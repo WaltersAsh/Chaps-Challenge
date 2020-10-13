@@ -583,11 +583,10 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Decrement treasure pickup value.
    */
   public void decrementTreasurePickUp() {
-    int treasureCount = maze.getChap().getTreasures().size();
-    setTreasuresValueLabel(maze.numTreasures() - treasureCount);
+    setTreasuresValueLabel(maze.getTreasures().size());
 
     //treasures are all collected
-    if (maze.numTreasures() - treasureCount == 0) {
+    if (maze.getTreasures().isEmpty()) {
       treasuresValueLabel.setForeground(Color.GREEN);
     }
   }

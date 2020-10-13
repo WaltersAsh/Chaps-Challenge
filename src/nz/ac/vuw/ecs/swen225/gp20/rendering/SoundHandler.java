@@ -150,6 +150,8 @@ public class SoundHandler extends MazeEventListener{
 
   public void update(MazeEventWalkedKilled e){playSound("DE");}
 
+  public void update(MazeEventEnemyWalkedKilled e){playSound("DE");}
+
   // exitlock event is needed
   // sounds.get(exitlock.initials).play();
 }
