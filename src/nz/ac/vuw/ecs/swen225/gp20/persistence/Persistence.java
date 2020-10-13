@@ -1,16 +1,16 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+
+
 
 
 /**
@@ -54,12 +54,10 @@ public class Persistence {
     if (file == null) {
       return false;
     }
-//    System.out.println(maze.getListeners());
-//    System.out.println(maze);
     try {
       mapper.writeValue(file, maze);
       return true;
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return false;
@@ -78,8 +76,8 @@ public class Persistence {
     if (loadedMaze == null) {
       return false;
     } else if (loadedMaze.getHeight() < 1 || loadedMaze.getWidth() < 1) {
-      throw new Exception("Illegal Maze size, excepted both >0 but height = " +
-          loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
+      throw new Exception("Illegal Maze size, excepted both >0 but height = "
+          + loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
     }
 
     return true;
@@ -93,12 +91,13 @@ public class Persistence {
    */
   public static boolean quickSave(Maze maze) {
     try {
+      mazeValidator(maze);
       Path p = Paths.get(".", "levels", "quickSave.json");
-      BufferedWriter bw = Files.newBufferedWriter(p, Charsets.UTF_8);
+      BufferedWriter bw = Files.newBufferedWriter(p, StandardCharsets.UTF_8);
       bw.write(mapper.writeValueAsString(maze));
       bw.close();
       return true;
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return false;
@@ -118,10 +117,8 @@ public class Persistence {
         if (mazeValidator(loadedMaze)) {
           fixMaze(loadedMaze);
           return loadedMaze;
-        }else{
-          throw new Exception("Maze file not valid");
         }
-      } else {//if file not exist
+      } else { //if file not exist
         throw new IOException("levels/quickSave.json not existed");
       }
     } catch (Exception e) {
@@ -129,19 +126,4 @@ public class Persistence {
     }
     return null;
   }
-
-  /**
-   * The tester for quickSave.
-   *
-   * @param args the input arguments
-   */
-//  public static void main(String[] args) {
-//    try {
-//      System.out.println(quickSave(BoardRig.lesson1()));
-//      System.out.println(quickLoad());
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//  }
-
 }
