@@ -27,6 +27,7 @@ public class Maze {
   private int width, height;
   private Tile[][] tiles;
   private Chap chap;
+  private int numTreasures;
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
 
@@ -55,7 +56,6 @@ public class Maze {
    * Instantiates a new Maze. For Jackson.
    */
   public Maze() {
-
   }
 
 
@@ -95,7 +95,7 @@ public class Maze {
         enemies.add(e);
       }
     }
-
+    numTreasures = treasures.size();
     setupTimer();
   }
 
@@ -190,7 +190,10 @@ public class Maze {
    * Postcondition checks after moving
    */
   public void postMoveChecks() {
-    assert(chap.getContainer() instanceof PathTile);
+    assert(chap.getContainer() instanceof PathTile); // chap can only ever stand on a PathTile
+    assert(chap.getContainer().getBlocker() instanceof Chap); // the PathTile Chap is on can only ever contain Chap
+    assert(treasures.size()>=0); // treasures may never be below 0
+    assert(treasures.size()+chap.getTreasures().size()==numTreasures); // total treasures is constant
   }
 
   public void moveChap(PathTile next) {
@@ -226,7 +229,6 @@ public class Maze {
   public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
     if (p instanceof Treasure) {
       checkTreasure(next, current, d, (Treasure) p);
-      System.out.println(treasures.size());
     } else if (p instanceof Key) {
 
     }
@@ -463,6 +465,7 @@ public class Maze {
 
   public void setTreasures(List<Treasure> treasures) {
     this.treasures = treasures;
+    this.numTreasures = treasures.size();
   }
 
   public List<Enemy> getEnemies() {
