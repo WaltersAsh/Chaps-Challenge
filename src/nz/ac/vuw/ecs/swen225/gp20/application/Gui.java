@@ -925,7 +925,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {
         pause(false);
         displayExitOptionPanel("Are you sure you want to exit? \n"
-                + "All progress will be lost up to last save ", null);
+                + "All unsaved progress will be lost ", null);
       }
     });
   }

@@ -1,9 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
+import javax.swing.Box;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -52,11 +55,16 @@ public class MenuBar extends JMenuBar {
   public MenuBar(ActionListener actionListener) {
     createMenuComponents(actionListener);
     add(fileMenu);
+    add(Box.createRigidArea(new Dimension(20, 0)));
     add(gameMenu);
+    add(Box.createRigidArea(new Dimension(20, 0)));
     add(levelMenu);
+    add(Box.createRigidArea(new Dimension(20, 0)));
     add(recnplayMenu);
+    add(Box.createRigidArea(new Dimension(20, 0)));
     add(helpMenu);
-    setBackground(ComponentLibrary.deepLavender);
+    //setBackground(ComponentLibrary.deepLavender);
+    setBackground(ComponentLibrary.lightLavender);
     setBorder(new LineBorder(ComponentLibrary.lightLavender, 10));
     setOpaque(true);
   }
@@ -116,9 +124,13 @@ public class MenuBar extends JMenuBar {
         menuItem.setBackground(ComponentLibrary.deepLavender);
         menuItem.setForeground(Color.WHITE);
         menuItem.setFont(ComponentLibrary.bodyFont);
+        menuItem.setBorder(new LineBorder(Color.WHITE, 1, true));
         JMenu menu = menuToMenuItems.get(menuItems);
         menu.setForeground(Color.WHITE);
+        menu.setOpaque(true);
+        menu.setBackground(ComponentLibrary.fullLavender);
         menu.setFont(ComponentLibrary.bodyFont);
+        menu.setBorder(new LineBorder(Color.WHITE, 1, true));
         menu.add(menuItem);
       });
     });
@@ -129,9 +141,13 @@ public class MenuBar extends JMenuBar {
     helpMenu.add(showInstructMenuItem);
     helpMenu.setBackground(ComponentLibrary.deepLavender);
     helpMenu.setFont(ComponentLibrary.bodyFont);
+    helpMenu.setBorder(new LineBorder(Color.WHITE, 1, true));
+    helpMenu.setOpaque(true);
+    helpMenu.setBackground(ComponentLibrary.fullLavender);
     showInstructMenuItem.setBackground(ComponentLibrary.deepLavender);
     showInstructMenuItem.setForeground(Color.WHITE);
     showInstructMenuItem.setFont(ComponentLibrary.bodyFont);
+    showInstructMenuItem.setBorder(new LineBorder(Color.WHITE, 1, true));
   }
 
   /**
