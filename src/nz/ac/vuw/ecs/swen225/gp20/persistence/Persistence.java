@@ -50,7 +50,7 @@ public class Persistence {
    * @param file the file object
    * @return the boolean indicate saving is successful or not
    */
-  public static boolean saveMaze(Maze maze, File file) {//TODO
+  public static boolean saveMaze(Maze maze, File file) {
     if (file == null) {
       return false;
     }
