@@ -1,6 +1,9 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
-
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 
 /**
@@ -28,19 +30,22 @@ public class Persistence {
    * @return the maze if loading is successful, null if failed.
    */
   public static Maze loadMaze(File file) {
+    Maze loadedMaze;
     if (file == null) {
       return null;
     }
     try {
-      Maze loadedMaze = mapper.readValue(file, Maze.class);
+      loadedMaze = mapper.readValue(file, Maze.class);
       if (mazeValidator(loadedMaze)) {
         fixMaze(loadedMaze);
-        return loadedMaze;
+      } else {
+        return null;
       }
     } catch (Exception e) {
       e.printStackTrace();
+      return null;
     }
-    return null;
+    return loadedMaze;
   }
 
   /**
@@ -73,14 +78,49 @@ public class Persistence {
   }
 
   private static boolean mazeValidator(Maze loadedMaze) throws Exception {
+    AtomicBoolean valid = new AtomicBoolean(true);
     if (loadedMaze == null) {
       return false;
-    } else if (loadedMaze.getHeight() < 1 || loadedMaze.getWidth() < 1) {
+    }
+    if (loadedMaze.getHeight() < 1 || loadedMaze.getWidth() < 1) {
+      valid.set(false);
       throw new Exception("Illegal Maze size, excepted both >0 but height = "
           + loadedMaze.getHeight() + " width = " + loadedMaze.getWidth());
     }
-
-    return true;
+    if (loadedMaze.getExitlock() == null) {
+      valid.set(false);
+      throw new Exception("Maze has no ExitLock");
+    }
+    if (loadedMaze.getChap() == null) {
+      valid.set(false);
+      throw new Exception("Chap is null");
+    }
+    if (loadedMaze.getChap().filename == null) {
+      valid.set(false);
+      throw new Exception("Chap's image is missing");
+    }
+    IntStream.range(0, loadedMaze.getHeight()).parallel().forEach(x -> {
+      IntStream.range(0, loadedMaze.getTiles()[x].length).forEach(y -> {
+        try {
+          if (loadedMaze.getTileAt(x, y).getFilename() == null) {
+            valid.set(false);
+            throw new Exception("Filename for Tile at [" + x + "," + y + "] " + "is null");
+          }
+          if (loadedMaze.getTileAt(x, y).getFilename().isEmpty()) {
+            valid.set(false);
+            throw new Exception("Filename for Tile at [" + x + "," + y + "] " + "is empty");
+          }
+          if (!Files.exists(Path.of(loadedMaze.getTileAt(x, y).getFilename()))) {
+            valid.set(false);
+            throw new Exception("File not exist for Tile at [" + x + "," + y + "] ");
+          }
+        } catch (Exception e) {
+          valid.set(false);
+          e.printStackTrace();
+        }
+      });
+    });
+    return valid.get();
   }
 
   /**
@@ -91,14 +131,16 @@ public class Persistence {
    */
   public static boolean quickSave(Maze maze) {
     try {
-      mazeValidator(maze);
-      Path p = Paths.get(".", "levels", "quickSave.json");
-      BufferedWriter bw = Files.newBufferedWriter(p, StandardCharsets.UTF_8);
-      bw.write(mapper.writeValueAsString(maze));
-      bw.close();
-      return true;
+      if (mazeValidator(maze)) {
+        Path p = Paths.get(".", "levels", "quickSave.json");
+        BufferedWriter bw = Files.newBufferedWriter(p, StandardCharsets.UTF_8);
+        bw.write(mapper.writeValueAsString(maze));
+        bw.close();
+        return true;
+      }
     } catch (Exception e) {
       e.printStackTrace();
+      return false;
     }
     return false;
   }
@@ -126,4 +168,13 @@ public class Persistence {
     }
     return null;
   }
+
+  public static void main(String[] args) {
+    try {
+      mapper.writeValue(Paths.get(".", "levels", java.time.LocalDate.now() + "_" + java.time.LocalTime.now().getHour() + "_" + java.time.LocalTime.now().getMinute() + "_" + java.time.LocalTime.now().getSecond() + ".json").toFile(), BoardRig.enemyKillTest1());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
+
