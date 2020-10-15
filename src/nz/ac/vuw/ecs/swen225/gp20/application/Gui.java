@@ -103,7 +103,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   private TimerTask timerTask;
   private boolean isTimerActive;
   private boolean isPaused;
-  private int currentLevel = 1;
 
   private RecordAndReplay recnplay;
   private Map<Long, List<Move>> timeToMoveMap = new HashMap<>();
@@ -159,7 +158,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     //reload gui information (for save and exit shortcuts)
     clearInventoryPanel();
     reloadInventoryPanel();
-    levelValueLabel.setText(String.valueOf(currentLevel));
+    levelValueLabel.setText(String.valueOf(maze.getLevelID()));
     timeValueLabel.setText(String.valueOf(maze.getMillisecondsLeft() / 1000));
 
     //initialise optionpane
@@ -254,7 +253,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //restart unfinished level
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
-      if (currentLevel == 1) {
+      if (maze.getLevelID() == 1) {
         loadLevel(Persistence.loadMaze(Main.level1));
       } else {
         loadLevel(Persistence.loadMaze(Main.level2));
@@ -334,18 +333,23 @@ public class Gui extends MazeEventListener implements ActionListener {
     //popup dialog button actions
     if (e.getSource() == nextButton) {
       System.out.println("Next button pressed");
-      currentLevel = 2;
-      loadLevel(Persistence.loadMaze(Main.level2));
+      Maze newMaze = Persistence.loadMaze(Main.level2);
+      newMaze.setLevelID(2);
+      loadLevel(newMaze);
       levelCompleteDialog.setVisible(false);
     }
     if (e.getSource() == levelCompleteRestartButton
             || e.getSource() == timerExpiryRestartButton
             || e.getSource() == deathRestartButton) {
       System.out.println("Restart button pressed");
-      if (currentLevel == 1) {
-        loadLevel(Persistence.loadMaze(Main.level1));
+      if (maze.getLevelID() == 1) {
+        Maze newMaze = Persistence.loadMaze(Main.level1);
+        newMaze.setLevelID(1);
+        loadLevel(newMaze);
       } else {
-        loadLevel(Persistence.loadMaze(Main.level2));
+        Maze newMaze = Persistence.loadMaze(Main.level2);
+        newMaze.setLevelID(2);
+        loadLevel(newMaze);
       }
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
@@ -457,16 +461,21 @@ public class Gui extends MazeEventListener implements ActionListener {
           //restart unfinished level
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
-          if (currentLevel == 1) {
-            loadLevel(Persistence.loadMaze(Main.level1));
+          if (maze.getLevelID() == 1) {
+            Maze newMaze = Persistence.loadMaze(Main.level1);
+            newMaze.setLevelID(1);
+            loadLevel(newMaze);
           } else {
-            loadLevel(Persistence.loadMaze(Main.level2));
+            Maze newMaze = Persistence.loadMaze(Main.level2);
+            newMaze.setLevelID(2);
+            loadLevel(newMaze);
           }
 
           //restart from level 1
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
-          currentLevel = 1;
-          loadLevel(Persistence.loadMaze(Main.level1));
+          Maze newMaze = Persistence.loadMaze(Main.level1);
+          newMaze.setLevelID(1);
+          loadLevel(newMaze);
           System.out.println("ctrl + 1 pressed - start new game at level 1");
 
           //undo last move
@@ -581,13 +590,13 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //level panel
 
-    if (currentLevel == 2) {
+    if (maze.getLevelID() == 2) { //make sure that maze.setLevelID is invoked before this method
       maze.setMillisecondsLeft(40000);
     } else {
       maze.setMillisecondsLeft(60000);
     }
 
-    levelValueLabel.setText(String.valueOf(currentLevel));
+    levelValueLabel.setText(String.valueOf(maze.getLevelID()));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
     frame.revalidate();
@@ -893,10 +902,14 @@ public class Gui extends MazeEventListener implements ActionListener {
       }
       switch (Objects.requireNonNull(operationOnClose)) {
         case "ctrl + x":
-          if (currentLevel == 1) {
-            loadLevel(Persistence.loadMaze(Main.level1));
+          if (maze.getLevelID() == 1) {
+            Maze newMaze = Persistence.loadMaze(Main.level1);
+            newMaze.setLevelID(1);
+            loadLevel(newMaze);
           } else {
-            loadLevel(Persistence.loadMaze(Main.level2));
+            Maze newMaze = Persistence.loadMaze(Main.level2);
+            newMaze.setLevelID(2);
+            loadLevel(newMaze);
           }
           Persistence.quickSave(maze);
           break;

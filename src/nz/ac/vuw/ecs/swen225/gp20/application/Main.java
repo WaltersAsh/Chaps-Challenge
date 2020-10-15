@@ -23,11 +23,15 @@ public class Main {
     //new TextGUI();
     //Maze maze = BoardRig.enemyKillTest1();
     Maze maze = Persistence.loadMaze(level1);
-    maze.setLevelID(1);
+
+    //game has already been played before
     if (main.length() != 0)  {
-      //game has already been played before
       maze = Persistence.quickLoad();
+    } else {
+      maze.setLevelID(1);
     }
+
+    //initialise the gui
     Gui gui = new Gui(maze);
     gui.getFrame().setVisible(true);
   }
