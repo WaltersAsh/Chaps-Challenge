@@ -271,6 +271,7 @@ public class Maze {
     } else if (bc instanceof Water) {
       overrideDispatch(new MazeEventWalkedDrowned(this,(Water)bc, current, blocked, d));
       killChap();
+      return true;
     }
     return false;
   }
