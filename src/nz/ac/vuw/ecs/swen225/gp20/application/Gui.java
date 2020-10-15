@@ -291,7 +291,10 @@ public class Gui extends MazeEventListener implements ActionListener {
       //load
     } else if (e.getSource() == menuBar.getLoadMenuItem()) {
       pause(false);
-      loadLevel(Persistence.loadMaze(openFileChooser(true)));
+      File loadedFile = openFileChooser(true);
+      if (loadedFile != null) {
+        loadLevel(Persistence.loadMaze(loadedFile));
+      }
       resume();
 
       //RECNPLAY FUNCTIONALITIES
