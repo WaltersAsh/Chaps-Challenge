@@ -35,6 +35,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Enemy;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
@@ -50,6 +51,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Recording;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -238,6 +240,10 @@ public class Gui extends MazeEventListener implements ActionListener {
     deathDialog.setVisible(false);
   }
 
+
+  //FIXME test for recnplay
+  private File recordingSaveFile;
+
   /**
    * Listen to menu buttons in menu bar, recnplay buttons and execute.
    *
@@ -310,24 +316,37 @@ public class Gui extends MazeEventListener implements ActionListener {
       //start recording game play
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
       pause(false);
-      //Todo record game state here, maze clone method perhaps
+
+      //save game state when a recording begins
+      recordingSaveFile = openFileChooser(false);
+      Persistence.saveMaze(maze, recordingSaveFile);
+
       RecordAndReplay.startRecording();
       recordingIconLabel.setVisible(true);
       resume();
 
       //stop recording game play
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
-            && RecordAndReplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && RecordAndReplay.isRecording()) {
       pause(false);
-      RecordAndReplay.stopRecording(openFileChooser(false));
+
+      //Todo write moves to original state
+      //load game state from recSaveFile
+      Maze loaded = Persistence.loadMaze(recordingSaveFile);
+
+      //set moves in loaded maze with moves in recnplay
+      loaded.setMovesByTime(RecordAndReplay.currentRecording);
+
+      //write game state with moves
+      Persistence.saveMaze(loaded, recordingSaveFile);
+
+      RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
       //play recording
     } else if (e.getSource() == menuBar.getPlayMenuItem()) {
-      pause(false);
-      recnplay.playRecording();
       resume();
+      RecordAndReplay.playRecording(maze.getMovesByTime(), maze.getMillisecondsLeft());
 
       //stop playing recording
     } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
@@ -335,8 +354,17 @@ public class Gui extends MazeEventListener implements ActionListener {
       //load recording
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause(false);
-      RecordAndReplay.loadRecording(openFileChooser(true));
-      resume();
+
+      //load game state
+      Maze loaded = Persistence.loadMaze(openFileChooser(true));
+
+      //get the move data from the loaded game state
+      Map<Long, List<Move>> moveData = loaded.getMovesByTime();
+
+      //finally set the game state
+      this.loadLevel(loaded);
+
+      RecordAndReplay.loadRecording();
 
       //instructions
     } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 
 import java.util.*;
 
@@ -49,6 +50,17 @@ public class Maze {
   private UndoRedoHandler undoredo = new UndoRedoHandler(this);
 
   private boolean dead = false;
+
+  //FIXME test for recnplay
+  private Map<Long, List<Move>> movesByTime;
+  public void setMovesByTime(Map<Long, List<Move>> m) {
+    movesByTime = m;
+  }
+  public Map<Long, List<Move>> getMovesByTime() {
+    return movesByTime;
+  }
+
+
 
   /**
    * Instantiates a new Maze. For Jackson.

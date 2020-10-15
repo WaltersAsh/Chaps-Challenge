@@ -20,7 +20,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
  * @author Fangyi Yan 300519195
  */
 public class Persistence {
-  static ObjectMapper mapper = new ObjectMapper();
+  public static ObjectMapper mapper = new ObjectMapper();
 
   /**
    * Load maze.
