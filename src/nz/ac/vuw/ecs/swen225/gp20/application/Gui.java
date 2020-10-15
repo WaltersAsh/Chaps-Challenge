@@ -259,6 +259,23 @@ public class Gui extends MazeEventListener implements ActionListener {
         loadLevel(Persistence.loadMaze(Main.level2));
       }
 
+      //undo
+    } else if (e.getSource() == menuBar.getUndoMenuItem()) {
+      maze.getUndoRedo().undo();
+      clearInventoryPanel();
+      reloadInventoryPanel();
+      decrementTreasurePickUp();
+      System.out.println("Undo activated");
+
+
+      //exit and save
+    } else if (e.getSource() == menuBar.getExitSaveMenuItem()) {
+      System.out.println("ctrl + s pressed - exit and save");
+      pause(false);
+      Persistence.quickSave(maze);
+      displayExitOptionPanel("Are you sure you want to exit? \n"
+              + "resume current state ", "ctrl + s");
+
       //exit
     } else if (e.getSource() == menuBar.getExitMenuItem()) {
       frame.dispose();
@@ -437,7 +454,6 @@ public class Gui extends MazeEventListener implements ActionListener {
           pause(false);
           displayExitOptionPanel("Are you sure you want to exit? \n"
                   + "resume at last unfinished level ", "ctrl + x");
-          resume();
 
           //exit and save
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
@@ -446,7 +462,6 @@ public class Gui extends MazeEventListener implements ActionListener {
           Persistence.quickSave(maze);
           displayExitOptionPanel("Are you sure you want to exit? \n"
                   + "resume current state ", "ctrl + s");
-          resume();
 
           //resume a saved game
         } else if (e.isControlDown() && key == KeyEvent.VK_R) {
