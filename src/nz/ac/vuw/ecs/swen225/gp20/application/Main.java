@@ -21,12 +21,12 @@ public class Main {
    */
   public static void main(String[] args) {
     //new TextGUI();
-    Maze maze = BoardRig.crateAndWaterTest();
-    //Maze maze = Persistence.loadMaze(level1);
+    //Maze maze = BoardRig.crateAndWaterTest();
+    Maze maze = Persistence.loadMaze(level1);
 
     //game has already been played before
     if (main.length() != 0)  {
-      //maze = Persistence.quickLoad();
+      maze = Persistence.quickLoad();
     } else {
       maze.setLevelID(1);
     }
