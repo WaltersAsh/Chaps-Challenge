@@ -254,10 +254,20 @@ public class Gui extends MazeEventListener implements ActionListener {
       //restart unfinished level
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
       if (maze.getLevelID() == 1) {
-        loadLevel(Persistence.loadMaze(Main.level1));
+        Maze newMaze = Persistence.loadMaze(Main.level1);
+        newMaze.setLevelID(1);
+        loadLevel(newMaze);
       } else {
-        loadLevel(Persistence.loadMaze(Main.level2));
+        Maze newMaze = Persistence.loadMaze(Main.level2);
+        newMaze.setLevelID(2);
+        loadLevel(newMaze);
       }
+
+      //restart the first level
+    } else if (e.getSource() == menuBar.getStartFirstLevelMenuItem()) {
+      Maze newMaze = Persistence.loadMaze(Main.level1);
+      newMaze.setLevelID(1);
+      loadLevel(newMaze);
 
       //undo
     } else if (e.getSource() == menuBar.getUndoMenuItem()) {
