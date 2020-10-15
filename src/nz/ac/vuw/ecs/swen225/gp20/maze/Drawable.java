@@ -17,7 +17,7 @@ import java.util.UUID;
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 public class Drawable {
   public final String id = UUID.randomUUID().toString();
-  protected static Toolkit toolkit = Toolkit.getDefaultToolkit();
+  protected Toolkit toolkit = Toolkit.getDefaultToolkit();
   protected String initials; // the string representation of this Drawable for drawing in text form
 
   // public Image image;
@@ -45,4 +45,5 @@ public class Drawable {
   public void changeFile(String newFile) {
     filename = newFile;
   }
+
 }

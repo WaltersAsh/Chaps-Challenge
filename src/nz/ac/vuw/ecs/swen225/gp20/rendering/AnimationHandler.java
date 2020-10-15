@@ -2,13 +2,16 @@ package nz.ac.vuw.ecs.swen225.gp20.rendering;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import java.awt.Toolkit;
 
 public class AnimationHandler extends MazeEventListener {
   BoardView bv;
+  protected Toolkit toolkit = Toolkit.getDefaultToolkit();
 
   public AnimationHandler(Maze m, BoardView bv) {
     m.addListener(this);
     this.bv = bv;
+
   }
 
   @Override
@@ -42,11 +45,13 @@ public class AnimationHandler extends MazeEventListener {
   public void update(MazeEventWalkedKilled e) {
     Chap c = e.getMaze().getChap();
     c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
+    toolkit.getImage(c.getFilename()).flush();
   }
 
   @Override
   public void update(MazeEventEnemyWalkedKilled e) {
     Chap c = e.getMaze().getChap();
     c.changeFile("resources/textures/board/moveable/character_skins/new_player_skin/SteveDeathLeft.gif");
+    toolkit.getImage(c.getFilename()).flush();
   }
 }
