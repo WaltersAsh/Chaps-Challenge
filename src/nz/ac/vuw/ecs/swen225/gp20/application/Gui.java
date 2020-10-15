@@ -103,6 +103,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private TimerTask timerTask;
   private boolean isTimerActive;
   private boolean isPaused;
+  private boolean isFreshStart = true;
 
   private RecordAndReplay recnplay;
   private Map<Long, List<Move>> timeToMoveMap = new HashMap<>();
@@ -617,11 +618,12 @@ public class Gui extends MazeEventListener implements ActionListener {
     reinitialiseBoard(maze);
 
     //level panel
-
-    if (maze.getLevelID() == 2) { //make sure that maze.setLevelID is invoked before this method
-      maze.setMillisecondsLeft(40000);
-    } else {
-      maze.setMillisecondsLeft(60000);
+    if (isFreshStart) {
+      if (maze.getLevelID() == 2) { //make sure that maze.setLevelID is invoked before this method
+        maze.setMillisecondsLeft(40000);
+      } else {
+        maze.setMillisecondsLeft(60000);
+      }
     }
 
     levelValueLabel.setText(String.valueOf(maze.getLevelID()));
@@ -681,6 +683,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       result = fc.showSaveDialog(null);
     }
     if (result == JFileChooser.APPROVE_OPTION) {
+      isFreshStart = false;
       return fc.getSelectedFile();
     }
     return null;

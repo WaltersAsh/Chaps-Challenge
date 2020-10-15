@@ -129,7 +129,7 @@ public class MenuBar extends JMenuBar {
         menu.setForeground(Color.WHITE);
         menu.setOpaque(true);
         menu.setBackground(ComponentLibrary.fullLavender);
-        menu.setFont(ComponentLibrary.bodyFont);
+        menu.setFont(ComponentLibrary.buttonFont);
         menu.setBorder(new LineBorder(Color.WHITE, 1, true));
         menu.add(menuItem);
       });
@@ -140,7 +140,7 @@ public class MenuBar extends JMenuBar {
     helpMenu.setForeground(Color.WHITE);
     helpMenu.add(showInstructMenuItem);
     helpMenu.setBackground(ComponentLibrary.deepLavender);
-    helpMenu.setFont(ComponentLibrary.bodyFont);
+    helpMenu.setFont(ComponentLibrary.buttonFont);
     helpMenu.setBorder(new LineBorder(Color.WHITE, 1, true));
     helpMenu.setOpaque(true);
     helpMenu.setBackground(ComponentLibrary.fullLavender);
