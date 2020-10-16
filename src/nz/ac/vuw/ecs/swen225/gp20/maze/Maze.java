@@ -51,6 +51,16 @@ public class Maze {
 
   private boolean dead = false;
 
+
+  //FIXME
+  private List<Direction> moves = new ArrayList<>();
+  public void setMoves(List<Direction> moves) {
+    this.moves = moves;
+  }
+  public List<Direction> getMoves() {
+    return moves;
+  }
+
   //FIXME test for recnplay
   private Map<Long, List<Move>> movesByTime;
   public void setMovesByTime(Map<Long, List<Move>> m) {

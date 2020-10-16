@@ -13,13 +13,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -51,7 +45,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordAndReplay;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.Recording;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
 /**
@@ -364,7 +357,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       //finally set the game state
       this.loadLevel(loaded);
 
-      RecordAndReplay.loadRecording();
+      RecordAndReplay.loadRecording(maze.getMovesByTime(), maze.getMillisecondsLeft());
 
       //instructions
     } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
@@ -374,9 +367,23 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
+
+
       System.out.println("Next frame button pressed");
+      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
+          RecordAndReplay.step = RecordAndReplay.step - 1;
+      }
+      RecordAndReplay.stepForward();
+
+
     } else if (e.getSource() == lastFrameButton) {
       System.out.println("Last frame button pressed");
+        while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
+            RecordAndReplay.step = RecordAndReplay.step + 1;
+        }
+      RecordAndReplay.stepBack();
+
+
     } else if (e.getSource() == autoPlayButton) {
       System.out.println("Auto play button pressed");
     } else if (e.getSource() == slowerReplayButton) {
@@ -441,6 +448,13 @@ public class Gui extends MazeEventListener implements ActionListener {
       //move enemy
       maze.moveEnemy(move.actorId, direction);
     }
+  }
+
+    /**
+     * Undoes the last move, used by recnplay
+     */
+  public void undoMove() {
+      maze.getUndoRedo().undo();
   }
 
   /**

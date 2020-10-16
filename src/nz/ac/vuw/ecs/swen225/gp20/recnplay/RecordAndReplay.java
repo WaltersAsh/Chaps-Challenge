@@ -34,7 +34,7 @@ public class RecordAndReplay {
     /**
      * The current step/time in this recording in milliseconds
      */
-    private static long step;
+    public static long step;
 
     /**
      * The time stamp of the beginning of this
@@ -79,16 +79,13 @@ public class RecordAndReplay {
         }
     }
 
-    public static void loadRecording() {
-
-    }
-
     /**
      * Starts a new recording, records the time left when recording begins
      */
     public static void startRecording() {
         if (!isRecording && !inPlaybackMode) {
             isRecording = true;
+            currentRecording = new HashMap<>();
         }
     }
 
@@ -128,7 +125,7 @@ public class RecordAndReplay {
      * Replays the current recording
      */
     public static void playRecording(Map<Long, List<Move>> recording, Long startTime) {
-        if(currentRecording.isEmpty() || isRecording) {
+        if(currentRecording == null || currentRecording.isEmpty() || isRecording) {
             return;
         }
         inPlaybackMode = true;
@@ -136,22 +133,23 @@ public class RecordAndReplay {
 
         currentRecording = recording;
 
-        Runnable runnable = () -> {
+        //Runnable runnable = () -> {
             while(step > 0 && !paused) {
 
                 stepForward();
 
-                try {
-                    Thread.sleep(playbackSpeed);
-                } catch (InterruptedException e) {
-                    System.out.println("Error with playback: " + e);
-                }
+//                try {
+//                    System.out.println("ligma");
+//                    Thread.sleep(playbackSpeed);
+//                } catch (InterruptedException e) {
+//                    System.out.println("Error with playback: " + e);
+//                }
 
             }
-        };
+        //};
 
-        Thread thread = new Thread(runnable);
-        thread.start();
+//        Thread thread = new Thread(runnable);
+//        thread.start();
 
 
 //        while(step > 0 && !paused) {
@@ -190,7 +188,6 @@ public class RecordAndReplay {
      */
     public static void stepForward() {
         if (!isRecording && step > 0) {
-            step--;
             List<Move> movesAtStep = getMovesAtStep(step);
             if(movesAtStep != null) {
                 //execute all the moves on the appropriate actors
@@ -198,6 +195,7 @@ public class RecordAndReplay {
                     gui.executeMove(move);
                 }
             }
+            step--;
         }
     }
 
@@ -205,14 +203,15 @@ public class RecordAndReplay {
      * Rewind the playback of this recording by one
      * step (1 millisecond or until the next move)
      */
-    public void stepBack() {
+    public static void stepBack() {
         if (!isRecording && step < beginning) {
             step++;
             List<Move> movesAtStep = getMovesAtStep(step);
             if(movesAtStep != null) {
                 //execute all the moves on the appropriate actors
                 for (Move move : movesAtStep) {
-                    gui.executeMove(move);
+                    //gui.executeMove(move);
+                    gui.undoMove();
                 }
             }
         }
