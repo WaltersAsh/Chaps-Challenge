@@ -322,7 +322,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && RecordAndReplay.isRecording()) {
       pause(false);
 
-      //Todo write moves to original state
       //load game state from recSaveFile
       Maze loaded = Persistence.loadMaze(recordingSaveFile);
 
@@ -336,10 +335,30 @@ public class Gui extends MazeEventListener implements ActionListener {
       recordingIconLabel.setVisible(false);
       resume();
 
+
       //play recording
     } else if (e.getSource() == menuBar.getPlayMenuItem()) {
       resume();
-      RecordAndReplay.playRecording(maze.getMovesByTime(), maze.getMillisecondsLeft());
+      Runnable runnable = () -> {
+      while(RecordAndReplay.step > 0 && !RecordAndReplay.paused) {
+
+        RecordAndReplay.stepForward();
+
+                try {
+                    Thread.sleep(RecordAndReplay.playbackSpeed);
+                } catch (InterruptedException e1) {
+                    System.out.println("Error with playback: " + e1);
+                }
+
+      }
+      System.out.println("Replay finished");
+      };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+
+
 
       //stop playing recording
     } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {

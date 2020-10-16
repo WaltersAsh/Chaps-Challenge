@@ -24,12 +24,12 @@ public class RecordAndReplay {
      * Fields for remembering whether gameplay is
      * currently being recorded or playback is paused
      */
-    private static boolean isRecording = false, inPlaybackMode = false, paused = false;
+    public static boolean isRecording = false, inPlaybackMode = false, paused = false;
 
     /**
      * Delay for playback speed
      */
-    private static long playbackSpeed = 150L;
+    public static long playbackSpeed = 1L;
 
     /**
      * The current step/time in this recording in milliseconds
