@@ -31,7 +31,7 @@ public class Main {
     }
 
     //initialise the gui
-    Gui gui = new Gui(maze);
+    Gui gui = new Gui(Persistence.loadMaze(level2));
     gui.getFrame().setVisible(true);
   }
 }

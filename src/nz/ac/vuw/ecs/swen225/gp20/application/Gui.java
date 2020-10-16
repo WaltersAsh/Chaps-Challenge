@@ -306,19 +306,27 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //RECNPLAY FUNCTIONALITIES
 
+
+      //FIXME start recording
       //start recording game play
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
       pause(false);
 
       //save game state when a recording begins
-      recordingSaveFile = openFileChooser(false);
-      Persistence.saveMaze(maze, recordingSaveFile);
+      File file = openFileChooser(false);
+      if(file != null) {
 
-      RecordAndReplay.startRecording();
-      recordingIconLabel.setVisible(true);
+        recordingSaveFile = file;
+        Persistence.saveMaze(maze, recordingSaveFile);
+
+        RecordAndReplay.startRecording();
+        recordingIconLabel.setVisible(true);
+
+      }
       resume();
 
-      //stop recording game play
+
+      //FIXME stop recording game play
     } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && RecordAndReplay.isRecording()) {
       pause(false);
 
@@ -336,47 +344,54 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
 
 
-      //play recording
+
+
+      //FIXME play recording
     } else if (e.getSource() == menuBar.getPlayMenuItem()) {
       resume();
-      Runnable runnable = () -> {
-      while(RecordAndReplay.step > 0 && !RecordAndReplay.paused) {
 
-        RecordAndReplay.stepForward();
 
-                try {
-                    Thread.sleep(RecordAndReplay.playbackSpeed);
-                } catch (InterruptedException e1) {
-                    System.out.println("Error with playback: " + e1);
-                }
-
-      }
-      System.out.println("Replay finished");
-      };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
+      recnplay.playRecording();
 
 
 
 
-      //stop playing recording
+
+
+      //FIXME stop playing recording
     } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
 
-      //load recording
+
+
+
+
+
+
+      //FIXME load recording
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause(false);
 
-      //load game state
-      Maze loaded = Persistence.loadMaze(openFileChooser(true));
+      File file = openFileChooser(true);
 
-      //get the move data from the loaded game state
-      Map<Long, List<Move>> moveData = loaded.getMovesByTime();
+      if (file != null) {
 
-      //finally set the game state
-      this.loadLevel(loaded);
+        //load game state
+        Maze loaded = Persistence.loadMaze(file);
 
-      RecordAndReplay.loadRecording(maze.getMovesByTime(), maze.getMillisecondsLeft());
+        //set the game state
+        this.loadLevel(loaded);
+
+        //load the recording in recnplay
+        recnplay.loadRecording(maze.getMovesByTime(), maze.getMillisecondsLeft());
+
+      } else {
+        resume();
+      }
+
+
+
+
+
 
       //instructions
     } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
@@ -389,7 +404,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
 
       System.out.println("Next frame button pressed");
-      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
+      while(!recnplay.currentRecording.containsKey(recnplay.step)) {
           RecordAndReplay.step = RecordAndReplay.step - 1;
       }
       RecordAndReplay.stepForward();
@@ -397,21 +412,34 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     } else if (e.getSource() == lastFrameButton) {
       System.out.println("Last frame button pressed");
-        while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
-            RecordAndReplay.step = RecordAndReplay.step + 1;
-        }
+
+      //keep stepping until a move is reached
+      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
+        RecordAndReplay.step = RecordAndReplay.step + 1;
+      }
       RecordAndReplay.stepBack();
 
 
+      //Todo playback speeds
     } else if (e.getSource() == autoPlayButton) {
       System.out.println("Auto play button pressed");
+      recnplay.setPlaybackSpeed(1);
+
     } else if (e.getSource() == slowerReplayButton) {
       System.out.println("Slower replay button pressed");
+      recnplay.setPlaybackSpeed(4);
+
     } else if (e.getSource() == standardReplayButton) {
       System.out.println("Standard replay button pressed");
+      recnplay.setPlaybackSpeed(1);
+
     } else if (e.getSource() == fasterReplayButton) {
       System.out.println("Faster replay button pressed");
+      recnplay.setPlaybackSpeed(0);
+
     }
+
+
 
     //popup dialog button actions
     if (e.getSource() == nextButton) {

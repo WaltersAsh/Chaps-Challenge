@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,11 +68,20 @@ public class RecordAndReplay {
      * @param recording the map of lists of moves
      * @param startTime the time remaining at the start of the recording
      */
-    public static void loadRecording(Map<Long, List<Move>> recording, Long startTime) {
+    public void loadRecording(Map<Long, List<Move>> recording, Long startTime) {
         if (!isRecording && !inPlaybackMode) {
+
+            //set the move data
             currentRecording = recording;
+
+            //record the timestamp of the beginning of this recording
             beginning = startTime;
-            step = beginning;
+
+            //set the current index, or step of this recording to the beginning time stamp
+            step = startTime;
+
+            //set playback mode to true
+            inPlaybackMode = true;
         }
     }
 
@@ -124,46 +130,31 @@ public class RecordAndReplay {
     /**
      * Replays the current recording
      */
-    public static void playRecording(Map<Long, List<Move>> recording, Long startTime) {
+    public void playRecording() {
         if(currentRecording == null || currentRecording.isEmpty() || isRecording) {
             return;
         }
-        inPlaybackMode = true;
-        step = startTime;
 
-        currentRecording = recording;
+        //set index, or step back
+        step = beginning;
 
-        //Runnable runnable = () -> {
-            while(step > 0 && !paused) {
 
-                stepForward();
+        Runnable runnable = () -> {
 
-//                try {
-//                    System.out.println("ligma");
-//                    Thread.sleep(playbackSpeed);
-//                } catch (InterruptedException e) {
-//                    System.out.println("Error with playback: " + e);
-//                }
+            while(RecordAndReplay.step > 0 && !RecordAndReplay.paused) {
 
+                RecordAndReplay.stepForward();
+                try {
+                    Thread.sleep(playbackSpeed);
+                } catch (InterruptedException e1) {
+                    System.out.println("Error with playback: " + e1);
+                }
             }
-        //};
+            System.out.println("Replay finished");
+        };
 
-//        Thread thread = new Thread(runnable);
-//        thread.start();
-
-
-//        while(step > 0 && !paused) {
-//            //Todo execute moves then delay by playback speed, do this function in a different thread to gui
-//            thisTime = System.currentTimeMillis();
-//
-//            if(thisTime - lastTime >= playbackSpeed) {
-//                stepForward();
-//                //lastTime = thisTime;
-//            }
-//            //delay
-//
-//        }
-
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     /**
@@ -178,7 +169,7 @@ public class RecordAndReplay {
      */
     public void stopPlayback() {
         if(inPlaybackMode) {
-            inPlaybackMode = false;
+
         }
     }
 
@@ -205,15 +196,25 @@ public class RecordAndReplay {
      */
     public static void stepBack() {
         if (!isRecording && step < beginning) {
-            step++;
             List<Move> movesAtStep = getMovesAtStep(step);
+
             if(movesAtStep != null) {
+
                 //execute all the moves on the appropriate actors
                 for (Move move : movesAtStep) {
-                    //gui.executeMove(move);
-                    gui.undoMove();
+                    //chaps moves need to be undone with undo redo handler whereas mobs can simply move backwards
+                    if(move.actorId == -1) {
+                        gui.undoMove();
+                        continue;
+                    }
+
+                    //invert move direction
+                    move.direction = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
+
+                    gui.executeMove(move);
                 }
             }
+            step++;
         }
     }
 
@@ -236,6 +237,15 @@ public class RecordAndReplay {
      */
     public static boolean isRecording() {
         return isRecording;
+    }
+
+    /**
+     * Adjusts the playback speed
+     *
+     * @param newSpeed the new value to delay playback speed by
+     */
+    public void setPlaybackSpeed(long newSpeed) {
+        playbackSpeed = newSpeed;
     }
 
 }
