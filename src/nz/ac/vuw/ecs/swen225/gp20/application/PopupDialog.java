@@ -97,6 +97,8 @@ public class PopupDialog extends JDialog {
 
   /**
    * Dialog for finished level.
+   *
+   * @param actionListener the passed actionlistener
    */
   private void levelFinishDialog(ActionListener actionListener) {
     messageLabel = new JLabel(" LEVEL COMPLETE ");

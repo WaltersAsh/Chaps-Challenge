@@ -83,6 +83,8 @@ public class ComponentLibrary {
 
   /**
    * Create and return an icon/indicator for pausing.
+   *
+   * @return the pausediconLabel JLabel
    */
   public static JLabel pausedIconLabel() {
     JLabel pausedIconLabel = new JLabel();

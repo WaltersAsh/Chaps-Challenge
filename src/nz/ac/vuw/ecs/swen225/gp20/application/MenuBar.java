@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.Arrays;

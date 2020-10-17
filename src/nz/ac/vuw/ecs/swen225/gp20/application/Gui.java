@@ -92,12 +92,14 @@ public class Gui extends MazeEventListener implements ActionListener {
   private PopupDialog timerExpiryDialog;
   private PopupDialog deathDialog;
 
+  //popup dialog buttons
   private JButton nextButton;
   private JButton levelCompleteRestartButton;
   private JButton timerExpiryRestartButton;
   private JButton deathRestartButton;
 
-  public BoardView board;
+  //gui components
+  private BoardView board;
   private Maze maze;
   private Timer timer;
   private TimerTask timerTask;
@@ -105,11 +107,14 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isPaused;
   private boolean isFreshStart = true;
 
+  //recnplay components
   private RecordAndReplay recnplay;
   private Map<Long, List<Move>> timeToMoveMap = new HashMap<>();
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
+   *
+   * @param maze the maze object passed
    */
   public Gui(Maze maze) {
     this.maze = maze;
@@ -377,6 +382,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Moves chap.
    *
    * @param direction the movement direction
+   * @param keyEvent the registered keyEvent
    */
   public void move(Maze.Direction direction, KeyEvent keyEvent) {
     maze.move(direction);
@@ -490,6 +496,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           //redo last move
         } else if (key == KeyEvent.VK_D) {
           undoRedoGui(false);
+          System.out.println("Redo activated");
         }
       }
 
@@ -723,7 +730,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    * Clear the whole inventory panel.
    */
   public void clearInventoryPanel() {
-    //reset whole inventory display
     for (JLabel inventoryValueLabel : inventoryValueLabels) {
       inventoryValueLabel.setText(" "); // set label to empty again
       inventoryValueLabel.setIcon(null); // remove the icon (display nothing)

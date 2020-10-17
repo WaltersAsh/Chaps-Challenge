@@ -25,6 +25,8 @@ public class InstructionsFrame extends JFrame implements ActionListener {
 
   /**
    * A help panel is constructed with its content panel.
+   *
+   * @param gui the gui object passed
    */
   public InstructionsFrame(Gui gui) {
 
@@ -46,6 +48,8 @@ public class InstructionsFrame extends JFrame implements ActionListener {
 
   /**
    * Initialise the content panels with instructions.
+   *
+   * @return a initialised content JPanel
    */
   private JPanel initialiseContentPanel() {
     final JLabel titleLabel = new JLabel("HOW TO PLAY");
@@ -106,6 +110,26 @@ public class InstructionsFrame extends JFrame implements ActionListener {
                     + "<br>"
                     + "<br>"
                     + "UP, DOWN, LEFT, RIGHT ARROWS - move Chap within the maze\n"
+                    + "<br>"
+                    + "<br>"
+                    + "A - undo last move"
+                    + "<br>"
+                    + "<br>"
+                    + "D - redo last move"
+                    + "<br>"
+                    + "<br>"
+                    + "Use the menu bar at the top of the screen to access features, such as:"
+                    + "<br>"
+                    + "File - load and save"
+                    + "<br>"
+                    + "Game - resume, pause, redo, undo, exit and exit + save"
+                    + "<br>"
+                    + "Level - restart current level and restart from level 1"
+                    + "<br>"
+                    + "Rec'n'play - record and save, stop recording, replay, "
+                    + "stop replay and load recording"
+                    + "<br>"
+                    + "Help - how to play (you are here)"
                     + "</a>"
                     + "<br>"
                     + "<br>"

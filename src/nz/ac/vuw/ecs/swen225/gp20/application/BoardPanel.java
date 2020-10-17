@@ -22,7 +22,7 @@ public class BoardPanel extends JLayeredPane {
   /**
    * Construct a board panel and add all required components.
    *
-   * @param maze the maze
+   * @param maze the maze object passed
    */
   public BoardPanel(Maze maze) {
     createBoardPanel(maze);
@@ -41,6 +41,8 @@ public class BoardPanel extends JLayeredPane {
 
   /**
    * Create the board panel and rendered board.
+   *
+   * @param maze the maze object passed
    */
   private void createBoardPanel(Maze maze) {
     board = new BoardView(maze);
