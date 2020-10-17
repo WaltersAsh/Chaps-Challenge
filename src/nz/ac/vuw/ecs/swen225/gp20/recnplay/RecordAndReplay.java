@@ -3,10 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 import nz.ac.vuw.ecs.swen225.gp20.application.Gui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class used for recording are replaying gameplay
@@ -37,7 +34,7 @@ public class RecordAndReplay {
      * The time stamp of the beginning of this
      * recording i.e. the time left (milliseconds)
      */
-    private static long beginning;
+    public static long beginning, end;
 
     /**
      * The current recording either being constructed or loaded
@@ -48,9 +45,6 @@ public class RecordAndReplay {
      * The save file of this recording
      */
     private static File saveFile;
-
-
-
 
 
     /**
@@ -77,6 +71,9 @@ public class RecordAndReplay {
             //record the timestamp of the beginning of this recording
             beginning = startTime;
 
+            //set the end time, this is the time stamp of the final move
+            end = Collections.min(currentRecording.keySet());
+
             //set the current index, or step of this recording to the beginning time stamp
             step = startTime;
 
@@ -99,7 +96,7 @@ public class RecordAndReplay {
      * Stops and saves the current recording to a json file
      */
     public static void stopRecording() {
-        if(!isRecording || inPlaybackMode) {
+        if (!isRecording || inPlaybackMode) {
             return;
         }
         isRecording = false;
@@ -131,28 +128,40 @@ public class RecordAndReplay {
      * Replays the current recording
      */
     public void playRecording() {
-        if(currentRecording == null || currentRecording.isEmpty() || isRecording) {
+        if (currentRecording == null || currentRecording.isEmpty() || isRecording) {
             return;
         }
 
         //set index, or step back
         step = beginning;
 
-
         Runnable runnable = () -> {
 
-            while(RecordAndReplay.step > 0 && !RecordAndReplay.paused) {
-
+            while (RecordAndReplay.step > end && !RecordAndReplay.paused) {
+                //advance the recording
                 RecordAndReplay.stepForward();
                 try {
-                    Thread.sleep(playbackSpeed);
-                } catch (InterruptedException e1) {
-                    System.out.println("Error with playback: " + e1);
+                    //if fastest playback speed is selected only sleep when chap moves
+                    if (playbackSpeed == 0) {
+                        //if the last move was chap
+                        for (Move move : getMovesAtStep(step - 1)) {
+                            //sleep the thread
+                            if (move.actorId == -1) {
+                                //sleep
+                                Thread.sleep(130);
+                                break;
+                            }
+                        }
+                    } else {
+                        //sleep
+                        Thread.sleep(playbackSpeed);
+                    }
+                } catch (InterruptedException e) {
+                    System.out.println("Error with playback: " + e);
                 }
             }
-            System.out.println("Replay finished");
+            System.out.println("Replay finished!");
         };
-
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -168,7 +177,7 @@ public class RecordAndReplay {
      * Stops playback of the current recording
      */
     public void stopPlayback() {
-        if(inPlaybackMode) {
+        if (inPlaybackMode) {
 
         }
     }
@@ -178,14 +187,17 @@ public class RecordAndReplay {
      * step (1 millisecond or until the next move)
      */
     public static void stepForward() {
-        if (!isRecording && step > 0) {
+        if (!isRecording && step >= end) {
+
+            //get the list of moves at this timestamp
             List<Move> movesAtStep = getMovesAtStep(step);
-            if(movesAtStep != null) {
-                //execute all the moves on the appropriate actors
-                for (Move move : movesAtStep) {
-                    gui.executeMove(move);
-                }
+
+            //execute all the moves on the appropriate actors
+            for (Move move : movesAtStep) {
+                gui.executeMove(move, false);
             }
+
+            //increment the step (index)
             step--;
         }
     }
@@ -196,25 +208,17 @@ public class RecordAndReplay {
      */
     public static void stepBack() {
         if (!isRecording && step < beginning) {
+
+            //increment the step (index)
+            step++;
+
+            //get the list of moves at this timestamp
             List<Move> movesAtStep = getMovesAtStep(step);
 
-            if(movesAtStep != null) {
-
-                //execute all the moves on the appropriate actors
-                for (Move move : movesAtStep) {
-                    //chaps moves need to be undone with undo redo handler whereas mobs can simply move backwards
-                    if(move.actorId == -1) {
-                        gui.undoMove();
-                        continue;
-                    }
-
-                    //invert move direction
-                    move.direction = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
-
-                    gui.executeMove(move);
-                }
+            //execute all the moves on the appropriate actors
+            for (Move move : movesAtStep) {
+                gui.executeMove(move, true);
             }
-            step++;
         }
     }
 
@@ -226,10 +230,11 @@ public class RecordAndReplay {
      * @return the list of move objects
      */
     private static List<Move> getMovesAtStep(long step) {
+        List<Move> moves = new ArrayList<>();
         if (!isRecording && !currentRecording.isEmpty() && currentRecording.containsKey(step)) {
-            return currentRecording.get(step);
+            moves.addAll(currentRecording.get(step));
         }
-        return null;
+        return moves;
     }
 
     /**

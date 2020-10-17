@@ -341,7 +341,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
-      resume();
+      //resume();
 
 
 
@@ -404,8 +404,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
 
       System.out.println("Next frame button pressed");
-      while(!recnplay.currentRecording.containsKey(recnplay.step)) {
-          RecordAndReplay.step = RecordAndReplay.step - 1;
+      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step) && RecordAndReplay.step > 0) {
+          RecordAndReplay.step--;
       }
       RecordAndReplay.stepForward();
 
@@ -413,8 +413,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == lastFrameButton) {
       System.out.println("Last frame button pressed");
 
-      //keep stepping until a move is reached
-      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step)) {
+      //keep stepping until a valid move is reached
+      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step + 1) && RecordAndReplay.step < RecordAndReplay.beginning) {
         RecordAndReplay.step = RecordAndReplay.step + 1;
       }
       RecordAndReplay.stepBack();
@@ -424,6 +424,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == autoPlayButton) {
       System.out.println("Auto play button pressed");
       recnplay.setPlaybackSpeed(1);
+      recnplay.playRecording();
 
     } else if (e.getSource() == slowerReplayButton) {
       System.out.println("Slower replay button pressed");
@@ -481,27 +482,31 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Executes a move on the maze from a recording
+   *
    * @param move the move to be executed
+   * @param undo indicates if this move should be undone or applied
    */
-  public void executeMove(Move move) {
+  public void executeMove(Move move, boolean undo) {
 
     //get the direction from the moves ordinal value (this is to follow dependency diagram)
     Maze.Direction direction = Maze.Direction.values()[move.direction];
 
     if (move.actorId == -1) {
-      //move chap
-      maze.move(direction);
+      if(undo) {
+        maze.getUndoRedo().undo();
+      } else {
+        //move chap
+        maze.move(direction);
+      }
     } else {
+      if(undo) {
+        //invert move direction
+        move.direction = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
+        direction = Maze.Direction.values()[move.direction];
+      }
       //move enemy
       maze.moveEnemy(move.actorId, direction);
     }
-  }
-
-    /**
-     * Undoes the last move, used by recnplay
-     */
-  public void undoMove() {
-      maze.getUndoRedo().undo();
   }
 
   /**
