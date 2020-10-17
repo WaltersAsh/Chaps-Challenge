@@ -21,11 +21,7 @@ import javax.swing.JScrollPane;
  */
 public class InstructionsFrame extends JFrame implements ActionListener {
 
-  private Gui gui;
-  private JPanel contentPanel;
-  private JLabel titleLabel;
-  private JLabel instructLabel;
-  private JButton exitButton;
+  private final Gui gui;
 
   /**
    * A help panel is constructed with its content panel.
@@ -52,8 +48,8 @@ public class InstructionsFrame extends JFrame implements ActionListener {
    * Initialise the content panels with instructions.
    */
   private JPanel initialiseContentPanel() {
-    titleLabel = new JLabel("HOW TO PLAY");
-    exitButton = new JButton("EXIT");
+    final JLabel titleLabel = new JLabel("HOW TO PLAY");
+    JButton exitButton = new JButton("EXIT");
     exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     exitButton.setBackground(ComponentLibrary.fullLavender);
     exitButton.setForeground(Color.WHITE);
@@ -61,7 +57,7 @@ public class InstructionsFrame extends JFrame implements ActionListener {
     exitButton.addActionListener(this);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     titleLabel.setFont(ComponentLibrary.titleScreenFont);
-    contentPanel = new JPanel();
+    JPanel contentPanel = new JPanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
     contentPanel.add(titleLabel);
     contentPanel.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -77,78 +73,83 @@ public class InstructionsFrame extends JFrame implements ActionListener {
    * @return the keyboard controls JLabel
    */
   private JLabel instructionsLabel() {
-    instructLabel = new JLabel(
-    "<html>"
-          + "<body>"
-          + "<br>"
-          + "<br>"
-          + "<h1>KEYBOARD CONTROLS</h1>"
-          + "<br>"
-          + "<a>"
-            +  "CTRL-X - exit the game, the current game state will be lost,"
-            +  "the next time the game is started, it will resume from the"
-            +  " last unfinished level\n"
-            + "<br>"
-            + "<br>"
-            +  "CTRL-S - exit the game, saves the game state, game will resume\n"
-            + "next time the application will be started\n"
-            + "<br>"
-            + "<br>"
-            +  "CTRL-R - resume a saved game\n"
-            + "<br>"
-            + "<br>"
-            +  "CTRL-P - start a new game at the last unfinished level\n"
-            + "<br>"
-            + "<br>"
-            +  "CTRL-1 - start a new game at level 1\n"
-            + "<br>"
-            + "<br>"
-            +  "SPACE - pause the game and display a “game is paused” dialog\n"
-            + "<br>"
-            + "<br>"
-            +  "ESC - close the “game is paused” dialog and resume the game\n"
-            + "<br>"
-            + "<br>"
-            +  "UP, DOWN, LEFT, RIGHT ARROWS - move Chap within the maze\n"
-          +  "</a>"
-          + "<br>"
-          + "<br>"
-          + "<br>"
-          + "<h1> GAMEPLAY </h1>"
-          + "<a>"
-            + "Use the arrow keys to guide chap around the maze."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.moveDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-            + "Collect the emerald treasures."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.collectDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-            + "Collect the pickaxes to mine through certain blocks/unlock doors."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-            + "Move crates to create a path in the water."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.crateDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-            + "Avoid enemies."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.enemiesDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-            + "Reach the portal before the time runs out to progress to the next level."
-            + "<br>"
-            + "<img src=\"file:" + ComponentLibrary.portalDemo.toString() + "\" border=\"3\">"
-            + "<br>"
-            + "<br>"
-          + "</a>"
-        + "</body>"
-      + "</html>");
+    JLabel instructLabel = new JLabel(
+            "<html>"
+                    + "<body>"
+                    + "<br>"
+                    + "<br>"
+                    + "<h1>KEYBOARD CONTROLS</h1>"
+                    + "<br>"
+                    + "<a>"
+                    + "CTRL-X - exit the game, the current game state will be lost,"
+                    + "the next time the game is started, it will resume from the"
+                    + " last unfinished level\n"
+                    + "<br>"
+                    + "<br>"
+                    + "CTRL-S - exit the game, saves the game state, game will resume\n"
+                    + "next time the application will be started\n"
+                    + "<br>"
+                    + "<br>"
+                    + "CTRL-R - resume a saved game\n"
+                    + "<br>"
+                    + "<br>"
+                    + "CTRL-P - start a new game at the last unfinished level\n"
+                    + "<br>"
+                    + "<br>"
+                    + "CTRL-1 - start a new game at level 1\n"
+                    + "<br>"
+                    + "<br>"
+                    + "SPACE - pause the game and display a “game is paused” dialog\n"
+                    + "<br>"
+                    + "<br>"
+                    + "ESC - close the “game is paused” dialog and resume the game\n"
+                    + "<br>"
+                    + "<br>"
+                    + "UP, DOWN, LEFT, RIGHT ARROWS - move Chap within the maze\n"
+                    + "</a>"
+                    + "<br>"
+                    + "<br>"
+                    + "<br>"
+                    + "<h1> GAMEPLAY </h1>"
+                    + "<a>"
+                    + "Use the arrow keys to guide chap around the maze."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.moveDemo.toString() + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "Collect the emerald treasures."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.collectDemo.toString()
+                      + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "Collect the pickaxes to mine through certain blocks/unlock doors."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString()
+                      + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "Move crates to create a path in the water."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.crateDemo.toString()
+                      + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "Avoid enemies."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.enemiesDemo.toString()
+                      + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "Reach the portal before the time runs out to progress to the next level."
+                    + "<br>"
+                    + "<img src=\"file:" + ComponentLibrary.portalDemo.toString()
+                      + "\" border=\"3\">"
+                    + "<br>"
+                    + "<br>"
+                    + "</a>"
+                    + "</body>"
+                    + "</html>");
     instructLabel.setFont(ComponentLibrary.bodyFont);
     instructLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     return instructLabel;

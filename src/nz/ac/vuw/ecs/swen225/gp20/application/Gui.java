@@ -198,7 +198,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Create the frame panel.
    */
-  public void createFramePanel() {
+  private void createFramePanel() {
     framePanel = new JPanel();
     framePanel.setLayout(new BoxLayout(framePanel, BoxLayout.X_AXIS));
     framePanel.setBackground(ComponentLibrary.lightLavender);
@@ -208,7 +208,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Initialise the side panel of the gui.
    */
-  public void initialiseSidePanel() {
+  private void initialiseSidePanel() {
     sidePanel = new SidePanel(maze);
     levelValueLabel = sidePanel.getLevelValueLabel();
     timeValueLabel = sidePanel.getTimeValueLabel();
@@ -219,7 +219,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Initialise the popup dialogs.
    */
-  public void initialisePopupDialogs() {
+  private void initialisePopupDialogs() {
     levelCompleteDialog = new PopupDialog(PopupDialog.DialogState.LEVEL_COMPLETE, this);
     timerExpiryDialog = new PopupDialog(PopupDialog.DialogState.TIME_EXPIRED, this);
     deathDialog = new PopupDialog(PopupDialog.DialogState.DEATH, this);
@@ -412,7 +412,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Key listener to detect keys and key strokes.
    */
-  public void setupKeyListener() {
+  private void setupKeyListener() {
     frame.addKeyListener(new KeyListener() {
 
       @Override
@@ -467,7 +467,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           System.out.println("ctrl + x pressed - exit game");
           pause(false);
           displayExitOptionPanel("Are you sure you want to exit? \n"
-                  + "resume at last unfinished level ", "ctrl + x");
+                  + "Resume at last unfinished level ", "ctrl + x");
 
           //exit and save
         } else if (e.isControlDown() && key == KeyEvent.VK_S) {
@@ -475,7 +475,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           pause(false);
           Persistence.quickSave(maze);
           displayExitOptionPanel("Are you sure you want to exit? \n"
-                  + "resume current state ", "ctrl + s");
+                  + "Resume current state ", "ctrl + s");
 
           //resume a saved game
         } else if (e.isControlDown() && key == KeyEvent.VK_R) {
@@ -539,7 +539,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Setup the timer.
    */
-  public void setupTimer() {
+  private void setupTimer() {
     timer = new Timer();
     timeValueLabel.setForeground(Color.BLACK);
     timerTask = new TimerTask() {
@@ -694,7 +694,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    *
    * @param key the key to be displayed in the inevntory gui
    */
-  public void addKeyToInventoryPanel(Key key) {
+  private void addKeyToInventoryPanel(Key key) {
     Image keyImage;
     try {
       keyImage = ImageIO.read(new File(key.getFilename()));
@@ -776,16 +776,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public Long getCurrentTimeStamp() {
     return maze.getMillisecondsLeft();
-  }
-
-  /**
-   * Set the level value text of the label.
-   *
-   * @param levelValue the String representing the level value to be set
-   */
-  public void setLevelValueLabel(String levelValue) {
-    levelValueLabel.setText(levelValue);
-    frame.revalidate();
   }
 
   /**
@@ -920,7 +910,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @param message the String to display a message
    * @param operationOnClose the String representing an operation to execute before closing
    */
-  public void displayExitOptionPanel(String message, String operationOnClose) {
+  private void displayExitOptionPanel(String message, String operationOnClose) {
     JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
     temp.setAlwaysOnTop(true);
     int response = JOptionPane.showConfirmDialog(temp, message,
@@ -963,7 +953,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Initialise the window listener.
    */
-  public void initialiseWindowListener() {
+  private void initialiseWindowListener() {
     frame.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent windowEvent) {

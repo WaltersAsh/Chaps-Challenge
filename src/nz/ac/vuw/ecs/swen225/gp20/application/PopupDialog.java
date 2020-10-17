@@ -23,6 +23,9 @@ import javax.swing.border.Border;
  */
 public class PopupDialog extends JDialog {
 
+  /**
+   * Dialog states upon dialog required to be shown.
+   */
   public enum DialogState {
     LEVEL_COMPLETE,
     TIME_EXPIRED,
@@ -95,7 +98,7 @@ public class PopupDialog extends JDialog {
   /**
    * Dialog for finished level.
    */
-  public void levelFinishDialog(ActionListener actionListener) {
+  private void levelFinishDialog(ActionListener actionListener) {
     messageLabel = new JLabel(" LEVEL COMPLETE ");
     restartButton = new JButton(" Restart Level ");
     nextButton = new JButton(" Next Level ");
@@ -116,7 +119,7 @@ public class PopupDialog extends JDialog {
    * @param actionListener the actionlistener to be added.
    * @param text the text to be set for the message label initialised.
    */
-  public void messageDialog(ActionListener actionListener, String text) {
+  private void messageDialog(ActionListener actionListener, String text) {
     messageLabel = new JLabel(text);
     restartButton = new JButton(" Restart Level ");
     restartButton.addActionListener(actionListener);
@@ -126,7 +129,7 @@ public class PopupDialog extends JDialog {
   /**
    * Stylise the dialog.
    */
-  public void stylise() {
+  private void stylise() {
     messagePanel.setBackground(ComponentLibrary.fullLavender);
     messagePanel.setBorder(border);
     buttonPanel.setBackground(new Color(0, 0, 0, 0));

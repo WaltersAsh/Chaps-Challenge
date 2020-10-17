@@ -71,7 +71,7 @@ public class SidePanel extends JPanel {
   /**
    * Create the side panel.
    */
-  public void initialise() {
+  private void initialise() {
     setBackground(ComponentLibrary.paleLavender);
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -82,7 +82,7 @@ public class SidePanel extends JPanel {
   /**
    * Create the inner side panels.
    */
-  public void createInnerSidePanels() {
+  private void createInnerSidePanels() {
     final JPanel[] panels = new JPanel[]{
       levelPanel = new JPanel(),
       timePanel = new JPanel(),
@@ -122,7 +122,7 @@ public class SidePanel extends JPanel {
   /**
    * Create and initialise the panels in the side panel.
    */
-  public void initialiseInnerSidePanels() {
+  private void initialiseInnerSidePanels() {
     // initialise inner panels for inner panels in side panel
     JPanel[] panels = new JPanel[]{
       levelContentPanel = new JPanel(),

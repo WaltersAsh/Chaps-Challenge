@@ -37,7 +37,7 @@ public class RecnplayControlsPanel extends JPanel {
    *
    * @param actionListener the action listener
    */
-  public void createRecnplayControls(ActionListener actionListener) {
+  private void createRecnplayControls(ActionListener actionListener) {
     setBackground(ComponentLibrary.lightLavender);
     setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

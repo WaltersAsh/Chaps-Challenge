@@ -3,8 +3,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.border.LineBorder;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 
@@ -44,7 +42,7 @@ public class BoardPanel extends JLayeredPane {
   /**
    * Create the board panel and rendered board.
    */
-  public void createBoardPanel(Maze maze) {
+  private void createBoardPanel(Maze maze) {
     board = new BoardView(maze);
     this.setBackground(ComponentLibrary.lightLavender);
     this.setMinimumSize(

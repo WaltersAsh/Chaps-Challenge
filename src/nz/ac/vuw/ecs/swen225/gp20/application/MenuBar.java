@@ -74,7 +74,7 @@ public class MenuBar extends JMenuBar {
    *
    * @param actionListener the ActionListener to be added (this - in Gui)
    */
-  public void createMenuComponents(ActionListener actionListener) {
+  private void createMenuComponents(ActionListener actionListener) {
     fileMenu = new JMenu("File");
     gameMenu = new JMenu("Game");
     levelMenu = new JMenu("Level");
