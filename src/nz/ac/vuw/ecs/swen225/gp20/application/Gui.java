@@ -254,30 +254,21 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //restart unfinished level
     } else if (e.getSource() == menuBar.getRestartCurrentLevelMenuItem()) {
-      if (maze.getLevelID() == 1) {
-        Maze newMaze = Persistence.loadMaze(Main.level1);
-        newMaze.setLevelID(1);
-        loadLevel(newMaze);
-      } else {
-        Maze newMaze = Persistence.loadMaze(Main.level2);
-        newMaze.setLevelID(2);
-        loadLevel(newMaze);
-      }
+      restartUnfinishedLevel();
 
       //restart the first level
     } else if (e.getSource() == menuBar.getStartFirstLevelMenuItem()) {
-      Maze newMaze = Persistence.loadMaze(Main.level1);
-      newMaze.setLevelID(1);
-      loadLevel(newMaze);
+      restartFirstLevel();
 
       //undo
     } else if (e.getSource() == menuBar.getUndoMenuItem()) {
-      maze.getUndoRedo().undo();
-      clearInventoryPanel();
-      reloadInventoryPanel();
-      decrementTreasurePickUp();
+      undoRedoGui(true);
       System.out.println("Undo activated");
 
+      //redo
+    } else if (e.getSource() == menuBar.getRedoMenuItem()) {
+      undoRedoGui(false);
+      System.out.println("Redo activated");
 
       //exit and save
     } else if (e.getSource() == menuBar.getExitSaveMenuItem()) {
@@ -314,7 +305,9 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
       pause(false);
       RecordAndReplay.startRecording(openFileChooser(false));
-      recordingIconLabel.setVisible(true);
+      if (RecordAndReplay.isRecording()) {
+        recordingIconLabel.setVisible(true);
+      }
       resume();
 
       //stop recording game play
@@ -373,15 +366,7 @@ public class Gui extends MazeEventListener implements ActionListener {
             || e.getSource() == timerExpiryRestartButton
             || e.getSource() == deathRestartButton) {
       System.out.println("Restart button pressed");
-      if (maze.getLevelID() == 1) {
-        Maze newMaze = Persistence.loadMaze(Main.level1);
-        newMaze.setLevelID(1);
-        loadLevel(newMaze);
-      } else {
-        Maze newMaze = Persistence.loadMaze(Main.level2);
-        newMaze.setLevelID(2);
-        loadLevel(newMaze);
-      }
+      restartUnfinishedLevel();
       levelCompleteDialog.setVisible(false);
       timerExpiryDialog.setVisible(false);
       deathDialog.setVisible(false);
@@ -490,38 +475,21 @@ public class Gui extends MazeEventListener implements ActionListener {
           //restart unfinished level
         } else if (e.isControlDown() && key == KeyEvent.VK_P) {
           System.out.println("ctrl + p pressed - start new game at last unfinished level");
-          if (maze.getLevelID() == 1) {
-            Maze newMaze = Persistence.loadMaze(Main.level1);
-            newMaze.setLevelID(1);
-            loadLevel(newMaze);
-          } else {
-            Maze newMaze = Persistence.loadMaze(Main.level2);
-            newMaze.setLevelID(2);
-            loadLevel(newMaze);
-          }
+          restartUnfinishedLevel();
 
           //restart from level 1
         } else if (e.isControlDown() && key == KeyEvent.VK_1) {
-          Maze newMaze = Persistence.loadMaze(Main.level1);
-          newMaze.setLevelID(1);
-          loadLevel(newMaze);
+          restartFirstLevel();
           System.out.println("ctrl + 1 pressed - start new game at level 1");
 
           //undo last move
         } else if (key == KeyEvent.VK_A) {
-          maze.getUndoRedo().undo();
-          clearInventoryPanel();
-          reloadInventoryPanel();
-          decrementTreasurePickUp();
+          undoRedoGui(true);
           System.out.println("Undo activated");
 
           //redo last move
         } else if (key == KeyEvent.VK_D) {
-          maze.getUndoRedo().redo();
-          clearInventoryPanel();
-          reloadInventoryPanel();
-          decrementTreasurePickUp();
-          System.out.println("Redo activated");
+          undoRedoGui(false);
         }
       }
 
@@ -619,7 +587,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //level panel
     if (isFreshStart) {
-      if (maze.getLevelID() == 2) { //make sure that maze.setLevelID is invoked before this method
+      if (maze.getLevelID() == 2) {
         maze.setMillisecondsLeft(40000);
       } else {
         maze.setMillisecondsLeft(60000);
@@ -666,6 +634,44 @@ public class Gui extends MazeEventListener implements ActionListener {
     isTimerActive = false;
     isPaused = false;
     maze.resume();
+  }
+
+  /**
+   * Restart the current unfinished level.
+   */
+  public void restartUnfinishedLevel() {
+    if (maze.getLevelID() == 1) {
+      restartFirstLevel();
+    } else {
+      Maze newMaze = Persistence.loadMaze(Main.level2);
+      newMaze.setLevelID(2);
+      loadLevel(newMaze);
+    }
+  }
+
+  /**
+   * Restart level 1.
+   */
+  public void restartFirstLevel() {
+    Maze newMaze = Persistence.loadMaze(Main.level1);
+    newMaze.setLevelID(1);
+    loadLevel(newMaze);
+  }
+
+  /**
+   * Execute undo and reflect changes in gui.
+   *
+   * @param isUndo boolean indicating undoing or not (redoing)
+   */
+  public void undoRedoGui(boolean isUndo) {
+    if (isUndo) {
+      maze.getUndoRedo().undo();
+    } else {
+      maze.getUndoRedo().redo();
+    }
+    clearInventoryPanel();
+    reloadInventoryPanel();
+    decrementTreasurePickUp();
   }
 
   /**
@@ -923,15 +929,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       }
       switch (Objects.requireNonNull(operationOnClose)) {
         case "ctrl + x":
-          if (maze.getLevelID() == 1) {
-            Maze newMaze = Persistence.loadMaze(Main.level1);
-            newMaze.setLevelID(1);
-            loadLevel(newMaze);
-          } else {
-            Maze newMaze = Persistence.loadMaze(Main.level2);
-            newMaze.setLevelID(2);
-            loadLevel(newMaze);
-          }
+          restartUnfinishedLevel();
           Persistence.quickSave(maze);
           break;
         case "ctrl + s":

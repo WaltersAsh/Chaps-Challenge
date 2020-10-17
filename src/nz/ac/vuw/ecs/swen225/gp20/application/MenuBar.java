@@ -101,7 +101,7 @@ public class MenuBar extends JMenuBar {
     };
 
     JMenuItem[] recnplayMenuItems = new JMenuItem[]{
-      startRecordingMenuItem = new JMenuItem("Record"),
+      startRecordingMenuItem = new JMenuItem("Record and Save"),
       stopRecordingMenuItem = new JMenuItem("Stop Recording"),
       playMenuItem = new JMenuItem("Replay"),
       stopPlayMenuItem = new JMenuItem("Stop Replay"),

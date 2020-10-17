@@ -58,8 +58,10 @@ public class RecordAndReplay {
     public static void loadRecording(File file) {
         if (!isRecording) {
             Maze loadedMaze = Persistence.loadMaze(file);
-            loadedRecording = loadedMaze.getMoves();
-            gui.loadLevel(loadedMaze);
+            if (loadedMaze != null) {
+                loadedRecording = loadedMaze.getMoves();
+                gui.loadLevel(loadedMaze);
+            }
         }
     }
 
@@ -96,6 +98,11 @@ public class RecordAndReplay {
             isRecording = true;
             saveFile = file;
             Persistence.saveMaze(gui.getMaze(), file);
+
+            //user selects cancel in filechooser
+            if (file == null) {
+                isRecording = false;
+            }
         }
     }
 
