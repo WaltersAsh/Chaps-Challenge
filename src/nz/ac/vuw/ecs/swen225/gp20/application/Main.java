@@ -1,7 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.io.File;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 
@@ -20,15 +19,13 @@ public class Main {
    * @param args the commandline arguments
    */
   public static void main(String[] args) {
-    //new TextGUI();
-    //Maze maze = BoardRig.crateAndWaterTest();
     Maze maze = Persistence.loadMaze(level1);
 
-    //game has already been played before
-    if (main.length() != 0)  {
-      maze = Persistence.quickLoad();
-    } else {
+    //fresh game, no saved state
+    if (main.length() == 0 || Persistence.quickLoad() == null)  {
       maze.setLevelID(1);
+    } else {
+      maze = Persistence.quickLoad();
     }
 
     //initialise the gui
