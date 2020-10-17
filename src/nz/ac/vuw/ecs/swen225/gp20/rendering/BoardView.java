@@ -165,8 +165,7 @@ public class BoardView extends JComponent implements ActionListener {
 //                toAnimate = (Movable) c;
 //                continue;
 //              }
-              g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,
-                  currentRow * blockSize, blockSize, blockSize, this);
+              g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,currentRow * blockSize, blockSize, blockSize, this);
             }
           }
         }

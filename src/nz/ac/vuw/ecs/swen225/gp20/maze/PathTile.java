@@ -48,6 +48,10 @@ public class PathTile extends Tile {
    * @param c The Containable
    */
   public void place(Containable c) {
+    if(c == null) {
+      int breakpoint = 0;
+//      c = new Crate();
+    }
     contains.push(c);
     c.setContainer(this);
     if (c instanceof BlockingContainable) {
@@ -63,7 +67,7 @@ public class PathTile extends Tile {
    */
   public void remove(Containable c) {
     contains.remove(c);
-    if (c instanceof BlockingContainable) {
+    if (c instanceof BlockingContainable && this.getContainedEntities().isEmpty()) {
       walkable = true;
       blocker = null;
     }
@@ -95,6 +99,10 @@ public class PathTile extends Tile {
 
   public BlockingContainable getBlocker() {
     return blocker;
+  }
+
+  public void setBlocker(BlockingContainable blocker) {
+    this.blocker = blocker;
   }
 
   public Stack<Containable> getContainedEntities() {

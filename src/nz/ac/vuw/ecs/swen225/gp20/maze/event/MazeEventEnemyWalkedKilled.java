@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
- * Event for when chap moves from one tile to another.
+ * Event for when an enemy moves from one tile to another.
  *
  * @author Ian 300474717
  *
@@ -36,7 +36,7 @@ public class MazeEventEnemyWalkedKilled extends MazeEventEnemyWalked {
 
   @Override
   public String toString() {
-    return String.format("Enemy walked from tile %s,%s to tile %s,%s", origin.getCol(), origin.getRow(),
+    return String.format("Enemy walked from tile %s,%s to tile %s,%s and killed Chap", origin.getCol(), origin.getRow(),
         target.getCol(), target.getRow());
   }
 

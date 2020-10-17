@@ -36,9 +36,10 @@ public class MazeEventPushedWater extends MazeEventPushed {
   
   @Override
   public void invert() {
-    PathTile watertile = pushed.getContainer();
+    //PathTile watertile = pushed.getContainer();
+    PathTile waterTile = (PathTile) maze.tileTo(target, direction);
     target.moveTo(pushed);
-    watertile.place(water);
+    waterTile.place(water);
     super.invert();
   }
 }

@@ -52,7 +52,7 @@ public class Maze {
   private boolean dead = false;
 
 
-  //FIXME
+  //FIXME REMOVE THIS COLLECTION
   private List<Direction> moves = new ArrayList<>();
   public void setMoves(List<Direction> moves) {
     this.moves = moves;
@@ -357,9 +357,10 @@ public class Maze {
         overrideDispatch(new MazeEventPushed(this, current, original, d, c));
         // can also push crate onto water to make a path
       } else if (pt.getBlocker() instanceof Water) {
+        Water water = (Water) pt.getBlocker();
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, (Water)pt.getBlocker()));
+        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, water));
       } else {
         return false;
       }

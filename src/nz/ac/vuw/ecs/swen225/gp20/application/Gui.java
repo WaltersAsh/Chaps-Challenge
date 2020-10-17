@@ -401,23 +401,15 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
-
-
       System.out.println("Next frame button pressed");
-      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step) && RecordAndReplay.step > 0) {
-          RecordAndReplay.step--;
-      }
-      RecordAndReplay.stepForward();
+      recnplay.nextFrame();
+
 
 
     } else if (e.getSource() == lastFrameButton) {
       System.out.println("Last frame button pressed");
+      recnplay.lastFrame();
 
-      //keep stepping until a valid move is reached
-      while(!RecordAndReplay.currentRecording.containsKey(RecordAndReplay.step + 1) && RecordAndReplay.step < RecordAndReplay.beginning) {
-        RecordAndReplay.step = RecordAndReplay.step + 1;
-      }
-      RecordAndReplay.stepBack();
 
 
       //Todo playback speeds
@@ -487,7 +479,6 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @param undo indicates if this move should be undone or applied
    */
   public void executeMove(Move move, boolean undo) {
-
     //get the direction from the moves ordinal value (this is to follow dependency diagram)
     Maze.Direction direction = Maze.Direction.values()[move.direction];
 

@@ -63,7 +63,7 @@ public class RecordAndReplay {
      * @param startTime the time remaining at the start of the recording
      */
     public void loadRecording(Map<Long, List<Move>> recording, Long startTime) {
-        if (!isRecording && !inPlaybackMode) {
+        if (!isRecording) {
 
             //set the move data
             currentRecording = recording;
@@ -235,6 +235,42 @@ public class RecordAndReplay {
             moves.addAll(currentRecording.get(step));
         }
         return moves;
+    }
+
+    /**
+     * Advances the step to the next timestamp of a chap move
+     * this stops the next frame button feeling un-responsive
+     */
+    public void nextFrame() {
+        while (step > end) {
+            //check if chap moves at this time stamp
+            for (Move move : getMovesAtStep(step)) {
+                if (move.actorId == -1) {
+                    stepForward();
+                    return;
+                }
+            }
+            //apply the move(s)
+            stepForward();
+        }
+    }
+
+    /**
+     * Rewinds the step to the last timestamp of a chap move
+     * this stops the next frame button feeling un-responsive
+     */
+    public void lastFrame() {
+        while(step < beginning) {
+            //check if chap moved at this time stamp
+            for (Move move : getMovesAtStep(step)) {
+                if (move.actorId == -1) {
+                    stepBack();
+                    return;
+                }
+            }
+            //undo the move(s)
+            stepBack();
+        }
     }
 
     /**
