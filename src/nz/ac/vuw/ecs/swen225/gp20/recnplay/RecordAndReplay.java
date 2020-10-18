@@ -23,7 +23,7 @@ public class RecordAndReplay {
     /**
      * Delay for playback speed
      */
-    public static long playbackSpeed = 1L;
+    public static double playbackSpeed = 1;
 
     /**
      * The current step/time in this recording in milliseconds
@@ -144,36 +144,23 @@ public class RecordAndReplay {
             return;
         }
 
-        //set index, or step back
-        step = 0;
-
         Runnable runnable = () -> {
 
-            while (step < timeStamps.size() - 1 && !paused) {
-                //advance the recording
-                nextFrame();
+            //step through each move in the recording, sleeping in between moves
+            while (step < timeStamps.size() - 1) {
+
+                stepForward();
+
                 try {
-                    //if fastest playback speed is selected only sleep when chap moves
-                    if (playbackSpeed == 0) {
-                        //if the last move was chap
-                        for (Move move : getMovesAtStep(timeStamps.get(step))) {
-                            //sleep the thread
-                            if (move.actorId == -1) {
-                                //sleep
-                                Thread.sleep(150);
-                                break;
-                            }
-                        }
-                    } else {
-                        //sleep
-                        Thread.sleep(150 * playbackSpeed);
-                    }
+                    Thread.sleep((long) (150 * playbackSpeed));
                 } catch (InterruptedException e) {
                     System.out.println("Error with playback: " + e);
                 }
+
             }
-            System.out.println("Replay finished!");
+
         };
+
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -242,7 +229,7 @@ public class RecordAndReplay {
     }
 
     /**
-     * Advances the step to the next move
+     * Advances the step to the next chap move
      */
     public void nextFrame() {
         while (step < timeStamps.size() - 1) {
@@ -256,7 +243,7 @@ public class RecordAndReplay {
     }
 
     /**
-     * Rewinds the step to the last timestamp of a move
+     * Rewinds the step to the last timestamp of a chap move
      */
     public void lastFrame() {
         while (step > 0) {
@@ -267,7 +254,6 @@ public class RecordAndReplay {
                 }
             }
         }
-
     }
 
     /**
@@ -282,7 +268,7 @@ public class RecordAndReplay {
      *
      * @param newSpeed the new value to delay playback speed by
      */
-    public void setPlaybackSpeed(long newSpeed) {
+    public void setPlaybackSpeed(double newSpeed) {
         playbackSpeed = newSpeed;
     }
 

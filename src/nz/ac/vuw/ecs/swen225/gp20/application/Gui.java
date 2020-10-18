@@ -418,7 +418,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     } else if (e.getSource() == slowerReplayButton) {
       System.out.println("Slower replay button pressed");
-      recnplay.setPlaybackSpeed(4);
+      recnplay.setPlaybackSpeed(1.75);
 
     } else if (e.getSource() == standardReplayButton) {
       System.out.println("Standard replay button pressed");
@@ -426,7 +426,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     } else if (e.getSource() == fasterReplayButton) {
       System.out.println("Faster replay button pressed");
-      recnplay.setPlaybackSpeed(0);
+      recnplay.setPlaybackSpeed(0.5);
 
     }
 
