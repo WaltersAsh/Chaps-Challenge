@@ -401,13 +401,11 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
-      System.out.println("Next frame button pressed");
       recnplay.nextFrame();
 
 
 
     } else if (e.getSource() == lastFrameButton) {
-      System.out.println("Last frame button pressed");
       recnplay.lastFrame();
 
 
@@ -492,8 +490,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else {
       if(undo) {
         //invert move direction
-        move.direction = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
-        direction = Maze.Direction.values()[move.direction];
+        int opposite = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
+        direction = Maze.Direction.values()[opposite];
       }
       //move enemy
       maze.moveEnemy(move.actorId, direction);
@@ -1015,12 +1013,13 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void update(MazeEventInfoField e) {
-    infoFieldTextLabel.setText(e.getInfoField().getInformation());
-    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
-    infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
-        infoFieldLabel.getY() - 150, 1000, 1000);
-    frame.revalidate();
-    showInfoFieldToGui(true);
+    //FIXME turned this off for debugging recnplay
+//    infoFieldTextLabel.setText(e.getInfoField().getInformation());
+//    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
+//    infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
+//        infoFieldLabel.getY() - 150, 1000, 1000);
+//    frame.revalidate();
+//    showInfoFieldToGui(true);
   }
 
   /**

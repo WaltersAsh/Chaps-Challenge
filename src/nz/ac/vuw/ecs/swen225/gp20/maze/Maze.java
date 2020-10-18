@@ -183,6 +183,11 @@ public class Maze {
     //get the correct enemy from the list of enemies
     Enemy enemy = enemies.get(enemyId);
 
+    //FIXME breakpoint code to check for wrong tile type
+    if(tileTo(enemy.getContainer(), direction) instanceof WallTile) {
+      int breakpoint = 0;
+    }
+
     //the tile to move the enemy to
     PathTile nextTile = (PathTile) tileTo(enemy.getContainer(), direction);
 

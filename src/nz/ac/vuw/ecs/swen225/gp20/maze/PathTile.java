@@ -48,10 +48,6 @@ public class PathTile extends Tile {
    * @param c The Containable
    */
   public void place(Containable c) {
-    if(c == null) {
-      int breakpoint = 0;
-//      c = new Crate();
-    }
     contains.push(c);
     c.setContainer(this);
     if (c instanceof BlockingContainable) {
@@ -67,14 +63,25 @@ public class PathTile extends Tile {
    */
   public void remove(Containable c) {
     contains.remove(c);
-    if (c instanceof BlockingContainable && this.getContainedEntities().isEmpty()) {
+    if ((c instanceof BlockingContainable && this.getContainedEntities().isEmpty()) || !this.containsBlocker()) {
       walkable = true;
       blocker = null;
     }
+  }
 
-    // might have to check all other objects in contains, but
-    // theoretically if it correctly blocks then we never
-    // have 2 BlockingContainable at once
+  /**
+   * Check whether this tile contains any
+   * blocking containables
+   *
+   * @return true if it does contain a blocking containable, false if not
+   */
+  public boolean containsBlocker() {
+    for(Containable containable : this.contains) {
+      if(containable instanceof BlockingContainable) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

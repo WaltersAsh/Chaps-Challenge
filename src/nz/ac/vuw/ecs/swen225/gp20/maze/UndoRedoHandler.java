@@ -19,7 +19,6 @@ public class UndoRedoHandler extends MazeEventListener {
   @Override
   public void update(MazeEvent e) {
     //FIXME test for recnplay, only record chaps moves
-
     if(e instanceof MazeEventEnemyWalked || e instanceof MazeEventEnemyWalkedKilled) {
       return;
     }
@@ -27,13 +26,8 @@ public class UndoRedoHandler extends MazeEventListener {
   }
   
   public void undo() {
-    //Todo try undone up until last time chap moved
     if(!undo.isEmpty()) {
       MazeEvent e = undo.pop();
-//      while (e instanceof MazeEventEnemyWalked || e instanceof MazeEventEnemyWalkedKilled) {
-//        e.invert();
-//        e = undo.pop();
-//      }
       e.invert();
       redo.add(e);
     }

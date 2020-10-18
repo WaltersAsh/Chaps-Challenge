@@ -21,4 +21,8 @@ public class Move {
 
     }
 
+    @Override
+    public String toString() {
+        return actorId + " moved ";
+    }
 }

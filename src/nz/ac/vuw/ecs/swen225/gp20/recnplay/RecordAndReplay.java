@@ -28,7 +28,7 @@ public class RecordAndReplay {
     /**
      * The current step/time in this recording in milliseconds
      */
-    public static long step;
+    public static int step;
 
     /**
      * The time stamp of the beginning of this
@@ -45,6 +45,13 @@ public class RecordAndReplay {
      * The save file of this recording
      */
     private static File saveFile;
+
+    private static List<Long> timeStamps = new ArrayList<>();
+
+
+
+
+
 
 
     /**
@@ -75,7 +82,12 @@ public class RecordAndReplay {
             end = Collections.min(currentRecording.keySet());
 
             //set the current index, or step of this recording to the beginning time stamp
-            step = startTime;
+            step = 0;
+
+            timeStamps = new ArrayList<>();
+            timeStamps.addAll(currentRecording.keySet());
+            Collections.sort(timeStamps);
+            Collections.reverse(timeStamps);
 
             //set playback mode to true
             inPlaybackMode = true;
@@ -133,28 +145,28 @@ public class RecordAndReplay {
         }
 
         //set index, or step back
-        step = beginning;
+        step = 0;
 
         Runnable runnable = () -> {
 
-            while (RecordAndReplay.step > end && !RecordAndReplay.paused) {
+            while (step < timeStamps.size() - 1 && !paused) {
                 //advance the recording
-                RecordAndReplay.stepForward();
+                nextFrame();
                 try {
                     //if fastest playback speed is selected only sleep when chap moves
                     if (playbackSpeed == 0) {
                         //if the last move was chap
-                        for (Move move : getMovesAtStep(step - 1)) {
+                        for (Move move : getMovesAtStep(timeStamps.get(step))) {
                             //sleep the thread
                             if (move.actorId == -1) {
                                 //sleep
-                                Thread.sleep(130);
+                                Thread.sleep(150);
                                 break;
                             }
                         }
                     } else {
                         //sleep
-                        Thread.sleep(playbackSpeed);
+                        Thread.sleep(150 * playbackSpeed);
                     }
                 } catch (InterruptedException e) {
                     System.out.println("Error with playback: " + e);
@@ -183,42 +195,34 @@ public class RecordAndReplay {
     }
 
     /**
-     * Advance the playback of this recording by one
-     * step (1 millisecond or until the next move)
+     * Advance the playback of this recording by one step
      */
     public static void stepForward() {
-        if (!isRecording && step >= end) {
-
-            //get the list of moves at this timestamp
-            List<Move> movesAtStep = getMovesAtStep(step);
-
-            //execute all the moves on the appropriate actors
-            for (Move move : movesAtStep) {
-                gui.executeMove(move, false);
-            }
-
-            //increment the step (index)
-            step--;
+        if (isRecording || step == timeStamps.size() - 1) {
+            return;
         }
+        long time = timeStamps.get(step);
+        for (Move move : getMovesAtStep(time)) {
+            gui.executeMove(move, false);
+        }
+
+        step = step < timeStamps.size() - 1 ? step + 1 : step;
+
     }
 
     /**
-     * Rewind the playback of this recording by one
-     * step (1 millisecond or until the next move)
+     * Rewind the playback of this recording by one step
      */
     public static void stepBack() {
-        if (!isRecording && step < beginning) {
+        if (isRecording || step == 0) {
+            return;
+        }
 
-            //increment the step (index)
-            step++;
+        step = step > 0 ? step - 1 : step;
 
-            //get the list of moves at this timestamp
-            List<Move> movesAtStep = getMovesAtStep(step);
-
-            //execute all the moves on the appropriate actors
-            for (Move move : movesAtStep) {
-                gui.executeMove(move, true);
-            }
+        long time = timeStamps.get(step);
+        for (Move move : getMovesAtStep(time)) {
+            gui.executeMove(move, true);
         }
     }
 
@@ -238,39 +242,32 @@ public class RecordAndReplay {
     }
 
     /**
-     * Advances the step to the next timestamp of a chap move
-     * this stops the next frame button feeling un-responsive
+     * Advances the step to the next move
      */
     public void nextFrame() {
-        while (step > end) {
-            //check if chap moves at this time stamp
-            for (Move move : getMovesAtStep(step)) {
+        while (step < timeStamps.size() - 1) {
+            stepForward();
+            for(Move move : getMovesAtStep(timeStamps.get(step - 1))) {
                 if (move.actorId == -1) {
-                    stepForward();
                     return;
                 }
             }
-            //apply the move(s)
-            stepForward();
         }
     }
 
     /**
-     * Rewinds the step to the last timestamp of a chap move
-     * this stops the next frame button feeling un-responsive
+     * Rewinds the step to the last timestamp of a move
      */
     public void lastFrame() {
-        while(step < beginning) {
-            //check if chap moved at this time stamp
-            for (Move move : getMovesAtStep(step)) {
+        while (step > 0) {
+            stepBack();
+            for(Move move : getMovesAtStep(timeStamps.get(step))) {
                 if (move.actorId == -1) {
-                    stepBack();
                     return;
                 }
             }
-            //undo the move(s)
-            stepBack();
         }
+
     }
 
     /**
