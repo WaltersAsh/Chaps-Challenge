@@ -1,24 +1,34 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 
+/**
+ * The Persistence test class. Contains unit test for the class Persistence.
+ *
+ * @author Fangyi Yan 300519195
+ */
 public class PersistenceTest {
   static ObjectMapper mapper = new ObjectMapper();
 
+  /**
+   * Delete quick save after each test.
+   */
   @AfterEach
   public void deleteQuickSave() {
     Path p = Paths.get(".", "levels", "quickSave.json");
@@ -30,7 +40,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Convert test 01. This test is to check all Tile we developed can be serialize. Uses parallelStream to speed up process.
+   * Convert test 01. This test is to check all Tile we developed
+   * can be serialize. Uses parallelStream to speed up process.
    */
   @Test
   public void convertTest01() {
@@ -50,11 +61,10 @@ public class PersistenceTest {
         level.pause();
         String json = mapper.writeValueAsString(level);
         Maze loadedMaze = mapper.readValue(json, Maze.class);
-        IntStream.range(0, level.getHeight()).forEach(x -> {
-          IntStream.range(0, level.getTiles()[x].length).forEach(y -> {
-            assertEquals(level.getTileAt(x, y), loadedMaze.getTileAt(x, y));
-          });
-        });
+        IntStream.range(0, level.getHeight()).forEach(x ->
+            IntStream.range(0, level.getTiles()[x].length).forEach(y -> {
+              assertEquals(level.getTileAt(x, y), loadedMaze.getTileAt(x, y));
+            }));
       } catch (Exception e) {
         e.printStackTrace();
         assert false;
@@ -64,7 +74,8 @@ public class PersistenceTest {
 
 
   /**
-   * Save maze test 01. Test if sample level can be serialize and save into a file and deserialize correctly.
+   * Save maze test 01. Test if sample level can be serialize
+   * and save into a file and deserialize correctly.
    */
   @Test
   public void saveMazeTest01() {
@@ -81,7 +92,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Save maze fail test 01. This test case check Persistence.saveMaze() won't crush when args are null.
+   * Save maze fail test 01. This test case check Persistence.saveMaze()
+   * won't crush when args are null.
    */
   @Test
   public void saveMazeFailTest01() {
@@ -93,7 +105,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Save maze fail test 02. This test case check Persistence.saveMaze() won't crush when Path passed to it is Illegal.
+   * Save maze fail test 02. This test case check Persistence.saveMaze()
+   * won't crush when Path passed to it is Illegal.
    */
   @Test
   public void saveMazeFailTest02() {
@@ -203,7 +216,6 @@ public class PersistenceTest {
     Maze m = BoardRig.lesson1();
     try {
       mapper.writeValue(p.toFile(), m);
-//      assertEquals(p,m);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -245,7 +257,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Load maze test 01. This test case check if Persistence.loadMaze() can load maze from a valid File correctly.
+   * Load maze test 01. This test case check if Persistence.loadMaze()
+   * can load maze from a valid File correctly.
    */
   @Test
   public void loadMazeTest01() {
@@ -263,7 +276,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Load maze fail test 01. This test case check what Persistence.loadMaze() will return when a invalid path
+   * Load maze fail test 01. This test case check what
+   * Persistence.loadMaze() will return when a invalid path
    * is passed to it (Should return null).
    */
   @Test
@@ -273,7 +287,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Load maze fail test 02. This test case check what Persistence.loadMaze() will return when a invalid file
+   * Load maze fail test 02. This test case check what
+   * Persistence.loadMaze() will return when a invalid file
    * is passed to it (Should return null).
    */
   @Test
@@ -291,7 +306,8 @@ public class PersistenceTest {
   }
 
   /**
-   * Load maze fail test 03. This test case check what Persistence.loadMaze() will return when null is passed to it
+   * Load maze fail test 03. This test case check
+   * what Persistence.loadMaze() will return when null is passed to it
    * (Should return null).
    */
   @Test

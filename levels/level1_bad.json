@@ -1,13 +1,13 @@
 {
-  "width": -17,
-  "height": -11,
+  "width": -7,
+  "height": 11,
   "tiles": [
     [
       {
         "@c": ".PathTile",
         "id": "efcbca7e-3098-44c8-bd7e-34f5403e717b",
         "initials": "PA",
-        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "filename": "",
         "row": 2,
         "col": 11,
         "walkable": true,
@@ -18,7 +18,7 @@
         "@c": ".PathTile",
         "id": "f76dbabc-d56e-4c81-b8e7-05713a825cbd",
         "initials": "PA",
-        "filename": "resources/textures/board/tile/smooth_stone.png",
+        "filename": "",
         "row": 2,
         "col": 12,
         "walkable": true,
@@ -29,7 +29,7 @@
         "@c": ".WallTile",
         "id": "b760c6a3-1058-45a4-b5d0-4ac0ef08cf80",
         "initials": "▓▓",
-        "filename": "resources/textures/board/tile/wall.png",
+        "filename": "",
         "row": 2,
         "col": 13,
         "walkable": false
@@ -2668,6 +2668,7 @@
   ],
   "enemies": [],
   "exitlock": "90e57357-845e-4276-992b-aa2faa74f451",
+  "levelID": "114514",
   "levelFinished": false,
   "pathFindingDelay": 500,
   "listeners": []
