@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
+import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 
 
 /**
@@ -169,9 +168,16 @@ public class Persistence {
     return null;
   }
 
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
   public static void main(String[] args) {
     try {
-      mapper.writeValue(Paths.get(".", "levels", java.time.LocalDate.now() + "_" + java.time.LocalTime.now().getHour() + "_" + java.time.LocalTime.now().getMinute() + "_" + java.time.LocalTime.now().getSecond() + ".json").toFile(), BoardRig.enemyKillTest1());
+      mapper.writeValue(Paths.get(".", "levels", java.time.LocalDate.now() + "_"
+          + java.time.LocalTime.now().getHour() + "_" + java.time.LocalTime.now().getMinute() + "_"
+          + java.time.LocalTime.now().getSecond() + ".json").toFile(), BoardRig.enemyKillTest1());
     } catch (IOException e) {
       e.printStackTrace();
     }
