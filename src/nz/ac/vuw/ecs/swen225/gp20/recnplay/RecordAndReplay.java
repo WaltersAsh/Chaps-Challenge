@@ -16,40 +16,30 @@ public class RecordAndReplay {
 
     /**
      * Fields for remembering whether gameplay is
-     * currently being recorded or playback is paused
+     * currently being recorded or a game is being played back
      */
-    public static boolean isRecording = false, inPlaybackMode = false, paused = false;
+    private static boolean isRecording = false, inPlaybackMode = false;
 
     /**
      * Delay for playback speed
      */
-    public static double playbackSpeed = 1;
+    private static double playbackSpeed = 1;
 
     /**
      * The current step/time in this recording in milliseconds
      */
-    public static int step;
-
-    /**
-     * The time stamp of the beginning of this
-     * recording i.e. the time left (milliseconds)
-     */
-    public static long beginning, end;
+    private static int step;
 
     /**
      * The current recording either being constructed or loaded
      */
-    public static Map<Long, List<Move>> currentRecording;
+    private static Map<Long, List<Move>> currentRecording;
 
     /**
-     * The save file of this recording
+     * Collection storing the time stamps of each move
+     * in the current recording
      */
-    private static File saveFile;
-
     private static List<Long> timeStamps = new ArrayList<>();
-
-
-
 
 
 
@@ -67,19 +57,12 @@ public class RecordAndReplay {
      * Loads a recording from a map of moves
      *
      * @param recording the map of lists of moves
-     * @param startTime the time remaining at the start of the recording
      */
-    public void loadRecording(Map<Long, List<Move>> recording, Long startTime) {
+    public void loadRecording(Map<Long, List<Move>> recording) {
         if (!isRecording) {
 
             //set the move data
             currentRecording = recording;
-
-            //record the timestamp of the beginning of this recording
-            beginning = startTime;
-
-            //set the end time, this is the time stamp of the final move
-            end = Collections.min(currentRecording.keySet());
 
             //set the current index, or step of this recording to the beginning time stamp
             step = 0;
@@ -140,7 +123,7 @@ public class RecordAndReplay {
      * Replays the current recording
      */
     public void playRecording() {
-        if (currentRecording == null || currentRecording.isEmpty() || isRecording) {
+        if (currentRecording == null || currentRecording.isEmpty() || isRecording || !inPlaybackMode) {
             return;
         }
 
@@ -149,6 +132,7 @@ public class RecordAndReplay {
             //step through each move in the recording, sleeping in between moves
             while (step < timeStamps.size() - 1) {
 
+                //step forward
                 stepForward();
 
                 try {
@@ -156,9 +140,7 @@ public class RecordAndReplay {
                 } catch (InterruptedException e) {
                     System.out.println("Error with playback: " + e);
                 }
-
             }
-
         };
 
         Thread thread = new Thread(runnable);
@@ -166,18 +148,11 @@ public class RecordAndReplay {
     }
 
     /**
-     * Pauses playback of the current recording
-     */
-    public void pausePlayback() {
-        paused = true;
-    }
-
-    /**
      * Stops playback of the current recording
      */
     public void stopPlayback() {
         if (inPlaybackMode) {
-
+            inPlaybackMode = false;
         }
     }
 
@@ -185,7 +160,7 @@ public class RecordAndReplay {
      * Advance the playback of this recording by one step
      */
     public static void stepForward() {
-        if (isRecording || step == timeStamps.size() - 1) {
+        if (isRecording || step == timeStamps.size() - 1 || !inPlaybackMode) {
             return;
         }
         long time = timeStamps.get(step);
@@ -201,7 +176,7 @@ public class RecordAndReplay {
      * Rewind the playback of this recording by one step
      */
     public static void stepBack() {
-        if (isRecording || step == 0) {
+        if (isRecording || step == 0 || !inPlaybackMode) {
             return;
         }
 
@@ -232,6 +207,9 @@ public class RecordAndReplay {
      * Advances the step to the next chap move
      */
     public void nextFrame() {
+        if(!inPlaybackMode) {
+            return;
+        }
         while (step < timeStamps.size() - 1) {
             stepForward();
             for(Move move : getMovesAtStep(timeStamps.get(step - 1))) {
@@ -246,6 +224,9 @@ public class RecordAndReplay {
      * Rewinds the step to the last timestamp of a chap move
      */
     public void lastFrame() {
+        if(!inPlaybackMode) {
+            return;
+        }
         while (step > 0) {
             stepBack();
             for(Move move : getMovesAtStep(timeStamps.get(step))) {
@@ -259,8 +240,15 @@ public class RecordAndReplay {
     /**
      * Check whether the game is being recorded
      */
-    public static boolean isRecording() {
+    public boolean isRecording() {
         return isRecording;
+    }
+
+    /**
+     * Check whether a recording is being played back
+     */
+    public boolean isInPlaybackMode() {
+        return inPlaybackMode;
     }
 
     /**
@@ -270,6 +258,15 @@ public class RecordAndReplay {
      */
     public void setPlaybackSpeed(double newSpeed) {
         playbackSpeed = newSpeed;
+    }
+
+    /**
+     * Gets the current map of move data
+     *
+     * @return the current recording
+     */
+    public Map<Long, List<Move>> getMovesByTime() {
+        return currentRecording;
     }
 
 }
