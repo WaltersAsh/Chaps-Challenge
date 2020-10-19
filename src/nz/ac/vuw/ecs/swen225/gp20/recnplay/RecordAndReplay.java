@@ -41,6 +41,10 @@ public class RecordAndReplay {
      */
     private static List<Long> timeStamps = new ArrayList<>();
 
+    /**
+     * File used for recording game state
+     */
+    private File saveFile;
 
 
 
@@ -269,4 +273,11 @@ public class RecordAndReplay {
         return currentRecording;
     }
 
+    public File getSaveFile() {
+        return saveFile;
+    }
+
+    public void setSaveFile(File saveFile) {
+        this.saveFile = saveFile;
+    }
 }

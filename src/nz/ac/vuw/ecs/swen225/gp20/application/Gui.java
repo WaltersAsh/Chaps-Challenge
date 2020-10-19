@@ -233,10 +233,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     deathDialog.setVisible(false);
   }
 
-
-  //FIXME test for recnplay
-  private File recordingSaveFile;
-
   /**
    * Listen to menu buttons in menu bar, recnplay buttons and execute.
    *
@@ -314,8 +310,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       File file = openFileChooser(false);
       if(file != null) {
 
-        recordingSaveFile = file;
-        Persistence.saveMaze(maze, recordingSaveFile);
+        recnplay.setSaveFile(file);
+        Persistence.saveMaze(maze, recnplay.getSaveFile());
 
         RecordAndReplay.startRecording();
         recordingIconLabel.setVisible(true);
@@ -324,17 +320,17 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
 
 
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording() || recnplay.getSaveFile() == null) {
       pause(false);
 
       //load game state from recSaveFile
-      Maze loaded = Persistence.loadMaze(recordingSaveFile);
+      Maze loaded = Persistence.loadMaze(recnplay.getSaveFile());
 
       //set moves in loaded maze with moves in recnplay
       loaded.setMovesByTime(recnplay.getMovesByTime());
 
       //write game state with moves
-      Persistence.saveMaze(loaded, recordingSaveFile);
+      Persistence.saveMaze(loaded, recnplay.getSaveFile());
 
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
