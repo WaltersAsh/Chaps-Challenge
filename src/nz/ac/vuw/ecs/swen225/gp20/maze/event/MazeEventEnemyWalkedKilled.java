@@ -8,18 +8,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
  * @author Ian 300474717
  *
  */
-public class MazeEventEnemyWalkedKilled implements MazeEvent {
-  protected PathTile origin, target;
-  protected Maze.Direction direction;
-  protected Maze maze;
-  protected Enemy enemy;
-
+public class MazeEventEnemyWalkedKilled extends MazeEventEnemyWalked {
   public MazeEventEnemyWalkedKilled(Maze maze, Enemy enemy, PathTile origin, PathTile target, Maze.Direction direction) {
-    this.maze = maze;
-    this.origin = origin;
-    this.target = target;
-    this.direction = direction;
-    this.enemy = enemy;
+    super(maze, enemy, origin, target, direction);
   }
 
   public PathTile getEnemyTarget() {

@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 
@@ -14,6 +16,7 @@ public class MazeEventWalkedKilled extends MazeEventWalked {
   public MazeEventWalkedKilled(Maze maze, Enemy enemy, PathTile origin, PathTile target, Maze.Direction direction) {
     super(maze, origin, target, direction);
     this.enemy = enemy;
+    Preconditions.checkArgument(target.getBlocker().equals(enemy), "Enemy on target must match enemy who killed");
   }
 
   public Enemy getEnemy() {

@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
@@ -15,6 +17,7 @@ public class MazeEventEnemyWalked implements MazeEvent {
   protected Enemy enemy;
 
   public MazeEventEnemyWalked(Maze maze, Enemy enemy, PathTile origin, PathTile target, Maze.Direction direction) {
+    Preconditions.checkArgument(target.isWalkable() || maze.getChap().equals(target.getBlocker()), "Target must be walkable");
     this.maze = maze;
     this.origin = origin;
     this.target = target;

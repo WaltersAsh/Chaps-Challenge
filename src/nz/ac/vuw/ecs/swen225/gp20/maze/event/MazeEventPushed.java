@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**

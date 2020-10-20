@@ -266,11 +266,11 @@ public class Maze {
     } else if (bc instanceof Crate) {
       return tryPushCrate(current, (Crate) bc, d);
     } else if (bc instanceof Enemy) {
+      killChap();
       overrideDispatch(new MazeEventWalkedKilled(this,(Enemy)bc, current, blocked, d));
-      killChap();
     } else if (bc instanceof Water) {
-      overrideDispatch(new MazeEventWalkedDrowned(this,(Water)bc, current, blocked, d));
       killChap();
+      overrideDispatch(new MazeEventWalkedDrowned(this,(Water)bc, current, blocked, d));
       return true;
     }
     return false;
@@ -369,8 +369,8 @@ public class Maze {
       if (next == null) continue;
       PathTile pt = (PathTile) tileTo(e.getContainer(), next);
       if(pt.equals(chap.getContainer())) {
-        broadcast(new MazeEventEnemyWalkedKilled(this, e, e.getContainer(), pt, next));
         killChap();
+        broadcast(new MazeEventEnemyWalkedKilled(this, e, e.getContainer(), pt, next));
       }else {
         broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
         pt.moveTo(e);
@@ -527,5 +527,9 @@ public class Maze {
 
   public UndoRedoHandler getUndoRedo() {
     return undoredo;
+  }
+  
+  public boolean isDead() {
+    return dead;
   }
 }

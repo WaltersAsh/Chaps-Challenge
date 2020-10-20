@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
@@ -17,6 +19,7 @@ public class MazeEventUnlocked extends MazeEventWalked {
     super(maze, origin, target, direction);
     this.door = door;
     this.key = key;
+    Preconditions.checkArgument(door.getColor().equals(key.getColor()), "Door and key must match");
   }
 
   public Door getDoor() {

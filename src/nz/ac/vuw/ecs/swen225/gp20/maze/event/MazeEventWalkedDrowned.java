@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
+import com.google.common.base.Preconditions;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.Direction;
 
@@ -15,6 +17,7 @@ public class MazeEventWalkedDrowned extends MazeEventWalked {
   public MazeEventWalkedDrowned(Maze maze, Water water, PathTile origin, PathTile target, Maze.Direction direction) {
     super(maze, origin, target, direction);
     this.water = water;
+    Preconditions.checkArgument(target.getBlocker().equals(water), "Water does not match target PathTile blocker");
   }
 
   public Water getWater() {

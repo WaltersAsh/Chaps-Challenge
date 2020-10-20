@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
- * Event for when chap walks onto an InfoField
+ * Event for when chap walks onto Teleporter and is Teleported
  *
  * @author Ian 300474717
  *
