@@ -320,7 +320,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
 
 
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording() || recnplay.getSaveFile() == null) {
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording() && recnplay.getSaveFile() != null) {
       pause(false);
 
       //load game state from recSaveFile
@@ -340,9 +340,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
 
-
     } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
-      pause(false);
 
       recnplay.stopPlayback();
       Maze loaded = Persistence.quickLoad();
