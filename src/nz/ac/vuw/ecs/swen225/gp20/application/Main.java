@@ -21,7 +21,7 @@ public class Main {
    * @param args the commandline arguments
    */
   public static void main(String[] args) {
-    Maze maze = Persistence.loadMaze(level2);
+    Maze maze = Persistence.loadMaze(level1);
 
     //fresh game, no saved state
     if (main.length() == 0 || Persistence.quickLoad() == null)  {

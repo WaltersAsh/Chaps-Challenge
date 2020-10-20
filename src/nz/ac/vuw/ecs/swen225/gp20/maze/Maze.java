@@ -200,7 +200,6 @@ public class Maze {
   public void postMoveChecks() {
     assert(chap.getContainer() instanceof PathTile); // chap can only ever stand on a PathTile
     assert(chap.getContainer().getBlocker() instanceof Chap); // the PathTile Chap is on can only ever be blocked by Chap
-    assert(treasures.size()>=0); // treasures may never be below 0
     assert(treasures.size()+chap.getTreasures().size()==numTreasures); // total treasures is constant
   }
 
@@ -244,7 +243,6 @@ public class Maze {
   }
 
   public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
-    Preconditions.checkArgument(treasures.size()>=0, "No treasures left"); // can't pick up treasure if none exist
     if (treasures.isEmpty()) {
       overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
