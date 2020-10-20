@@ -592,15 +592,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
 
-    //level panel
-    if (isFreshStart) {
-      if (maze.getLevelID() == 2) {
-        maze.setMillisecondsLeft(40000);
-      } else {
-        maze.setMillisecondsLeft(60000);
-      }
-    }
-
     levelValueLabel.setText(String.valueOf(maze.getLevelID()));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
@@ -689,7 +680,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   public File openFileChooser(boolean isLoad) {
     int result = -1;
-    JFileChooser fc = new JFileChooser(Paths.get(".", "levels").toFile());;
+    JFileChooser fc = new JFileChooser(Paths.get(".", "levels").toFile());
     if (isLoad) { //is loading the file
       result = fc.showOpenDialog(null);
     } else { //is saving the file
@@ -926,7 +917,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
     temp.setAlwaysOnTop(true);
     int response = JOptionPane.showConfirmDialog(temp, message,
-            "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.exitIcon);
     if (response == JOptionPane.YES_OPTION) {
       if (operationOnClose == null) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

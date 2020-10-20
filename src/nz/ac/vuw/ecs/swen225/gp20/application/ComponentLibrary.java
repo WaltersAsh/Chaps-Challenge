@@ -23,6 +23,7 @@ public class ComponentLibrary {
   private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
   private static Font font = new Font("Arial", Font.PLAIN, 24);
   private static Icon pausedIc = new ImageIcon();
+  private static Icon exitIc = new ImageIcon();
 
   static {
     try {
@@ -30,6 +31,9 @@ public class ComponentLibrary {
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
       image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
       pausedIc = new ImageIcon(image);
+      image = ImageIO.read(new File("resources/textures/gui/quit.png"));
+      image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
+      exitIc = new ImageIcon(image);
     } catch (FontFormatException | IOException e) {
       e.printStackTrace();
     }
@@ -37,6 +41,7 @@ public class ComponentLibrary {
 
   //Icons
   public static final Icon pausedIcon = pausedIc;
+  public static final Icon exitIcon = exitIc;
 
   //Fonts
   public static final Font buttonFont = font.deriveFont(Font.PLAIN, 20);
