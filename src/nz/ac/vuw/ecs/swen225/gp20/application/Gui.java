@@ -193,7 +193,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseWindowListener();
     setupTimer();
     setupKeyListener();
-    maze.resume();
   }
 
   /**
@@ -682,7 +681,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void resume() {
     if (isPaused) {
       pausedIconLabel.setVisible(false);
-      maze.resume();
       setupTimer();
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       isPaused = false;
@@ -762,7 +760,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     reloadInventoryPanel();
     isTimerActive = false;
     isPaused = false;
-    maze.resume();
   }
 
   /**
