@@ -139,7 +139,6 @@ public class SidePanel extends JPanel {
     inventoryContentPanel.setBackground(ComponentLibrary.darkLavender);
 
     // initialise title labels for panels in inner side panel
-    // title labels
     JLabel levelTitleLabel;
     JLabel timeTitleLabel;
     JLabel treasuresTitleLabel;
@@ -151,6 +150,7 @@ public class SidePanel extends JPanel {
       inventoryTitleLabel = new JLabel("INVENTORY"),
     };
 
+    //configure and stylise title labels
     Arrays.stream(titleLabels).forEach(label -> {
       label.setFont(ComponentLibrary.sideFont);
       label.setForeground(Color.WHITE);
@@ -164,6 +164,7 @@ public class SidePanel extends JPanel {
       treasuresValueLabel = new JLabel(String.valueOf(maze.numTreasures())),
     };
 
+    //configure and stylise value labels
     Arrays.stream(valueLabels).forEach(valueLabel -> {
       valueLabel.setFont(ComponentLibrary.bigFont);
       valueLabel.setForeground(Color.BLACK);

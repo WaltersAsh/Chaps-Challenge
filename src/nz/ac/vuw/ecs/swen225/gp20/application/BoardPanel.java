@@ -27,7 +27,7 @@ public class BoardPanel extends JLayeredPane {
   public BoardPanel(Maze maze) {
     createBoardPanel(maze);
     infoFieldLabel = ComponentLibrary.infoFieldLabel();
-    infoFieldTextLabel = (ComponentLibrary.infoFieldTextLabel());
+    infoFieldTextLabel = ComponentLibrary.infoFieldTextLabel();
     recordingIconLabel = ComponentLibrary.recordingIconLabel();
     pausedIconLabel = ComponentLibrary.pausedIconLabel();
 

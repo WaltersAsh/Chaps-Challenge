@@ -25,6 +25,7 @@ public class ComponentLibrary {
   private static Icon pausedIc = new ImageIcon();
   private static Icon exitIc = new ImageIcon();
 
+  //instantiate resources
   static {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);

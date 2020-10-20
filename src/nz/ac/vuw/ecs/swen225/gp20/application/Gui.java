@@ -105,7 +105,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   private TimerTask timerTask;
   private boolean isTimerActive;
   private boolean isPaused;
-  private boolean isFreshStart = true;
 
   //recnplay components
   private RecordAndReplay recnplay;
@@ -589,6 +588,19 @@ public class Gui extends MazeEventListener implements ActionListener {
     setTreasuresValueLabel(maze.numTreasures());
     clearInventoryPanel();
 
+    //make sure right color of treasures left upon reloading
+    if (maze.getTreasures().isEmpty()) {
+      treasuresValueLabel.setForeground(Color.GREEN);
+    } else {
+      treasuresValueLabel.setForeground(Color.BLACK);
+    }
+
+    //make sure right color of time left upon reloading
+    if (maze.getMillisecondsLeft() <= 11000) {
+      timeValueLabel.setForeground(Color.RED);
+      timeValueLabel.revalidate();
+    }
+
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
 
@@ -621,14 +633,16 @@ public class Gui extends MazeEventListener implements ActionListener {
     board = new BoardView(maze);
     board = boardPanel.getBoard();
     board.reset(maze);
+
+    //reinitialise labels so they are visible upon trigger again
     infoFieldLabel = boardPanel.getInfoFieldLabel();
     infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
+
     maze.addListener(this);
     clearInventoryPanel();
     reloadInventoryPanel();
-    treasuresValueLabel.setForeground(Color.BLACK);
     isTimerActive = false;
     isPaused = false;
     maze.resume();
@@ -687,7 +701,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       result = fc.showSaveDialog(null);
     }
     if (result == JFileChooser.APPROVE_OPTION) {
-      isFreshStart = false;
       return fc.getSelectedFile();
     }
     return null;
@@ -917,7 +930,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     JFrame temp = new JFrame(); //if player wants to exit while optionpane is active
     temp.setAlwaysOnTop(true);
     int response = JOptionPane.showConfirmDialog(temp, message,
-            "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, ComponentLibrary.exitIcon);
+            "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+            ComponentLibrary.exitIcon);
     if (response == JOptionPane.YES_OPTION) {
       if (operationOnClose == null) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

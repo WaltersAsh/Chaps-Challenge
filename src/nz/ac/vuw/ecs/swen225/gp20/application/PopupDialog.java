@@ -59,6 +59,7 @@ public class PopupDialog extends JDialog {
     border = BorderFactory.createCompoundBorder(border,
             BorderFactory.createLineBorder(Color.WHITE, 2));
 
+    //instantiate dialog based on type/enum
     switch (state) {
       case LEVEL_COMPLETE:
         levelFinishDialog(actionListener);

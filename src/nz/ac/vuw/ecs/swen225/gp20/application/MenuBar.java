@@ -19,7 +19,7 @@ import javax.swing.border.LineBorder;
  */
 public class MenuBar extends JMenuBar {
 
-  //menu items
+  //menu and menu items
   private JMenu fileMenu;
   private JMenuItem saveMenuItem;
   private JMenuItem loadMenuItem;
@@ -62,7 +62,6 @@ public class MenuBar extends JMenuBar {
     add(recnplayMenu);
     add(Box.createRigidArea(new Dimension(20, 0)));
     add(helpMenu);
-    //setBackground(ComponentLibrary.deepLavender);
     setBackground(ComponentLibrary.lightLavender);
     setBorder(new LineBorder(ComponentLibrary.lightLavender, 10));
     setOpaque(true);
@@ -74,6 +73,8 @@ public class MenuBar extends JMenuBar {
    * @param actionListener the ActionListener to be added (this - in Gui)
    */
   private void createMenuComponents(ActionListener actionListener) {
+
+    //initialise menus and menu items
     fileMenu = new JMenu("File");
     gameMenu = new JMenu("Game");
     levelMenu = new JMenu("Level");
@@ -107,6 +108,7 @@ public class MenuBar extends JMenuBar {
       loadRecordingMenuItem = new JMenuItem("Load Recording")
     };
 
+    //map menu items to their respective menu
     HashMap<JMenuItem[], JMenu> menuToMenuItems = new HashMap<>();
     menuToMenuItems.put(fileMenuItems, fileMenu);
     menuToMenuItems.put(gameMenuItems, gameMenu);
@@ -117,6 +119,7 @@ public class MenuBar extends JMenuBar {
       fileMenuItems, gameMenuItems, levelMenuItems, recnplayMenuItems
     };
 
+    //go through every menu item, configure and add them to their respective menu
     Arrays.stream(superMenuItems).forEach(menuItems -> {
       Arrays.stream(menuItems).forEach(menuItem -> {
         menuItem.addActionListener(actionListener);
@@ -134,6 +137,7 @@ public class MenuBar extends JMenuBar {
       });
     });
 
+    //single menu item in help menu configured separately
     showInstructMenuItem = new JMenuItem("How to Play");
     showInstructMenuItem.addActionListener(actionListener);
     helpMenu.setForeground(Color.WHITE);

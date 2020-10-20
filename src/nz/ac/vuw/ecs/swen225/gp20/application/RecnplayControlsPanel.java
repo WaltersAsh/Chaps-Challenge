@@ -41,6 +41,7 @@ public class RecnplayControlsPanel extends JPanel {
     setBackground(ComponentLibrary.lightLavender);
     setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
+    //initialise buttons
     JButton[] buttons = new JButton[]{
       lastFrameButton = new JButton("<"),
       autoPlayButton = new JButton("AUTO"),
@@ -50,6 +51,7 @@ public class RecnplayControlsPanel extends JPanel {
       fasterReplayButton = new JButton("FASTER")
     };
 
+    //go through each button, configure and add them to this panel
     Arrays.stream(buttons).forEach(button -> {
       button.setFont(ComponentLibrary.buttonFont);
       button.setForeground(Color.WHITE);

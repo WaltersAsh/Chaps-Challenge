@@ -38,6 +38,7 @@ public class InstructionsFrame extends JFrame implements ActionListener {
     add(jsp);
     initialiseWindowListener();
     setSize(1024, 800);
+    setMinimumSize(new Dimension(1010, 820));
     setTitle("Chap's Challenge - Instructions (Game is Paused)");
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension scrnsize = toolkit.getScreenSize();
@@ -103,10 +104,10 @@ public class InstructionsFrame extends JFrame implements ActionListener {
                     + "CTRL-1 - start a new game at level 1\n"
                     + "<br>"
                     + "<br>"
-                    + "SPACE - pause the game and display a “game is paused” dialog\n"
+                    + "SPACE - pause the game, a paused dialog will popup\n"
                     + "<br>"
                     + "<br>"
-                    + "ESC - close the “game is paused” dialog and resume the game\n"
+                    + "ESC - resume the game, the paused dialog will disappear\n"
                     + "<br>"
                     + "<br>"
                     + "UP, DOWN, LEFT, RIGHT ARROWS - move Chap within the maze\n"
