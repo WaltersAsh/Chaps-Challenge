@@ -656,7 +656,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       pausedIconLabel.setVisible(false);
       setupTimer();
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
+      maze.resume();
       isPaused = false;
+      
     }
   }
 

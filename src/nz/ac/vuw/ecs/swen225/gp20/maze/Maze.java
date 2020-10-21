@@ -327,9 +327,10 @@ public class Maze {
         overrideDispatch(new MazeEventPushed(this, current, original, d, c));
         // can also push crate onto water to make a path
       } else if (pt.getBlocker() instanceof Water) {
-        pt.remove(pt.getBlocker());
+        Water w = (Water) pt.getBlocker();
+        pt.remove(w);
         c.getContainer().remove(c);
-        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, (Water)pt.getBlocker()));
+        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, w));
       } else {
         return false;
       }
@@ -382,6 +383,7 @@ public class Maze {
    * Tick the enemy path finding.
    */
   public void tickPathFinding() {
+    System.out.println("ticking");
     for (Enemy e : enemies) {
       Direction next = e.tickPathFinding();
       if (next == null) continue;
