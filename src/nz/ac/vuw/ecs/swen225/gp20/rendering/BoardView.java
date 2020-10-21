@@ -13,33 +13,25 @@ import java.util.List;
 public class BoardView extends JComponent implements ActionListener {
 
   private Maze m;
-  private final Maze startMaze;
 
   private Tile[][] tiles;
   private int blockSize = 40;
   private int width, height, minPanel;
-  private int boardWidth = 650;
-  private int boardHeight = 650;
+  private final int boardWidth = 650;
+  private final int boardHeight = 650;
 
-  private int viewTiles = 3;
+  private final int viewTiles = 3;
 
   // Stuff for animation
-  private Tile from, to;
-  private int fromX, fromY, toX, toY;
+  private Tile from;
 
-  private int startRow, startCol;
   private int windowSize = (2 * viewTiles) + 1;
 
   private int drawX, drawY;
   private Maze.Direction d;
-  private Movable entity;
-
-  private int prevRow = 1;
-  private int prevCol = 1;
 
   int startCount = 0;
 
-  Movable toAnimate;
   Animation currentAnimation;
 
   private double velx, vely;
@@ -48,7 +40,7 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = true;
+  private final boolean isWindowed = true;
   private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
@@ -67,7 +59,6 @@ public class BoardView extends JComponent implements ActionListener {
     if(windowSize>height||windowSize>width){
       windowSize = Math.min(height,width);
     }
-    startMaze = m;
   }
 
   @Override
@@ -116,7 +107,6 @@ public class BoardView extends JComponent implements ActionListener {
                   blockSize, blockSize, this);
               }catch(Exception e) {
                 e.printStackTrace();
-                System.exit(0);
               }
             }
           }
@@ -137,8 +127,8 @@ public class BoardView extends JComponent implements ActionListener {
     int chapRow = m.getChap().getContainer().getRow();
     int chapCol = m.getChap().getContainer().getCol();
 
-    startRow = chapRow - viewTiles;
-    startCol = chapCol - viewTiles;
+    int startRow = chapRow - viewTiles;
+    int startCol = chapCol - viewTiles;
 
     if (startRow < 0) {
       startRow = 0;
@@ -165,10 +155,6 @@ public class BoardView extends JComponent implements ActionListener {
           PathTile pt = (PathTile) t;
           if (!pt.getContainedEntities().isEmpty()) {
             for (Containable c : pt.getContainedEntities()) {
-//              if (isAnimating && c instanceof Movable&&entitesAnimated.contains(c)) {
-//                toAnimate = (Movable) c;
-//                continue;
-//              }
               g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,currentRow * blockSize, blockSize, blockSize, this);
             }
           }
@@ -201,18 +187,10 @@ public class BoardView extends JComponent implements ActionListener {
     }
 
     if(!isWindowed||(from.getCol()<=viewTiles&&from.getRow()<= viewTiles)) {
-      for (int i = 0; i < animations.size(); i++) {
-        Animation a = animations.get(i);
+      for (Animation a : animations) {
         g.drawImage(getToolkit().getImage(a.getM().getFilename()), a.getFromX(), a.getFromY(), blockSize, blockSize, this);
       }
     }
-    else{
-      drawMoveBoard(g);
-    }
-
-  }
-
-  public void drawMoveBoard(Graphics g){
 
   }
 
@@ -225,32 +203,21 @@ public class BoardView extends JComponent implements ActionListener {
    * @param d the direction its moving
    */
   public void initaliseAnimation(Movable entity, Tile from, Tile to, Maze.Direction d) {
-
-
     this.from = from;
-    this.to = to;
 
-    this.entity = entity;
     this.d = d;
 
-    if(isWindowed){
-//      startRow = entity.getContainer().getRow() - viewTiles;
-//      startCol = entity.getContainer().getCol() - viewTiles;
+    if(!isWindowed){
+      int fromX = from.getCol() * getBlockSize();
+      int fromY = from.getRow() * getBlockSize();
+      int toX = to.getCol() * getBlockSize();
+      int toY = to.getRow() * getBlockSize();
 
-      //System.out.println("___________________");
-    }
-    else{
-      fromX = from.getCol() * getBlockSize();
-      fromY = from.getRow() * getBlockSize();
-      toX = to.getCol() * getBlockSize();
-      toY = to.getRow() * getBlockSize();
-    }
-
-    if(!isWindowed) {
       entitesAnimated.add(entity);
       animations.add(new Animation(entity, fromX, toX, fromY, toY, d));
       t.start();
     }
+
 
   }
 
@@ -330,7 +297,6 @@ public class BoardView extends JComponent implements ActionListener {
   }
 
   public void reset(Maze maze){
-    m = startMaze;
     m = maze;
 
     tiles = m.getTiles();

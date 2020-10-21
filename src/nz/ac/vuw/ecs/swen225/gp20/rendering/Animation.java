@@ -6,26 +6,39 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
 
 public class Animation {
 
-  private Movable m;
-  private int fromX, fromY, toX, toY;
-  private Maze.Direction d;
+  private Movable move;
+  private int fromX;
+  private int fromY;
+  private int toX;
+  private int toY;
+  private Maze.Direction dir;
 
-  public Animation(Movable m, int fromX, int toX, int fromY, int toY, Maze.Direction d){
-    this.m = m;
+  /**
+   * THe constructor for storing info for an animation.
+   *
+   * @param m the object moving.
+   * @param fromX x coordinate of where its from.
+   * @param toX x coordinate of where its going
+   * @param fromY y coordinate of where its from.
+   * @param toY y coordinate of where its going.
+   * @param d the direction of the movement.
+   */
+  public Animation(Movable m, int fromX, int toX, int fromY, int toY, Maze.Direction d) {
+    this.move = m;
     this.fromX = fromX;
     this.fromY = fromY;
     this.toX = toX;
     this.toY = toY;
 
-    this.d = d;
+    this.dir = d;
   }
 
   public Movable getM() {
-    return m;
+    return move;
   }
 
   public Maze.Direction getD() {
-    return d;
+    return dir;
   }
 
   public int getFromX() {

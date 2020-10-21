@@ -7,16 +7,13 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 
 public class SoundHandler extends MazeEventListener{
 
-  private HashMap<String, SoundEffect> sounds = new HashMap<>();
-  private List<SoundEffect> pathSounds = new ArrayList<>();
-  private List<SoundEffect> ghastSounds = new ArrayList<>();
+  private final HashMap<String, SoundEffect> sounds = new HashMap<>();
+  private final List<SoundEffect> pathSounds = new ArrayList<>();
+  private final List<SoundEffect> ghastSounds = new ArrayList<>();
 
   private SoundEffect prevSound = null;
-  private SoundEffect currentSound = null;
 
-  private boolean scaryMode = true;
-
-  private Random random = new Random();
+  private final Random random = new Random();
 
   public SoundHandler(Maze m) {
     initialiseSounds();
@@ -92,7 +89,6 @@ public class SoundHandler extends MazeEventListener{
 
     currentSound = sounds.get(rand.nextInt(sounds.size()));
     while (prevSound == currentSound) {
-      prevSound = currentSound;
       currentSound = sounds.get(rand.nextInt(sounds.size()));
     }
     currentSound.play();
@@ -122,7 +118,8 @@ public class SoundHandler extends MazeEventListener{
   @Override
   public void update(MazeEventWalked e) {
     playRandomSound(pathSounds);
-    if(random.nextInt(100)==1&&scaryMode){
+    boolean scaryMode = true;
+    if(random.nextInt(100)==1&& scaryMode){
       playRandomSound(ghastSounds);
     }
   }
