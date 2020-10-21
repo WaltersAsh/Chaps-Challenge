@@ -339,13 +339,14 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
 
-    } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
 
       recnplay.stopPlayback();
       Maze loaded = Persistence.quickLoad();
       this.loadLevel(loaded);
-
       resume();
+      pause(false);
+
 
 
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem() && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
@@ -450,7 +451,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     if (move.actorId == -1) {
       if(undo) {
-        maze.getUndoRedo().undo();
+        this.undoRedoGui(undo);
       } else {
         //move chap
         maze.move(direction);
@@ -759,7 +760,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     clearInventoryPanel();
     reloadInventoryPanel();
     isTimerActive = false;
-    isPaused = false;
+
   }
 
   /**
@@ -979,13 +980,12 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void update(MazeEventInfoField e) {
-    //FIXME turned this off for debugging recnplay
-//    infoFieldTextLabel.setText(e.getInfoField().getInformation());
-//    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
-//    infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
-//        infoFieldLabel.getY() - 150, 1000, 1000);
-//    frame.revalidate();
-//    showInfoFieldToGui(true);
+    infoFieldTextLabel.setText(e.getInfoField().getInformation());
+    infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
+    infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
+        infoFieldLabel.getY() - 150, 1000, 1000);
+    frame.revalidate();
+    showInfoFieldToGui(true);
   }
 
   /**

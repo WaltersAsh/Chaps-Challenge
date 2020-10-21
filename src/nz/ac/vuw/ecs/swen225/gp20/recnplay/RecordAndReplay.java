@@ -155,9 +155,7 @@ public class RecordAndReplay {
      * Stops playback of the current recording
      */
     public void stopPlayback() {
-        if (inPlaybackMode) {
-            inPlaybackMode = false;
-        }
+        inPlaybackMode = false;
     }
 
     /**
