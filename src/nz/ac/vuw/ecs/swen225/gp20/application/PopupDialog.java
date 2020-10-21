@@ -33,7 +33,7 @@ public class PopupDialog extends JDialog {
   }
 
   private final JPanel buttonPanel;
-  private JPanel messagePanel;
+  private final JPanel messagePanel;
   private JLabel messageLabel;
 
   private JButton restartButton;

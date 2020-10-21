@@ -610,6 +610,8 @@ public class Gui extends MazeEventListener implements ActionListener {
     //treasures are all collected
     if (maze.getTreasures().isEmpty()) {
       treasuresValueLabel.setForeground(Color.GREEN);
+    } else {
+      treasuresValueLabel.setForeground(Color.BLACK);
     }
   }
 
