@@ -63,14 +63,25 @@ public class PathTile extends Tile {
    */
   public void remove(Containable c) {
     contains.remove(c);
-    if (c instanceof BlockingContainable) {
+    if ((c instanceof BlockingContainable && this.getContainedEntities().isEmpty()) || !this.containsBlocker()) {
       walkable = true;
       blocker = null;
     }
+  }
 
-    // might have to check all other objects in contains, but
-    // theoretically if it correctly blocks then we never
-    // have 2 BlockingContainable at once
+  /**
+   * Check whether this tile contains any
+   * blocking containables
+   *
+   * @return true if it does contain a blocking containable, false if not
+   */
+  public boolean containsBlocker() {
+    for(Containable containable : this.contains) {
+      if(containable instanceof BlockingContainable) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -95,6 +106,10 @@ public class PathTile extends Tile {
 
   public BlockingContainable getBlocker() {
     return blocker;
+  }
+
+  public void setBlocker(BlockingContainable blocker) {
+    this.blocker = blocker;
   }
 
   public Stack<Containable> getContainedEntities() {

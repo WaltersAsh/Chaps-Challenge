@@ -8,6 +8,7 @@ module maze {
 
   exports nz.ac.vuw.ecs.swen225.gp20.maze to com.fasterxml.jackson.databind;
   exports nz.ac.vuw.ecs.swen225.gp20.maze.event to com.fasterxml.jackson.databind;
+  exports nz.ac.vuw.ecs.swen225.gp20.recnplay to com.fasterxml.jackson.databind;
   opens nz.ac.vuw.ecs.swen225.gp20.maze to com.fasterxml.jackson.databind;
   exports nz.ac.vuw.ecs.swen225.gp20.application to com.fasterxml.jackson.databind;
 

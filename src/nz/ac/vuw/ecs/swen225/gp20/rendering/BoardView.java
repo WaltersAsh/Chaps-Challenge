@@ -48,7 +48,7 @@ public class BoardView extends JComponent implements ActionListener {
   List<Movable> entitesAnimated = new ArrayList<>();
 
   public boolean isAnimating = false;
-  private boolean isWindowed = true;
+  private boolean isWindowed = false;
   private boolean boardNeedMove = false;
 
   Timer t = new Timer(5, this);
@@ -165,8 +165,7 @@ public class BoardView extends JComponent implements ActionListener {
 //                toAnimate = (Movable) c;
 //                continue;
 //              }
-              g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,
-                  currentRow * blockSize, blockSize, blockSize, this);
+              g.drawImage(getToolkit().getImage(c.getFilename()), currentCol * blockSize,currentRow * blockSize, blockSize, blockSize, this);
             }
           }
         }
