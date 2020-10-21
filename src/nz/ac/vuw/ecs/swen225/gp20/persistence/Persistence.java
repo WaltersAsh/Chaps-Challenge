@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
-import test.nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+
 
 
 /**
