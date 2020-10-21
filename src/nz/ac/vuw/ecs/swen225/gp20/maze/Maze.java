@@ -361,6 +361,7 @@ public class Maze {
 
         @Override
         public void run() {
+          if(!doPathFinding) return;
           tickPathFinding();
         }
       }, 0, pathFindingDelay);
@@ -371,7 +372,6 @@ public class Maze {
    * Tick the enemy path finding.
    */
   public void tickPathFinding() {
-    if(!doPathFinding) return;
     for (Enemy e : enemies) {
       Direction next = e.tickPathFinding();
       if (next == null) continue;

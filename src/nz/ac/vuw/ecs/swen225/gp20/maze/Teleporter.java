@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
 
 /**
- * Shows an information popup when Chap walks over it
+ * Teleports chap when walked on
  *
  * @author Ian 300474717
  *
