@@ -13,7 +13,10 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,9 +31,6 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Enemy;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -106,7 +106,6 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   //recnplay components
   private RecordAndReplay recnplay;
-  private Map<Long, List<Move>> timeToMoveMap = new HashMap<>();
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -189,7 +188,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     frame.setSize(1024, 800);
     frame.setMinimumSize(new Dimension(1010, 820));
     frame.setLocation(dimen.width / 2 - frame.getSize().width / 2,
-        dimen.height / 2 - frame.getSize().height / 2);
+            dimen.height / 2 - frame.getSize().height / 2);
     frame.setFocusable(true);
     initialiseWindowListener();
     setupTimer();
@@ -299,12 +298,13 @@ public class Gui extends MazeEventListener implements ActionListener {
       //RECNPLAY FUNCTIONALITIES
 
       //start recording game play
-    } else if (e.getSource() == menuBar.getStartRecordingMenuItem() && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStartRecordingMenuItem()
+            && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       pause(false);
 
       //save game state when a recording begins
       File file = openFileChooser(false);
-      if(file != null) {
+      if (file != null) {
 
         recnplay.setSaveFile(file);
         Persistence.saveMaze(maze, recnplay.getSaveFile());
@@ -316,7 +316,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
 
 
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording() && recnplay.getSaveFile() != null) {
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode()
+            && recnplay.isRecording() && recnplay.getSaveFile() != null) {
       pause(false);
 
       //load game state from recSaveFile
@@ -333,7 +334,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       resume();
 
 
-    } else if (e.getSource() == menuBar.getPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getPlayMenuItem()
+            && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
 
     } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
@@ -345,8 +347,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       pause(false);
 
 
-
-    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem() && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()
+            && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       pause(false);
 
       //quick save current game
@@ -369,7 +371,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       } else {
         resume();
       }
-
 
 
       //instructions
@@ -418,7 +419,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Moves chap, tells recnplay to record the move
+   * Moves chap, tells recnplay to record the move.
    * if game play is being recorded
    *
    * @param direction the movement direction
@@ -437,7 +438,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Executes a move on the maze from a recording
+   * Executes a move on the maze from a recording.
    *
    * @param move the move to be executed
    * @param undo indicates if this move should be undone or applied
@@ -447,29 +448,21 @@ public class Gui extends MazeEventListener implements ActionListener {
     Maze.Direction direction = Maze.Direction.values()[move.direction];
 
     if (move.actorId == -1) {
-      if(undo) {
+      if (undo) {
         this.undoGui();
       } else {
         //move chap
         maze.move(direction);
       }
     } else {
-      if(undo) {
+      if (undo) {
         //invert move direction
-        int opposite = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
+        int opposite = move.direction == 0 || move.direction == 2
+                ? move.direction + 1 : move.direction - 1;
         direction = Maze.Direction.values()[opposite];
       }
       //move enemy
       maze.moveEnemy(maze.getEnemies().get(move.actorId), direction);
-    }
-  }
-  
-  @Override
-  public void update(MazeEventEnemyWalked e) {
-    int enemyId = maze.getEnemies().indexOf(e.getEnemy());
-    if (recnplay.isRecording()) {
-      Move move = new Move(enemyId, e.getEnemyDirection().ordinal());
-      recnplay.addMove(move);
     }
   }
 
@@ -519,7 +512,7 @@ public class Gui extends MazeEventListener implements ActionListener {
             move(Maze.Direction.RIGHT);
             break;
           default:
-          }
+        }
 
         decrementTreasurePickUp();
         board.repaint();
@@ -593,13 +586,14 @@ public class Gui extends MazeEventListener implements ActionListener {
         //get time remaining
         long millisLeft = maze.getMillisecondsLeft();
 
-        if(millisLeft > 0) {
+        if (millisLeft > 0) {
           //decrement milliseconds left
           millisLeft--;
           maze.setMillisecondsLeft(millisLeft);
 
           //first two digits of the remaining time
-          String value = millisLeft > 10 ? Long.toString(millisLeft).substring(0, 2) : Long.toString(millisLeft);
+          String value = millisLeft > 10
+                  ? Long.toString(millisLeft).substring(0, 2) : Long.toString(millisLeft);
 
           //if its the last ten seconds
           if (millisLeft < 9999) {
@@ -608,7 +602,7 @@ public class Gui extends MazeEventListener implements ActionListener {
             timeValueLabel.setForeground(Color.RED);
 
             //if its the last ten seconds but not the last second
-            if(millisLeft > 999) {
+            if (millisLeft > 999) {
               value = value.charAt(0) + "." + value.charAt(1);
             } else {
               value = "0." + value.charAt(0);
@@ -619,7 +613,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           timeValueLabel.setText(value);
 
           //if time runs out
-          if(millisLeft == 0) {
+          if (millisLeft == 0) {
             pause(false);
             timerExpiryDialog.setVisible(true);
           }
@@ -641,9 +635,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       timer.cancel();
       if (showDialog) {
         JOptionPane.showOptionDialog(frame, "Press esc to resume ",
-            "Game Paused", JOptionPane.DEFAULT_OPTION,
-            JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
-            null, null);
+                "Game Paused", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+                null, null);
       }
     }
   }
@@ -658,7 +652,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       maze.resume();
       isPaused = false;
-      
+
     }
   }
 
@@ -694,6 +688,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     //reset state of board/maze back to start of level
     reinitialiseBoard(maze);
 
+    isTimerActive = false;
     levelValueLabel.setText(String.valueOf(maze.getLevelID()));
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
@@ -735,8 +730,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     maze.addListener(this);
     clearInventoryPanel();
     reloadInventoryPanel();
-    isTimerActive = false;
-
   }
 
   /**
@@ -801,7 +794,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     try {
       keyImage = ImageIO.read(new File(key.getFilename()));
       ImageIcon keyIcon = new ImageIcon(
-          keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+              keyImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT));
       for (JLabel inventoryValueLabel : inventoryValueLabels) {
         if (inventoryValueLabel.getText().equals(" ")) { // check label is empty
           inventoryValueLabel.setText(key.getColor().name()); // identify as non-empty label
@@ -911,6 +904,20 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Update enemies moves and add them to recnplay.
+   *
+   * @param e the maze event enemy walked event
+   */
+  @Override
+  public void update(MazeEventEnemyWalked e) {
+    int enemyId = maze.getEnemies().indexOf(e.getEnemy());
+    if (recnplay.isRecording()) {
+      Move move = new Move(enemyId, e.getEnemyDirection().ordinal());
+      recnplay.addMove(move);
+    }
+  }
+
+  /**
    * Update the inventory when we pick up a key.
    *
    * @param e the key pickup event
@@ -953,7 +960,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     infoFieldTextLabel.setText(e.getInfoField().getInformation());
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
     infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
-        infoFieldLabel.getY() - 150, 1000, 1000);
+            infoFieldLabel.getY() - 150, 1000, 1000);
     frame.revalidate();
     showInfoFieldToGui(true);
   }
@@ -1008,7 +1015,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   /**
    * Display an option panel that exits the frame.
    *
-   * @param message the String to display a message
+   * @param message          the String to display a message
    * @param operationOnClose the String representing an operation to execute before closing
    */
   private void displayExitOptionPanel(String message, String operationOnClose) {
