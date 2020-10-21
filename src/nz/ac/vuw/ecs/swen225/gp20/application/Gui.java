@@ -341,7 +341,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     } else if (e.getSource() == menuBar.getPlayMenuItem()
             && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
-      replayingIconLabel.setVisible(true);
 
       //stop replaying
     } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
@@ -484,7 +483,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !recnplay.isInPlaybackMode()) {
+        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording()
+                && !recnplay.isInPlaybackMode()) {
           resume();
           isTimerActive = true;
           try {
