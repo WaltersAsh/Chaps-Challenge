@@ -1,4 +1,4 @@
-package nz.ac.vuw.ecs.swen225.gp20.persistence;
+package test.nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -13,8 +13,10 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+
 import test.nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
