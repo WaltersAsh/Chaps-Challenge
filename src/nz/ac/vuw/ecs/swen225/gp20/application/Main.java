@@ -7,7 +7,7 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.Persistence;
 /**
  * Main class for running Chap's Challenge.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class Main {
 

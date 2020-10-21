@@ -18,7 +18,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 /**
  * SidePanel class for instantiating a side panel for the gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class SidePanel extends JPanel {
 
@@ -43,12 +43,16 @@ public class SidePanel extends JPanel {
 
   private final Maze maze;
 
+  private ComponentLibrary cl;
+
   /**
    * Side panel is constructed with its inner side panels.
    *
    * @param m the maze passed through from the gui
    */
   public SidePanel(Maze m) {
+    cl = ComponentLibrary.getInstance();
+
     maze = m;
 
     initialise();
@@ -72,7 +76,7 @@ public class SidePanel extends JPanel {
    * Create the side panel.
    */
   private void initialise() {
-    setBackground(ComponentLibrary.paleLavender);
+    setBackground(cl.paleLavender);
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     setBorder(new EmptyBorder(5, 5, 5, 5));
     setPreferredSize(new Dimension(175, 500));
@@ -95,15 +99,15 @@ public class SidePanel extends JPanel {
     inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
     inventoryGridPanel.setLayout(new GridLayout(2, 4));
 
-    levelPanel.setBackground(ComponentLibrary.fullLavender);
-    timePanel.setBackground(ComponentLibrary.lavender);
-    treasuresPanel.setBackground(ComponentLibrary.deepLavender);
-    inventoryPanel.setBackground(ComponentLibrary.darkLavender);
-    inventoryGridPanel.setBackground(ComponentLibrary.darkLavender);
+    levelPanel.setBackground(cl.fullLavender);
+    timePanel.setBackground(cl.lavender);
+    treasuresPanel.setBackground(cl.deepLavender);
+    inventoryPanel.setBackground(cl.darkLavender);
+    inventoryGridPanel.setBackground(cl.darkLavender);
 
     Arrays.stream(panels).forEach(panel -> {
       panel.setPreferredSize(new Dimension(175, 125));
-      panel.setBorder(new LineBorder(ComponentLibrary.paleLavender, 2, false));
+      panel.setBorder(new LineBorder(cl.paleLavender, 2, false));
     });
 
     // inventory grid panel initialisation
@@ -112,8 +116,8 @@ public class SidePanel extends JPanel {
       JLabel label = new JLabel();
       label.setText(" ");
       label.setOpaque(true);
-      label.setBackground(ComponentLibrary.darkLavender);
-      label.setBorder(BorderFactory.createLineBorder(ComponentLibrary.paleLavender));
+      label.setBackground(cl.darkLavender);
+      label.setBorder(BorderFactory.createLineBorder(cl.paleLavender));
       inventoryValueLabels[i] = label;
       inventoryGridPanel.add(label);
     });
@@ -133,10 +137,10 @@ public class SidePanel extends JPanel {
 
     Arrays.stream(panels).forEach(panel -> panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)));
 
-    levelContentPanel.setBackground(ComponentLibrary.fullLavender);
-    timeContentPanel.setBackground(ComponentLibrary.lavender);
-    treasuresContentPanel.setBackground(ComponentLibrary.deepLavender);
-    inventoryContentPanel.setBackground(ComponentLibrary.darkLavender);
+    levelContentPanel.setBackground(cl.fullLavender);
+    timeContentPanel.setBackground(cl.lavender);
+    treasuresContentPanel.setBackground(cl.deepLavender);
+    inventoryContentPanel.setBackground(cl.darkLavender);
 
     // initialise title labels for panels in inner side panel
     JLabel levelTitleLabel;
@@ -152,7 +156,7 @@ public class SidePanel extends JPanel {
 
     //configure and stylise title labels
     Arrays.stream(titleLabels).forEach(label -> {
-      label.setFont(ComponentLibrary.sideFont);
+      label.setFont(cl.sideFont);
       label.setForeground(Color.WHITE);
       label.setAlignmentX(Component.CENTER_ALIGNMENT);
     });
@@ -166,7 +170,7 @@ public class SidePanel extends JPanel {
 
     //configure and stylise value labels
     Arrays.stream(valueLabels).forEach(valueLabel -> {
-      valueLabel.setFont(ComponentLibrary.bigFont);
+      valueLabel.setFont(cl.bigFont);
       valueLabel.setForeground(Color.BLACK);
       valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     });

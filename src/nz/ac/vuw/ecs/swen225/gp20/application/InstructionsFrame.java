@@ -17,11 +17,12 @@ import javax.swing.JScrollPane;
 /**
  * InstructionsFrame class for instantiating a new instructions frame to gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class InstructionsFrame extends JFrame implements ActionListener {
 
   private final Gui gui;
+  private final ComponentLibrary cl;
 
   /**
    * A help panel is constructed with its content panel.
@@ -29,6 +30,7 @@ public class InstructionsFrame extends JFrame implements ActionListener {
    * @param gui the gui object passed
    */
   public InstructionsFrame(Gui gui) {
+    cl = ComponentLibrary.getInstance();
 
     this.gui = gui;
 
@@ -56,19 +58,19 @@ public class InstructionsFrame extends JFrame implements ActionListener {
     final JLabel titleLabel = new JLabel("HOW TO PLAY");
     JButton exitButton = new JButton("EXIT");
     exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    exitButton.setBackground(ComponentLibrary.fullLavender);
+    exitButton.setBackground(cl.fullLavender);
     exitButton.setForeground(Color.WHITE);
-    exitButton.setFont(ComponentLibrary.bigFont);
+    exitButton.setFont(cl.bigFont);
     exitButton.addActionListener(this);
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    titleLabel.setFont(ComponentLibrary.titleScreenFont);
+    titleLabel.setFont(cl.titleScreenFont);
     JPanel contentPanel = new JPanel();
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
     contentPanel.add(titleLabel);
     contentPanel.add(Box.createRigidArea(new Dimension(0, 50)));
     contentPanel.add(exitButton);
     contentPanel.add(instructionsLabel());
-    contentPanel.setBackground(ComponentLibrary.lightLavender);
+    contentPanel.setBackground(cl.lightLavender);
     return contentPanel;
   }
 
@@ -136,43 +138,43 @@ public class InstructionsFrame extends JFrame implements ActionListener {
                     + "<a>"
                     + "Use the arrow keys to guide chap around the maze."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.moveDemo.toString() + "\" border=\"3\">"
+                    + "<img src=\"file:" + cl.moveDemo.toString() + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "Collect the emerald treasures."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.collectDemo.toString()
+                    + "<img src=\"file:" + cl.collectDemo.toString()
                       + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "Collect the pickaxes to mine through certain blocks/unlock doors."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.unlockDemo.toString()
+                    + "<img src=\"file:" + cl.unlockDemo.toString()
                       + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "Move crates to create a path in the water."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.crateDemo.toString()
+                    + "<img src=\"file:" + cl.crateDemo.toString()
                       + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "Avoid enemies."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.enemiesDemo.toString()
+                    + "<img src=\"file:" + cl.enemiesDemo.toString()
                       + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "Reach the portal before the time runs out to progress to the next level."
                     + "<br>"
-                    + "<img src=\"file:" + ComponentLibrary.portalDemo.toString()
+                    + "<img src=\"file:" + cl.portalDemo.toString()
                       + "\" border=\"3\">"
                     + "<br>"
                     + "<br>"
                     + "</a>"
                     + "</body>"
                     + "</html>");
-    instructLabel.setFont(ComponentLibrary.bodyFont);
+    instructLabel.setFont(cl.bodyFont);
     instructLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     return instructLabel;
   }

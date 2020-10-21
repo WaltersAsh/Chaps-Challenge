@@ -51,7 +51,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 /**
  * Gui class for visual display of the game.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 @JsonIgnoreType
 public class Gui extends MazeEventListener implements ActionListener {
@@ -105,8 +105,10 @@ public class Gui extends MazeEventListener implements ActionListener {
   private boolean isTimerActive;
   private boolean isPaused;
 
+  private final ComponentLibrary cl;
+
   //recnplay components
-  private RecordAndReplay recnplay;
+  private final RecordAndReplay recnplay;
 
   /**
    * Construct the GUI: frame, panels, labels, menus, button listeners.
@@ -114,6 +116,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    * @param maze the maze object passed
    */
   public Gui(Maze maze) {
+    cl = ComponentLibrary.getInstance();
     this.maze = maze;
 
     recnplay = new RecordAndReplay(this);
@@ -166,18 +169,18 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel.setText(String.valueOf(maze.getMillisecondsLeft() / 1000));
 
     //initialise optionpane
-    UIManager.put("OptionPane.background", new ColorUIResource(ComponentLibrary.deepLavender));
-    UIManager.put("Panel.background", new ColorUIResource(ComponentLibrary.lightLavender));
-    UIManager.put("OptionPane.messageFont", ComponentLibrary.buttonFont);
-    UIManager.put("OptionPane.buttonFont", ComponentLibrary.buttonFont);
+    UIManager.put("OptionPane.background", new ColorUIResource(cl.deepLavender));
+    UIManager.put("Panel.background", new ColorUIResource(cl.lightLavender));
+    UIManager.put("OptionPane.messageFont", cl.buttonFont);
+    UIManager.put("OptionPane.buttonFont", cl.buttonFont);
     UIManager.put("OptionPane.messageForeground", Color.BLACK);
-    UIManager.put("Button.background", ComponentLibrary.fullLavender);
+    UIManager.put("Button.background", cl.fullLavender);
     UIManager.put("Button.foreground", Color.WHITE);
 
     //initialise filechooser styling
-    UIManager.put("List.background", ComponentLibrary.deepLavender);
+    UIManager.put("List.background", cl.deepLavender);
     UIManager.put("List.foreground", Color.WHITE);
-    UIManager.put("FileChooser.listFont", ComponentLibrary.sideFont);
+    UIManager.put("FileChooser.listFont", cl.sideFont);
 
     // initialise frame
     frame.add(framePanel);
@@ -204,7 +207,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   private void createFramePanel() {
     framePanel = new JPanel();
     framePanel.setLayout(new BoxLayout(framePanel, BoxLayout.X_AXIS));
-    framePanel.setBackground(ComponentLibrary.lightLavender);
+    framePanel.setBackground(cl.lightLavender);
     framePanel.setBorder(new EmptyBorder(50, 50, 50, 50));
   }
 
@@ -646,7 +649,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       if (showDialog) {
         JOptionPane.showOptionDialog(frame, "Press esc to resume ",
                 "Game Paused", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, ComponentLibrary.pausedIcon,
+                JOptionPane.QUESTION_MESSAGE, cl.pausedIcon,
                 null, null);
       }
     }
@@ -1032,7 +1035,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     temp.setAlwaysOnTop(true);
     int response = JOptionPane.showConfirmDialog(temp, message,
             "Exit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-            ComponentLibrary.exitIcon);
+            cl.exitIcon);
     if (response == JOptionPane.YES_OPTION) {
       if (operationOnClose == null) {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

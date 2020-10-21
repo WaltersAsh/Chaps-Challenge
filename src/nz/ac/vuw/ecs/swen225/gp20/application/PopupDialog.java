@@ -19,7 +19,7 @@ import javax.swing.border.Border;
 /**
  * PopupDialog class for instantiating a new popup box to the gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class PopupDialog extends JDialog {
 
@@ -41,6 +41,8 @@ public class PopupDialog extends JDialog {
 
   private Border border;
 
+  private final ComponentLibrary cl;
+
   /**
    * Instantiates a new Popup dialog for the gui.
    *
@@ -48,6 +50,8 @@ public class PopupDialog extends JDialog {
    * @param actionListener the action listener to be added
    */
   public PopupDialog(DialogState state, ActionListener actionListener) {
+    cl = ComponentLibrary.getInstance();
+
     setLayout(new GridBagLayout());
     messagePanel = new JPanel();
     GridBagConstraints gbc = new GridBagConstraints();
@@ -108,9 +112,9 @@ public class PopupDialog extends JDialog {
     buttonPanel.add(restartButton);
     buttonPanel.add(Box.createRigidArea(new Dimension(50, 0)));
     buttonPanel.add(nextButton);
-    nextButton.setBackground(ComponentLibrary.fullLavender);
+    nextButton.setBackground(cl.fullLavender);
     nextButton.setForeground(Color.WHITE);
-    nextButton.setFont(ComponentLibrary.buttonFont);
+    nextButton.setFont(cl.buttonFont);
     nextButton.setBorder(border);
     nextButton.addActionListener(actionListener);
     restartButton.addActionListener(actionListener);
@@ -133,15 +137,15 @@ public class PopupDialog extends JDialog {
    * Stylise the dialog.
    */
   private void stylise() {
-    messagePanel.setBackground(ComponentLibrary.fullLavender);
+    messagePanel.setBackground(cl.fullLavender);
     messagePanel.setBorder(border);
     buttonPanel.setBackground(new Color(0, 0, 0, 0));
     messageLabel.setForeground(Color.BLACK);
-    restartButton.setBackground(ComponentLibrary.fullLavender);
+    restartButton.setBackground(cl.fullLavender);
     restartButton.setForeground(Color.WHITE);
     restartButton.setBorder(border);
-    messageLabel.setFont(ComponentLibrary.bigFont);
-    restartButton.setFont(ComponentLibrary.buttonFont);
+    messageLabel.setFont(cl.bigFont);
+    restartButton.setFont(cl.buttonFont);
   }
 
   /**

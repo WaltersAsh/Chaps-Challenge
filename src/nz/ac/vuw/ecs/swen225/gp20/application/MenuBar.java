@@ -15,7 +15,7 @@ import javax.swing.border.LineBorder;
 /**
  * MenuBar class for instantiating a menu bar for gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class MenuBar extends JMenuBar {
 
@@ -45,12 +45,16 @@ public class MenuBar extends JMenuBar {
   private JMenu helpMenu;
   private JMenuItem showInstructMenuItem;
 
+  private final ComponentLibrary cl;
+
   /**
    * Construct a menu bar and add all menus + menu items.
    *
    * @param actionListener the action listener passed (this - in gui)
    */
   public MenuBar(ActionListener actionListener) {
+    cl = ComponentLibrary.getInstance();
+
     createMenuComponents(actionListener);
     add(fileMenu);
     add(Box.createRigidArea(new Dimension(20, 0)));
@@ -61,8 +65,8 @@ public class MenuBar extends JMenuBar {
     add(recnplayMenu);
     add(Box.createRigidArea(new Dimension(20, 0)));
     add(helpMenu);
-    setBackground(ComponentLibrary.lightLavender);
-    setBorder(new LineBorder(ComponentLibrary.lightLavender, 10));
+    setBackground(cl.lightLavender);
+    setBorder(new LineBorder(cl.lightLavender, 10));
     setOpaque(true);
   }
 
@@ -121,15 +125,15 @@ public class MenuBar extends JMenuBar {
     Arrays.stream(superMenuItems).forEach(menuItems -> {
       Arrays.stream(menuItems).forEach(menuItem -> {
         menuItem.addActionListener(actionListener);
-        menuItem.setBackground(ComponentLibrary.deepLavender);
+        menuItem.setBackground(cl.deepLavender);
         menuItem.setForeground(Color.WHITE);
-        menuItem.setFont(ComponentLibrary.bodyFont);
+        menuItem.setFont(cl.bodyFont);
         menuItem.setBorder(new LineBorder(Color.WHITE, 1, true));
         JMenu menu = menuToMenuItems.get(menuItems);
         menu.setForeground(Color.WHITE);
         menu.setOpaque(true);
-        menu.setBackground(ComponentLibrary.fullLavender);
-        menu.setFont(ComponentLibrary.buttonFont);
+        menu.setBackground(cl.fullLavender);
+        menu.setFont(cl.buttonFont);
         menu.setBorder(new LineBorder(Color.WHITE, 1, true));
         menu.add(menuItem);
       });
@@ -140,14 +144,14 @@ public class MenuBar extends JMenuBar {
     showInstructMenuItem.addActionListener(actionListener);
     helpMenu.setForeground(Color.WHITE);
     helpMenu.add(showInstructMenuItem);
-    helpMenu.setBackground(ComponentLibrary.deepLavender);
-    helpMenu.setFont(ComponentLibrary.buttonFont);
+    helpMenu.setBackground(cl.deepLavender);
+    helpMenu.setFont(cl.buttonFont);
     helpMenu.setBorder(new LineBorder(Color.WHITE, 1, true));
     helpMenu.setOpaque(true);
-    helpMenu.setBackground(ComponentLibrary.fullLavender);
-    showInstructMenuItem.setBackground(ComponentLibrary.deepLavender);
+    helpMenu.setBackground(cl.fullLavender);
+    showInstructMenuItem.setBackground(cl.deepLavender);
     showInstructMenuItem.setForeground(Color.WHITE);
-    showInstructMenuItem.setFont(ComponentLibrary.bodyFont);
+    showInstructMenuItem.setFont(cl.bodyFont);
     showInstructMenuItem.setBorder(new LineBorder(Color.WHITE, 1, true));
   }
 

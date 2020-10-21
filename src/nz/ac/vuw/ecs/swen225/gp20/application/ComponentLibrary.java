@@ -11,71 +11,120 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-
 /**
- * A utility class used for storing and retrieving fonts, colours and icon images.
+ * A class used for storing and retrieving fonts, colours and icon images.
+ * Follows the Singleton design pattern
+ * https://en.wikipedia.org/wiki/Singleton_pattern
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class ComponentLibrary {
 
-  //static resources to be initialised
-  private static final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
-  private static Font font = new Font("Arial", Font.PLAIN, 24);
-  private static Icon pausedIc = new ImageIcon();
-  private static Icon exitIc = new ImageIcon();
+  private final File fontFile = new File("resources/textures/gui/font/minecraft_font.ttf");
+  private Font font = new Font("Arial", Font.PLAIN, 24);
 
-  //instantiate resources
-  static {
+  //Icons
+  public Icon pausedIcon;
+  public Icon exitIcon;
+
+  //Fonts
+  public Font buttonFont;
+  public Font sideFont;
+  public Font bigFont;
+  public Font infoFont;
+  public Font titleScreenFont;
+  public Font bodyFont;
+
+  //Colours
+  public Color lavender;
+  public Color lightLavender;
+  public Color darkLavender;
+  public Color deepLavender;
+  public Color fullLavender;
+  public Color paleLavender;
+
+  //demo files
+  public final File collectDemo = new File(
+          "resources/textures/gui/instructions/collect.gif");
+  public final File crateDemo = new File("resources/textures/gui/instructions/crate.gif");
+  public final File enemiesDemo = new File(
+          "resources/textures/gui/instructions/enemies.gif");
+  public final File moveDemo = new File("resources/textures/gui/instructions/movement.gif");
+  public final File portalDemo = new File("resources/textures/gui/instructions/portal.gif");
+  public final File unlockDemo = new File("resources/textures/gui/instructions/unlock.gif");
+
+  //only a single instance of this object is instantiated
+  static ComponentLibrary cl = new ComponentLibrary();
+
+  /**
+   * The component library is instantiated by initialising colours, fonts and icons.
+   */
+  private ComponentLibrary() {
+    initialiseColours();
+    initialiseFonts();
+    initialiseIcons();
+  }
+
+  /**
+   * Get the only instance of the ComponentLibrary.
+   *
+   * @return the ComponentLibrary object
+   */
+  static ComponentLibrary getInstance() {
+    return cl;
+  }
+
+  /**
+   * Setup fonts.
+   */
+  private void initialiseFonts() {
     try {
       font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+    } catch (IOException | FontFormatException e) {
+      e.printStackTrace();
+    }
+    buttonFont = font.deriveFont(Font.PLAIN, 20);
+    sideFont = font.deriveFont(Font.PLAIN, 11);
+    bigFont = font.deriveFont(Font.BOLD, 40);
+    infoFont = font.deriveFont(Font.PLAIN, 40);
+    titleScreenFont = font.deriveFont(Font.BOLD, 95);
+    bodyFont = font.deriveFont(Font.PLAIN, 13);
+  }
+
+  /**
+   * Setup colours.
+   */
+  private void initialiseColours() {
+    lavender = new Color(74, 29, 138);
+    lightLavender = new Color(179, 159, 207);
+    darkLavender = new Color(50, 38, 66);
+    deepLavender = new Color(85, 52, 130);
+    fullLavender = new Color(102, 0, 255);
+    paleLavender = new Color(237, 224, 255);
+  }
+
+  /**
+   * Setup icons.
+   */
+  private void initialiseIcons() {
+    try {
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
       image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
-      pausedIc = new ImageIcon(image);
+      pausedIcon = new ImageIcon(image);
       image = ImageIO.read(new File("resources/textures/gui/quit.png"));
       image = image.getScaledInstance(103, 42, Image.SCALE_DEFAULT);
-      exitIc = new ImageIcon(image);
-    } catch (FontFormatException | IOException e) {
+      exitIcon = new ImageIcon(image);
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
-
-  //Icons
-  public static final Icon pausedIcon = pausedIc;
-  public static final Icon exitIcon = exitIc;
-
-  //Fonts
-  public static final Font buttonFont = font.deriveFont(Font.PLAIN, 20);
-  public static final Font sideFont = font.deriveFont(Font.PLAIN, 11);
-  public static final Font bigFont = font.deriveFont(Font.BOLD, 40);
-  public static final Font infoFont = font.deriveFont(Font.PLAIN, 40);
-  public static final Font titleScreenFont = font.deriveFont(Font.BOLD, 95);
-  public static final Font bodyFont = font.deriveFont(Font.PLAIN, 13);
-
-  //Colours
-  public static final Color lavender = new Color(74, 29, 138);
-  public static final Color lightLavender = new Color(179, 159, 207);
-  public static final Color darkLavender = new Color(50, 38, 66);
-  public static final Color deepLavender = new Color(85, 52, 130);
-  public static final Color fullLavender = new Color(102, 0, 255);
-  public static final Color paleLavender = new Color(237, 224, 255);
-
-  //demo files
-  public static final File collectDemo = new File(
-          "resources/textures/gui/instructions/collect.gif");
-  public static final File crateDemo = new File("resources/textures/gui/instructions/crate.gif");
-  public static final File enemiesDemo = new File(
-          "resources/textures/gui/instructions/enemies.gif");
-  public static final File moveDemo = new File("resources/textures/gui/instructions/movement.gif");
-  public static final File portalDemo = new File("resources/textures/gui/instructions/portal.gif");
-  public static final File unlockDemo = new File("resources/textures/gui/instructions/unlock.gif");
 
   /**
    * Create and return a icon/indicator for recording.
    *
    * @return the JLabel as an indicator for recording
    */
-  public static JLabel recordingIconLabel() {
+  public JLabel recordingIconLabel() {
     JLabel recordingIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/rec-icon.jpg"));
@@ -94,7 +143,7 @@ public class ComponentLibrary {
    *
    * @return the JLabel as an indicator for replaying
    */
-  public static JLabel replayingIconLabel() {
+  public JLabel replayingIconLabel() {
     JLabel replayingIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/replay.png"));
@@ -113,7 +162,7 @@ public class ComponentLibrary {
    *
    * @return the JLabel as an indicator for pausing
    */
-  public static JLabel pausedIconLabel() {
+  public JLabel pausedIconLabel() {
     JLabel pausedIconLabel = new JLabel();
     try {
       Image image = ImageIO.read(new File("resources/textures/gui/paused.png"));
@@ -132,7 +181,7 @@ public class ComponentLibrary {
    *
    * @return the info field JLabel
    */
-  public static JLabel infoFieldLabel() {
+  public JLabel infoFieldLabel() {
     JLabel infoFieldLabel = null;
     try {
       Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
@@ -152,27 +201,12 @@ public class ComponentLibrary {
    *
    * @return the info field text JLabel
    */
-  public static JLabel infoFieldTextLabel() {
+  public JLabel infoFieldTextLabel() {
     JLabel infoFieldTextLabel = new JLabel();
     infoFieldTextLabel.setBounds(150, -225, 1000, 1000);
-    infoFieldTextLabel.setFont(ComponentLibrary.infoFont);
+    infoFieldTextLabel.setFont(cl.infoFont);
     infoFieldTextLabel.setForeground(Color.BLACK);
     infoFieldTextLabel.setVisible(false);
     return infoFieldTextLabel;
   }
-
-  /**
-   * Create and return a background image label.
-   *
-   * @return the background image JLabel.
-   */
-  public static JLabel backgroundImageLabel() {
-    File backgroundFile = new File("resources/textures/gui/background.jpg");
-    ImageIcon backgroundIcon = new ImageIcon(String.valueOf(backgroundFile));
-    JLabel background = new JLabel("", backgroundIcon, JLabel.CENTER);
-    background.setBounds(0, 0, 1280, 800);
-    background.setVisible(true);
-    return background;
-  }
-
 }

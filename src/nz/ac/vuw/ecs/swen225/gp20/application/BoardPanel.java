@@ -9,7 +9,7 @@ import nz.ac.vuw.ecs.swen225.gp20.rendering.BoardView;
 /**
  * BoardPanel class for instantiating a new board panel for the gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class BoardPanel extends JLayeredPane {
 
@@ -19,6 +19,7 @@ public class BoardPanel extends JLayeredPane {
   private final JLabel recordingIconLabel;
   private final JLabel replayingIconLabel;
   private final JLabel pausedIconLabel;
+  private final ComponentLibrary cl;
 
   /**
    * Construct a board panel and add all required components.
@@ -26,12 +27,13 @@ public class BoardPanel extends JLayeredPane {
    * @param maze the maze object passed
    */
   public BoardPanel(Maze maze) {
+    cl = ComponentLibrary.getInstance();
     createBoardPanel(maze);
-    infoFieldLabel = ComponentLibrary.infoFieldLabel();
-    infoFieldTextLabel = ComponentLibrary.infoFieldTextLabel();
-    recordingIconLabel = ComponentLibrary.recordingIconLabel();
-    replayingIconLabel = ComponentLibrary.replayingIconLabel();
-    pausedIconLabel = ComponentLibrary.pausedIconLabel();
+    infoFieldLabel = cl.infoFieldLabel();
+    infoFieldTextLabel = cl.infoFieldTextLabel();
+    recordingIconLabel = cl.recordingIconLabel();
+    replayingIconLabel = cl.replayingIconLabel();
+    pausedIconLabel = cl.pausedIconLabel();
 
     board.setBounds(0, 0, 1000, 1000);
     add(board, JLayeredPane.DEFAULT_LAYER);
@@ -49,7 +51,7 @@ public class BoardPanel extends JLayeredPane {
    */
   private void createBoardPanel(Maze maze) {
     board = new BoardView(maze);
-    this.setBackground(ComponentLibrary.lightLavender);
+    this.setBackground(cl.lightLavender);
     this.setMinimumSize(
             new Dimension(board.getPreferredSize().width, board.getPreferredSize().height));
     this.setPreferredSize(

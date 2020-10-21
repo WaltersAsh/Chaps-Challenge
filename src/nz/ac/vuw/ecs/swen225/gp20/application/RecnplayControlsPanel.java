@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 /**
  * RecnplayControlsPanel class for instantiating a new control panel for the gui.
  *
- * @author Justin 300470389
+ * @author Justin Joe 300470389
  */
 public class RecnplayControlsPanel extends JPanel {
 
@@ -23,12 +23,15 @@ public class RecnplayControlsPanel extends JPanel {
   private JButton standardReplayButton;
   private JButton fasterReplayButton;
 
+  private final ComponentLibrary cl;
+
   /**
    * Instantiates a new Recnplay controls panel.
    *
    * @param actionListener the action listener
    */
   public RecnplayControlsPanel(ActionListener actionListener) {
+    cl = ComponentLibrary.getInstance();
     createRecnplayControls(actionListener);
   }
 
@@ -38,7 +41,7 @@ public class RecnplayControlsPanel extends JPanel {
    * @param actionListener the action listener
    */
   private void createRecnplayControls(ActionListener actionListener) {
-    setBackground(ComponentLibrary.lightLavender);
+    setBackground(cl.lightLavender);
     setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
     //initialise buttons
@@ -53,9 +56,9 @@ public class RecnplayControlsPanel extends JPanel {
 
     //go through each button, configure and add them to this panel
     Arrays.stream(buttons).forEach(button -> {
-      button.setFont(ComponentLibrary.buttonFont);
+      button.setFont(cl.buttonFont);
       button.setForeground(Color.WHITE);
-      button.setBackground(ComponentLibrary.lavender);
+      button.setBackground(cl.lavender);
       button.addActionListener(actionListener);
       add(button);
       add(Box.createRigidArea(new Dimension(50, 0)));
