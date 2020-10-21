@@ -240,6 +240,7 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void actionPerformed(ActionEvent e) {
+    frame.requestFocusInWindow();
 
     //MAZE FUNCTIONALITY
 
@@ -475,7 +476,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !isPaused) {
+        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording()) {
+          resume();
           isTimerActive = true;
           try {
             timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
@@ -652,7 +654,6 @@ public class Gui extends MazeEventListener implements ActionListener {
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       maze.resume();
       isPaused = false;
-
     }
   }
 
@@ -693,7 +694,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     timeValueLabel.setText(Long.toString(maze.getMillisecondsLeft() / 1000));
     pausedIconLabel.setVisible(false);
     frame.revalidate();
-    setupTimer();
   }
 
   /**
