@@ -39,6 +39,7 @@ public class Maze {
   private int levelID;
   private Timer pathFindingTimer;
   private int pathFindingDelay = 1000; // delay between path finding ticks in ms
+  private boolean doPathFinding = true;
 
   // Output
   @JsonIgnore
@@ -59,18 +60,6 @@ public class Maze {
    * Instantiates a new Maze. For Jackson.
    */
   public Maze() {
-  }
-
-
-  /**
-   * Constuct empty Board with a width and height
-   *
-   * @param width  width of board
-   * @param height height of board
-   */
-  public Maze(int width, int height) {
-    tiles = new Tile[width][height];
-    throw new UnsupportedOperationException("Not implemented.");
   }
 
   /**
@@ -107,7 +96,14 @@ public class Maze {
     StringBuilder s = new StringBuilder();
     for (Tile[] rows : tiles) {
       for (Tile t : rows) {
-        s.append(t.getInitials());
+        String a = t.getInitials();
+        if(t instanceof PathTile) {
+          if(((PathTile)t).getContainedEntities().isEmpty()){
+            a = "__";
+          }
+        }
+        s.append(a);
+        s.append(" ");
       }
       s.append("\n");
     }
@@ -122,6 +118,14 @@ public class Maze {
    */
   public <L extends MazeEventListener> void addListener(L listener) {
     listeners.add(listener);
+  }
+  
+  /**
+   * Clear the listeners
+   * For testing only!
+   */
+  public void clearListeners() {
+    listeners.clear();
   }
 
   /**
@@ -142,7 +146,6 @@ public class Maze {
    * @param event the new event
    */
   private void overrideDispatch(MazeEventWalked event) {
-    // System.out.printf("trying to override current dispatch %s with new %s\n", dispatch, event);
     if (dispatch == null) {
       dispatch = event;
     } else {
@@ -150,7 +153,6 @@ public class Maze {
         dispatch = event;
       }
     }
-    // System.out.printf("dispatch = %s\n", dispatch);
   }
 
   /**
@@ -341,6 +343,13 @@ public class Maze {
         return null;
     }
   }
+  
+  /**
+   * Disable or enable pathfinding
+   */
+  public void setDoPathfinding(boolean set) {
+    doPathFinding = set;
+  }
 
   /**
    * Setup the timer, but only if it's needed.
@@ -362,6 +371,7 @@ public class Maze {
    * Tick the enemy path finding.
    */
   public void tickPathFinding() {
+    if(!doPathFinding) return;
     for (Enemy e : enemies) {
       Direction next = e.tickPathFinding();
       if (next == null) continue;

@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze.event;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.*;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+import test.nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 
 /**
  * An example class of how to implement MazeEventListener.
