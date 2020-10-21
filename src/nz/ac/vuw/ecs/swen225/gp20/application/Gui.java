@@ -13,13 +13,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -34,6 +28,9 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ColorUIResource;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Enemy;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
@@ -196,7 +193,6 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseWindowListener();
     setupTimer();
     setupKeyListener();
-    maze.resume();
   }
 
   /**
@@ -301,36 +297,78 @@ public class Gui extends MazeEventListener implements ActionListener {
       //RECNPLAY FUNCTIONALITIES
 
       //start recording game play
-    } else if (e.getSource() == menuBar.getStartRecordingMenuItem()) {
+    } else if (e.getSource() == menuBar.getStartRecordingMenuItem() && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       pause(false);
-      RecordAndReplay.startRecording(openFileChooser(false));
-      if (RecordAndReplay.isRecording()) {
+
+      //save game state when a recording begins
+      File file = openFileChooser(false);
+      if(file != null) {
+
+        recnplay.setSaveFile(file);
+        Persistence.saveMaze(maze, recnplay.getSaveFile());
+
+        RecordAndReplay.startRecording();
         recordingIconLabel.setVisible(true);
+
       }
       resume();
 
-      //stop recording game play
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem()
-            && RecordAndReplay.isRecording()) {
+
+    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode() && recnplay.isRecording() && recnplay.getSaveFile() != null) {
       pause(false);
+
+      //load game state from recSaveFile
+      Maze loaded = Persistence.loadMaze(recnplay.getSaveFile());
+
+      //set moves in loaded maze with moves in recnplay
+      loaded.setMovesByTime(recnplay.getMovesByTime());
+
+      //write game state with moves
+      Persistence.saveMaze(loaded, recnplay.getSaveFile());
+
       RecordAndReplay.stopRecording();
       recordingIconLabel.setVisible(false);
       resume();
 
-      //play recording
-    } else if (e.getSource() == menuBar.getPlayMenuItem()) {
-      pause(false);
+
+    } else if (e.getSource() == menuBar.getPlayMenuItem() && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
+
+    } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
+
+      recnplay.stopPlayback();
+      Maze loaded = Persistence.quickLoad();
+      this.loadLevel(loaded);
       resume();
-
-      //stop playing recording
-    } else if (e.getSource() == menuBar.getStopPlayMenuItem()) {
-
-      //load recording
-    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause(false);
-      RecordAndReplay.loadRecording(openFileChooser(true));
-      resume();
+
+
+
+    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem() && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+      pause(false);
+
+      //quick save current game
+      Persistence.quickSave(maze);
+
+      //choose a file to save recording to
+      File file = openFileChooser(true);
+
+      if (file != null) {
+
+        //load game state
+        Maze loaded = Persistence.loadMaze(file);
+
+        //set the game state
+        this.loadLevel(loaded);
+
+        //load the recording in recnplay
+        recnplay.loadRecording(maze.getMovesByTime());
+
+      } else {
+        resume();
+      }
+
+
 
       //instructions
     } else if (e.getSource() == menuBar.getShowInstructMenuItem()) {
@@ -340,17 +378,22 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     //recnplay button actions
     if (e.getSource() == nextFrameButton) {
-      System.out.println("Next frame button pressed");
+      recnplay.nextFrame();
     } else if (e.getSource() == lastFrameButton) {
-      System.out.println("Last frame button pressed");
+      recnplay.lastFrame();
     } else if (e.getSource() == autoPlayButton) {
       System.out.println("Auto play button pressed");
+      recnplay.setPlaybackSpeed(1);
+      recnplay.playRecording();
     } else if (e.getSource() == slowerReplayButton) {
       System.out.println("Slower replay button pressed");
+      recnplay.setPlaybackSpeed(1.75);
     } else if (e.getSource() == standardReplayButton) {
       System.out.println("Standard replay button pressed");
+      recnplay.setPlaybackSpeed(1);
     } else if (e.getSource() == fasterReplayButton) {
       System.out.println("Faster replay button pressed");
+      recnplay.setPlaybackSpeed(0.5);
     }
 
     //popup dialog button actions
@@ -373,24 +416,73 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Moves chap.
+   * Moves chap, tells recnplay to record the move
+   * if game play is being recorded
    *
    * @param direction the movement direction
-   * @param keyEvent the registered keyEvent
    */
-  public void move(Maze.Direction direction, KeyEvent keyEvent) {
+  public void move(Maze.Direction direction) {
     maze.move(direction);
-    if (RecordAndReplay.isRecording()) {
-      this.maze.moves.add(direction);
-      Move move = new Move(1, keyEvent);
-      long timestamp = maze.getMillisecondsLeft();
-      if (timeToMoveMap.containsKey(timestamp)) {
-        timeToMoveMap.get(timestamp).add(move);
-      } else {
-        List<Move> newList = new ArrayList<>();
-        timeToMoveMap.put(timestamp, newList);
-      }
 
+    if (recnplay.isRecording()) {
+
+      //save chaps id as -1 so enemies can be saved by their index, (0, 1, 2, 3, etc...)
+      Move move = new Move(-1, direction.ordinal());
+
+      //add the move to the current collection of moves i.e. the current recording
+      recnplay.addMove(move);
+    }
+  }
+
+  /**
+   * Executes a move on the maze from a recording
+   *
+   * @param move the move to be executed
+   * @param undo indicates if this move should be undone or applied
+   */
+  public void executeMove(Move move, boolean undo) {
+    //get the direction from the moves ordinal value (this is to follow dependency diagram)
+    Maze.Direction direction = Maze.Direction.values()[move.direction];
+
+    if (move.actorId == -1) {
+      if(undo) {
+        this.undoRedoGui(undo);
+      } else {
+        //move chap
+        maze.move(direction);
+      }
+    } else {
+      if(undo) {
+        //invert move direction
+        int opposite = move.direction == 0 || move.direction == 2 ? move.direction + 1 : move.direction - 1;
+        direction = Maze.Direction.values()[opposite];
+      }
+      //move enemy
+      maze.moveEnemy(move.actorId, direction);
+    }
+  }
+
+  /**
+   * Tick the enemy path finding and record enemy moves
+   * if needed
+   */
+  public void tickPathFinding() {
+    for(Enemy enemy : maze.getEnemies()) {
+
+      //get the direction from enemy path finding
+      Maze.Direction direction = enemy.tickPathFinding();
+
+      //add the mobs move to the current time stamps list of moves in gui
+      int enemyId = maze.getEnemies().indexOf(enemy);
+
+      //move the enemy
+      maze.moveEnemy(enemyId, direction);
+
+      //if game play is being recorded add the move to the recording
+      if (recnplay.isRecording()) {
+        Move move = new Move(enemyId, direction.ordinal());
+        recnplay.addMove(move);
+      }
     }
   }
 
@@ -403,7 +495,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !RecordAndReplay.isRecording() && !isPaused) {
+        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !isPaused) {
           isTimerActive = true;
           try {
             timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
@@ -428,16 +520,16 @@ public class Gui extends MazeEventListener implements ActionListener {
         }
         switch (key) {
           case KeyEvent.VK_UP:
-            move(Maze.Direction.UP, e);
+            move(Maze.Direction.UP);
             break;
           case KeyEvent.VK_DOWN:
-            move(Maze.Direction.DOWN, e);
+            move(Maze.Direction.DOWN);
             break;
           case KeyEvent.VK_LEFT:
-            move(Maze.Direction.LEFT, e);
+            move(Maze.Direction.LEFT);
             break;
           case KeyEvent.VK_RIGHT:
-            move(Maze.Direction.RIGHT, e);
+            move(Maze.Direction.RIGHT);
             break;
           default:
           }
@@ -487,6 +579,7 @@ public class Gui extends MazeEventListener implements ActionListener {
           undoGui();
           System.out.println("Undo activated");
         }
+
       }
 
       // dead code
@@ -509,18 +602,42 @@ public class Gui extends MazeEventListener implements ActionListener {
     timerTask = new TimerTask() {
       @Override
       public void run() {
-        if (maze.getMillisecondsLeft() > 0) {
-          maze.setMillisecondsLeft(maze.getMillisecondsLeft() - 1);
-          long millisecondsLeft = maze.getMillisecondsLeft();
-          if (millisecondsLeft > 9) {
-            timeValueLabel.setText(Long.toString(millisecondsLeft / 1000));
+
+        //get time remaining
+        long millisLeft = maze.getMillisecondsLeft();
+
+        if(millisLeft > 0) {
+          //decrement milliseconds left
+          millisLeft--;
+          maze.setMillisecondsLeft(millisLeft);
+
+          //tick enemy path finding every half second/500 milliseconds
+          if(millisLeft % 500 ==0) {
+            tickPathFinding();
           }
-          //timer drops down to last 10
-          if (millisecondsLeft <= 11000) {
+
+          //first two digits of the remaining time
+          String value = millisLeft > 10 ? Long.toString(millisLeft).substring(0, 2) : Long.toString(millisLeft);
+
+          //if its the last ten seconds
+          if (millisLeft < 9999) {
+
+            //set the label colour to red
             timeValueLabel.setForeground(Color.RED);
+
+            //if its the last ten seconds but not the last second
+            if(millisLeft > 999) {
+              value = value.charAt(0) + "." + value.charAt(1);
+            } else {
+              value = "0." + value.charAt(0);
+            }
           }
-          //timer expires
-          if (millisecondsLeft == 0) {
+
+          //set the label
+          timeValueLabel.setText(value);
+
+          //if time runs out
+          if(millisLeft == 0) {
             pause(false);
             timerExpiryDialog.setVisible(true);
           }
@@ -555,7 +672,6 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void resume() {
     if (isPaused) {
       pausedIconLabel.setVisible(false);
-      maze.resume();
       setupTimer();
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       isPaused = false;
@@ -634,8 +750,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     clearInventoryPanel();
     reloadInventoryPanel();
     isTimerActive = false;
-    isPaused = false;
-    maze.resume();
+
   }
 
   /**

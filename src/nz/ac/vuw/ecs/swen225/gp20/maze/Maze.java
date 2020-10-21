@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 
 import java.util.*;
 
@@ -47,14 +48,30 @@ public class Maze {
 
   private MazeEventWalked dispatch;
 
-
-  //FIXME test for record and replay
-  public List<Direction> moves = new ArrayList<Direction>();
-
-  @JsonIgnore
   private UndoRedoHandler undoredo = new UndoRedoHandler(this);
 
   private boolean dead = false;
+
+
+  //FIXME REMOVE THIS COLLECTION
+  private List<Direction> moves = new ArrayList<>();
+  public void setMoves(List<Direction> moves) {
+    this.moves = moves;
+  }
+  public List<Direction> getMoves() {
+    return moves;
+  }
+
+  //FIXME test for recnplay
+  private Map<Long, List<Move>> movesByTime;
+  public void setMovesByTime(Map<Long, List<Move>> m) {
+    movesByTime = m;
+  }
+  public Map<Long, List<Move>> getMovesByTime() {
+    return movesByTime;
+  }
+
+
 
   /**
    * Instantiates a new Maze. For Jackson.
@@ -88,7 +105,6 @@ public class Maze {
       }
     }
     numTreasures = treasures.size();
-    setupTimer();
   }
 
   @Override
@@ -152,6 +168,37 @@ public class Maze {
       if (dispatch.getClass().isAssignableFrom(event.getClass())) {
         dispatch = event;
       }
+    }
+  }
+
+  /**
+   * Moves the given enemy in the given direction
+   *
+   * @param enemyId the id (index) of the enemy to be moved
+   * @param direction the direction to move the enemy
+   */
+  public void moveEnemy(int enemyId, Direction direction) {
+    if (direction == null) {
+      return;
+    }
+
+    //get the correct enemy from the list of enemies
+    Enemy enemy = enemies.get(enemyId);
+
+    //FIXME breakpoint code to check for wrong tile type
+    if(tileTo(enemy.getContainer(), direction) instanceof WallTile) {
+      int breakpoint = 0;
+    }
+
+    //the tile to move the enemy to
+    PathTile nextTile = (PathTile) tileTo(enemy.getContainer(), direction);
+
+    if (nextTile.equals(getChap().getContainer())) {
+      broadcast(new MazeEventEnemyWalkedKilled(this, enemy, enemy.getContainer(), nextTile, direction));
+      killChap();
+    } else {
+      broadcast(new MazeEventEnemyWalked(this, enemy, enemy.getContainer(), nextTile, direction));
+      nextTile.moveTo(enemy);
     }
   }
 
@@ -317,9 +364,10 @@ public class Maze {
         overrideDispatch(new MazeEventPushed(this, current, original, d, c));
         // can also push crate onto water to make a path
       } else if (pt.getBlocker() instanceof Water) {
+        Water water = (Water) pt.getBlocker();
         pt.remove(pt.getBlocker());
         c.getContainer().remove(c);
-        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, (Water)pt.getBlocker()));
+        overrideDispatch(new MazeEventPushedWater(this, current, original, d, c, water));
       } else {
         return false;
       }
@@ -352,54 +400,12 @@ public class Maze {
   }
 
   /**
-   * Setup the timer, but only if it's needed.
-   */
-  public void setupTimer() {
-    if (!enemies.isEmpty()) {
-      pathFindingTimer = new Timer();
-      pathFindingTimer.schedule(new TimerTask() {
-
-        @Override
-        public void run() {
-          if(!doPathFinding) return;
-          tickPathFinding();
-        }
-      }, 0, pathFindingDelay);
-    }
-  }
-
-  /**
-   * Tick the enemy path finding.
-   */
-  public void tickPathFinding() {
-    for (Enemy e : enemies) {
-      Direction next = e.tickPathFinding();
-      if (next == null) continue;
-      PathTile pt = (PathTile) tileTo(e.getContainer(), next);
-      if(pt.equals(chap.getContainer())) {
-        killChap();
-        broadcast(new MazeEventEnemyWalkedKilled(this, e, e.getContainer(), pt, next));
-      }else {
-        broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
-        pt.moveTo(e);
-      }
-    }
-  }
-
-  /**
    * Pause the game (suspending the game timer).
    */
   public void pause() {
     if (pathFindingTimer != null) {
       pathFindingTimer.cancel();
     }
-  }
-
-  /**
-   * Resume the game.
-   */
-  public void resume() {
-    setupTimer();
   }
 
   public Tile getTileAt(int row, int col) {
@@ -455,13 +461,6 @@ public class Maze {
   }
   public void setLevelID(int levelID) {
     this.levelID = levelID;
-  }
-
-  public void setMoves(List<Direction> moves) {
-    this.moves = moves;
-  }
-  public List<Direction> getMoves() {
-    return moves;
   }
 
   private ExitLock exitlock;
@@ -536,7 +535,7 @@ public class Maze {
   public UndoRedoHandler getUndoRedo() {
     return undoredo;
   }
-  
+
   public boolean isDead() {
     return dead;
   }
