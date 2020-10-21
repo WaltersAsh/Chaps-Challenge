@@ -27,7 +27,6 @@ public class MenuBar extends JMenuBar {
   private JMenu gameMenu;
   private JMenuItem resumeMenuItem;
   private JMenuItem pauseMenuItem;
-  private JMenuItem redoMenuItem;
   private JMenuItem undoMenuItem;
   private JMenuItem exitMenuItem;
   private JMenuItem exitSaveMenuItem;
@@ -89,7 +88,6 @@ public class MenuBar extends JMenuBar {
     JMenuItem[] gameMenuItems = new JMenuItem[]{
       resumeMenuItem = new JMenuItem("Resume"),
       pauseMenuItem = new JMenuItem("Pause"),
-      redoMenuItem = new JMenuItem("Redo"),
       undoMenuItem = new JMenuItem("Undo"),
       exitMenuItem = new JMenuItem("Exit"),
       exitSaveMenuItem = new JMenuItem("Exit + Save")
@@ -196,15 +194,6 @@ public class MenuBar extends JMenuBar {
    */
   public JMenuItem getPlayMenuItem() {
     return playMenuItem;
-  }
-
-  /**
-   * Gets redo menu item.
-   *
-   * @return the redo menu item
-   */
-  public JMenuItem getRedoMenuItem() {
-    return redoMenuItem;
   }
 
   /**
