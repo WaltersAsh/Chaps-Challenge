@@ -34,6 +34,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Enemy;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Key;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze.KeyColor;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalked;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalkedKilled;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
@@ -193,6 +194,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     initialiseWindowListener();
     setupTimer();
     setupKeyListener();
+    maze.resume();
   }
 
   /**
@@ -446,7 +448,7 @@ public class Gui extends MazeEventListener implements ActionListener {
 
     if (move.actorId == -1) {
       if(undo) {
-        this.undoRedoGui(undo);
+        this.undoGui();
       } else {
         //move chap
         maze.move(direction);
@@ -458,31 +460,16 @@ public class Gui extends MazeEventListener implements ActionListener {
         direction = Maze.Direction.values()[opposite];
       }
       //move enemy
-      maze.moveEnemy(move.actorId, direction);
+      maze.moveEnemy(maze.getEnemies().get(move.actorId), direction);
     }
   }
-
-  /**
-   * Tick the enemy path finding and record enemy moves
-   * if needed
-   */
-  public void tickPathFinding() {
-    for(Enemy enemy : maze.getEnemies()) {
-
-      //get the direction from enemy path finding
-      Maze.Direction direction = enemy.tickPathFinding();
-
-      //add the mobs move to the current time stamps list of moves in gui
-      int enemyId = maze.getEnemies().indexOf(enemy);
-
-      //move the enemy
-      maze.moveEnemy(enemyId, direction);
-
-      //if game play is being recorded add the move to the recording
-      if (recnplay.isRecording()) {
-        Move move = new Move(enemyId, direction.ordinal());
-        recnplay.addMove(move);
-      }
+  
+  @Override
+  public void update(MazeEventEnemyWalked e) {
+    int enemyId = maze.getEnemies().indexOf(e.getEnemy());
+    if (recnplay.isRecording()) {
+      Move move = new Move(enemyId, e.getEnemyDirection().ordinal());
+      recnplay.addMove(move);
     }
   }
 
@@ -610,11 +597,6 @@ public class Gui extends MazeEventListener implements ActionListener {
           //decrement milliseconds left
           millisLeft--;
           maze.setMillisecondsLeft(millisLeft);
-
-          //tick enemy path finding every half second/500 milliseconds
-          if(millisLeft % 500 ==0) {
-            tickPathFinding();
-          }
 
           //first two digits of the remaining time
           String value = millisLeft > 10 ? Long.toString(millisLeft).substring(0, 2) : Long.toString(millisLeft);
