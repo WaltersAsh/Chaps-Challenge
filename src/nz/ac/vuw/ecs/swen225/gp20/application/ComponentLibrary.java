@@ -182,7 +182,7 @@ public class ComponentLibrary {
    * @return the info field JLabel
    */
   public JLabel infoFieldLabel() {
-    JLabel infoFieldLabel = null;
+    JLabel infoFieldLabel = new JLabel();
     try {
       Image sign = ImageIO.read(new File("resources/textures/gui/sign_large.png"));
       infoFieldLabel = new JLabel(
@@ -190,7 +190,6 @@ public class ComponentLibrary {
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-    assert infoFieldLabel != null;
     infoFieldLabel.setBounds(-180, -90, 1000, 1000);
     infoFieldLabel.setVisible(false);
     return infoFieldLabel;

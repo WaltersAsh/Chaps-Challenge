@@ -43,7 +43,7 @@ public class SidePanel extends JPanel {
 
   private final Maze maze;
 
-  private ComponentLibrary cl;
+  private final ComponentLibrary cl;
 
   /**
    * Side panel is constructed with its inner side panels.

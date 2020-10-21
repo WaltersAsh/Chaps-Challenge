@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 /**
  * InstructionsFrame class for instantiating a new instructions frame to gui.
@@ -31,10 +32,19 @@ public class InstructionsFrame extends JFrame implements ActionListener {
    */
   public InstructionsFrame(Gui gui) {
     cl = ComponentLibrary.getInstance();
-
     this.gui = gui;
-
     JScrollPane jsp = new JScrollPane();
+
+    //initialise scrollbar stylisation
+    jsp.getVerticalScrollBar().setBackground(cl.paleLavender);
+    jsp.getHorizontalScrollBar().setBackground(cl.paleLavender);
+    jsp.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+      @Override
+      protected void configureScrollBarColors() {
+        this.thumbColor = cl.fullLavender;
+      }
+    });
+
     jsp.setViewportView(initialiseContentPanel());
     jsp.add(initialiseContentPanel());
     add(jsp);

@@ -168,7 +168,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     levelValueLabel.setText(String.valueOf(maze.getLevelID()));
     timeValueLabel.setText(String.valueOf(maze.getMillisecondsLeft() / 1000));
 
-    //initialise optionpane
+    //initialise optionpane stylisation
     UIManager.put("OptionPane.background", new ColorUIResource(cl.deepLavender));
     UIManager.put("Panel.background", new ColorUIResource(cl.lightLavender));
     UIManager.put("OptionPane.messageFont", cl.buttonFont);
@@ -177,7 +177,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     UIManager.put("Button.background", cl.fullLavender);
     UIManager.put("Button.foreground", Color.WHITE);
 
-    //initialise filechooser styling
+    //initialise filechooser stylisation
     UIManager.put("List.background", cl.deepLavender);
     UIManager.put("List.foreground", Color.WHITE);
     UIManager.put("FileChooser.listFont", cl.sideFont);
@@ -351,9 +351,11 @@ public class Gui extends MazeEventListener implements ActionListener {
       recnplay.stopPlayback();
       replayingIconLabel.setVisible(false);
       Maze loaded = Persistence.quickLoad();
-      this.loadLevel(loaded);
-      resume();
-      pause(true);
+      if (loaded != null) {
+        this.loadLevel(loaded);
+        resume();
+        pause(true);
+      }
 
       //load recording
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()
