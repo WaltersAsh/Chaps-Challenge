@@ -168,12 +168,8 @@ public class Persistence {
     return null;
   }
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   */
-  public static void main(String[] args) {
+
+  /*public static void main(String[] args) {
     try {
       mapper.writeValue(Paths.get(".", "levels", java.time.LocalDate.now() + "_"
           + java.time.LocalTime.now().getHour() + "_" + java.time.LocalTime.now().getMinute() + "_"
@@ -181,6 +177,6 @@ public class Persistence {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
+  }*/
 }
 
