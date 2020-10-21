@@ -10,8 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
-import nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
+import test.nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 
 
 /**

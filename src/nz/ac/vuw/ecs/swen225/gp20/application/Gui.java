@@ -262,13 +262,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //undo
     } else if (e.getSource() == menuBar.getUndoMenuItem()) {
-      undoRedoGui(true);
+      undoGui();
       System.out.println("Undo activated");
-
-      //redo
-    } else if (e.getSource() == menuBar.getRedoMenuItem()) {
-      undoRedoGui(false);
-      System.out.println("Redo activated");
 
       //exit and save
     } else if (e.getSource() == menuBar.getExitSaveMenuItem()) {
@@ -581,13 +576,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
           //undo last move
         } else if (key == KeyEvent.VK_A) {
-          undoRedoGui(true);
+          undoGui();
           System.out.println("Undo activated");
-
-          //redo last move
-        } else if (key == KeyEvent.VK_D) {
-          undoRedoGui(false);
-          System.out.println("Redo activated");
         }
 
       }
@@ -787,15 +777,9 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Execute undo and reflect changes in gui.
-   *
-   * @param isUndo boolean indicating undoing or not (redoing)
    */
-  public void undoRedoGui(boolean isUndo) {
-    if (isUndo) {
-      maze.getUndoRedo().undo();
-    } else {
-      maze.getUndoRedo().redo();
-    }
+  public void undoGui() {
+    maze.getUndoRedo().undo();
     clearInventoryPanel();
     reloadInventoryPanel();
     decrementTreasurePickUp();

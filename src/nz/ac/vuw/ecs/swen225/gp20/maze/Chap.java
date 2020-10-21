@@ -65,9 +65,10 @@ public class Chap extends Movable {
    * its Tile as it no longer knows what Tile it was on
    * @param p
    */
-  public void unPickup(Pickup p) {
+  public void unPickup(Maze m, Pickup p) {
     if (p instanceof Treasure) {
       treasures.remove((Treasure) p);
+      m.getTreasures().add((Treasure)p);
     } else if (p instanceof Key) {
       keys.remove((Key) p);
     }

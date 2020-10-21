@@ -1,9 +1,11 @@
-package nz.ac.vuw.ecs.swen225.gp20.maze;
+package test.nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import java.util.*;
 import java.util.regex.*;
 
 import com.google.common.base.Preconditions;
+
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
  * A testing class for setting up a text only Board
@@ -154,6 +156,30 @@ public class BoardRig {
         "WA WA WA WA WA";
     return BoardRig.fromString(board);
   }
+  
+  public static Maze exitLockTest1() {
+    String board = "WA WA WA WA\n"+
+        "WA PA PA WA\n"+
+        "WA CH TR WA\n"+
+        "WA PA PA WA\n"+
+        "WA WA EL WA\n"+
+        "WA EX PA WA\n"+
+        "WA WA WA WA";
+    return BoardRig.fromString(board);
+  }
+  
+  public static Maze diamondPickTest1() {
+    String board = "WA WA WA\n"+
+        "WA CH WA\n"+
+        "WA KG WA\n"+
+        "WA LG WA\n"+
+        "WA LG WA\n"+
+        "WA TR WA\n"+
+        "WA EL WA\n"+
+        "WA EX WA\n"+
+        "WA WA WA";
+    return BoardRig.fromString(board);
+  }
 
   /**
    * Construct Board from string
@@ -198,7 +224,6 @@ public class BoardRig {
       }
       tiles[r] = row;
     }
-    System.out.println(entities);
     return new Maze(tiles, entities);
   }
 
