@@ -71,7 +71,9 @@ public class ComponentLibrary {
   public static final File unlockDemo = new File("resources/textures/gui/instructions/unlock.gif");
 
   /**
-   * Create and return a icon/indicator for recording and return.
+   * Create and return a icon/indicator for recording.
+   *
+   * @return the JLabel as an indicator for recording
    */
   public static JLabel recordingIconLabel() {
     JLabel recordingIconLabel = new JLabel();
@@ -88,9 +90,28 @@ public class ComponentLibrary {
   }
 
   /**
+   * Create and return a icon/indicator for replaying.
+   *
+   * @return the JLabel as an indicator for replaying
+   */
+  public static JLabel replayingIconLabel() {
+    JLabel replayingIconLabel = new JLabel();
+    try {
+      Image image = ImageIO.read(new File("resources/textures/gui/replay.png"));
+      ImageIcon icon = new ImageIcon(image.getScaledInstance(220, 83, Image.SCALE_DEFAULT));
+      replayingIconLabel.setIcon(icon);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    replayingIconLabel.setBounds(-10, -465, 1000, 1000);
+    replayingIconLabel.setVisible(false);
+    return replayingIconLabel;
+  }
+
+  /**
    * Create and return an icon/indicator for pausing.
    *
-   * @return the pausediconLabel JLabel
+   * @return the JLabel as an indicator for pausing
    */
   public static JLabel pausedIconLabel() {
     JLabel pausedIconLabel = new JLabel();

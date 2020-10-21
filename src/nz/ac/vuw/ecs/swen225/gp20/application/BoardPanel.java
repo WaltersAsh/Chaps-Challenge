@@ -17,6 +17,7 @@ public class BoardPanel extends JLayeredPane {
   private final JLabel infoFieldLabel;
   private final JLabel infoFieldTextLabel;
   private final JLabel recordingIconLabel;
+  private final JLabel replayingIconLabel;
   private final JLabel pausedIconLabel;
 
   /**
@@ -29,6 +30,7 @@ public class BoardPanel extends JLayeredPane {
     infoFieldLabel = ComponentLibrary.infoFieldLabel();
     infoFieldTextLabel = ComponentLibrary.infoFieldTextLabel();
     recordingIconLabel = ComponentLibrary.recordingIconLabel();
+    replayingIconLabel = ComponentLibrary.replayingIconLabel();
     pausedIconLabel = ComponentLibrary.pausedIconLabel();
 
     board.setBounds(0, 0, 1000, 1000);
@@ -36,6 +38,7 @@ public class BoardPanel extends JLayeredPane {
     add(infoFieldLabel, JLayeredPane.PALETTE_LAYER);
     add(infoFieldTextLabel, JLayeredPane.MODAL_LAYER);
     add(recordingIconLabel, JLayeredPane.PALETTE_LAYER);
+    add(replayingIconLabel, JLayeredPane.PALETTE_LAYER);
     add(pausedIconLabel, JLayeredPane.PALETTE_LAYER);
   }
 
@@ -84,16 +87,25 @@ public class BoardPanel extends JLayeredPane {
   /**
    * Get the recording icon label.
    *
-   * @return the recording icon text JLabel
+   * @return the recording icon Label
    */
   public JLabel getRecordingIconLabel() {
     return recordingIconLabel;
   }
 
   /**
+   * Get the replaying icon label.
+   *
+   * @return the replaying icon JLabel
+   */
+  public JLabel getReplayingIconLabel() {
+    return replayingIconLabel;
+  }
+
+  /**
    * Get the paused icon label.
    *
-   * @return the paused icon JLabel.
+   * @return the paused icon JLabel
    */
   public JLabel getPausedIconLabel() {
     return pausedIconLabel;

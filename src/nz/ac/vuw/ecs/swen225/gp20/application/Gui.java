@@ -76,6 +76,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   //icon labels
   private JLabel recordingIconLabel;
   private JLabel pausedIconLabel;
+  private JLabel replayingIconLabel;
 
   //buttons for controlling replaying in recnplay
   private final JButton nextFrameButton;
@@ -136,6 +137,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
+    replayingIconLabel = boardPanel.getReplayingIconLabel();
 
     //recnplay initialisation
     RecnplayControlsPanel recnplayControlsPanel = new RecnplayControlsPanel(this);
@@ -277,7 +279,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //exit
     } else if (e.getSource() == menuBar.getExitMenuItem()) {
-      frame.dispose();
+      displayExitOptionPanel("Are you sure you want to exit? \n"
+              + "All unsaved progress will be lost ", null);
 
       //PERSISTENCE FUNCTIONALITY
 
@@ -316,7 +319,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       }
       resume();
 
-
+      //stop recording
     } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode()
             && recnplay.isRecording() && recnplay.getSaveFile() != null) {
       pause(false);
@@ -334,20 +337,23 @@ public class Gui extends MazeEventListener implements ActionListener {
       recordingIconLabel.setVisible(false);
       resume();
 
-
+      //play recording
     } else if (e.getSource() == menuBar.getPlayMenuItem()
             && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       recnplay.playRecording();
+      replayingIconLabel.setVisible(true);
 
+      //stop replaying
     } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
 
       recnplay.stopPlayback();
+      replayingIconLabel.setVisible(false);
       Maze loaded = Persistence.quickLoad();
       this.loadLevel(loaded);
       resume();
-      pause(false);
+      pause(true);
 
-
+      //load recording
     } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()
             && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
       pause(false);
@@ -359,6 +365,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       File file = openFileChooser(true);
 
       if (file != null) {
+
+        replayingIconLabel.setVisible(true);
 
         //load game state
         Maze loaded = Persistence.loadMaze(file);
@@ -476,7 +484,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording()) {
+        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording() && !recnplay.isInPlaybackMode()) {
           resume();
           isTimerActive = true;
           try {
@@ -726,6 +734,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     infoFieldTextLabel = boardPanel.getInfoFieldTextLabel();
     recordingIconLabel = boardPanel.getRecordingIconLabel();
     pausedIconLabel = boardPanel.getPausedIconLabel();
+    replayingIconLabel = boardPanel.getReplayingIconLabel();
 
     maze.addListener(this);
     clearInventoryPanel();

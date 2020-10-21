@@ -2,7 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.Maze;
 import test.nz.ac.vuw.ecs.swen225.gp20.maze.BoardRig;
 
