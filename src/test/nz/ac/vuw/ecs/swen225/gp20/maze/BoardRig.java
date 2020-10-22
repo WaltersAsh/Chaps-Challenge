@@ -180,6 +180,32 @@ public class BoardRig {
         "WA WA WA";
     return BoardRig.fromString(board);
   }
+  
+  public static Maze enemyStuckTest1() {
+    String board = "WA WA WA WA WA\n"+
+        "WA EN WA EN WA\n"+
+        "WA WA WA WA WA\n"+
+        "WA EN WA EN WA\n"+
+        "WA WA WA WA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA PA CH PA WA\n"+
+        "WA WA WA WA WA";
+    return BoardRig.fromString(board);
+  }
+  
+  public static Maze enemyOpenTest1() {
+    String board = "WA WA WA WA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA PA EN PA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA WA WA WA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA PA CH PA WA\n"+
+        "WA PA PA PA WA\n"+
+        "WA WA WA WA WA";
+    return BoardRig.fromString(board);
+  }
 
   /**
    * Construct Board from string

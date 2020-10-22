@@ -34,6 +34,10 @@ public class Enemy extends Movable {
   }
 
   public Direction tickPathFinding() {
-    return pf.next(container, PathFinder.Mode.STRAIGHT_ANTICLOCKWISE);
+    return tickPathFinding(PathFinder.Mode.STRAIGHT_ANTICLOCKWISE);
+  }
+  
+  public Direction tickPathFinding(PathFinder.Mode mode) {
+    return pf.next(container, mode);
   }
 }

@@ -126,16 +126,15 @@ public class Maze {
    * @param <L>      any type which extends MazeEventListener
    * @param listener the object which will listen to events
    */
-  public <L extends MazeEventListener> void addListener(L listener) {
+  public void addListener(MazeEventListener listener) {
     listeners.add(listener);
   }
   
   /**
-   * Clear the listeners
-   * For testing only!
+   * Remove a listener
    */
-  public void clearListeners() {
-    listeners.clear();
+  public void removeListener(MazeEventListener l) {
+    listeners.remove(l);
   }
 
   /**
@@ -383,15 +382,14 @@ public class Maze {
    * Tick the enemy path finding.
    */
   public void tickPathFinding() {
-    System.out.println("ticking");
     for (Enemy e : enemies) {
       Direction next = e.tickPathFinding();
-      if (next == null) continue;
       moveEnemy(e, next);
     }
   }
   
   public void moveEnemy(Enemy e, Direction next) {
+    if(next==null)return;
     PathTile pt = (PathTile) tileTo(e.getContainer(), next);
     if(pt.equals(chap.getContainer())) {
       killChap();

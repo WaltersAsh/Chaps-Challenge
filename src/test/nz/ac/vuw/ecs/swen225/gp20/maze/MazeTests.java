@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Test;
  *
  */
 public class MazeTests {
-  //================================================
+  // ================================================
   // Tests for Maze Class
   // ================================================
-  
+
   // Test if we can initialise the lesson 1 maze
   @Test
   public void maze_test_01() {
@@ -44,12 +44,13 @@ public class MazeTests {
   public void maze_test_04() {
     printDivider();
     Maze m = BoardRig.lesson1();
+    System.out.println(m);
     applyMove(m, Maze.Direction.RIGHT);
     applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPickup.class, true);
     assertEquals(m.getChap().getTreasures().size(), 1); // should have 1 treasure now
   }
 
-  // Test if we are able to pick up a treasure
+  // Test if we are able to pick up a key
   @Test
   public void maze_test_05() {
     printDivider();
@@ -57,7 +58,8 @@ public class MazeTests {
     System.out.println(m);
     applyMove(m, Maze.Direction.RIGHT);
     applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPickup.class, true);
-    assertEquals(m.getChap().getTreasures().size(), 1); // should have 1 treasure now
+    applyMoveAndListenFor(m, Maze.Direction.UP, MazeEventPickup.class, true);
+    assertEquals(m.getChap().getKeys().size(), 1); // should have 1 treasure now
   }
 
   // Test if we are able to open a door
@@ -175,7 +177,7 @@ public class MazeTests {
     applyMove(m, Maze.Direction.RIGHT);
     applyMoveEnsureNotMoved(m, Maze.Direction.RIGHT);
   }
- 
+
   // Test diamond pick not being used up
   @Test
   public void maze_test_16() {
@@ -199,20 +201,148 @@ public class MazeTests {
     tickPathFinding(m);
     tickPathFindingAndListenFor(m, MazeEventEnemyWalkedKilled.class);
   }
-  
-  
+
+  // Test if we are able to undo picking up a key and treasure
+  @Test
+  public void maze_test_18() {
+    printDivider();
+    Maze m = BoardRig.lesson1();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.RIGHT);
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPickup.class, true);
+    assertEquals(m.getChap().getTreasures().size(), 1); // should have 1 treasure now
+    applyMoveAndListenFor(m, Maze.Direction.UP, MazeEventPickup.class, true);
+    assertEquals(m.getChap().getKeys().size(), 1); // should have 1 key now
+    m.getUndoRedo().undo();
+    assertEquals(m.getChap().getKeys().size(), 0); // should have no key now
+    m.getUndoRedo().undo();
+    assertEquals(m.getChap().getTreasures().size(), 0); // should have no treasure now
+  }
+
+  // ================================================
+  // Tests for PathFinder Class
+  // ================================================
+
+  // Test if enemies will correctly detect when stuck
+  @Test
+  public void pf_test_01() {
+    printDivider();
+    Maze m = BoardRig.enemyStuckTest1();
+    System.out.println(m);
+    for (Enemy e : m.getEnemies()) {
+      assertEquals(e.getPf().trapped(e.getContainer()), true);
+    }
+    System.out.println(m);
+  }
+
+  // Test the random pathfind algorithm
+  @Test
+  public void pf_test_02() {
+    printDivider();
+    Maze m = BoardRig.enemyOpenTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    for (Enemy e : m.getEnemies()) {
+      pathfindEnsureMoved(m, e, PathFinder.Mode.RANDOM);
+    }
+    System.out.println(m);
+  }
+
+  // Test the random pathfind algorithm if trapped
+  @Test
+  public void pf_test_03() {
+    printDivider();
+    Maze m = BoardRig.enemyStuckTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    for (Enemy e : m.getEnemies()) {
+      pathfindEnsureNotMoved(m, e, PathFinder.Mode.RANDOM);
+    }
+    System.out.println(m);
+  }
+
+  // Test the straight random pathfind algorithm
+  @Test
+  public void pf_test_04() {
+    printDivider();
+    Maze m = BoardRig.enemyOpenTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    for (Enemy e : m.getEnemies()) {
+      pathfindEnsureMoved(m, e, PathFinder.Mode.STRAIGHT_RANDOM);
+    }
+    System.out.println(m);
+  }
+
+  // Test the straight anticlockwise pathfind algorithm
+  @Test
+  public void pf_test_05() {
+    printDivider();
+    Maze m = BoardRig.enemyOpenTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    for (Enemy e : m.getEnemies()) {
+      pathfindEnsureMoved(m, e, PathFinder.Mode.STRAIGHT_ANTICLOCKWISE);
+    }
+    System.out.println(m);
+  }
+
+  // ================================================
+  // Tests for Drawble Class and implementing subtypes
+  // ================================================
+
+  // Test Drawable equality
+  @Test
+  public void drawable_test_01() {
+    Drawable db = new Drawable();
+    assertEquals(db, db);
+  }
+
+  // Test Drawable equality
+  @Test
+  public void drawable_test_02() {
+    Drawable db = new Drawable();
+    assertNotEquals(db, new Chap());
+  }
+
+  // Test Drawable hashCode
+  @Test
+  public void drawable_test_03() {
+    Drawable db = new Drawable();
+    assertEquals(db.hashCode(), db.hashCode());
+  }
+
+  // Test Drawable hashCode
+  @Test
+  public void drawable_test_04() {
+    Drawable db = new Chap("", "");
+    assertEquals(db.hashCode(), db.hashCode());
+  }
+
+  // Test Drawable equality
+  @Test
+  public void drawable_test_05() {
+    Drawable db = new Chap("", "");
+    assertEquals(db, db);
+  }
+
+  //Test Drawable equality
+  @Test
+  public void drawable_test_06() {
+    Drawable db = new Chap("", "");
+    assertNotEquals(db, new PathTile());
+  }
 
   // Utility methods
 
   public static void printDivider() {
     System.out.println("###################################################");
   }
-  
+
   public static void applyMove(Maze m, Maze.Direction d) {
     m.move(d);
     System.out.println(m);
   }
-  
 
   /**
    * Apply a move and ensure that we did actually move.
@@ -238,7 +368,6 @@ public class MazeTests {
     assertEquals(original, m.getChap().getContainer()); // ensure we didn't move
   }
 
-
   /**
    * Utility method to test if a certain move will give us a certain MazeEvent.
    * 
@@ -246,39 +375,43 @@ public class MazeTests {
    * @param d     the direction to move in
    * @param event the event we expect
    */
-  public static void applyMoveAndListenFor(Maze m, Maze.Direction d, Class<? extends MazeEvent> event, boolean ensure) {
+  public static void applyMoveAndListenFor(Maze m, Maze.Direction d,
+      Class<? extends MazeEvent> event, boolean ensure) {
     // Add a listener which assertEquals on our incoming and expected event
-    m.addListener(new MazeEventListener() {
+    MazeEventListener ml;
+    m.addListener(ml = new MazeEventListener() {
       @Override
       public void update(MazeEvent e) {
         assertEquals(e.getClass(), event);
       }
     });
-    
-    if(ensure) {
+
+    if (ensure) {
       applyMoveEnsureMoved(m, d);
-    }else {
+    } else {
       applyMoveEnsureNotMoved(m, d);
     }
     // Clear the listeners so we could keep using this maze without getting further
     // errors
-    m.clearListeners();
+    m.removeListener(ml);
   }
-  
+
   public void tickPathFinding(Maze m) {
     m.tickPathFinding();
     System.out.println(m);
   }
-  
+
   /**
-   * Utility method to test if a certain pathfind will give us a certain MazeEvent.
+   * Utility method to test if a certain pathfind will give us a certain
+   * MazeEvent.
    * 
    * @param m     the maze to tick pathfinding
    * @param event the event we expect
    */
   public static void tickPathFindingAndListenFor(Maze m, Class<? extends MazeEvent> event) {
     // Add a listener which assertEquals on our incoming and expected event
-    m.addListener(new MazeEventListener() {
+    MazeEventListener ml;
+    m.addListener(ml = new MazeEventListener() {
       @Override
       public void update(MazeEvent e) {
         assertEquals(e.getClass(), event);
@@ -287,6 +420,32 @@ public class MazeTests {
     m.tickPathFinding();
     // Clear the listeners so we could keep using this maze without getting further
     // errors
-    m.clearListeners();
+    m.removeListener(ml);
+  }
+
+  /**
+   * Tick pathfinding for one enemy and ensure it moved
+   * 
+   * @param e    the enemy
+   * @param mode the pathfinding mode
+   */
+  public static void pathfindEnsureMoved(Maze m, Enemy e, PathFinder.Mode mode) {
+    PathTile original = e.getContainer();
+    m.moveEnemy(e, e.tickPathFinding(mode));
+    assertNotEquals(original, e.getContainer());
+    System.out.println(m);
+  }
+
+  /**
+   * Tick pathfinding for one enemy and ensure it did not move
+   * 
+   * @param e    the enemy
+   * @param mode the pathfinding mode
+   */
+  public static void pathfindEnsureNotMoved(Maze m, Enemy e, PathFinder.Mode mode) {
+    PathTile original = e.getContainer();
+    e.tickPathFinding(mode);
+    assertEquals(original, e.getContainer());
+    System.out.println(m);
   }
 }

@@ -26,8 +26,10 @@ public class UndoRedoHandler extends MazeEventListener {
   }
   
   public void undo() {
+    System.out.println(undo);
     if(!undo.isEmpty()) {
       MazeEvent e = undo.pop();
+      System.out.println(e);
       e.invert();
       redo.add(e);
     }
