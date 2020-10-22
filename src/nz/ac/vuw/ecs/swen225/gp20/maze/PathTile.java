@@ -67,6 +67,7 @@ public class PathTile extends Tile {
       walkable = true;
       blocker = null;
     }
+    c.setContainer(null);
   }
 
   /**

@@ -2,6 +2,7 @@ package test.nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
@@ -286,9 +287,77 @@ public class MazeTests {
     }
     System.out.println(m);
   }
+  
+  // Test undo for Unlock event
+  @Test
+  public void event_test_01() {
+    printDivider();
+    Maze m = BoardRig.diamondPickTest1();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventExitUnlocked.class, true);
+    ExitLock ex = m.getExitlock();
+    assertEquals(ex.getContainer(), null);
+    m.getUndoRedo().undo();
+    assertNotEquals(ex.getContainer(), null);
+  }
+  
+  // Test invalid undo for killed event
+  @Test
+  public void event_test_02() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventWalkedDrowned.class, true);
+    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+  }
 
+  // Test invalid undo for killed event
+  @Test
+  public void event_test_03() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWalkedKilled.class, false);
+    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+  }
+  
+  // Test invalid undo for winning event
+  @Test
+  public void event_test_04() {
+    printDivider();
+    Maze m = BoardRig.exitLockTest1();
+    System.out.println(m);
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventExitUnlocked.class, true);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWon.class, true);
+    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+  }  
+
+  // Test invalid undo for enemy kill
+  @Test
+  public void event_test_05() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    tickPathFinding(m);
+    tickPathFinding(m);
+    tickPathFinding(m);
+    tickPathFindingAndListenFor(m, MazeEventEnemyWalkedKilled.class);
+    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+  }
+  
   // ================================================
-  // Tests for Drawble Class and implementing subtypes
+  // Tests for Drawable Class and implementing subtypes
   // ================================================
 
   // Test Drawable equality
@@ -332,7 +401,8 @@ public class MazeTests {
     Drawable db = new Chap("", "");
     assertNotEquals(db, new PathTile());
   }
-
+ 
+  
   // Utility methods
 
   public static void printDivider() {

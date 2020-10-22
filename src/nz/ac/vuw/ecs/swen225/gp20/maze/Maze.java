@@ -271,9 +271,9 @@ public class Maze {
   public boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
     if (bc instanceof Door) {
-      return tryUnlockDoor(current, (Door) bc, d);
+      return tryUnlockDoor(current, blocked, (Door) bc, d);
     } else if (bc instanceof Crate) {
-      return tryPushCrate(current, (Crate) bc, d);
+      return tryPushCrate(current, blocked, (Crate) bc, d);
     } else if (bc instanceof Enemy) {
       killChap();
       overrideDispatch(new MazeEventWalkedKilled(this,(Enemy)bc, current, blocked, d));
@@ -293,7 +293,7 @@ public class Maze {
    * @param d    the direction we moved to
    * @return the event if we opened the door and moved, null if we didn't
    */
-  public boolean tryUnlockDoor(PathTile current, Door door, Direction d) {
+  public boolean tryUnlockDoor(PathTile current, PathTile next, Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
       door.getContainer().remove(door);
@@ -301,7 +301,7 @@ public class Maze {
       if (!key.getColor().equals(KeyColor.GREEN)) {
         chap.getKeys().remove(key);
       }
-      overrideDispatch(new MazeEventUnlocked(this, current, door.container, d, door, key));
+      overrideDispatch(new MazeEventUnlocked(this, current, next, d, door, key));
       return true;
     }
     return false;
@@ -314,12 +314,12 @@ public class Maze {
    * @param d the direction in which to push
    * @return the MazeEvent for pushing the crate
    */
-  public boolean tryPushCrate(PathTile current, Crate c, Direction d) {
+  public boolean tryPushCrate(PathTile current, PathTile next, Crate c, Direction d) {
     Tile destination = tileTo(c.container, d);
     // if the tile we try to push to is a pathtile
     if (destination instanceof PathTile) {
       PathTile pt = (PathTile) destination;
-      PathTile original = c.getContainer();
+      PathTile original = next;
       // if the pathtile we try to push to is free, push the crate
       if (pt.isWalkable()) {
         pt.moveTo(c);
