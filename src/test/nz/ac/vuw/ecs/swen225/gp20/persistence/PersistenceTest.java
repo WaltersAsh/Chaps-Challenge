@@ -156,7 +156,7 @@ public class PersistenceTest {
   @Test
   public void mazeValidatorTest03() {
     Maze m = BoardRig.lesson1();
-    m.getChap().filename = null;
+    m.getChap().changeFile(null);
     assertFalse(Persistence.quickSave(m));
   }
 
@@ -186,7 +186,7 @@ public class PersistenceTest {
   @Test
   public void mazeValidatorTest06() {
     Maze m = BoardRig.lesson1();
-    m.getTileAt(0, 0).filename = null;
+    m.getTileAt(0, 0).changeFile(null);
     assertFalse(Persistence.quickSave(m));
   }
 
@@ -196,7 +196,7 @@ public class PersistenceTest {
   @Test
   public void mazeValidatorTest07() {
     Maze m = BoardRig.lesson1();
-    m.getTileAt(0, 0).filename = "";
+    m.getTileAt(0, 0).changeFile("");
     assertFalse(Persistence.quickSave(m));
   }
 
@@ -207,7 +207,7 @@ public class PersistenceTest {
   public void mazeValidatorTest08() {
     Maze m = BoardRig.lesson1();
     assert Files.notExists(Path.of("thisFileShouldNotExist"));
-    m.getTileAt(0, 0).filename = "thisFileShouldNotExist";
+    m.getTileAt(0, 0).changeFile("thisFileShouldNotExist");
     assertFalse(Persistence.quickSave(m));
   }
 
