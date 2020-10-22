@@ -304,83 +304,74 @@ public class Gui extends MazeEventListener implements ActionListener {
 
       //RECNPLAY FUNCTIONALITIES
 
-      //start recording game play
-    } else if (e.getSource() == menuBar.getStartRecordingMenuItem()
-            && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+      //start or stop recording game play
+    } else if (e.getSource() == menuBar.getStartStopRecordingMenuItem()) {
+
+      //pause the game
       pause(false);
 
-      //save game state when a recording begins
-      File file = openFileChooser(false);
-      if (file != null) {
+      switch (recnplay.getState()) {
+        case SLEEPING:
+          //save game state when a recording begins
+          File file = openFileChooser(false);
+          if (file != null) {
 
-        recnplay.setSaveFile(file);
-        Persistence.saveMaze(maze, recnplay.getSaveFile());
+            //quick save game state
+            Persistence.saveMaze(maze, file);
 
-        RecordAndReplay.startRecording();
-        recordingIconLabel.setVisible(true);
+            //set the save file in recnplay
+            recnplay.setSaveFile(file);
 
+            //set the new state in recnplay
+            recnplay.getState().startStopRecording();
+
+            //display recording icon
+            recordingIconLabel.setVisible(true);
+          }
+          break;
+        case RECORDING:
+          //load game state from recSaveFile
+          Maze loaded = Persistence.loadMaze(recnplay.getSaveFile());
+
+          //set moves in loaded maze with moves in recnplay
+          loaded.setMovesByTime(recnplay.getMovesByTime());
+
+          //write game state with moves
+          Persistence.saveMaze(loaded, recnplay.getSaveFile());
+
+          //set the new state in recnplay
+          recnplay.getState().startStopRecording();
+
+          //hide recording icon
+          recordingIconLabel.setVisible(false);
+
+          break;
+        default:
+          break;
       }
       resume();
 
-      //stop recording
-    } else if (e.getSource() == menuBar.getStopRecordingMenuItem() && !recnplay.isInPlaybackMode()
-            && recnplay.isRecording() && recnplay.getSaveFile() != null) {
-      pause(false);
-
-      //load game state from recSaveFile
-      Maze loaded = Persistence.loadMaze(recnplay.getSaveFile());
-
-      //set moves in loaded maze with moves in recnplay
-      loaded.setMovesByTime(recnplay.getMovesByTime());
-
-      //write game state with moves
-      Persistence.saveMaze(loaded, recnplay.getSaveFile());
-
-      RecordAndReplay.stopRecording();
-      recordingIconLabel.setVisible(false);
-      resume();
 
       //play recording
-    } else if (e.getSource() == menuBar.getPlayMenuItem()
-            && recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getStartStopReplayMenuItem()) {
       recnplay.playRecording();
+      recnplay.getState().startStopReplay();
 
-      //stop replaying
-    } else if (e.getSource() == menuBar.getStopPlayMenuItem() && recnplay.isInPlaybackMode()) {
-
-      recnplay.stopPlayback();
-      replayingIconLabel.setVisible(false);
-      Maze loaded = Persistence.quickLoad();
-      if (loaded != null) {
-        this.loadLevel(loaded);
-        resume();
-        pause(true);
-      }
 
       //load recording
-    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()
-            && !recnplay.isInPlaybackMode() && !recnplay.isRecording()) {
+    } else if (e.getSource() == menuBar.getLoadRecordingMenuItem()) {
       pause(false);
-
       //quick save current game
       Persistence.quickSave(maze);
-
       //choose a file to save recording to
       File file = openFileChooser(true);
-
       if (file != null) {
-
-        replayingIconLabel.setVisible(true);
-
         //load game state
         Maze loaded = Persistence.loadMaze(file);
-
         //set the game state
         this.loadLevel(loaded);
-
         //load the recording in recnplay
-        recnplay.loadRecording(maze.getMovesByTime());
-
+        recnplay.getState().loadRecording(maze.getMovesByTime());
       } else {
         resume();
       }
@@ -393,24 +384,23 @@ public class Gui extends MazeEventListener implements ActionListener {
     }
 
     //recnplay button actions
+
     if (e.getSource() == nextFrameButton) {
       recnplay.nextFrame();
     } else if (e.getSource() == lastFrameButton) {
       recnplay.lastFrame();
     } else if (e.getSource() == autoPlayButton) {
-      System.out.println("Auto play button pressed");
       recnplay.setPlaybackSpeed(1);
       recnplay.playRecording();
+      recnplay.getState().startStopReplay();
     } else if (e.getSource() == slowerReplayButton) {
-      System.out.println("Slower replay button pressed");
       recnplay.setPlaybackSpeed(1.75);
     } else if (e.getSource() == standardReplayButton) {
-      System.out.println("Standard replay button pressed");
       recnplay.setPlaybackSpeed(1);
-    } else if (e.getSource() == fasterReplayButton) {
-      System.out.println("Faster replay button pressed");
-      recnplay.setPlaybackSpeed(0.5);
-    }
+      } else if (e.getSource() == fasterReplayButton) {
+        recnplay.setPlaybackSpeed(0.5);
+      }
+
 
     //popup dialog button actions
     if (e.getSource() == nextButton) {
@@ -440,7 +430,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   public void move(Maze.Direction direction) {
     maze.move(direction);
 
-    if (recnplay.isRecording()) {
+    if (recnplay.getState() == RecordAndReplay.State.RECORDING) {
 
       //save chaps id as -1 so enemies can be saved by their index, (0, 1, 2, 3, etc...)
       Move move = new Move(-1, direction.ordinal());
@@ -488,8 +478,7 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && !recnplay.isRecording()
-                && !recnplay.isInPlaybackMode()) {
+        if (!isTimerActive && !e.isControlDown() && recnplay.getState() == RecordAndReplay.State.SLEEPING) {
           resume();
           isTimerActive = true;
           try {
@@ -667,6 +656,23 @@ public class Gui extends MazeEventListener implements ActionListener {
       timer.scheduleAtFixedRate(timerTask, 0, 1); // start the timer countdown
       maze.resume();
       isPaused = false;
+    }
+  }
+
+  /**
+   * Quick loads a level using persistence quick load
+   * this method is used by recnplay and needed
+   * to adhere to package dependencies
+   */
+  public void quickLoadLevel() {
+    //quick load maze
+    Maze loaded = Persistence.quickLoad();
+
+    //make sure the file is valid
+    if (loaded != null) {
+      this.loadLevel(loaded);
+      resume();
+      pause(true);
     }
   }
 
@@ -927,7 +933,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   @Override
   public void update(MazeEventEnemyWalked e) {
     int enemyId = maze.getEnemies().indexOf(e.getEnemy());
-    if (recnplay.isRecording()) {
+    if (recnplay.getState() == RecordAndReplay.State.RECORDING) {
       Move move = new Move(enemyId, e.getEnemyDirection().ordinal());
       recnplay.addMove(move);
     }
@@ -1079,5 +1085,21 @@ public class Gui extends MazeEventListener implements ActionListener {
                 + "All unsaved progress will be lost ", null);
       }
     });
+  }
+
+  /**
+   * Get the menu bar object to update text
+   * displayed in the menus
+   */
+  public MenuBar getMenuBar() {
+    return this.menuBar;
+  }
+
+  /**
+   * Get the replaying icon label
+   * so recnplay can show or hide it
+   */
+  public JLabel getReplayingIconLabel() {
+    return replayingIconLabel;
   }
 }

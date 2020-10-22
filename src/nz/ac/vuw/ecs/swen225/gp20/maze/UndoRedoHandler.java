@@ -18,15 +18,14 @@ public class UndoRedoHandler extends MazeEventListener {
   
   @Override
   public void update(MazeEvent e) {
-    //FIXME test for recnplay, only record chaps moves
-    if(e instanceof MazeEventEnemyWalked || e instanceof MazeEventEnemyWalkedKilled) {
+    //only record chaps moves
+    if(e instanceof MazeEventEnemyWalked) {
       return;
     }
     undo.push(e);
   }
   
   public void undo() {
-    System.out.println(undo);
     if(!undo.isEmpty()) {
       MazeEvent e = undo.pop();
       System.out.println(e);

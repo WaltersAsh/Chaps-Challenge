@@ -12,13 +12,127 @@ import java.util.*;
  */
 public class RecordAndReplay {
 
+    /**
+     * The gui this recorder object belongs to
+     */
     private static Gui gui;
 
     /**
-     * Fields for remembering whether gameplay is
-     * currently being recorded or a game is being played back
+     * Finite state machine for switching states of this recorder
+     * and their transitions
      */
-    private static boolean isRecording = false, inPlaybackMode = false;
+    public enum State {
+
+        //game play is currently being recorded
+        RECORDING {
+            @Override
+            public void startStopRecording() {
+                gui.getMenuBar().getStartStopRecordingMenuItem().setText("Start Recording");
+                state = SLEEPING;
+            }
+
+            @Override
+            public void startStopReplay() {
+            }
+
+            @Override
+            public void loadRecording(Map<Long, List<Move>> recording) {
+            }
+        },
+
+        //a recording is loaded and ready to be played back
+        LOADED {
+            @Override
+            public void startStopRecording() {
+            }
+
+            @Override
+            public void startStopReplay() {
+                gui.getMenuBar().getStartStopReplayMenuItem().setText("Exit Replay");
+                state = REPLAYING;
+            }
+
+            @Override
+            public void loadRecording(Map<Long, List<Move>> recording) {
+            }
+        },
+
+        //game play is currently being replayed
+        REPLAYING {
+            @Override
+            public void startStopRecording() {
+            }
+
+            @Override
+            public void startStopReplay() {
+                //load quick saved game state
+                gui.quickLoadLevel();
+                //hide replay menu button
+                gui.getMenuBar().getStartStopReplayMenuItem().setText("Start Replay");
+                gui.getMenuBar().getStartStopReplayMenuItem().setVisible(false);
+                //show recording and load menu buttons
+                gui.getMenuBar().getStartStopRecordingMenuItem().setVisible(true);
+                gui.getMenuBar().getLoadRecordingMenuItem().setVisible(true);
+                gui.getReplayingIconLabel().setVisible(false);
+                state = SLEEPING;
+            }
+
+            @Override
+            public void loadRecording(Map<Long, List<Move>> recording) {
+            }
+        },
+
+        //game is being played as normal, not being recorded
+        SLEEPING {
+            @Override
+            public void startStopRecording() {
+                gui.getMenuBar().getStartStopRecordingMenuItem().setText("Stop Recording");
+                currentRecording = new HashMap<>();
+                state = RECORDING;
+            }
+
+            @Override
+            public void startStopReplay() {
+            }
+
+            @Override
+            public void loadRecording(Map<Long, List<Move>> recording) {
+                setRecording(recording);
+                //hide load and start recording buttons on menu
+                gui.getMenuBar().getStartStopRecordingMenuItem().setVisible(false);
+                gui.getMenuBar().getLoadRecordingMenuItem().setVisible(false);
+                //show replay button on menu
+                gui.getMenuBar().getStartStopReplayMenuItem().setVisible(true);
+                gui.getMenuBar().getStartStopReplayMenuItem().setText("Start Replay");
+                //show the replay icon label
+                gui.getReplayingIconLabel().setVisible(true);
+                state = LOADED;
+            }
+
+        };
+
+        /**
+         * Start or stop recording gameplay depending on current state
+         */
+        public abstract void startStopRecording();
+
+        /**
+         * Start or stop playback depending on current state
+         */
+        public abstract void startStopReplay();
+
+        /**
+         * Load a recording
+         *
+         * @param recording the map of lists of moves
+         */
+        public abstract void loadRecording(Map<Long, List<Move>> recording);
+    }
+
+    /**
+     * The current state of this recorder, set to sleeping by default
+     */
+    private static State state = State.SLEEPING;
 
     /**
      * Delay for playback speed
@@ -47,7 +161,6 @@ public class RecordAndReplay {
     private File saveFile;
 
 
-
     /**
      * Constructor
      *
@@ -58,47 +171,20 @@ public class RecordAndReplay {
     }
 
     /**
-     * Loads a recording from a map of moves
+     * Set the current recording field and update
+     * menus accordingly
      *
-     * @param recording the map of lists of moves
+     * @param recording the map of move data for this recording
      */
-    public void loadRecording(Map<Long, List<Move>> recording) {
-        if (!isRecording) {
-
-            //set the move data
-            currentRecording = recording;
-
-            //set the current index, or step of this recording to the beginning time stamp
-            step = 0;
-
-            timeStamps = new ArrayList<>();
-            timeStamps.addAll(currentRecording.keySet());
-            Collections.sort(timeStamps);
-            Collections.reverse(timeStamps);
-
-            //set playback mode to true
-            inPlaybackMode = true;
-        }
-    }
-
-    /**
-     * Starts a new recording, records the time left when recording begins
-     */
-    public static void startRecording() {
-        if (!isRecording && !inPlaybackMode) {
-            isRecording = true;
-            currentRecording = new HashMap<>();
-        }
-    }
-
-    /**
-     * Stops and saves the current recording to a json file
-     */
-    public static void stopRecording() {
-        if (!isRecording || inPlaybackMode) {
-            return;
-        }
-        isRecording = false;
+    private static void setRecording(Map<Long, List<Move>> recording) {
+        //set the move data
+        currentRecording = recording;
+        //set the current index, or step of this recording to the beginning time stamp
+        step = 0;
+        //add the key set of times to a list
+        timeStamps = new ArrayList<>(currentRecording.keySet());
+        //sort the list in reverse
+        timeStamps.sort(Collections.reverseOrder());
     }
 
     /**
@@ -124,17 +210,18 @@ public class RecordAndReplay {
     }
 
     /**
-     * Replays the current recording
+     * Replays the current recording in a new thread
      */
     public void playRecording() {
-        if (currentRecording == null || currentRecording.isEmpty() || isRecording || !inPlaybackMode) {
+        //a recording can only be played from loaded state
+        if (state != State.LOADED) {
             return;
         }
 
         Runnable runnable = () -> {
 
             //step through each move in the recording, sleeping in between moves
-            while (step < timeStamps.size() - 1) {
+            while (step < timeStamps.size()) {
 
                 //step forward
                 stepForward();
@@ -152,37 +239,22 @@ public class RecordAndReplay {
     }
 
     /**
-     * Stops playback of the current recording
-     */
-    public void stopPlayback() {
-        inPlaybackMode = false;
-    }
-
-    /**
      * Advance the playback of this recording by one step
      */
     public static void stepForward() {
-        if (isRecording || step == timeStamps.size() - 1 || !inPlaybackMode) {
-            return;
-        }
         long time = timeStamps.get(step);
         for (Move move : getMovesAtStep(time)) {
             gui.executeMove(move, false);
         }
 
-        step = step < timeStamps.size() - 1 ? step + 1 : step;
-
+        step++;
     }
 
     /**
      * Rewind the playback of this recording by one step
      */
     public static void stepBack() {
-        if (isRecording || step == 0 || !inPlaybackMode) {
-            return;
-        }
-
-        step = step > 0 ? step - 1 : step;
+        step--;
 
         long time = timeStamps.get(step);
         for (Move move : getMovesAtStep(time)) {
@@ -199,7 +271,7 @@ public class RecordAndReplay {
      */
     private static List<Move> getMovesAtStep(long step) {
         List<Move> moves = new ArrayList<>();
-        if (!isRecording && !currentRecording.isEmpty() && currentRecording.containsKey(step)) {
+        if (!currentRecording.isEmpty() && currentRecording.containsKey(step)) {
             moves.addAll(currentRecording.get(step));
         }
         return moves;
@@ -209,14 +281,13 @@ public class RecordAndReplay {
      * Advances the step to the next chap move
      */
     public void nextFrame() {
-        if(!inPlaybackMode) {
-            return;
-        }
-        while (step < timeStamps.size() - 1) {
-            stepForward();
-            for(Move move : getMovesAtStep(timeStamps.get(step - 1))) {
-                if (move.actorId == -1) {
-                    return;
+        if(state == State.REPLAYING || state == State.LOADED) {
+            while (step < timeStamps.size()) {
+                stepForward();
+                for (Move move : getMovesAtStep(timeStamps.get(step - 1))) {
+                    if (move.actorId == -1) {
+                        return;
+                    }
                 }
             }
         }
@@ -226,31 +297,16 @@ public class RecordAndReplay {
      * Rewinds the step to the last timestamp of a chap move
      */
     public void lastFrame() {
-        if(!inPlaybackMode) {
-            return;
-        }
-        while (step > 0) {
-            stepBack();
-            for(Move move : getMovesAtStep(timeStamps.get(step))) {
-                if (move.actorId == -1) {
-                    return;
+        if(state == State.REPLAYING || state == State.LOADED) {
+            while (step > 0) {
+                stepBack();
+                for (Move move : getMovesAtStep(timeStamps.get(step))) {
+                    if (move.actorId == -1) {
+                        return;
+                    }
                 }
             }
         }
-    }
-
-    /**
-     * Check whether the game is being recorded
-     */
-    public boolean isRecording() {
-        return isRecording;
-    }
-
-    /**
-     * Check whether a recording is being played back
-     */
-    public boolean isInPlaybackMode() {
-        return inPlaybackMode;
     }
 
     /**
@@ -271,11 +327,33 @@ public class RecordAndReplay {
         return currentRecording;
     }
 
+    /**
+     * Get the save file path for the game state at
+     * the beginning of the recording
+     *
+     * @return the file
+     */
     public File getSaveFile() {
         return saveFile;
     }
 
+    /**
+     * Set the save file path for the game state at
+     * the beginning of the recording
+     *
+     * @param saveFile the file
+     */
     public void setSaveFile(File saveFile) {
         this.saveFile = saveFile;
     }
+
+    /**
+     * Get the current state
+     *
+     * @return the current state of the recorder
+     */
+    public State getState() {
+        return state;
+    }
+
 }

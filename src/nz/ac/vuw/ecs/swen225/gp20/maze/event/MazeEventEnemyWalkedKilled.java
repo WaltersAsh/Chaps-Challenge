@@ -20,7 +20,6 @@ public class MazeEventEnemyWalkedKilled extends MazeEventEnemyWalked {
 
   @Override
   public void invert() {
-    origin.moveTo(enemy);
-    //throw new UnsupportedOperationException("Not implemented.");
+    throw new UnsupportedOperationException("Not implemented.");
   }
 }

@@ -36,10 +36,8 @@ public class MenuBar extends JMenuBar {
   private JMenuItem startFirstLevelMenuItem;
 
   private JMenu recnplayMenu;
-  private JMenuItem playMenuItem;
-  private JMenuItem stopPlayMenuItem;
-  private JMenuItem startRecordingMenuItem;
-  private JMenuItem stopRecordingMenuItem;
+  private JMenuItem startStopReplayMenuItem;
+  private JMenuItem startStopRecordingMenuItem;
   private JMenuItem loadRecordingMenuItem;
 
   private JMenu helpMenu;
@@ -103,12 +101,11 @@ public class MenuBar extends JMenuBar {
     };
 
     JMenuItem[] recnplayMenuItems = new JMenuItem[]{
-      startRecordingMenuItem = new JMenuItem("Record and Save"),
-      stopRecordingMenuItem = new JMenuItem("Stop Recording"),
-      playMenuItem = new JMenuItem("Replay"),
-      stopPlayMenuItem = new JMenuItem("Stop Replay"),
+      startStopRecordingMenuItem = new JMenuItem("Start Recording"),
+      startStopReplayMenuItem = new JMenuItem("Replay Recording"),
       loadRecordingMenuItem = new JMenuItem("Load Recording")
     };
+    startStopReplayMenuItem.setVisible(false);
 
     //map menu items to their respective menu
     HashMap<JMenuItem[], JMenu> menuToMenuItems = new HashMap<>();
@@ -192,15 +189,6 @@ public class MenuBar extends JMenuBar {
   }
 
   /**
-   * Gets play menu item.
-   *
-   * @return the play menu item
-   */
-  public JMenuItem getPlayMenuItem() {
-    return playMenuItem;
-  }
-
-  /**
    * Gets resume menu item.
    *
    * @return the resume menu item
@@ -237,12 +225,12 @@ public class MenuBar extends JMenuBar {
   }
 
   /**
-   * Gets start recording menu item.
+   * Gets start stop recording menu item.
    *
-   * @return the start recording menu item
+   * @return the start stop recording menu item
    */
-  public JMenuItem getStartRecordingMenuItem() {
-    return startRecordingMenuItem;
+  public JMenuItem getStartStopRecordingMenuItem() {
+    return startStopRecordingMenuItem;
   }
 
   /**
@@ -255,21 +243,12 @@ public class MenuBar extends JMenuBar {
   }
 
   /**
-   * Gets stop play menu item.
+   * Gets start stop replay menu item.
    *
-   * @return the stop play menu item
+   * @return the start stop replay menu item
    */
-  public JMenuItem getStopPlayMenuItem() {
-    return stopPlayMenuItem;
-  }
-
-  /**
-   * Gets stop recording menu item.
-   *
-   * @return the stop recording menu item
-   */
-  public JMenuItem getStopRecordingMenuItem() {
-    return stopRecordingMenuItem;
+  public JMenuItem getStartStopReplayMenuItem() {
+    return startStopReplayMenuItem;
   }
 
   /**
