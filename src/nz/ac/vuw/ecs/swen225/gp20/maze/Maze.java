@@ -2,14 +2,31 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Preconditions;
-
-import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEvent;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventEnemyWalkedKilled;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventExitUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventInfoField;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventListener;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPickup;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPushed;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventPushedWater;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventTeleported;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventUnlocked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalked;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalkedDrowned;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWalkedKilled;
+import nz.ac.vuw.ecs.swen225.gp20.maze.event.MazeEventWon;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.Move;
 
-import java.util.*;
 
 /**
- * The Maze board, which keeps track of the Tiles and logic in the game
+ * The Maze board, which keeps track of the Tiles and logic in the game.
  *
  * @author Ian 300474717
  */
@@ -18,21 +35,70 @@ public class Maze {
   // TODO: fix all the comments, outdated because of rewrite
 
   // Enums
+  /**
+   * Enums for directions.
+   * @author Ian 300474717
+   *
+   */
   public enum Direction {
-    UP, DOWN, LEFT, RIGHT
+    /**
+     * Up.
+     */
+    UP, 
+    
+    /**
+     * Down.
+     */
+    DOWN, 
+    
+    /**
+     * Left.
+     */
+    LEFT, 
+    
+    /**
+     * Right.
+     */
+    RIGHT
   }
 
+  /**
+   * Enum for Key Colors.
+   * 
+   * @author Ian 300474717
+   */
   public enum KeyColor {
-    BLUE, RED, GREEN, YELLOW
+    /**
+     * Blue (Wood).
+     */
+    BLUE, 
+    
+    /**
+     * Red (Iron).
+     */
+    RED, 
+    
+    /**
+     * Green (Diamond).
+     */
+    GREEN, 
+    
+    /**
+     * Yellow (Gold).
+     */
+    YELLOW
   }
 
   // Board and Entities
-  private int width, height;
+  private int width;
+  private int height;
   private Tile[][] tiles;
   private Chap chap;
   private int numTreasures;
   private List<Treasure> treasures = new ArrayList<Treasure>();
   private List<Enemy> enemies = new ArrayList<Enemy>();
+  private ExitLock exitlock;
+
 
   // Logic
   private boolean levelFinished = false;
@@ -48,18 +114,29 @@ public class Maze {
 
   private MazeEventWalked dispatch;
 
-  //FIXME REMOVE THIS COLLECTION
+  // FIXME REMOVE THIS COLLECTION
   private List<Direction> moves = new ArrayList<>();
 
-  //FIXME test for recnplay
+  // FIXME test for recnplay
   private Map<Long, List<Move>> movesByTime;
+
+  /**
+   * Set the moves by time.
+   * 
+   * @param m New moves by time.
+   */
   public void setMovesByTime(Map<Long, List<Move>> m) {
     movesByTime = m;
   }
+
+  /**
+   * Get the moves by time.
+   * 
+   * @return The moves by time.
+   */
   public Map<Long, List<Move>> getMovesByTime() {
     return movesByTime;
   }
-
 
   @JsonIgnore
   private UndoHandler undoredo = new UndoHandler(this, false);
@@ -67,16 +144,16 @@ public class Maze {
   private boolean dead = false;
 
   /**
-   * Instantiates a new Maze. For Jackson.
+   * Empty constructor for Persistence.
    */
   public Maze() {
   }
 
   /**
-   * Construct Board from predetermined Tiles
+   * Construct Board from predetermined Tiles.
    *
-   * @param t        Tile[][] of Tiles
-   * @param entities what entities need to be placed
+   * @param t        2d Array of Tiles.
+   * @param entities Entities to be placed.
    */
   public Maze(Tile[][] t, List<Containable> entities) {
     tiles = t;
@@ -107,8 +184,8 @@ public class Maze {
     for (Tile[] rows : tiles) {
       for (Tile t : rows) {
         String a = t.getInitials();
-        if(t instanceof PathTile) {
-          if(((PathTile)t).getContainedEntities().isEmpty()){
+        if (t instanceof PathTile) {
+          if (((PathTile) t).getContainedEntities().isEmpty()) {
             a = "__";
           }
         }
@@ -123,15 +200,15 @@ public class Maze {
   /**
    * Add a listener which will respond to MazeEvents produced by this Maze.
    *
-   * @param <L>      any type which extends MazeEventListener
-   * @param listener the object which will listen to events
+   * @param listener the object which will listen to events.
    */
   public void addListener(MazeEventListener listener) {
     listeners.add(listener);
   }
-  
+
   /**
-   * Remove a listener
+   * Remove a listener.
+   * @param l The listener to remove. 
    */
   public void removeListener(MazeEventListener l) {
     listeners.remove(l);
@@ -139,8 +216,7 @@ public class Maze {
 
   /**
    * Broadcast MazeEvents to any MazeEventListeners we may have.
-   *
-   * @param event
+   * @param event The event to broadcast.
    */
   public void broadcast(MazeEvent event) {
     for (MazeEventListener listener : listeners) {
@@ -150,9 +226,9 @@ public class Maze {
   }
 
   /**
-   * Replace the event to be dispatched if the new event is a subclass of it
+   * Replace the event to be dispatched if the new event is a subclass of it.
    *
-   * @param event the new event
+   * @param event The new event.
    */
   private void overrideDispatch(MazeEventWalked event) {
     if (dispatch == null) {
@@ -172,10 +248,10 @@ public class Maze {
   public void move(Direction d) {
     preMoveChecks();
     if (d == Direction.LEFT) {
-      chap.changeFile(chap.left);
+      chap.changeFile(chap.getLeft());
     }
     if (d == Direction.RIGHT) {
-      chap.changeFile(chap.right);
+      chap.changeFile(chap.getRight());
     }
 
     PathTile current = chap.getContainer();
@@ -201,26 +277,41 @@ public class Maze {
     }
   }
 
-  public void preMoveChecks() {
+  private void preMoveChecks() {
     Preconditions.checkArgument(!dead, "Chap is dead, cannot move");
   }
 
-  /**
-   * Postcondition checks after moving
-   */
-  public void postMoveChecks() {
-    assert(chap.getContainer() instanceof PathTile); // chap can only ever stand on a PathTile
-    assert(chap.getContainer().getBlocker() instanceof Chap); // the PathTile Chap is on can only ever be blocked by Chap
-    assert(treasures.size()+chap.getTreasures().size()==numTreasures); // total treasures is constant
+  private void postMoveChecks() {
+    // chap can only ever stand on a PathTile
+    assert (chap.getContainer() instanceof PathTile); 
+
+    // the PathTile Chap is on can only ever be blocked by Chap
+    assert (chap.getContainer().getBlocker() instanceof Chap); 
+    
+    // total treasures is constant
+    assert (treasures.size() + chap.getTreasures().size() == numTreasures); 
   }
 
+  /**
+   * Move Chap to a new PathTile.
+   * @param next  the new PathTile.
+   */
   public void moveChap(PathTile next) {
     next.moveTo(chap);
     undoredo.clearRedoStack();
   }
 
+  /**
+   * Check the next PathTile for any entities.
+   * 
+   * @param current The current PathTile.
+   * @param next The next PathTile.
+   * @param d The direction moved.
+   */
   public void checkWalked(PathTile current, PathTile next, Direction d) {
-    if (next.getContainedEntities().isEmpty()) return;
+    if (next.getContainedEntities().isEmpty()) {
+      return;
+    }
     for (int i = next.getContainedEntities().size() - 1; i >= 0; i--) {
       Containable c = next.getContainedEntities().get(i);
       c.onWalked(this);
@@ -244,31 +335,22 @@ public class Maze {
     }
   }
 
-  public void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
+  private void checkPickup(PathTile current, PathTile next, Direction d, Pickup p) {
     if (p instanceof Treasure) {
       checkTreasure(next, current, d, (Treasure) p);
-    } else if (p instanceof Key) {
-
     }
     overrideDispatch(new MazeEventPickup(this, current, next, d, p));
   }
 
-  public void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
+  private void checkTreasure(PathTile current, PathTile next, Direction d, Treasure t) {
     if (treasures.isEmpty()) {
-      overrideDispatch(new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
+      overrideDispatch(
+          new MazeEventExitUnlocked(this, current, next, d, t, exitlock, exitlock.getContainer()));
       openExitLock();
     }
   }
 
-  /**
-   * Check if we can move onto a b PathTile
-   * <p>
-   * We could move onto it if we had the matching key to the blocking door.
-   *
-   * @param blocked the PathTile to check
-   * @return the event for moving to it if we did
-   */
-  public boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
+  private boolean checkBlocking(PathTile current, PathTile blocked, Direction d) {
     BlockingContainable bc = blocked.getBlocker();
     if (bc instanceof Door) {
       return tryUnlockDoor(current, blocked, (Door) bc, d);
@@ -276,24 +358,16 @@ public class Maze {
       return tryPushCrate(current, blocked, (Crate) bc, d);
     } else if (bc instanceof Enemy) {
       killChap();
-      overrideDispatch(new MazeEventWalkedKilled(this,(Enemy)bc, current, blocked, d));
+      overrideDispatch(new MazeEventWalkedKilled(this, (Enemy) bc, current, blocked, d));
     } else if (bc instanceof Water) {
       killChap();
-      overrideDispatch(new MazeEventWalkedDrowned(this,(Water)bc, current, blocked, d));
+      overrideDispatch(new MazeEventWalkedDrowned(this, (Water) bc, current, blocked, d));
       return true;
     }
     return false;
   }
 
-
-  /**
-   * Check if we could open a door.
-   *
-   * @param door the door to check
-   * @param d    the direction we moved to
-   * @return the event if we opened the door and moved, null if we didn't
-   */
-  public boolean tryUnlockDoor(PathTile current, PathTile next, Door door, Direction d) {
+  private boolean tryUnlockDoor(PathTile current, PathTile next, Door door, Direction d) {
     Key key = chap.hasMatchingKey(door);
     if (key != null) {
       door.getContainer().remove(door);
@@ -307,14 +381,7 @@ public class Maze {
     return false;
   }
 
-  /**
-   * Try to push a crate.
-   *
-   * @param c the crate to push
-   * @param d the direction in which to push
-   * @return the MazeEvent for pushing the crate
-   */
-  public boolean tryPushCrate(PathTile current, PathTile next, Crate c, Direction d) {
+  private boolean tryPushCrate(PathTile current, PathTile next, Crate c, Direction d) {
     Tile destination = tileTo(c.container, d);
     // if the tile we try to push to is a pathtile
     if (destination instanceof PathTile) {
@@ -339,6 +406,12 @@ public class Maze {
     return false;
   }
 
+  /**
+   * Get the Tile to a certain direction of a given one.
+   * @param t The given Tile.
+   * @param d The direction to check.
+   * @return  The next tile in specified direction.
+   */
   public Tile tileTo(Tile t, Direction d) {
     switch (d) {
       case DOWN:
@@ -353,9 +426,10 @@ public class Maze {
         return null;
     }
   }
-  
+
   /**
-   * Disable or enable pathfinding
+   * Disable or enable path finding.
+   * @param set Whether to enable or disable path finding.
    */
   public void setDoPathfinding(boolean set) {
     doPathFinding = set;
@@ -371,7 +445,9 @@ public class Maze {
 
         @Override
         public void run() {
-          if(!doPathFinding) return;
+          if (!doPathFinding) {
+            return;
+          }
           tickPathFinding();
         }
       }, 0, pathFindingDelay);
@@ -387,14 +463,21 @@ public class Maze {
       moveEnemy(e, next);
     }
   }
-  
+
+  /**
+   * Move an Enemy.
+   * @param e The Enemy to move.
+   * @param next  The direction to move.
+   */
   public void moveEnemy(Enemy e, Direction next) {
-    if(next==null)return;
+    if (next == null) {
+      return;
+    }
     PathTile pt = (PathTile) tileTo(e.getContainer(), next);
-    if(pt.equals(chap.getContainer())) {
+    if (pt.equals(chap.getContainer())) {
       killChap();
       broadcast(new MazeEventEnemyWalkedKilled(this, e, e.getContainer(), pt, next));
-    }else {
+    } else {
       broadcast(new MazeEventEnemyWalked(this, e, e.getContainer(), pt, next));
       pt.moveTo(e);
     }
@@ -415,142 +498,279 @@ public class Maze {
   public void resume() {
     setupTimer();
   }
-
+  
+  /**
+   * Get a Tile at a specified row and column on the board.
+   * @param row The specified row.
+   * @param col The specified column.
+   * @return  The tile at the position.
+   */
   public Tile getTileAt(int row, int col) {
     return tiles[row][col];
   }
 
+  /**
+   * Get the Chap entity.
+   * @return  The Chap entity.
+   */
   public Chap getChap() {
     return chap;
   }
 
+  /**
+   * Get the Tiles of the board.
+   * @return  The Tiles of the board.
+   */
   public Tile[][] getTiles() {
     return tiles;
   }
 
+  /**
+   * Get whether the level is finished or not.
+   * @return  Whether the level is finished or not.
+   */
   public boolean isLevelFinished() {
     return levelFinished;
   }
 
+  /**
+   * Get the board width.
+   * @return  The board width.
+   */
   public int getWidth() {
     return width;
   }
 
+  /**
+   * Get the board height.
+   * @return  The board height.
+   */
   public int getHeight() {
     return height;
   }
 
+  /**
+   * Get the list of Treasures on the board.
+   * @return  The Treasures on the board.
+   */
   public List<Treasure> getTreasures() {
     return treasures;
   }
 
+  /**
+   * Get the number of Treasures on the board.
+   * @return  The number of Treasures on the board.
+   */
   public int numTreasures() {
     return treasures.size();
   }
 
+  /**
+   * Open the ExitLock.
+   */
   public void openExitLock() {
     exitlock.getContainer().remove(exitlock);
   }
 
+  /**
+   * Kill Chap and pause the game.
+   */
   public void killChap() {
     pause();
     dead = true;
   }
 
+  /**
+   * Get the ms left.
+   * @return The ms left.
+   */
   public long getMillisecondsLeft() {
     return millisecondsLeft;
   }
 
+  /**
+   * Set the ms left.
+   * @param ms  New value for the ms left.
+   */
   public void setMillisecondsLeft(long ms) {
     this.millisecondsLeft = ms;
   }
+
+  /**
+   * Get the level ID.
+   * @return  Current level ID.
+   */
   public int getLevelID() {
     return levelID;
   }
+
+  /**
+   * Set the level ID.
+   * @param levelID New value for the level ID.
+   */
   public void setLevelID(int levelID) {
     this.levelID = levelID;
   }
 
-  public void setMoves(List<Direction> moves) {
-    this.moves = moves;
-  }
+  /**
+   * Get the list of moves.
+   * @return  Current list of moves.
+   */
   public List<Direction> getMoves() {
     return moves;
   }
 
-  private ExitLock exitlock;
+  /**
+   * Set the list of moves.
+   * @param moves New value for list of moves.
+   */
+  public void setMoves(List<Direction> moves) {
+    this.moves = moves;
+  }
 
+  /**
+   * Set width.
+   * @param width New width.
+   */
   public void setWidth(int width) {
     this.width = width;
   }
 
+  /**
+   * Set height.
+   * @param height  New height.
+   */
   public void setHeight(int height) {
     this.height = height;
   }
 
+  /**
+   * Set Tiles.
+   * @param tiles New Tiles.
+   */
   public void setTiles(Tile[][] tiles) {
     this.tiles = tiles;
   }
 
+  /**
+   * Set Chap.
+   * @param chap New Chap.
+   */
   public void setChap(Chap chap) {
     this.chap = chap;
   }
 
+  /**
+   * Set Treasures.
+   * @param treasures New Treasures.
+   */
   public void setTreasures(List<Treasure> treasures) {
     this.treasures = treasures;
     this.numTreasures = treasures.size();
   }
 
+  /**
+   * Get Enemies.
+   * @return Current Enemies.
+   */
   public List<Enemy> getEnemies() {
     return enemies;
   }
 
+  /**
+   * Set Enemies.
+   * @param enemies New Enemies.
+   */
   public void setEnemies(List<Enemy> enemies) {
     this.enemies = enemies;
   }
 
+  /**
+   * Get ExitLock.
+   * @return  Current ExitLock.
+   */
   public ExitLock getExitlock() {
     return exitlock;
   }
 
+  /**
+   * Set ExitLock.
+   * @param exitlock New ExitLock.
+   */
   public void setExitlock(ExitLock exitlock) {
     this.exitlock = exitlock;
   }
 
+  /**
+   * Set Level Finished.
+   * @param levelFinished New Level Finished.
+   */
   public void setLevelFinished(boolean levelFinished) {
     this.levelFinished = levelFinished;
   }
 
+  /**
+   * Get Path Finding timer.
+   * @return  current Path Finding timer. 
+   */
   @JsonIgnore
   public Timer getPathFindingTimer() {
     return pathFindingTimer;
   }
 
+  /**
+   * Set new Path Finding timer.
+   * @param timer new Path Finding timer.
+   */
   @JsonIgnore
   public void setPathFindingTimer(Timer timer) {
     this.pathFindingTimer = timer;
   }
 
+  /**
+   * Get Path Finding delay.
+   * @return  current Path Finding delay.
+   */
   public int getPathFindingDelay() {
     return pathFindingDelay;
   }
 
+  /**
+   * Set Path Finding delay.
+   * @param pathFindingDelay  new Path Finding delay.
+   */
   public void setPathFindingDelay(int pathFindingDelay) {
     this.pathFindingDelay = pathFindingDelay;
   }
 
+  /**
+   * Get Listeners.
+   * @return  Current Listeners.
+   */
   public List<MazeEventListener> getListeners() {
     return listeners;
   }
 
+  /**
+   * Set Listeners.
+   * @param listeners new Listeners.
+   */
   public void setListeners(List<MazeEventListener> listeners) {
     this.listeners = listeners;
   }
 
+  /**
+   * Get Undo handler.
+   * @return Current Undo handler.
+   */
   public UndoHandler getUndoRedo() {
     return undoredo;
   }
-  
+
+  /**
+   * Get if Chap is dead.
+   * @return  if Chap is dead.
+   */
   public boolean isDead() {
     return dead;
   }

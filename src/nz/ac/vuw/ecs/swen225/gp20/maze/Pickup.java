@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Base class for objects the Chap can pick up
+ * Base class for entities the Chap can pick up.
  *
  * @author Ian 300474717
  *
@@ -9,11 +9,17 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public abstract class Pickup extends Containable {
   /**
-   * Instantiates a new empty Pickup. For Jackson
+   * Empty constructor for Persistence.
    */
   public Pickup() {
   }
 
+  /**
+   * Construct a new instance.
+   * 
+   * @param filename The filename of the image to use for this entity.
+   * @param initials The initials to represent this entity.
+   */
   public Pickup(String filename, String initials) {
     super(filename, initials);
   }

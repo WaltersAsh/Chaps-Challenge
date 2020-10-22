@@ -1,41 +1,52 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Base class for all Tiles representable on the board
+ * Base class for all Tiles representable on the board.
  *
  * @author Ian 300474717
  */
 
 public abstract class Tile extends Drawable {
+  int row;
+  int col;
+  protected boolean walkable = false;
+
   /**
-   * Instantiates a new Tile. For Jackson.
+   * Empty constructor for Persistence.
    */
   public Tile() {
   }
 
-  int row, col;
-  protected boolean walkable = false;
-
+  /**
+   * Construct a new instance.
+   * 
+   * @param filename The filename of the image to use for this entity.
+   * @param initials The initials to represent this entity.
+   */
   public Tile(String filename, String initials) {
     super(filename, initials);
   }
 
   /**
-   * can the Chap walk on this Tile?
+   * Whether the Chap may walk on this Tile.
    *
-   * @return whether Chap can walk on this Tile
+   * @return Whether Chap may walk on this Tile.
    */
   public boolean isWalkable() {
     return walkable;
   }
 
-
+  /**
+   * Whether an Enemy may walk on this Tile.
+   *
+   * @return Whether Enemy may walk on this Tile.
+   */
   public boolean enemyWalkable() {
     return walkable;
   }
 
   /**
-   * Set the coordinates of this Drawable
+   * Set the coordinates of this Drawable.
    *
    * @param r the row
    * @param c the column
@@ -45,10 +56,20 @@ public abstract class Tile extends Drawable {
     col = c;
   }
 
+  /**
+   * Get the row of this Tile.
+   * 
+   * @return Current row.
+   */
   public int getRow() {
     return row;
   }
 
+  /**
+   * Get the column of this Tile.
+   * 
+   * @return Current column.
+   */
   public int getCol() {
     return col;
   }
@@ -56,9 +77,5 @@ public abstract class Tile extends Drawable {
   @Override
   public String toString() {
     return this.getClass() + " at " + row + ", " + col;
-  }
-
-  public boolean equals(Tile other) {
-    return other.getCol()==col && other.getRow()==row;
   }
 }

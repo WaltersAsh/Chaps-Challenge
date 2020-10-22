@@ -1,22 +1,27 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * A Treasure which may be picked up by Chap and unlocks the final ExitLock once
- * all have been obtained
+ * A Treasure entity which may be picked up by Chap. Once all Treasures are
+ * picked up, the ExitLock opens.
  *
  * @author Ian 300474717
  *
  */
 
 public class Treasure extends Pickup {
-  public Treasure(String filename) {
-    super(filename, "TR");
+  /**
+   * Empty constructor for Persistence.
+   */
+  public Treasure() {
   }
 
   /**
-   * Instantiates a new empty Treasure. For Jackson.
+   * Construct a new instance.
+   * 
+   * @param filename The filename of the image to use for this entity.
    */
-  public Treasure() {
+  public Treasure(String filename) {
+    super(filename, "TR");
   }
 
   @Override
