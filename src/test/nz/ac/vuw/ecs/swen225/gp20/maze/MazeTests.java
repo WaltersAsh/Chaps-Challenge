@@ -2,15 +2,14 @@ package test.nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for the Maze package. BoardRig class is used for setting up board for
- * testing but not explicitly covered by these tests, as it is not used in the
- * actual game.
+ * Tests for the Maze package (maze and maze.event). 
  * 
  * @author Ian 300474717
  *
@@ -220,7 +219,7 @@ public class MazeTests {
   }
 
   // ================================================
-  // Tests for PathFinder Class
+  // Tests for Enemy and enclosed PathFinder Class
   // ================================================
 
   // Test if enemies will correctly detect when stuck
@@ -286,9 +285,155 @@ public class MazeTests {
     }
     System.out.println(m);
   }
+  
+  // ================================================
+  // Tests for the UndoRedoHandler and Events
+  // ================================================
+
+  // Test undo for Unlock event
+  @Test
+  public void undo_test_01() {
+    printDivider();
+    Maze m = BoardRig.diamondPickTest1();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventExitUnlocked.class, true);
+    ExitLock ex = m.getExitlock();
+    assertEquals(ex.getContainer(), null);
+    m.getUndoRedo().undo();
+    assertNotEquals(ex.getContainer(), null);
+  }
+
+  // Test invalid undo for killed event
+  @Test
+  public void undo_test_02() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventWalkedDrowned.class, true);
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
+  }
+
+  // Test invalid undo for killed event
+  @Test
+  public void undo_test_03() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWalkedKilled.class, false);
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
+  }
+
+  // Test invalid undo for winning event
+  @Test
+  public void undo_test_04() {
+    printDivider();
+    Maze m = BoardRig.exitLockTest1();
+    System.out.println(m);
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventExitUnlocked.class, true);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWon.class, true);
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
+  }
+
+  // Test invalid undo for enemy kill
+  @Test
+  public void undo_test_05() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    tickPathFinding(m);
+    tickPathFinding(m);
+    tickPathFinding(m);
+    tickPathFindingAndListenFor(m, MazeEventEnemyWalkedKilled.class);
+    // assertThrows(UnsupportedOperationException.class,
+    // ()->{m.getUndoRedo().undo();});
+    // TODO: need clarification - see issue #42
+  }
+
+  // Test undo for enemy pathfind
+  @Test
+  public void undo_test_06() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    UndoHandler u = new UndoHandler(m, true); // default handler does not record enemies
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    Enemy e = m.getEnemies().get(0);
+    PathTile original = e.getContainer();
+    tickPathFinding(m);
+    assertNotEquals(original, e.getContainer());
+    u.undo();
+    System.out.println(m);
+    assertEquals(original, e.getContainer());
+  }
+
+  // Test undoing push event
+  @Test
+  public void undo_test_07() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.RIGHT);
+    applyMove(m, Maze.Direction.DOWN);
+    PathTile original = m.getChap().getContainer();
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPushed.class, true);
+    assertNotEquals(original, m.getChap().getContainer());
+    m.getUndoRedo().undo();
+    assertEquals(original, m.getChap().getContainer());
+  }
+
+  // Test undoing water push event
+  @Test
+  public void undo_test_08() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.RIGHT);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPushed.class, true);
+    PathTile original = m.getChap().getContainer();
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventPushedWater.class, true);
+    assertNotEquals(original, m.getChap().getContainer());
+    m.getUndoRedo().undo();
+    assertEquals(original, m.getChap().getContainer());
+  }
+
+  // Test if we are able to undo opening a door
+  @Test
+  public void undo_test_09() {
+    printDivider();
+    Maze m = BoardRig.lesson1();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMoveAndListenFor(m, Maze.Direction.UP, MazeEventPickup.class, true); // pick up a key
+    Key key = m.getChap().getKeys().get(0);
+    applyMove(m, Maze.Direction.UP);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventUnlocked.class, true); // open door
+    assertEquals(m.getChap().getKeys().contains(key), false);
+    MazeEventUnlocked event = (MazeEventUnlocked)m.getUndoRedo().undo();
+    assertEquals(m.getChap().getKeys().contains(key), true);
+    assertNotEquals(event.getDoor().getContainer(), null);
+  }
 
   // ================================================
-  // Tests for Drawble Class and implementing subtypes
+  // Tests for Drawable Class and implemented subtypes
   // ================================================
 
   // Test Drawable equality
@@ -326,19 +471,30 @@ public class MazeTests {
     assertEquals(db, db);
   }
 
-  //Test Drawable equality
+  // Test Drawable equality
   @Test
   public void drawable_test_06() {
     Drawable db = new Chap("", "");
     assertNotEquals(db, new PathTile());
   }
 
+  //================================================
   // Utility methods
+  // ================================================
 
+  /**
+   * Print a divider.
+   */
   public static void printDivider() {
     System.out.println("###################################################");
   }
 
+  /**
+   * Apply a move and print the board.
+   * 
+   * @param m the maze to move on
+   * @param d the direction to move in
+   */
   public static void applyMove(Maze m, Maze.Direction d) {
     m.move(d);
     System.out.println(m);
@@ -369,7 +525,7 @@ public class MazeTests {
   }
 
   /**
-   * Utility method to test if a certain move will give us a certain MazeEvent.
+   * Test if a certain move will give us a certain MazeEvent.
    * 
    * @param m     the maze to move on
    * @param d     the direction to move in
@@ -391,7 +547,7 @@ public class MazeTests {
     } else {
       applyMoveEnsureNotMoved(m, d);
     }
-    // Clear the listeners so we could keep using this maze without getting further
+    // Clear the listener so we could keep using this maze without getting further
     // errors
     m.removeListener(ml);
   }
@@ -402,10 +558,10 @@ public class MazeTests {
   }
 
   /**
-   * Utility method to test if a certain pathfind will give us a certain
+   * Utility method to test if a certain path find will give us a certain
    * MazeEvent.
    * 
-   * @param m     the maze to tick pathfinding
+   * @param m     the maze to tick path finding
    * @param event the event we expect
    */
   public static void tickPathFindingAndListenFor(Maze m, Class<? extends MazeEvent> event) {
@@ -424,10 +580,10 @@ public class MazeTests {
   }
 
   /**
-   * Tick pathfinding for one enemy and ensure it moved
+   * Tick path finding for one enemy and ensure it moved
    * 
    * @param e    the enemy
-   * @param mode the pathfinding mode
+   * @param mode the path finding mode
    */
   public static void pathfindEnsureMoved(Maze m, Enemy e, PathFinder.Mode mode) {
     PathTile original = e.getContainer();
@@ -437,10 +593,10 @@ public class MazeTests {
   }
 
   /**
-   * Tick pathfinding for one enemy and ensure it did not move
+   * Tick path finding for one enemy and ensure it did not move
    * 
    * @param e    the enemy
-   * @param mode the pathfinding mode
+   * @param mode the path finding mode
    */
   public static void pathfindEnsureNotMoved(Maze m, Enemy e, PathFinder.Mode mode) {
     PathTile original = e.getContainer();

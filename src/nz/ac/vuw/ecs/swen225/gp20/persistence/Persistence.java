@@ -95,7 +95,7 @@ public class Persistence {
       valid.set(false);
       throw new Exception("Chap is null");
     }
-    if (loadedMaze.getChap().filename == null) {
+    if (loadedMaze.getChap().getFilename() == null) {
       valid.set(false);
       throw new Exception("Chap's image is missing");
     }

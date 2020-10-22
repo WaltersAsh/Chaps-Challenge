@@ -1,21 +1,27 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * A wall tile, which Chap may not walk on
+ * Wall Tile, which Chap cannot walk on under any circumstance.
  * 
  * @author Ian 300474717
  *
  */
 
 public class WallTile extends Tile {
-  public WallTile(String filename) {
-    super(filename, "▓▓");
-    this.walkable = false;
+
+  /**
+   * Empty constructor for Persistence.
+   */
+  public WallTile() {
   }
 
   /**
-   * Instantiates a new Wall tile. For Jackson.
+   * Construct a new instance.
+   * 
+   * @param filename The filename of the image to use for this entity.
    */
-  public WallTile() {
+  public WallTile(String filename) {
+    super(filename, "▓▓");
+    this.walkable = false;
   }
 }

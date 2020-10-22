@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * A Crate which may be pushed by Chap
+ * A Crate which may be pushed by Chap.
  * 
  * @author Ian 300474717
  *
@@ -9,15 +9,21 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 public class Crate extends Movable {
   /**
-   * Instantiates a new Crate. Empty constructor for Jackson.
+   * Empty constructor for Persistence.
    */
   public Crate() {
   }
-
+  
+  /**
+   * Construct a new instance.
+   * 
+   * @param filename The filename of the image to use for this entity.
+   */
   public Crate(String filename) {
     super(filename, "XX");
   }
 
+  
   @Override
   public String toString() {
     return "Crate";
