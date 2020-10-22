@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.LineBorder;
 
-
 /**
  * MenuBar class for instantiating a menu bar for gui.
  *
@@ -82,12 +81,12 @@ public class MenuBar extends JMenuBar {
     recnplayMenu = new JMenu("Rec'n'play");
     helpMenu = new JMenu("Help");
 
-    JMenuItem[] fileMenuItems = new JMenuItem[]{
+    final JMenuItem[] fileMenuItems = new JMenuItem[]{
       saveMenuItem = new JMenuItem("Save"),
       loadMenuItem = new JMenuItem("Load")
     };
 
-    JMenuItem[] gameMenuItems = new JMenuItem[]{
+    final JMenuItem[] gameMenuItems = new JMenuItem[]{
       resumeMenuItem = new JMenuItem("Resume"),
       pauseMenuItem = new JMenuItem("Pause"),
       undoMenuItem = new JMenuItem("Undo"),
@@ -95,12 +94,12 @@ public class MenuBar extends JMenuBar {
       exitSaveMenuItem = new JMenuItem("Exit + Save")
     };
 
-    JMenuItem[] levelMenuItems = new JMenuItem[]{
+    final JMenuItem[] levelMenuItems = new JMenuItem[]{
       restartCurrentLevelMenuItem = new JMenuItem("Restart Current Level"),
       startFirstLevelMenuItem = new JMenuItem("Restart Level 1")
     };
 
-    JMenuItem[] recnplayMenuItems = new JMenuItem[]{
+    final JMenuItem[] recnplayMenuItems = new JMenuItem[]{
       startStopRecordingMenuItem = new JMenuItem("Start Recording"),
       startStopReplayMenuItem = new JMenuItem("Replay Recording"),
       loadRecordingMenuItem = new JMenuItem("Load Recording")

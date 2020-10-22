@@ -478,7 +478,8 @@ public class Gui extends MazeEventListener implements ActionListener {
       @Override
       public void keyPressed(KeyEvent e) {
         int key = e.getExtendedKeyCode();
-        if (!isTimerActive && !e.isControlDown() && recnplay.getState() == RecordAndReplay.State.SLEEPING) {
+        if (!isTimerActive && !e.isControlDown()
+                && recnplay.getState() == RecordAndReplay.State.SLEEPING) {
           resume();
           isTimerActive = true;
           try {
@@ -660,7 +661,7 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
-   * Quick loads a level using persistence quick load
+   * Quick loads a level using persistence quick load.
    * this method is used by recnplay and needed
    * to adhere to package dependencies
    */
@@ -905,6 +906,20 @@ public class Gui extends MazeEventListener implements ActionListener {
   }
 
   /**
+   * Get the menu bar object to update text displayed in the menus.
+   */
+  public MenuBar getMenuBar() {
+    return this.menuBar;
+  }
+
+  /**
+   * Get the replaying icon label so recnplay can show or hide it.
+   */
+  public JLabel getReplayingIconLabel() {
+    return replayingIconLabel;
+  }
+
+  /**
    * Set the info field label text.
    *
    * @param text the desired text to be entered into the text label
@@ -1085,21 +1100,5 @@ public class Gui extends MazeEventListener implements ActionListener {
                 + "All unsaved progress will be lost ", null);
       }
     });
-  }
-
-  /**
-   * Get the menu bar object to update text
-   * displayed in the menus
-   */
-  public MenuBar getMenuBar() {
-    return this.menuBar;
-  }
-
-  /**
-   * Get the replaying icon label
-   * so recnplay can show or hide it
-   */
-  public JLabel getReplayingIconLabel() {
-    return replayingIconLabel;
   }
 }
