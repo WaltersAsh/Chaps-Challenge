@@ -872,6 +872,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Get timer active.
+   *
+   * @return the boolean confirming that the time is active
    */
   public boolean getIsTimerActive() {
     return isTimerActive;
