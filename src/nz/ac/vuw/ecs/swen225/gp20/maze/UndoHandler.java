@@ -4,15 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import java.util.*;
 
+/**
+ * Undo class
+ * @author Ian 300474717
+ *
+ */
 @JsonIgnoreType
-public class UndoRedoHandler extends MazeEventListener {
+public class UndoHandler extends MazeEventListener {
 
   private Stack<MazeEvent> undo = new Stack<>();
   private Stack<MazeEvent> redo = new Stack<>();
   private Maze maze;
   private boolean recordEnemies;
 
-  public UndoRedoHandler(Maze m, boolean recordEnemies) {
+  public UndoHandler(Maze m, boolean recordEnemies) {
     maze = m;
     maze.addListener(this);
     this.recordEnemies = recordEnemies;

@@ -4,17 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for the Maze package. BoardRig class is used for setting up board for
- * testing but not explicitly covered by these tests, as it is not used in the
- * actual game.
+ * Tests for the Maze package (maze and maze.event). 
  * 
  * @author Ian 300474717
  *
@@ -224,7 +219,7 @@ public class MazeTests {
   }
 
   // ================================================
-  // Tests for PathFinder Class
+  // Tests for Enemy and enclosed PathFinder Class
   // ================================================
 
   // Test if enemies will correctly detect when stuck
@@ -290,6 +285,10 @@ public class MazeTests {
     }
     System.out.println(m);
   }
+  
+  // ================================================
+  // Tests for the UndoRedoHandler and Events
+  // ================================================
 
   // Test undo for Unlock event
   @Test
@@ -372,7 +371,7 @@ public class MazeTests {
   public void undo_test_06() {
     printDivider();
     Maze m = BoardRig.enemyKillTest1();
-    UndoRedoHandler u = new UndoRedoHandler(m, true); // default handler does not record enemies
+    UndoHandler u = new UndoHandler(m, true); // default handler does not record enemies
     m.setDoPathfinding(false);
     System.out.println(m);
     Enemy e = m.getEnemies().get(0);
@@ -434,7 +433,7 @@ public class MazeTests {
   }
 
   // ================================================
-  // Tests for Drawable Class and implementing subtypes
+  // Tests for Drawable Class and implemented subtypes
   // ================================================
 
   // Test Drawable equality
@@ -479,12 +478,23 @@ public class MazeTests {
     assertNotEquals(db, new PathTile());
   }
 
+  //================================================
   // Utility methods
+  // ================================================
 
+  /**
+   * Print a divider.
+   */
   public static void printDivider() {
     System.out.println("###################################################");
   }
 
+  /**
+   * Apply a move and print the board.
+   * 
+   * @param m the maze to move on
+   * @param d the direction to move in
+   */
   public static void applyMove(Maze m, Maze.Direction d) {
     m.move(d);
     System.out.println(m);
@@ -515,7 +525,7 @@ public class MazeTests {
   }
 
   /**
-   * Utility method to test if a certain move will give us a certain MazeEvent.
+   * Test if a certain move will give us a certain MazeEvent.
    * 
    * @param m     the maze to move on
    * @param d     the direction to move in
@@ -537,7 +547,7 @@ public class MazeTests {
     } else {
       applyMoveEnsureNotMoved(m, d);
     }
-    // Clear the listeners so we could keep using this maze without getting further
+    // Clear the listener so we could keep using this maze without getting further
     // errors
     m.removeListener(ml);
   }
@@ -548,10 +558,10 @@ public class MazeTests {
   }
 
   /**
-   * Utility method to test if a certain pathfind will give us a certain
+   * Utility method to test if a certain path find will give us a certain
    * MazeEvent.
    * 
-   * @param m     the maze to tick pathfinding
+   * @param m     the maze to tick path finding
    * @param event the event we expect
    */
   public static void tickPathFindingAndListenFor(Maze m, Class<? extends MazeEvent> event) {
@@ -570,10 +580,10 @@ public class MazeTests {
   }
 
   /**
-   * Tick pathfinding for one enemy and ensure it moved
+   * Tick path finding for one enemy and ensure it moved
    * 
    * @param e    the enemy
-   * @param mode the pathfinding mode
+   * @param mode the path finding mode
    */
   public static void pathfindEnsureMoved(Maze m, Enemy e, PathFinder.Mode mode) {
     PathTile original = e.getContainer();
@@ -583,10 +593,10 @@ public class MazeTests {
   }
 
   /**
-   * Tick pathfinding for one enemy and ensure it did not move
+   * Tick path finding for one enemy and ensure it did not move
    * 
    * @param e    the enemy
-   * @param mode the pathfinding mode
+   * @param mode the path finding mode
    */
   public static void pathfindEnsureNotMoved(Maze m, Enemy e, PathFinder.Mode mode) {
     PathTile original = e.getContainer();
