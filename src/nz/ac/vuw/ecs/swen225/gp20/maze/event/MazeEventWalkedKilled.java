@@ -24,12 +24,6 @@ public class MazeEventWalkedKilled extends MazeEventWalked {
   }
 
   @Override
-  public String toString() {
-    return String.format("Walked onto the an enemy at %s,%s and got killed.",
-        target.getCol(), target.getRow());
-  }
-
-  @Override
   public void receive(MazeEventListener l) {
     l.update(this);
   }

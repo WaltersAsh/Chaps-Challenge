@@ -45,13 +45,6 @@ public class MazeEventEnemyWalked implements MazeEvent {
     return enemy;
   }
 
-
-  @Override
-  public String toString() {
-    return String.format("Enemy walked from tile %s,%s to tile %s,%s", origin.getCol(), origin.getRow(),
-        target.getCol(), target.getRow());
-  }
-
   @Override
   public void receive(MazeEventListener l) {
     l.update(this);

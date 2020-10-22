@@ -22,12 +22,6 @@ public class MazeEventTeleported extends MazeEventWalked {
   }
 
   @Override
-  public String toString() {
-    return String.format("Teleported to %s after walking onto teleporter at tile %s,%s",
-        teleporter.getOther().getContainer(), target.getCol(), target.getRow());
-  }
-
-  @Override
   public void receive(MazeEventListener l) {
     l.update(this);
   }

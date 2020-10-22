@@ -22,12 +22,6 @@ public class MazeEventPushedWater extends MazeEventPushed {
   public Movable getPushed() {
     return pushed;
   }
-
-  @Override
-  public String toString() {
-    return String.format("Walked onto %s,%s and pushed a %s %s into water", target.getCol(),
-        target.getRow(), pushed, direction);
-  }
   
   @Override
   public void receive(MazeEventListener l) {

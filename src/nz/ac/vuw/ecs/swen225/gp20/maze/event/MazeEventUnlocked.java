@@ -29,12 +29,6 @@ public class MazeEventUnlocked extends MazeEventWalked {
   public Key getKey() {
     return key;
   }
-
-  @Override
-  public String toString() {
-    return String.format("Unlocked a %s at %s,%s with a %s", door, target.getCol(),
-        target.getRow(), key);
-  }
   
   @Override
   public void receive(MazeEventListener l) {
