@@ -23,12 +23,6 @@ public class MazeEventInfoField extends MazeEventWalked {
   }
 
   @Override
-  public String toString() {
-    return String.format("Read an info field saying \"%s\" at tile %s,%s", info.getInformation(),
-        target.getCol(), target.getRow());
-  }
-
-  @Override
   public void receive(MazeEventListener l) {
     l.update(this);
   }

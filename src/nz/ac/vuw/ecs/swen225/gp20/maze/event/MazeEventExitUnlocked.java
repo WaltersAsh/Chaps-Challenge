@@ -23,12 +23,6 @@ public class MazeEventExitUnlocked extends MazeEventPickup {
   }
 
   @Override
-  public String toString() {
-    return String.format("Picked up final treasure %s at %s,%s and unlocked %s", picked, target.getCol(),
-        target.getRow(), exitlock);
-  }
-  
-  @Override
   public void receive(MazeEventListener l) {
     l.update(this);
   }
