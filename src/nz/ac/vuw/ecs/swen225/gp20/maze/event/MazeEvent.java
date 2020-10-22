@@ -8,14 +8,14 @@ package nz.ac.vuw.ecs.swen225.gp20.maze.event;
  */
 public interface MazeEvent {
   /**
-   * Receive this specific implementation/subclass of event
+   * Dispatch this event to a listener.
    * 
-   * @param listener
+   * @param listener  The listener to send this event to.
    */
   public void receive(MazeEventListener listener);
   
   /**
-   * Undo this MazeEvent
+   * Undo this MazeEvent.
    */
   public void invert();
 }
