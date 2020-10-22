@@ -91,7 +91,7 @@ public class PathTile extends Tile {
    * @param c The Containable
    */
   public void moveTo(Containable c) {
-    c.getContainer().remove(c);
+    if(c.getContainer()!=null)c.getContainer().remove(c);
     place(c);
   }
 

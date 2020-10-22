@@ -10,29 +10,35 @@ public class UndoRedoHandler extends MazeEventListener {
   private Stack<MazeEvent> undo = new Stack<>();
   private Stack<MazeEvent> redo = new Stack<>();
   private Maze maze;
+  private boolean recordEnemies;
 
-  public UndoRedoHandler(Maze m) {
+  public UndoRedoHandler(Maze m, boolean recordEnemies) {
     maze = m;
     maze.addListener(this);
+    this.recordEnemies = recordEnemies;
   }
   
   @Override
   public void update(MazeEvent e) {
+
     //FIXME test for recnplay, only record chaps moves
     if(e instanceof MazeEventEnemyWalked || e instanceof MazeEventEnemyWalkedKilled) {
-      return;
+      if(!recordEnemies) {
+        return;
+      };
     }
     undo.push(e);
   }
   
-  public void undo() {
-    System.out.println(undo);
+  public MazeEvent undo() {
     if(!undo.isEmpty()) {
       MazeEvent e = undo.pop();
       System.out.println(e);
       e.invert();
       redo.add(e);
+      return e;
     }
+    return null;
   }
   
   public void redo() {

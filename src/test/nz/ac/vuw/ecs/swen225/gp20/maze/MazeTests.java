@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.event.*;
 import org.junit.jupiter.api.Test;
@@ -287,10 +290,10 @@ public class MazeTests {
     }
     System.out.println(m);
   }
-  
+
   // Test undo for Unlock event
   @Test
-  public void event_test_01() {
+  public void undo_test_01() {
     printDivider();
     Maze m = BoardRig.diamondPickTest1();
     System.out.println(m);
@@ -303,34 +306,38 @@ public class MazeTests {
     m.getUndoRedo().undo();
     assertNotEquals(ex.getContainer(), null);
   }
-  
+
   // Test invalid undo for killed event
   @Test
-  public void event_test_02() {
+  public void undo_test_02() {
     printDivider();
     Maze m = BoardRig.crateAndWaterTest();
     System.out.println(m);
     applyMove(m, Maze.Direction.DOWN);
     applyMove(m, Maze.Direction.DOWN);
     applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventWalkedDrowned.class, true);
-    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
   }
 
   // Test invalid undo for killed event
   @Test
-  public void event_test_03() {
+  public void undo_test_03() {
     printDivider();
     Maze m = BoardRig.enemyKillTest1();
     m.setDoPathfinding(false);
     System.out.println(m);
     applyMove(m, Maze.Direction.LEFT);
     applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWalkedKilled.class, false);
-    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
   }
-  
+
   // Test invalid undo for winning event
   @Test
-  public void event_test_04() {
+  public void undo_test_04() {
     printDivider();
     Maze m = BoardRig.exitLockTest1();
     System.out.println(m);
@@ -339,12 +346,14 @@ public class MazeTests {
     applyMove(m, Maze.Direction.DOWN);
     applyMove(m, Maze.Direction.DOWN);
     applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventWon.class, true);
-    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
-  }  
+    assertThrows(UnsupportedOperationException.class, () -> {
+      m.getUndoRedo().undo();
+    });
+  }
 
   // Test invalid undo for enemy kill
   @Test
-  public void event_test_05() {
+  public void undo_test_05() {
     printDivider();
     Maze m = BoardRig.enemyKillTest1();
     m.setDoPathfinding(false);
@@ -353,9 +362,77 @@ public class MazeTests {
     tickPathFinding(m);
     tickPathFinding(m);
     tickPathFindingAndListenFor(m, MazeEventEnemyWalkedKilled.class);
-    assertThrows(UnsupportedOperationException.class, ()->{m.getUndoRedo().undo();});
+    // assertThrows(UnsupportedOperationException.class,
+    // ()->{m.getUndoRedo().undo();});
+    // TODO: need clarification - see issue #42
   }
-  
+
+  // Test undo for enemy pathfind
+  @Test
+  public void undo_test_06() {
+    printDivider();
+    Maze m = BoardRig.enemyKillTest1();
+    UndoRedoHandler u = new UndoRedoHandler(m, true); // default handler does not record enemies
+    m.setDoPathfinding(false);
+    System.out.println(m);
+    Enemy e = m.getEnemies().get(0);
+    PathTile original = e.getContainer();
+    tickPathFinding(m);
+    assertNotEquals(original, e.getContainer());
+    u.undo();
+    System.out.println(m);
+    assertEquals(original, e.getContainer());
+  }
+
+  // Test undoing push event
+  @Test
+  public void undo_test_07() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.RIGHT);
+    applyMove(m, Maze.Direction.DOWN);
+    PathTile original = m.getChap().getContainer();
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPushed.class, true);
+    assertNotEquals(original, m.getChap().getContainer());
+    m.getUndoRedo().undo();
+    assertEquals(original, m.getChap().getContainer());
+  }
+
+  // Test undoing water push event
+  @Test
+  public void undo_test_08() {
+    printDivider();
+    Maze m = BoardRig.crateAndWaterTest();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.RIGHT);
+    applyMove(m, Maze.Direction.DOWN);
+    applyMoveAndListenFor(m, Maze.Direction.RIGHT, MazeEventPushed.class, true);
+    PathTile original = m.getChap().getContainer();
+    applyMoveAndListenFor(m, Maze.Direction.DOWN, MazeEventPushedWater.class, true);
+    assertNotEquals(original, m.getChap().getContainer());
+    m.getUndoRedo().undo();
+    assertEquals(original, m.getChap().getContainer());
+  }
+
+  // Test if we are able to undo opening a door
+  @Test
+  public void undo_test_09() {
+    printDivider();
+    Maze m = BoardRig.lesson1();
+    System.out.println(m);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMove(m, Maze.Direction.LEFT);
+    applyMoveAndListenFor(m, Maze.Direction.UP, MazeEventPickup.class, true); // pick up a key
+    Key key = m.getChap().getKeys().get(0);
+    applyMove(m, Maze.Direction.UP);
+    applyMoveAndListenFor(m, Maze.Direction.LEFT, MazeEventUnlocked.class, true); // open door
+    assertEquals(m.getChap().getKeys().contains(key), false);
+    MazeEventUnlocked event = (MazeEventUnlocked)m.getUndoRedo().undo();
+    assertEquals(m.getChap().getKeys().contains(key), true);
+    assertNotEquals(event.getDoor().getContainer(), null);
+  }
+
   // ================================================
   // Tests for Drawable Class and implementing subtypes
   // ================================================
@@ -395,14 +472,13 @@ public class MazeTests {
     assertEquals(db, db);
   }
 
-  //Test Drawable equality
+  // Test Drawable equality
   @Test
   public void drawable_test_06() {
     Drawable db = new Chap("", "");
     assertNotEquals(db, new PathTile());
   }
- 
-  
+
   // Utility methods
 
   public static void printDivider() {

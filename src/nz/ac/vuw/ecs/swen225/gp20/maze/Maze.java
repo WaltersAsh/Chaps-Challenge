@@ -62,7 +62,7 @@ public class Maze {
 
 
   @JsonIgnore
-  private UndoRedoHandler undoredo = new UndoRedoHandler(this);
+  private UndoRedoHandler undoredo = new UndoRedoHandler(this, false);
 
   private boolean dead = false;
 

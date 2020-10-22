@@ -56,7 +56,8 @@ public class Chap extends Movable {
     } else if (p instanceof Key) {
       keys.add((Key) p);
     }
-    p.getContainer().remove(p);
+    System.out.println(p.getContainer());
+    if(p.getContainer()!=null)p.getContainer().remove(p);
   }
 
   /**
