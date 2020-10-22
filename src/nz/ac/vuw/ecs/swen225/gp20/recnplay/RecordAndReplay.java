@@ -28,6 +28,7 @@ public class RecordAndReplay {
             @Override
             public void startStopRecording() {
                 gui.getMenuBar().getStartStopRecordingMenuItem().setText("Start Recording");
+                gui.getMenuBar().getLoadRecordingMenuItem().setVisible(true);
                 state = SLEEPING;
             }
 
@@ -87,6 +88,7 @@ public class RecordAndReplay {
             @Override
             public void startStopRecording() {
                 gui.getMenuBar().getStartStopRecordingMenuItem().setText("Stop Recording");
+                gui.getMenuBar().getLoadRecordingMenuItem().setVisible(false);
                 currentRecording = new HashMap<>();
                 state = RECORDING;
             }
@@ -164,7 +166,7 @@ public class RecordAndReplay {
     /**
      * Constructor
      *
-     * @param gui the application
+     * @param gui the application this recorder belongs to
      */
     public RecordAndReplay(Gui gui) {
         RecordAndReplay.gui = gui;
@@ -242,6 +244,10 @@ public class RecordAndReplay {
      * Advance the playback of this recording by one step
      */
     public static void stepForward() {
+        if (step == timeStamps.size() - 1) {
+            return;
+        }
+
         long time = timeStamps.get(step);
         for (Move move : getMovesAtStep(time)) {
             gui.executeMove(move, false);
@@ -254,6 +260,10 @@ public class RecordAndReplay {
      * Rewind the playback of this recording by one step
      */
     public static void stepBack() {
+        if (step == 0) {
+            return;
+        }
+
         step--;
 
         long time = timeStamps.get(step);
@@ -282,7 +292,7 @@ public class RecordAndReplay {
      */
     public void nextFrame() {
         if(state == State.REPLAYING || state == State.LOADED) {
-            while (step < timeStamps.size()) {
+            while (step < timeStamps.size() - 1) {
                 stepForward();
                 for (Move move : getMovesAtStep(timeStamps.get(step - 1))) {
                     if (move.actorId == -1) {
