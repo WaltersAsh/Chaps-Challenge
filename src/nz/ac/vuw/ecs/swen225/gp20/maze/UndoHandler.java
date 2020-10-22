@@ -35,7 +35,7 @@ public class UndoHandler extends MazeEventListener {
 
   @Override
   public void update(MazeEvent e) {
-    if (e instanceof MazeEventEnemyWalked || e instanceof MazeEventEnemyWalkedKilled) {
+    if (e instanceof MazeEventEnemyWalked) {
       if (!recordEnemies) {
         return;
       }
@@ -51,7 +51,6 @@ public class UndoHandler extends MazeEventListener {
   public MazeEvent undo() {
     if (!undo.isEmpty()) {
       MazeEvent e = undo.pop();
-      System.out.println(e);
       e.invert();
       redo.add(e);
       return e;

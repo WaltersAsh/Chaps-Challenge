@@ -397,9 +397,9 @@ public class Gui extends MazeEventListener implements ActionListener {
       recnplay.setPlaybackSpeed(1.75);
     } else if (e.getSource() == standardReplayButton) {
       recnplay.setPlaybackSpeed(1);
-      } else if (e.getSource() == fasterReplayButton) {
-        recnplay.setPlaybackSpeed(0.5);
-      }
+    } else if (e.getSource() == fasterReplayButton) {
+      recnplay.setPlaybackSpeed(0.5);
+    }
 
 
     //popup dialog button actions
