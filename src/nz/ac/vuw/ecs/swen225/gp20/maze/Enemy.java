@@ -24,7 +24,6 @@ public class Enemy extends Movable {
   }
 
   @JsonIgnore
-  //TODO: Need to call this function after load from json
   public void initPathFinder(Maze m) {
     pf = new PathFinder(m);
   }
