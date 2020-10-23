@@ -910,6 +910,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Get the menu bar object to update text displayed in the menus.
+   *
+   * @return the MenuBar object
    */
   public MenuBar getMenuBar() {
     return this.menuBar;
@@ -917,6 +919,8 @@ public class Gui extends MazeEventListener implements ActionListener {
 
   /**
    * Get the replaying icon label so recnplay can show or hide it.
+   *
+   * @return the replay icon JLabel
    */
   public JLabel getReplayingIconLabel() {
     return replayingIconLabel;
