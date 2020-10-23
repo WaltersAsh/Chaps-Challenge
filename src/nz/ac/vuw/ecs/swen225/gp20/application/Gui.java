@@ -453,6 +453,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     Maze.Direction direction = Maze.Direction.values()[move.direction];
 
     if (move.actorId == -1) {
+      showInfoFieldToGui(false);
       if (undo) {
         this.undoGui();
       } else {
