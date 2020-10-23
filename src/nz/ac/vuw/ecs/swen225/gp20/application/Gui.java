@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -176,6 +177,7 @@ public class Gui extends MazeEventListener implements ActionListener {
     UIManager.put("OptionPane.messageForeground", Color.BLACK);
     UIManager.put("Button.background", cl.fullLavender);
     UIManager.put("Button.foreground", Color.WHITE);
+    GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(cl.infoFont);
 
     //initialise filechooser stylisation
     UIManager.put("List.background", cl.deepLavender);
@@ -994,10 +996,24 @@ public class Gui extends MazeEventListener implements ActionListener {
    */
   @Override
   public void update(MazeEventInfoField e) {
-    infoFieldTextLabel.setText(e.getInfoField().getInformation());
+    String info;
+    switch (maze.getLevelID()) {
+      case 1:
+        info = "<html>Collect pickaxes, mine <br>the blocks, "
+                + "collect the<br> emeralds to open and <br>reach the portal!</html>";
+        break;
+      case 2:
+        info = "<html>Push the blocks into <br>the water and avoid <br>enemies!</html>";
+        break;
+      default:
+        info = "PLEASE, PROGRAM LET ME DO IT. I AM THE PROGRAMMER, I AM THE KING HERE. "
+                + "PLEASE LET ME DO IT";
+    }
+    infoFieldTextLabel.setText(info);
     infoFieldLabel.setBounds(board.getX() - 175, board.getY() - 150, 1000, 1000);
     infoFieldTextLabel.setBounds(infoFieldLabel.getX() + 300,
             infoFieldLabel.getY() - 150, 1000, 1000);
+    infoFieldTextLabel.setFont(cl.infoFont);
     frame.revalidate();
     showInfoFieldToGui(true);
   }

@@ -86,7 +86,7 @@ public class ComponentLibrary {
     buttonFont = font.deriveFont(Font.PLAIN, 20);
     sideFont = font.deriveFont(Font.PLAIN, 11);
     bigFont = font.deriveFont(Font.BOLD, 40);
-    infoFont = font.deriveFont(Font.PLAIN, 40);
+    infoFont = font.deriveFont(Font.PLAIN, 30);
     titleScreenFont = font.deriveFont(Font.BOLD, 95);
     bodyFont = font.deriveFont(Font.PLAIN, 13);
   }
