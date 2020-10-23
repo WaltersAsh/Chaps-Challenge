@@ -234,6 +234,7 @@ public class RecordAndReplay {
                     System.out.println("Error with playback: " + e);
                 }
             }
+
         };
 
         Thread thread = new Thread(runnable);
@@ -244,7 +245,7 @@ public class RecordAndReplay {
      * Advance the playback of this recording by one step
      */
     public static void stepForward() {
-        if (step == timeStamps.size() - 1) {
+        if (step == timeStamps.size()) {
             return;
         }
 
