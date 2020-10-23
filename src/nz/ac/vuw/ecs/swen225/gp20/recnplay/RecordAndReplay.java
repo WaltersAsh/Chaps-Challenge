@@ -142,7 +142,7 @@ public class RecordAndReplay {
   /**
    * Delay for playback speed.
    */
-  private static double playbackSpeed = 1;
+  private double playbackSpeed = 1;
 
   /**
    * The current step/time in this recording in milliseconds.
@@ -172,6 +172,16 @@ public class RecordAndReplay {
    * @param gui the application this recorder belongs to
    */
   public RecordAndReplay(Gui gui) {
+    setGui(gui);
+  }
+
+  /**
+   * Set the gui field when an instance of RecordAndReplay created
+   * this fixes a bug found in spotBugs.
+   *
+   * @param gui the application this recorder belongs to
+   */
+  private static void setGui(Gui gui) {
     RecordAndReplay.gui = gui;
   }
 
