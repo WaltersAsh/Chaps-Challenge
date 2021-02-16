@@ -1,7 +1,7 @@
 # Chap's Challenge
 Chap's Challenge was a recreation of the classic 90s Chip's Challenge puzzle game with a Minecraft theme. 
 
-![demo](https://github.com/WaltersAsh/Chaps-Challenge/blob/master/readme_resources/demo.mp4)  
+![demo](https://github.com/WaltersAsh/Chaps-Challenge/blob/master/readme_resources/demo.gif)  
 
 This project was handled with an emphasis on software design and development, driving the use of strict management of dependencies and GitLab. 
 The development of Chap's Challenge was undertaken by a 5-person team, each taking on the responsibility for their package according to their role:  
